@@ -1,0 +1,229 @@
+:: StoryStylesheet [stylesheet]
+
+body {
+    margin: 0;
+    background: lightgray;
+}
+
+
+#story {
+    background: linear-gradient(to top, #00f187, #0004fd);
+    border-radius: 32px;
+    padding: 25px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+    color: white;
+    position: relative;
+    min-height: 660px;
+    width: 100%;
+    max-width: 390px;
+    box-sizing: border-box;
+    margin: 0 auto;
+    font-family: 'Atkinson Hyperlegible', system-ui, -apple-system,
+                 "Segoe UI", sans-serif;
+}
+
+
+
+.activity-page h1 {
+    text-align: center;
+}
+
+.activity-message {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 15px;
+    border-radius: 12px;
+    line-height: 1.5;
+}
+
+.activity-page h2 {
+    margin-top: 25px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+.activity-card {
+    background: white;
+    color: #172033;
+    padding: 15px;
+    margin: 12px 0;
+    border-radius: 14px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.activity-card h3 {
+    margin-top: 0;
+}
+
+.activity-card p {
+    line-height: 1.5;
+}
+
+.activity-card a {
+    display: inline-block;
+    background: #b5f5d0;
+    color: #173c2b;
+    padding: 10px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.activity-locked {
+    color: #687385;
+    font-style: italic;
+}
+
+.completed {
+    border-left: 5px solid #00c878;
+}
+
+.completed-label {
+    color: #16834f;
+    font-weight: bold;
+}
+
+.back-link {
+    margin-top: 25px;
+}
+
+/* for popup window styling */
+
+.answer-buttons button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 10px;
+    background: lightblue;
+    color: black;
+    font-size: 16px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.answer-buttons button:hover {
+    background: skyblue;
+}
+
+/* Make the popup match the mobile game screen */
+
+#ui-dialog {
+    width: 390px;
+    max-width: 100vw;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+
+#ui-dialog-body {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 20px;
+}
+
+
+
+/* Home screen */
+.home-screen {
+    text-align: center;
+    color: white;
+}
+
+.home-screen h1 {
+    font-size: 26px;
+    margin-bottom: 8px;
+}
+
+.home-screen p {
+    font-size: 15px;
+}
+
+.body-map {
+    position: relative;
+    width: 100%;
+    max-width: 360px;
+    height: 390px;
+    margin: 25px auto;
+}
+
+/* Five topic circles */
+.body-circle {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    border: 3px solid white;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* Arrange the circles like a human body */
+.body-circle.head {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #f5c2e7;
+}
+
+.body-circle.left {
+    top: 125px;
+    left: 0;
+    background: #89c2d9;
+}
+
+.body-circle.center {
+    top: 125px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #f08080;
+}
+
+.body-circle.right {
+    top: 125px;
+    right: 0;
+    background: #8bd3a8;
+}
+
+.body-circle.legs {
+    top: 265px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #f4c95d;
+}
+
+/* Make the links fill each circle */
+.body-circle a {
+    color: #172033;
+    text-decoration: none;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    line-height: 1.3;
+}
+
+.body-circle:hover {
+    filter: brightness(1.1);
+    transform: scale(1.05);
+}
+
+.body-circle.head:hover,
+.body-circle.center:hover,
+.body-circle.legs:hover {
+    transform: translateX(-50%) scale(1.05);
+}
+
+.home-hint {
+    margin-top: 10px;
+    font-style: italic;
+}

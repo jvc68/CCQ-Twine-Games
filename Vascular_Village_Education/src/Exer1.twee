@@ -1,0 +1,219 @@
+:: StoryTitle
+Education Game
+
+:: StoryData
+{
+"ifid": "BAE48670-5730-4DC7-B1BA-608EFEDA5280",
+"format": "SugarCube",
+"format-version": "2.30.0",
+"start": "Start",
+"zoom": 1
+}
+
+:: Start {"position": "625,275", "size": "100,100"}
+
+<h1>Vascular Village</h1>
+<p class="tagline">
+"A village lives inside your blood vessels. Your daily care keeps 
+it thriving."
+</p>
+[[Start Quest->HomeScreen]]
+
+
+
+:: HomeScreen
+
+<div class="home-screen">
+    <h1>❤️ CardioCare Quest</h1>
+    <p>Choose a part of your health journey!</p>
+
+    <div class="body-map">
+
+        <div class="body-circle head">
+            [[🧠Brain->Brain]]
+        </div>
+
+        <div class="body-circle left">
+            [[🩸Blood Cells->BloodCells]]
+        </div>
+
+        <div class="body-circle center">
+            [[❤️Heartbeat->Heartbeat]]
+        </div>
+
+        <div class="body-circle right">
+            [[🩸Blood Vessels->Blood Vessels]]
+        </div>
+
+        <div class="body-circle legs">
+            [[🫁Lungs->Lungs]]
+        </div>
+
+    </div>
+
+    <p class="home-hint">Tap a circle to begin exploring!</p>
+</div>
+
+
+
+:: Brain
+<h1>Brain</h1>
+<p>In Development</p>
+[[Return to the body map->HomeScreen]]
+
+:: BloodCells
+<h1>Blood Cells</h1>
+<p>In development</p>
+[[Return to the body map->HomeScreen]]
+
+:: Heartbeat
+<h1>Heartbeat</h1>
+<p>In development</p>
+[[Return to the body map->HomeScreen]]
+
+:: Lungs
+<h1>Lungs</h1>
+<p>In development</p>
+[[Return to the body map->HomeScreen]]
+
+
+:: Blood Vessels
+
+<div class="activity-page">
+
+    <h1>Blood Vessels</h1>
+
+    <p class="activity-message">Welcome to the vascular system! Join Ruby on her journey
+        and discover how healthy choices help keep your blood flowing.
+    </p>
+
+    <h2>🌟 New Activities</h2>
+
+    <div class="activity-card">
+        <h3>🩸 The Long Pause</h3>
+        <p>Help Ruby choose healthy actions after sitting for too long.</p>
+        [[Play Activity →->LongPause]]
+    </div>
+
+    <div class="activity-card">
+        <h3>🏃 Keep the Blood Moving</h3>
+        <p>Discover how movement supports healthy blood circulation.</p>
+        <span class="activity-locked">Coming soon!</span>
+    </div>
+
+    <h2>✅ Completed Activities</h2>
+
+    <div class="activity-card completed">
+        <h3>💧 Hydration Station</h3>
+        <p>Learn why drinking enough water is important for your body.</p>
+        <span class="completed-label">Completed</span>
+    </div>
+
+    <div class="activity-card completed">
+        <h3>🥗 Fuel Your Flow</h3>
+        <p>Explore how balanced food choices support cardiovascular health.</p>
+        <span class="completed-label">Completed</span>
+    </div>
+
+    <p class="back-link">
+        [[← Return to the body map->HomeScreen]]
+    </p>
+
+</div>
+
+:: LongPause
+<h1>The Long Pause</h1>
+
+<p>Follow Ruby, a red blood cell traveling through the body's vascular highway. Ruby's person has spent hours sitting at a desk, and the body's movement signals have been quiet.</p>
+
+<p><strong>Ruby:</strong> "It's been a long time since we've moved! Let's help the body get moving again. Can you help me choose what to do?"</p>
+
+<<set $didStretch = false>>
+<<set $didWalk = false>>
+
+<h3>Mission: Help Ruby's person!</h3>
+
+<p>Choose TWO healthy actions to support cardiovascular health.</p>
+
+<div class="answer-buttons">
+
+<<button "Stand up and stretch for a little while">>
+    <<if !$didStretch>>
+        <<set $didStretch = true>>
+        <<run Dialog.setup("Correct! Time to Stretch")>>
+        <<run Dialog.wiki("Ruby cheers! Taking a movement break helps interrupt long periods of sitting. Even small movement breaks are a great start!")>>
+        <<run Dialog.open()>>
+        <<replace "#progress">><<include "LongPauseProgress">><</replace>>
+    <<else>>
+        <<run Dialog.setup("Already Completed")>>
+        <<run Dialog.wiki("You've already chosen stretching! Try the other healthy action.")>>
+        <<run Dialog.open()>>
+    <</if>>
+<</button>>
+
+<<button "Take a short walk around the room">>
+    <<if !$didWalk>>
+        <<set $didWalk = true>>
+        <<run Dialog.setup("Correct! Let's Get Moving")>>
+        <<run Dialog.wiki("Ruby happily travels along the bloodstream. Walking gets the body moving, and regular physical activity can help manage blood pressure over time.")>>
+        <<run Dialog.open()>>
+        <<replace "#progress">><<include "LongPauseProgress">><</replace>>
+    <<else>>
+        <<run Dialog.setup("Already Completed")>>
+        <<run Dialog.wiki("You've already chosen walking! Try the other healthy action.")>>
+        <<run Dialog.open()>>
+    <</if>>
+<</button>>
+
+<<button "Keep sitting for several more hours without a break">>
+    <<run Dialog.setup("Not Quite!")>>
+    <<run Dialog.wiki("Ruby explains: Sitting for long periods without breaks means missing opportunities to move. Try a short movement break instead.")>>
+    <<run Dialog.open()>>
+<</button>>
+
+<<button "Open a bag of high-sodium chips">>
+    <<run Dialog.setup("Not Quite!")>>
+    <<run Dialog.wiki("Ruby explains: Regularly eating too much sodium can make blood pressure harder to manage. Let's make choices that support cardiovascular health!")>>
+    <<run Dialog.open()>>
+<</button>>
+
+</div>
+
+<hr>
+
+<div id="progress">
+    <<include "LongPauseProgress">>
+</div>
+
+
+:: LongPauseProgress
+
+<p><strong>Healthy choices:</strong>
+<<if $didStretch && !$didWalk>>1<</if>><<if $didStretch and $didWalk>> 2 <</if>><<if $didWalk && !$didStretch>>1<</if>> / 2</p>
+
+<<if $didStretch and $didWalk>>
+    <h3>Both choices completed!</h3>
+    <p>Ruby is ready to continue the journey.</p>
+    [[Continue to the lesson->LongPauseLesson]]
+<<else>>
+    <p>Choose both healthy actions to unlock the next lesson.</p>
+<</if>>
+
+
+:: LongPauseLesson
+<h1>Lesson Learned!</h1>
+
+<p>Ruby travels onward through the bloodstream.</p>
+
+<p><strong>Ruby:</strong> "You did it! Small choices can make a difference when we practice them regularly."</p>
+
+<p><strong>Remember:</strong> Sitting for long periods can be interrupted with basic movement breaks. Regular physical activity and a balanced, lower-sodium eating pattern can help manage blood pressure over time.</p>
+
+[[Return to the body map->HomeScreen]]
+
+
+/*
+to run on webpage
+in terminal: npm run watch
+Open in live server
+*/

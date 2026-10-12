@@ -1,0 +1,14 @@
+{
+  "name": "EducationGame",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tweego -o dist/index.html src/",
+    "watch": "nodemon --watch src --ext twee --exec \"npm run build\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
