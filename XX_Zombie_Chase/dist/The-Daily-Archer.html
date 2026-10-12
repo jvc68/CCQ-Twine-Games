@@ -201,6 +201,26 @@ img {
   width: fill;
 }
 
+.levelList button {
+  position: relative;
+  left: 14%;
+  padding: 1px;
+  border-radius: 12px;
+  min-width: 80%;
+  background-color: cornsilk;
+  color: black;
+}
+
+button {
+  position: relative;
+  left: 12%;
+  padding: 1px;
+  border-radius: 12px;
+  min-width: 80%;
+  background-color: cornsilk;
+  color: black;
+}
+
 .level {
   position: relative;
   left: 14%;
@@ -228,16 +248,16 @@ img {
   border: 1px solid black;
   background-color: white;
   box-sizing: border-box;
-}</style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-passagedata pid="1" name="StoryInit" tags="" position="100,100" size="100,100"></tw-passagedata><tw-passagedata pid="2" name="Home" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;Zombies are Stopped.
+}</style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-passagedata pid="1" name="StoryInit" tags="" position="100,100" size="100,100">&lt;&lt;set $zombieDistance = 10000&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="Home" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;Zombies are Stopped.
   &lt;img src=&quot;zombies.png&quot;&gt;
-  &lt;div class=&quot;mainTab&quot;&gt; &lt;img src=&quot;bar.png&quot;&gt;
-    Zombies are 20,000 Steps Away!
+  &lt;div class=&quot;mainTab&quot;&gt; &lt;img src=&quot;bar.png&quot;&gt; &lt;&lt;set $zombieDistance = 10000&gt;&gt;
+    Zombies are $zombieDistance Steps Away!
 
 
 
       &lt;div class=&quot;levelContainer&quot;&gt;
         &lt;div class=&quot;levelList&quot;&gt; Begin the Chase:
-          &lt;button class=&quot;level&quot;&gt;Easy&lt;/button&gt;
+          &lt;&lt;button &quot;Easy&quot; &quot;Chase&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;
           &lt;button class=&quot;level&quot;&gt;Medium&lt;/button&gt;
           &lt;button class=&quot;level&quot;&gt;Hard&lt;/button&gt;
         &lt;/div&gt;
@@ -245,14 +265,11 @@ img {
 
 
 
-      &lt;div class=&quot;navigation&quot;&gt;&lt;&lt;button &quot;Chase&quot; &quot;Home&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;&lt;button &quot;Minigames&quot; &quot;Minigames&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
   &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="Minigames" tags="" position="350,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;
-  Mini Games
-
-  &lt;div class=&quot;minigames&quot;&gt;&lt;div class=&quot;game&quot;&gt;Game 1&lt;/div&gt;&lt;div class=&quot;game&quot;&gt;Game 2&lt;/div&gt;&lt;div class=&quot;game&quot;&gt;Game 3&lt;/div&gt;&lt;div class=&quot;game&quot;&gt;Game 4&lt;/div&gt;&lt;/div&gt;
-
-
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="Chase" tags="" position="350,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;Chase
+  &lt;img src=&quot;zombies.png&quot;&gt;&lt;&lt;set $zombieDistance = 10123&gt;&gt;
+  Zombies are $zombieDistance Steps Away!
+  &lt;div class=&quot;mainTab&quot;&gt; &lt;img src=&quot;bar.png&quot;&gt;
 
 
 
@@ -260,7 +277,13 @@ img {
 
 
 
-  &lt;div class=&quot;navigation&quot;&gt;&lt;&lt;button &quot;Chase&quot; &quot;Home&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;&lt;button &quot;Minigames&quot; &quot;Minigames&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+
+
+
+
+
+  &lt;&lt;button &quot;Return&quot; &quot;Home&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;
+  &lt;/div&gt;
 &lt;/div&gt;</tw-passagedata></tw-storydata>
 	<script id="script-sugarcube" type="text/javascript">
 	/*! SugarCube JS */

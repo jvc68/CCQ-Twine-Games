@@ -11,18 +11,19 @@ The Daily Archer
 }
 
 :: StoryInit {"position": "100,100", "size": "100,100"}
+<<set $zombieDistance = 10000>>
 
 :: Home
 <div class="phone">Zombies are Stopped.
   <img src="zombies.png">
-  <div class="mainTab"> <img src="bar.png">
-    Zombies are 20,000 Steps Away!
+  <div class="mainTab"> <img src="bar.png"> <<set $zombieDistance = 10000>>
+    Zombies are $zombieDistance Steps Away!
 
 
 
       <div class="levelContainer">
         <div class="levelList"> Begin the Chase:
-          <button class="level">Easy</button>
+          <<button "Easy" "Chase">><</button>>
           <button class="level">Medium</button>
           <button class="level">Hard</button>
         </div>
@@ -30,17 +31,14 @@ The Daily Archer
 
 
 
-      <div class="navigation"><<button "Chase" "Home">><</button>><<button "Minigames" "Minigames">><</button>></div>
   </div>
 </div>
 
-:: Minigames
-<div class="phone">
-  Mini Games
-
-  <div class="minigames"><div class="game">Game 1</div><div class="game">Game 2</div><div class="game">Game 3</div><div class="game">Game 4</div></div>
-
-
+:: Chase
+<div class="phone">Chase
+  <img src="zombies.png"><<set $zombieDistance = 10123>>
+  Zombies are $zombieDistance Steps Away!
+  <div class="mainTab"> <img src="bar.png">
 
 
 
@@ -48,7 +46,13 @@ The Daily Archer
 
 
 
-  <div class="navigation"><<button "Chase" "Home">><</button>><<button "Minigames" "Minigames">><</button>></div>
+
+
+
+
+
+  <<button "Return" "Home">><</button>>
+  </div>
 </div>
 
 
@@ -149,6 +153,26 @@ img {
 .levelList {
   align-items: center;
   width: fill;
+}
+
+.levelList button {
+  position: relative;
+  left: 14%;
+  padding: 1px;
+  border-radius: 12px;
+  min-width: 80%;
+  background-color: cornsilk;
+  color: black;
+}
+
+button {
+  position: relative;
+  left: 12%;
+  padding: 1px;
+  border-radius: 12px;
+  min-width: 80%;
+  background-color: cornsilk;
+  color: black;
 }
 
 .level {
