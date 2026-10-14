@@ -1,0 +1,32 @@
+:: StoryTitle
+Food Truck Game
+
+:: StoryData
+{
+  "ifid": "EFD451B8-46CF-4200-86B0-31CAA585B034",
+  "format": "SugarCube",
+  "format-version": "2.37.3",
+  "start": "Start"
+}
+
+:: StoryInit
+<<set $numOrders = 0>>
+<<set $currentDay = 1>>
+<<set $dayScore = 0>>
+<<set $ordersCompleted = 0>>
+
+<<set $prepTray = []>>
+
+<<set $menuIngredients = [
+    "Ingredient1",
+    "Ingredient2",
+    "Ingredient3",
+    "Ingredient4",
+    "Ingredient5"
+]>>
+
+<<set $activeOrder = {
+    custName: "Name1",
+    dishName: "Dish1",
+    requiredIngredients: ["Ingredient1", "Ingredient2"]
+}>>

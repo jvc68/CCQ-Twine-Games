@@ -1,0 +1,48 @@
+:: Start
+<div class="phone">
+    Welcome to your Food Truck! Are you ready to start serving customers?
+
+    [[Open Truck Window|TruckWindow]]
+</div>
+
+:: TruckWindow
+<div class="phone">\
+    <div class="HUD">
+        <span><strong>Day:</strong> $currentDay</span> |
+        <span><strong>Orders Left:</strong> $numOrders</span> |
+        <span><strong>Score:</strong> $dayScore</span>  
+    </div>\
+    <hr>\
+    <div class="ticket-box">\
+        <h3>Customer: $activeOrder.custName</h3>\
+        <p>Order: $activeOrder.dishName</p>\
+        <p>Needs: <<print $activeOrder.requiredIngredients.join(", ")>></p>\
+    </div>
+
+    <div class="prep-area">\
+        <h4>Prep Tray</h4>\
+        <div id="tray">
+            <<if $prepTray.length === 0>>
+                <em>Tap ingredients to add them to the tray.</em>
+            <<else>>
+                <<print $prepTray.join(", ")>>
+            <</if>>
+        </div>
+    </div>
+
+    <div class="ingredient-shelf">
+        <h4>Pantry Bins</h4>
+        <div class="ingredient-grid">
+            <<for _i = 0; _i < $menuIngredients.length; _i++>>
+                <<capture _i>>
+                <<button $menuIngredients[_i]>>
+                    <<run $prepTray.push($menuIngredients[_i])>>
+                    <<replace "#tray">>
+                    <<print $prepTray.join(" + ")>>
+                    <</replace>>
+                <</button>>
+                <</capture>>
+            <</for>>
+        </div>
+  </div>
+</div>

@@ -1,0 +1,110 @@
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, "Segoe UI", sans-serif;
+  background-color: #d1e8e8;
+  margin: 0;
+  padding: 1.5em 0;
+}
+
+#ui-bar { display: none; }
+
+#story {
+  margin: 0 auto;
+  max-width: 380px;
+  padding: 0;
+}
+
+/* Phone frame — compact, soft dark viridis teal */
+.phone {
+  background: linear-gradient(to top, #00f187, #0004fd);
+  border-radius: 32px;
+  padding: 25px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+  color: white;
+  position: relative;
+  min-height: 660px;
+  max-height: 884px;
+  width: 100%;
+  max-width: 100%;
+  font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.HUD {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  background: rgba(0, 0, 0, 0.39);
+  padding: 20px 12px;
+  border-radius: 14px;
+  margin-bottom: 12px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+}
+
+.ticket-box {
+  background: rgba(255, 255, 255, 0.95);
+  color: #1a1a1a;
+  border-radius: 16px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  /* border: 6px solid #00f187; */
+  gap: 2px;
+}
+
+.ticket-box h3,
+.ticket-box p {
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+}
+
+.ticket-box h3 {
+  font-size: 1.05rem;
+  color: #0d1b2a;
+}
+
+.ticket-box p {
+  font-size: 0.9rem;
+}
+
+.prep-area {
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 16px;
+  padding: 12px;
+  margin-bottom: 12px;
+  /* border: 1px solid rgba(255, 255, 255, 0.4); */
+}
+
+.prep-area h4 {
+  margin: 0 0 6px 0;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #a8ffdb;
+}
+
+#tray {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.ingredient-shelf {
+  margin-bottom: 14px;
+}
+
+.ingredient-shelf h4 {
+  margin: 0 0 8px 0;
+  font-size: 0.95rem;
+  color: #a8ffdb;
+}
+
+.ingredient-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
