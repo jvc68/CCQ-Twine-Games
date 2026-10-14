@@ -1,5 +1,5 @@
 :: StoryTitle
-The Daily Archer
+Zombie Chase
 
 :: StoryData
 {
@@ -15,8 +15,8 @@ The Daily Archer
 
 :: Home
 <div class="phone">Zombies are Stopped.
-  <img src="zombies.png">
-  <div class="mainTab"> <img src="bar.png"> <<set $zombieDistance = 10000>>
+  <img src="../../img/zombies.png">
+  <div class="mainTab"> <img src="../../img/bar.png"> <<set $zombieDistance = 10000>>
     Zombies are $zombieDistance Steps Away!
 
 
@@ -36,9 +36,9 @@ The Daily Archer
 
 :: Chase
 <div class="phone">Chase
-  <img src="zombies.png"><<set $zombieDistance = 10123>>
+  <img src="../../img/zombies.png"><<set $zombieDistance = 10123>>
   Zombies are $zombieDistance Steps Away!
-  <div class="mainTab"> <img src="bar.png">
+  <div class="mainTab"> <img src="../../img/bar.png">
 
 
 
