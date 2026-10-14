@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tweego -o dist/The-Daily-Archer.html src/",
+    "build": "tweego -o dist/Zombie-chase.html src/",
     "watch": "nodemon --watch src --ext tw --exec \"npm run build\""
   },
   "keywords": [],
