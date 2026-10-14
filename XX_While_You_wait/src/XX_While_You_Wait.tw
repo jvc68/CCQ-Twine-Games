@@ -5,7 +5,7 @@ While You Wait
 {
   "ifid": "637D0CD9-6182-4ACE-9AF0-B6FB94AB090A",
   "format": "SugarCube",
-  "format-version": "2.30.0",
+  "format-version": "2.37.3",
   "start": "Home",
   "zoom": 1
 }
@@ -15,17 +15,30 @@ While You Wait
 <<set $currentFidget = "bubbleWrap">>
 
 
+
 :: Home
 <div class="phone">Time Spent: TODO
-  <div class="fidget-Interface">
-  </div>
-
-
-
-
+Bubble Wrap
+<div class="fidgetInterface" id="container"></div>
+  <<done>><<run setup.populateFidget("bubbleWrap")>><</done>>
 </div>
 
-
+:: UserScript [script]
+  setup.populateFidget = function populateFidget(name) {
+    let container = document.getElementById("container");
+    switch (name) {
+      case "bubbleWrap":
+        /*Do math here based on size of screen to know how many bubbles to make */
+        for (let i = 0; i < (13*12); i++) {
+          let newButton = document.createElement('button');
+          newButton.classList.add("bubble");
+          container.appendChild(newButton);
+        }
+        break;
+      default:
+        console.log("Something went wrong when populating fidget")
+    }
+  }
 
 
 :: UserStylesheet [stylesheet]
@@ -54,7 +67,7 @@ body {
   padding: 1.5em 0;
 }
 
-#ui-bar { display: none; }
+/*#ui-bar { display: none; }*/
 
 #story {
   margin: 0 auto;
@@ -76,4 +89,18 @@ body {
   width: 100%;
   max-width: 100%;
   font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.fidgetInterface {
+  background: lightgrey;
+  border-radius: 12px;
+  border: 1px solid black;
+  padding: 8px;
+  padding-left: 13px;
+}
+
+.bubble {
+  border-radius: 32px;
+  min-width: 25px;
+  min-height: 25px
 }
