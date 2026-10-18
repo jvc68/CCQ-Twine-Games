@@ -24,8 +24,8 @@ body {
   box-shadow: 0 8px 30px rgba(0,0,0,0.18);
   color: white;
   position: relative;
+  height: 660px;
   min-height: 660px;
-  max-height: 884px;
   width: 100%;
   max-width: 100%;
   font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -50,6 +50,8 @@ body {
   padding: 12px 14px;
   margin-bottom: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
   /* border: 6px solid #00f187; */
   gap: 2px;
 }
@@ -58,7 +60,7 @@ body {
 .ticket-box p {
   margin: 0;
   padding: 0;
-  line-height: 1.5;
+  line-height: 1.25;
 }
 
 .ticket-box h3 {
@@ -75,14 +77,14 @@ body {
   border-radius: 16px;
   padding: 12px;
   margin-bottom: 12px;
-  /* border: 1px solid rgba(255, 255, 255, 0.4); */
+  border: 5px solid rgba(255, 255, 255, 0.4);
 }
 
 .prep-area h4 {
   margin: 0 0 6px 0;
   font-size: 0.95rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.05em; 
   color: #a8ffdb;
 }
 
@@ -94,17 +96,71 @@ body {
 }
 
 .ingredient-shelf {
-  margin-bottom: 14px;
+  position: absolute;
+  right: 25px;
+  bottom: 0;
+  left: 25px;
+  max-height: 50%;
+  overflow-y: auto;
 }
 
 .ingredient-shelf h4 {
-  margin: 0 0 8px 0;
+  margin: 0 0 8px;
   font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   color: #a8ffdb;
 }
 
 .ingredient-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+  grid-template-columns: repeat(3,  minmax(0, 72px));
+  justify-content: space-evenly;
+  gap: 4px 8px;
+}
+
+.ingredient-grid > br {
+  display: none;
+}
+
+.ingredient-grid button {
+  appearance: none;
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.65);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #1a1a1a;
+  font: inherit;
+  font-size: 0.78rem;
+  line-height: 1.15;
+  text-align: center;
+  white-space: pre-line;
+  cursor: pointer;
+  transition: transform 120ms ease, background-color 120ms ease;
+}
+
+.ingredient-grid button::first-line {
+  font-size: 1.5rem;
+}
+
+.ingredient-grid button:hover {
+  background: #ffffff;
+  transform: translateY(-2px);
+}
+
+.ingredient-grid button:active {
+  transform: translateY(0);
+}
+
+.ingredient-grid button:focus-visible {
+  outline: 3px solid #a8ffdb;
+  outline-offset: 2px;
 }

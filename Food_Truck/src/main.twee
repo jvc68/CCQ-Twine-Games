@@ -17,8 +17,7 @@
         <h3>Customer: $activeOrder.custName</h3>\
         <p>Order: $activeOrder.dishName</p>\
         <p>Needs: <<print $activeOrder.requiredIngredients.join(", ")>></p>\
-    </div>
-
+    </div>\
     <div class="prep-area">\
         <h4>Prep Tray</h4>\
         <div id="tray">
@@ -28,15 +27,14 @@
                 <<print $prepTray.join(", ")>>
             <</if>>
         </div>
-    </div>
-
-    <div class="ingredient-shelf">
-        <h4>Pantry Bins</h4>
-        <div class="ingredient-grid">
+    </div>\
+    <div class="ingredient-shelf">\
+        <h4>Ingredient Bins</h4>\
+        <div class="ingredient-grid">\
             <<for _i = 0; _i < $menuIngredients.length; _i++>>
                 <<capture _i>>
-                <<button $menuIngredients[_i]>>
-                    <<run $prepTray.push($menuIngredients[_i])>>
+                <<button `$menuIngredients[_i].img + "\n" + $menuIngredients[_i].name`>>
+                    <<run $prepTray.push($menuIngredients[_i].name)>>
                     <<replace "#tray">>
                     <<print $prepTray.join(" + ")>>
                     <</replace>>
@@ -44,5 +42,5 @@
                 <</capture>>
             <</for>>
         </div>
-  </div>
+    </div>
 </div>

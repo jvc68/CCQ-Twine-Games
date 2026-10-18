@@ -3,10 +3,10 @@ Food Truck Game
 
 :: StoryData
 {
-  "ifid": "EFD451B8-46CF-4200-86B0-31CAA585B034",
-  "format": "SugarCube",
-  "format-version": "2.37.3",
-  "start": "Start"
+    "ifid":"EFD451B8-46CF-4200-86B0-31CAA585B034",
+    "format":"SugarCube",
+    "format-version":"2.37.3",
+    "start":"Start"
 }
 
 :: StoryInit
@@ -14,19 +14,19 @@ Food Truck Game
 <<set $currentDay = 1>>
 <<set $dayScore = 0>>
 <<set $ordersCompleted = 0>>
-
 <<set $prepTray = []>>
 
 <<set $menuIngredients = [
-    "Ingredient1",
-    "Ingredient2",
-    "Ingredient3",
-    "Ingredient4",
-    "Ingredient5"
+    { id: "tortilla", name: "Tortilla",    img: "🌮" },
+    { id: "beans",    name: "Black Beans", img: "🫘" },
+    { id: "squash",   name: "Squash",      img: "🎃" },
+    { id: "turkey",   name: "Lean Turkey", img: "🍗" },
+    { id: "garlic",   name: "Garlic",      img: "🧄" },
+    { id: "sage",     name: "Wild Sage",   img: "🌿" }
 ]>>
 
 <<set $activeOrder = {
     custName: "Name1",
     dishName: "Dish1",
-    requiredIngredients: ["Ingredient1", "Ingredient2"]
+    requiredIngredients: ["Garlic", "Sage"]
 }>>

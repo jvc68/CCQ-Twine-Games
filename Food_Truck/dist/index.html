@@ -130,8 +130,8 @@ body {
   box-shadow: 0 8px 30px rgba(0,0,0,0.18);
   color: white;
   position: relative;
+  height: 660px;
   min-height: 660px;
-  max-height: 884px;
   width: 100%;
   max-width: 100%;
   font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -156,6 +156,8 @@ body {
   padding: 12px 14px;
   margin-bottom: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
   /* border: 6px solid #00f187; */
   gap: 2px;
 }
@@ -164,7 +166,7 @@ body {
 .ticket-box p {
   margin: 0;
   padding: 0;
-  line-height: 1.5;
+  line-height: 1.25;
 }
 
 .ticket-box h3 {
@@ -181,14 +183,14 @@ body {
   border-radius: 16px;
   padding: 12px;
   margin-bottom: 12px;
-  /* border: 1px solid rgba(255, 255, 255, 0.4); */
+  border: 5px solid rgba(255, 255, 255, 0.4);
 }
 
 .prep-area h4 {
   margin: 0 0 6px 0;
   font-size: 0.95rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.05em; 
   color: #a8ffdb;
 }
 
@@ -200,40 +202,94 @@ body {
 }
 
 .ingredient-shelf {
-  margin-bottom: 14px;
+  position: absolute;
+  right: 25px;
+  bottom: 0;
+  left: 25px;
+  max-height: 50%;
+  overflow-y: auto;
 }
 
 .ingredient-shelf h4 {
-  margin: 0 0 8px 0;
+  margin: 0 0 8px;
   font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   color: #a8ffdb;
 }
 
 .ingredient-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+  grid-template-columns: repeat(3,  minmax(0, 72px));
+  justify-content: space-evenly;
+  gap: 4px 8px;
+}
+
+.ingredient-grid > br {
+  display: none;
+}
+
+.ingredient-grid button {
+  appearance: none;
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.65);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #1a1a1a;
+  font: inherit;
+  font-size: 0.78rem;
+  line-height: 1.15;
+  text-align: center;
+  white-space: pre-line;
+  cursor: pointer;
+  transition: transform 120ms ease, background-color 120ms ease;
+}
+
+.ingredient-grid button::first-line {
+  font-size: 1.5rem;
+}
+
+.ingredient-grid button:hover {
+  background: #ffffff;
+  transform: translateY(-2px);
+}
+
+.ingredient-grid button:active {
+  transform: translateY(0);
+}
+
+.ingredient-grid button:focus-visible {
+  outline: 3px solid #a8ffdb;
+  outline-offset: 2px;
 }</style><script role="script" id="twine-user-script" type="text/twine-javascript">window.checkRecipe = function(tray, required) {
     print("Hello World!");
 };</script><tw-passagedata pid="1" name="StoryInit" tags="" position="100,100" size="100,100">&lt;&lt;set $numOrders = 0&gt;&gt;
 &lt;&lt;set $currentDay = 1&gt;&gt;
 &lt;&lt;set $dayScore = 0&gt;&gt;
 &lt;&lt;set $ordersCompleted = 0&gt;&gt;
-
 &lt;&lt;set $prepTray = []&gt;&gt;
 
 &lt;&lt;set $menuIngredients = [
-    &quot;Ingredient1&quot;,
-    &quot;Ingredient2&quot;,
-    &quot;Ingredient3&quot;,
-    &quot;Ingredient4&quot;,
-    &quot;Ingredient5&quot;
+    { id: &quot;tortilla&quot;, name: &quot;Tortilla&quot;,    img: &quot;🌮&quot; },
+    { id: &quot;beans&quot;,    name: &quot;Black Beans&quot;, img: &quot;🫘&quot; },
+    { id: &quot;squash&quot;,   name: &quot;Squash&quot;,      img: &quot;🎃&quot; },
+    { id: &quot;turkey&quot;,   name: &quot;Lean Turkey&quot;, img: &quot;🍗&quot; },
+    { id: &quot;garlic&quot;,   name: &quot;Garlic&quot;,      img: &quot;🧄&quot; },
+    { id: &quot;sage&quot;,     name: &quot;Wild Sage&quot;,   img: &quot;🌿&quot; }
 ]&gt;&gt;
 
 &lt;&lt;set $activeOrder = {
     custName: &quot;Name1&quot;,
     dishName: &quot;Dish1&quot;,
-    requiredIngredients: [&quot;Ingredient1&quot;, &quot;Ingredient2&quot;]
+    requiredIngredients: [&quot;Garlic&quot;, &quot;Sage&quot;]
 }&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="Start" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;
     Welcome to your Food Truck! Are you ready to start serving customers?
 
@@ -249,8 +305,7 @@ body {
         &lt;h3&gt;Customer: $activeOrder.custName&lt;/h3&gt;\
         &lt;p&gt;Order: $activeOrder.dishName&lt;/p&gt;\
         &lt;p&gt;Needs: &lt;&lt;print $activeOrder.requiredIngredients.join(&quot;, &quot;)&gt;&gt;&lt;/p&gt;\
-    &lt;/div&gt;
-
+    &lt;/div&gt;\
     &lt;div class=&quot;prep-area&quot;&gt;\
         &lt;h4&gt;Prep Tray&lt;/h4&gt;\
         &lt;div id=&quot;tray&quot;&gt;
@@ -260,15 +315,14 @@ body {
                 &lt;&lt;print $prepTray.join(&quot;, &quot;)&gt;&gt;
             &lt;&lt;/if&gt;&gt;
         &lt;/div&gt;
-    &lt;/div&gt;
-
-    &lt;div class=&quot;ingredient-shelf&quot;&gt;
-        &lt;h4&gt;Pantry Bins&lt;/h4&gt;
-        &lt;div class=&quot;ingredient-grid&quot;&gt;
+    &lt;/div&gt;\
+    &lt;div class=&quot;ingredient-shelf&quot;&gt;\
+        &lt;h4&gt;Ingredient Bins&lt;/h4&gt;\
+        &lt;div class=&quot;ingredient-grid&quot;&gt;\
             &lt;&lt;for _i = 0; _i &lt; $menuIngredients.length; _i++&gt;&gt;
                 &lt;&lt;capture _i&gt;&gt;
-                &lt;&lt;button $menuIngredients[_i]&gt;&gt;
-                    &lt;&lt;run $prepTray.push($menuIngredients[_i])&gt;&gt;
+                &lt;&lt;button `$menuIngredients[_i].img + &quot;\n&quot; + $menuIngredients[_i].name`&gt;&gt;
+                    &lt;&lt;run $prepTray.push($menuIngredients[_i].name)&gt;&gt;
                     &lt;&lt;replace &quot;#tray&quot;&gt;&gt;
                     &lt;&lt;print $prepTray.join(&quot; + &quot;)&gt;&gt;
                     &lt;&lt;/replace&gt;&gt;
@@ -276,7 +330,7 @@ body {
                 &lt;&lt;/capture&gt;&gt;
             &lt;&lt;/for&gt;&gt;
         &lt;/div&gt;
-  &lt;/div&gt;
+    &lt;/div&gt;
 &lt;/div&gt;</tw-passagedata></tw-storydata>
 	<script id="script-sugarcube" type="text/javascript">
 	/*! SugarCube JS */
