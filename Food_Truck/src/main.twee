@@ -156,9 +156,9 @@
                 <div id="skill-marker" class="skill-marker"></div>\
             </div>\
             <div class="skill-legend">\
-                <span>Blue: Raw</span>\
-                <span>Green: Perfect</span>\
-                <span>Red: Overcooked</span>\
+                <span>Raw</span>\
+                <span>Perfect</span>\
+                <span>Overcooked</span>\
             </div>\
             <div class="action-button">\
                 <<button "Stop Cooking" "CookingResult">><<run FoodTruck.stopCooking()>><</button>>\
