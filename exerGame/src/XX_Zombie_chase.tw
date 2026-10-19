@@ -1,0 +1,54 @@
+:: StoryTitle
+Zombie Chase
+
+:: StoryData
+{
+  "ifid": "637D0CD9-6182-4ACE-9AF0-B6FB94AB090A",
+  "format": "SugarCube",
+  "format-version": "2.37.3",
+  "start": "Home",
+  "zoom": 1
+}
+
+:: StoryInit {"position": "100,100", "size": "100,100"}
+
+:: Home
+<div class="phone">Zombies are Stopped.
+  <img src="../../img/zombies.png">
+  <div class="mainTab"> <img src="../../img/bar.png">
+    Zombies are <<= setup.zombieDist>> Steps Away!
+
+
+
+      <div class="levelContainer">
+        <div class="levelList"> Begin the Chase:
+          <<button "Easy" "Chase">><<run setup.setMode('easy')>><</button>>
+          <<button "Medium" "Chase">><<run setup.setMode('med')>><</button>>
+          <<button "Hard" "Chase">><<run setup.setMode('hard')>><</button>>
+        </div>
+      </div>
+
+
+
+  </div>
+</div>
+
+:: Chase
+<div class="phone">Chase
+  <img src="../../img/zombies.png">
+  Zombies are <span id="zombieDist"></span> Steps Away!
+  <div class="mainTab"> <img src="../../img/bar.png">
+  <<button "Run!" >><<run setup.incZombieDist(1)>><</button>>
+  <<done>><<run setup.startChase()>><</done>>
+
+
+
+
+
+
+
+
+
+  <<button "Return" "Home">><<run setup.clearID()>><</button>>
+  </div>
+</div>

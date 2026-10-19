@@ -248,18 +248,55 @@ button {
   border: 1px solid black;
   background-color: white;
   box-sizing: border-box;
-}</style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-passagedata pid="1" name="StoryInit" tags="" position="100,100" size="100,100">&lt;&lt;set $zombieDistance = 10000&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="Home" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;Zombies are Stopped.
+}</style><script role="script" id="twine-user-script" type="text/twine-javascript">setup.zombieDist = 20022
+
+setup.setMode = function setMode(mode) {
+	setup.mode = mode
+}
+
+setup.decZombieDist = function decZombieDist(amount) {
+
+	setup.zombieDist -= amount
+	setup.zombieDistText.textContent = setup.zombieDist
+}
+
+setup.incZombieDist = function incZombieDist(amount) {
+
+	setup.zombieDist += amount
+	setup.zombieDistText.textContent = setup.zombieDist
+}
+
+setup.clearID = function clearID() {
+	clearInterval(setup.intervalId)
+}
+
+setup.startChase = function startChase() {
+	setup.zombieDistText = document.getElementById("zombieDist");
+	setup.decZombieDist(0)
+	switch (setup.mode) {
+		case "easy":
+			setup.intervalId = setInterval(setup.decZombieDist, 1000, 5);
+			break;
+		case "med":
+			setup.intervalId = setInterval(setup.decZombieDist, 1000, 10);
+			break;
+		case "hard":
+			setup.intervalId = setInterval(setup.decZombieDist, 1000, 50);
+			break;
+	}
+
+}</script><tw-passagedata pid="1" name="StoryInit" tags="" position="100,100" size="100,100"></tw-passagedata><tw-passagedata pid="2" name="Home" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;Zombies are Stopped.
   &lt;img src=&quot;../../img/zombies.png&quot;&gt;
-  &lt;div class=&quot;mainTab&quot;&gt; &lt;img src=&quot;../../img/bar.png&quot;&gt; &lt;&lt;set $zombieDistance = 10000&gt;&gt;
-    Zombies are $zombieDistance Steps Away!
+  &lt;div class=&quot;mainTab&quot;&gt; &lt;img src=&quot;../../img/bar.png&quot;&gt;
+    Zombies are &lt;&lt;= setup.zombieDist&gt;&gt; Steps Away!
 
 
 
       &lt;div class=&quot;levelContainer&quot;&gt;
         &lt;div class=&quot;levelList&quot;&gt; Begin the Chase:
-          &lt;&lt;button &quot;Easy&quot; &quot;Chase&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;
-          &lt;button class=&quot;level&quot;&gt;Medium&lt;/button&gt;
-          &lt;button class=&quot;level&quot;&gt;Hard&lt;/button&gt;
+          &lt;&lt;button &quot;Easy&quot; &quot;Chase&quot;&gt;&gt;&lt;&lt;run setup.setMode(&#39;easy&#39;)&gt;&gt;&lt;&lt;/button&gt;&gt;
+          &lt;&lt;button &quot;Medium&quot; &quot;Chase&quot;&gt;&gt;&lt;&lt;run setup.setMode(&#39;med&#39;)&gt;&gt;&lt;&lt;/button&gt;&gt;
+          &lt;&lt;button &quot;Hard&quot; &quot;Chase&quot;&gt;&gt;&lt;&lt;run setup.setMode(&#39;hard&#39;)&gt;&gt;&lt;&lt;/button&gt;&gt;
         &lt;/div&gt;
       &lt;/div&gt;
 
@@ -267,9 +304,11 @@ button {
 
   &lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="Chase" tags="" position="350,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;Chase
-  &lt;img src=&quot;../../img/zombies.png&quot;&gt;&lt;&lt;set $zombieDistance = 10123&gt;&gt;
-  Zombies are $zombieDistance Steps Away!
+  &lt;img src=&quot;../../img/zombies.png&quot;&gt;
+  Zombies are &lt;span id=&quot;zombieDist&quot;&gt;&lt;/span&gt; Steps Away!
   &lt;div class=&quot;mainTab&quot;&gt; &lt;img src=&quot;../../img/bar.png&quot;&gt;
+  &lt;&lt;button &quot;Run!&quot; &gt;&gt;&lt;&lt;run setup.incZombieDist(1)&gt;&gt;&lt;&lt;/button&gt;&gt;
+  &lt;&lt;done&gt;&gt;&lt;&lt;run setup.startChase()&gt;&gt;&lt;&lt;/done&gt;&gt;
 
 
 
@@ -279,10 +318,7 @@ button {
 
 
 
-
-
-
-  &lt;&lt;button &quot;Return&quot; &quot;Home&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;
+  &lt;&lt;button &quot;Return&quot; &quot;Home&quot;&gt;&gt;&lt;&lt;run setup.clearID()&gt;&gt;&lt;&lt;/button&gt;&gt;
   &lt;/div&gt;
 &lt;/div&gt;</tw-passagedata></tw-storydata>
 	<script id="script-sugarcube" type="text/javascript">
