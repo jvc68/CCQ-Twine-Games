@@ -15,14 +15,18 @@ Food Truck Game
 <<set $dayScore = 0>>
 <<set $ordersCompleted = 0>>
 <<set $prepTray = []>>
+<<set $dayPreparationChoices = []>>
+<<set $pendingIngredient = null>>
+<<set $pendingMethod = null>>
+<<set $cookingResult = null>>
 
 <<set $menuIngredients = [
-    { id: "tortilla", name: "Tortilla",    img: "🌮" },
-    { id: "beans",    name: "Black Beans", img: "🫘" },
-    { id: "squash",   name: "Squash",      img: "🎃" },
-    { id: "turkey",   name: "Turkey",      img: "🍗" },
-    { id: "garlic",   name: "Garlic",      img: "🧄" },
-    { id: "sage",     name: "Sage",        img: "🌿" }
+    { id: "tortilla", name: "Tortilla",    img: "🌮", methods: { healthy: "Toast on a dry griddle", unhealthy: "Deep-fry until crisp" } },
+    { id: "beans",    name: "Black Beans", img: "🫘", methods: { healthy: "Simmer with herbs", unhealthy: "Refry with extra oil" } },
+    { id: "squash",   name: "Squash",      img: "🎃", methods: { healthy: "Roast until tender", unhealthy: "Deep-fry until crisp" } },
+    { id: "turkey",   name: "Turkey",      img: "🍗", methods: { healthy: "Grill until cooked", unhealthy: "Deep-fry until crisp" } },
+    { id: "garlic",   name: "Garlic",      img: "🧄", methods: { healthy: "Roast until soft", unhealthy: "Fry in extra oil" } },
+    { id: "sage",     name: "Sage",        img: "🌿", methods: { healthy: "Use fresh leaves", unhealthy: "Fry until crisp" } }
 ]>>
 
 <<set $activeOrder = null>>
