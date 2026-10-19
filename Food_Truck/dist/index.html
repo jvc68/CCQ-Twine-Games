@@ -149,6 +149,124 @@ body {
   border: 3px solid rgba(255, 255, 255, 0.2);
 }
 
+.customer-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 0 10px;
+}
+
+.customer-window {
+  width: 100%;
+  height: 170px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 8px solid #795548;
+  border-radius: 18px;
+  background: linear-gradient(#bde8f2 0 72%, #e8cfa2 72%);
+  box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.6), 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+.customer-face {
+  width: 98px;
+  height: 98px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid #fff;
+  border-radius: 50%;
+  background: #fff;
+  color: #1a1a1a;
+  font-size: 4rem;
+  line-height: 1;
+}
+
+.customer-details {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.35);
+  text-align: center;
+}
+
+.customer-details h3,
+.customer-details p {
+  margin: 0;
+}
+
+.customer-details h3 {
+  font-size: 1rem;
+}
+
+.customer-details p {
+  font-size: 0.88rem;
+}
+
+.action-button {
+  margin: 8px 0;
+  text-align: center;
+}
+
+.action-button button,
+.passage-nav button {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin: 0;
+  padding: 10px 16px;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  background: #fff;
+  color: #123;
+  font: inherit;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.action-button button:hover,
+.passage-nav button:hover {
+  background: #a8ffdb;
+}
+
+.action-button button:focus-visible,
+.passage-nav button:focus-visible {
+  outline: 3px solid #a8ffdb;
+  outline-offset: 2px;
+}
+
+.order-status {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.fulfill-button {
+  margin-top: 10px;
+}
+
+.passage-nav {
+  position: absolute;
+  right: 25px;
+  bottom: 16px;
+  left: 25px;
+  display: flex;
+}
+
+.passage-nav-left {
+  justify-content: flex-start;
+}
+
+.passage-nav-right {
+  justify-content: flex-end;
+}
+
 .ticket-box {
   background: rgba(255, 255, 255, 0.95);
   color: #1a1a1a;
@@ -204,7 +322,7 @@ body {
 .ingredient-shelf {
   position: absolute;
   right: 25px;
-  bottom: 0;
+  bottom: 70px;
   left: 25px;
   max-height: 50%;
   overflow-y: auto;
@@ -281,56 +399,147 @@ body {
     { id: &quot;tortilla&quot;, name: &quot;Tortilla&quot;,    img: &quot;🌮&quot; },
     { id: &quot;beans&quot;,    name: &quot;Black Beans&quot;, img: &quot;🫘&quot; },
     { id: &quot;squash&quot;,   name: &quot;Squash&quot;,      img: &quot;🎃&quot; },
-    { id: &quot;turkey&quot;,   name: &quot;Lean Turkey&quot;, img: &quot;🍗&quot; },
+    { id: &quot;turkey&quot;,   name: &quot;Turkey&quot;,      img: &quot;🍗&quot; },
     { id: &quot;garlic&quot;,   name: &quot;Garlic&quot;,      img: &quot;🧄&quot; },
-    { id: &quot;sage&quot;,     name: &quot;Wild Sage&quot;,   img: &quot;🌿&quot; }
+    { id: &quot;sage&quot;,     name: &quot;Sage&quot;,        img: &quot;🌿&quot; }
 ]&gt;&gt;
 
 &lt;&lt;set $activeOrder = {
     custName: &quot;Name1&quot;,
     dishName: &quot;Dish1&quot;,
     requiredIngredients: [&quot;Garlic&quot;, &quot;Sage&quot;]
-}&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="Start" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;
+}&gt;&gt;
+
+&lt;&lt;set $orderOptions = [
+    {
+        custName: &quot;Alice&quot;,
+        dishName: &quot;Black Bean Taco&quot;,
+        requiredIngredients: [&quot;Tortilla&quot;, &quot;Black Beans&quot;, &quot;Garlic&quot;]
+    },
+    {
+        custName: &quot;Jordan&quot;,
+        dishName: &quot;Sage Turkey Taco&quot;,
+        requiredIngredients: [&quot;Tortilla&quot;, &quot;Turkey&quot;, &quot;Sage&quot;]
+    },
+    {
+        custName: &quot;Sam&quot;,
+        dishName: &quot;Squash and Black Bean Bowl&quot;,
+        requiredIngredients: [&quot;Squash&quot;, &quot;Black Beans&quot;, &quot;Garlic&quot;]
+    }
+]&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="Start" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;
     Welcome to your Food Truck! Are you ready to start serving customers?
 
-    [[Open Truck Window|TruckWindow]]
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="TruckWindow" tags="" position="350,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
-    &lt;div class=&quot;HUD&quot;&gt;
-        &lt;span&gt;&lt;strong&gt;Day:&lt;/strong&gt; $currentDay&lt;/span&gt; |
-        &lt;span&gt;&lt;strong&gt;Orders Left:&lt;/strong&gt; $numOrders&lt;/span&gt; |
-        &lt;span&gt;&lt;strong&gt;Score:&lt;/strong&gt; $dayScore&lt;/span&gt;  
+    &lt;&lt;button &quot;Start Day&quot; &quot;TakeOrderScreen&quot;&gt;&gt;
+        &lt;&lt;set $numOrders = 5&gt;&gt;
+        &lt;&lt;set $dayScore = 0&gt;&gt;
+        &lt;&lt;set $ordersCompleted = 0&gt;&gt;
+        &lt;&lt;set $prepTray = []&gt;&gt;
+        &lt;&lt;set $activeOrder = null&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="TakeOrderScreen" tags="" position="350,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+    &lt;div class=&quot;HUD&quot;&gt;\
+        &lt;span&gt;&lt;strong&gt;Day:&lt;/strong&gt; $currentDay&lt;/span&gt; |\
+        &lt;span&gt;&lt;strong&gt;Orders Left:&lt;/strong&gt; $numOrders&lt;/span&gt; |\
+        &lt;span&gt;&lt;strong&gt;Score:&lt;/strong&gt; $dayScore&lt;/span&gt;\
     &lt;/div&gt;\
     &lt;hr&gt;\
+    &lt;section class=&quot;customer-panel&quot;&gt;\
+        &lt;div class=&quot;customer-window&quot;&gt;\
+            &lt;div class=&quot;customer-face&quot; role=&quot;img&quot; aria-label=&quot;Placeholder customer face&quot;&gt;🙂&lt;/div&gt;\
+        &lt;/div&gt;\
+        &lt;div class=&quot;customer-details&quot;&gt;\
+            &lt;&lt;if $activeOrder&gt;&gt;\
+                &lt;h3&gt;$activeOrder.custName&lt;/h3&gt;\
+                &lt;p&gt;&quot;I&#39;d like a $activeOrder.dishName, please!&quot;&lt;/p&gt;\
+            &lt;&lt;else&gt;&gt;\
+                &lt;&lt;if $numOrders &gt; 0&gt;&gt;\
+                    &lt;p&gt;A customer is waiting. Take their order to get started.&lt;/p&gt;\
+                &lt;&lt;else&gt;&gt;\
+                    &lt;p&gt;All orders have been served for today.&lt;/p&gt;\
+                &lt;&lt;/if&gt;&gt;\
+            &lt;&lt;/if&gt;&gt;\
+        &lt;/div&gt;\
+    &lt;/section&gt;\
+    &lt;div class=&quot;action-button&quot;&gt;\
+        &lt;&lt;if !$activeOrder &amp;&amp; $numOrders &gt; 0&gt;&gt;\
+            &lt;&lt;button &quot;Take Order&quot; &quot;TakeOrderScreen&quot;&gt;&gt;
+                &lt;&lt;set $activeOrder = $orderOptions[Math.floor(Math.random() * $orderOptions.length)]&gt;&gt;
+            &lt;&lt;/button&gt;&gt;\
+        &lt;&lt;elseif $activeOrder&gt;&gt;\
+            &lt;p class=&quot;order-status&quot;&gt;Order received. Head to the truck window to prepare it.&lt;/p&gt;\
+        &lt;&lt;/if&gt;&gt;\
+    &lt;/div&gt;\
+    &lt;div class=&quot;prep-area&quot;&gt;\
+        &lt;h4&gt;Prep Tray&lt;/h4&gt;\
+        &lt;div id=&quot;tray&quot;&gt;\
+            &lt;&lt;if $prepTray.length === 0&gt;&gt;\
+                &lt;em&gt;No ingredients added yet.&lt;/em&gt;\
+            &lt;&lt;else&gt;&gt;\
+                &lt;&lt;print $prepTray.join(&quot; + &quot;)&gt;&gt;\
+            &lt;&lt;/if&gt;&gt;\
+        &lt;/div&gt;\
+    &lt;/div&gt;\
+    &lt;div class=&quot;action-button fulfill-button&quot;&gt;\
+        &lt;&lt;if $activeOrder&gt;&gt;\
+            &lt;&lt;button &quot;Fulfill Order&quot; &quot;TakeOrderScreen&quot;&gt;&gt;
+                &lt;&lt;set $ordersCompleted += 1&gt;&gt;
+                &lt;&lt;set $dayScore += 1&gt;&gt;
+                &lt;&lt;set $numOrders -= 1&gt;&gt;
+                &lt;&lt;set $activeOrder = null&gt;&gt;
+                &lt;&lt;set $prepTray = []&gt;&gt;
+            &lt;&lt;/button&gt;&gt;\
+        &lt;&lt;/if&gt;&gt;\
+    &lt;/div&gt;\
+    &lt;div class=&quot;passage-nav passage-nav-left&quot;&gt;\
+        &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
+    &lt;/div&gt;\
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="4" name="AssemblyStation" tags="" position="475,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+    &lt;div class=&quot;HUD&quot;&gt;\
+        &lt;span&gt;&lt;strong&gt;Day:&lt;/strong&gt; $currentDay&lt;/span&gt; |\
+        &lt;span&gt;&lt;strong&gt;Orders Left:&lt;/strong&gt; $numOrders&lt;/span&gt; |\
+        &lt;span&gt;&lt;strong&gt;Score:&lt;/strong&gt; $dayScore&lt;/span&gt;\
+    &lt;/div&gt;\
+    &lt;hr&gt;\
+    &lt;&lt;if $activeOrder&gt;&gt;\
     &lt;div class=&quot;ticket-box&quot;&gt;\
         &lt;h3&gt;Customer: $activeOrder.custName&lt;/h3&gt;\
         &lt;p&gt;Order: $activeOrder.dishName&lt;/p&gt;\
         &lt;p&gt;Needs: &lt;&lt;print $activeOrder.requiredIngredients.join(&quot;, &quot;)&gt;&gt;&lt;/p&gt;\
     &lt;/div&gt;\
+    &lt;&lt;else&gt;&gt;\
+    &lt;div class=&quot;ticket-box&quot;&gt;\
+        &lt;p&gt;No active order. Return to the Order Window to take a customer&#39;s order.&lt;/p&gt;\
+    &lt;/div&gt;\
+    &lt;&lt;/if&gt;&gt;\
     &lt;div class=&quot;prep-area&quot;&gt;\
         &lt;h4&gt;Prep Tray&lt;/h4&gt;\
-        &lt;div id=&quot;tray&quot;&gt;
-            &lt;&lt;if $prepTray.length === 0&gt;&gt;
-                &lt;em&gt;Tap ingredients to add them to the tray.&lt;/em&gt;
-            &lt;&lt;else&gt;&gt;
-                &lt;&lt;print $prepTray.join(&quot;, &quot;)&gt;&gt;
-            &lt;&lt;/if&gt;&gt;
-        &lt;/div&gt;
+        &lt;div id=&quot;tray&quot;&gt;\
+            &lt;&lt;if $prepTray.length === 0&gt;&gt;\
+                &lt;em&gt;Tap ingredients to add them to the tray.&lt;/em&gt;\
+            &lt;&lt;else&gt;&gt;\
+                &lt;&lt;print $prepTray.join(&quot;, &quot;)&gt;&gt;\
+            &lt;&lt;/if&gt;&gt;\
+        &lt;/div&gt;\
     &lt;/div&gt;\
+    &lt;&lt;if $activeOrder&gt;&gt;\
     &lt;div class=&quot;ingredient-shelf&quot;&gt;\
         &lt;h4&gt;Ingredient Bins&lt;/h4&gt;\
         &lt;div class=&quot;ingredient-grid&quot;&gt;\
-            &lt;&lt;for _i = 0; _i &lt; $menuIngredients.length; _i++&gt;&gt;
-                &lt;&lt;capture _i&gt;&gt;
+            &lt;&lt;for _i = 0; _i &lt; $menuIngredients.length; _i++&gt;&gt;\
+                &lt;&lt;capture _i&gt;&gt;\
                 &lt;&lt;button `$menuIngredients[_i].img + &quot;\n&quot; + $menuIngredients[_i].name`&gt;&gt;
                     &lt;&lt;run $prepTray.push($menuIngredients[_i].name)&gt;&gt;
                     &lt;&lt;replace &quot;#tray&quot;&gt;&gt;
-                    &lt;&lt;print $prepTray.join(&quot; + &quot;)&gt;&gt;
-                    &lt;&lt;/replace&gt;&gt;
-                &lt;&lt;/button&gt;&gt;
-                &lt;&lt;/capture&gt;&gt;
-            &lt;&lt;/for&gt;&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
+                        &lt;&lt;print $prepTray.join(&quot; + &quot;)&gt;&gt;
+                    &lt;&lt;&lt;/replace&gt;&gt;&lt;&lt;/button&gt;&gt;\
+                &lt;&lt;/capture&gt;&gt;\
+            &lt;&lt;/for&gt;&gt;\
+        &lt;/div&gt;\
+    &lt;/div&gt;\
+    &lt;&lt;/if&gt;&gt;\
+    &lt;div class=&quot;passage-nav passage-nav-right&quot;&gt;\
+        &lt;&lt;button &quot;Order Window&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
+    &lt;/div&gt;\
 &lt;/div&gt;</tw-passagedata></tw-storydata>
 	<script id="script-sugarcube" type="text/javascript">
 	/*! SugarCube JS */

@@ -43,6 +43,124 @@ body {
   border: 3px solid rgba(255, 255, 255, 0.2);
 }
 
+.customer-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 0 10px;
+}
+
+.customer-window {
+  width: 100%;
+  height: 170px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 8px solid #795548;
+  border-radius: 18px;
+  background: linear-gradient(#bde8f2 0 72%, #e8cfa2 72%);
+  box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.6), 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+.customer-face {
+  width: 98px;
+  height: 98px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid #fff;
+  border-radius: 50%;
+  background: #fff;
+  color: #1a1a1a;
+  font-size: 4rem;
+  line-height: 1;
+}
+
+.customer-details {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.35);
+  text-align: center;
+}
+
+.customer-details h3,
+.customer-details p {
+  margin: 0;
+}
+
+.customer-details h3 {
+  font-size: 1rem;
+}
+
+.customer-details p {
+  font-size: 0.88rem;
+}
+
+.action-button {
+  margin: 8px 0;
+  text-align: center;
+}
+
+.action-button button,
+.passage-nav button {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin: 0;
+  padding: 10px 16px;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  background: #fff;
+  color: #123;
+  font: inherit;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.action-button button:hover,
+.passage-nav button:hover {
+  background: #a8ffdb;
+}
+
+.action-button button:focus-visible,
+.passage-nav button:focus-visible {
+  outline: 3px solid #a8ffdb;
+  outline-offset: 2px;
+}
+
+.order-status {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.fulfill-button {
+  margin-top: 10px;
+}
+
+.passage-nav {
+  position: absolute;
+  right: 25px;
+  bottom: 16px;
+  left: 25px;
+  display: flex;
+}
+
+.passage-nav-left {
+  justify-content: flex-start;
+}
+
+.passage-nav-right {
+  justify-content: flex-end;
+}
+
 .ticket-box {
   background: rgba(255, 255, 255, 0.95);
   color: #1a1a1a;
@@ -98,7 +216,7 @@ body {
 .ingredient-shelf {
   position: absolute;
   right: 25px;
-  bottom: 0;
+  bottom: 70px;
   left: 25px;
   max-height: 50%;
   overflow-y: auto;

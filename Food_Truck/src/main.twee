@@ -2,45 +2,122 @@
 <div class="phone">
     Welcome to your Food Truck! Are you ready to start serving customers?
 
-    [[Open Truck Window|TruckWindow]]
+    <<button "Start Day" "TakeOrderScreen">>
+        <<set $numOrders = 5>>
+        <<set $dayScore = 0>>
+        <<set $ordersCompleted = 0>>
+        <<set $prepTray = []>>
+        <<set $activeOrder = null>>
+    <</button>>
 </div>
 
-:: TruckWindow
+:: TakeOrderScreen
 <div class="phone">\
-    <div class="HUD">
-        <span><strong>Day:</strong> $currentDay</span> |
-        <span><strong>Orders Left:</strong> $numOrders</span> |
-        <span><strong>Score:</strong> $dayScore</span>  
+    <div class="HUD">\
+        <span><strong>Day:</strong> $currentDay</span> |\
+        <span><strong>Orders Left:</strong> $numOrders</span> |\
+        <span><strong>Score:</strong> $dayScore</span>\
     </div>\
     <hr>\
+    <section class="customer-panel">\
+        <div class="customer-window">\
+            <div class="customer-face" role="img" aria-label="Placeholder customer face">🙂</div>\
+        </div>\
+        <div class="customer-details">\
+            <<if $activeOrder>>\
+                <h3>$activeOrder.custName</h3>\
+                <p>"I'd like a $activeOrder.dishName, please!"</p>\
+            <<else>>\
+                <<if $numOrders > 0>>\
+                    <p>A customer is waiting. Take their order to get started.</p>\
+                <<else>>\
+                    <p>All orders have been served for today.</p>\
+                <</if>>\
+            <</if>>\
+        </div>\
+    </section>\
+    <div class="action-button">\
+        <<if !$activeOrder && $numOrders > 0>>\
+            <<button "Take Order" "TakeOrderScreen">>
+                <<set $activeOrder = $orderOptions[Math.floor(Math.random() * $orderOptions.length)]>>
+            <</button>>\
+        <<elseif $activeOrder>>\
+            <p class="order-status">Order received. Head to the truck window to prepare it.</p>\
+        <</if>>\
+    </div>\
+    <div class="prep-area">\
+        <h4>Prep Tray</h4>\
+        <div id="tray">\
+            <<if $prepTray.length === 0>>\
+                <em>No ingredients added yet.</em>\
+            <<else>>\
+                <<print $prepTray.join(" + ")>>\
+            <</if>>\
+        </div>\
+    </div>\
+    <div class="action-button fulfill-button">\
+        <<if $activeOrder>>\
+            <<button "Fulfill Order" "TakeOrderScreen">>
+                <<set $ordersCompleted += 1>>
+                <<set $dayScore += 1>>
+                <<set $numOrders -= 1>>
+                <<set $activeOrder = null>>
+                <<set $prepTray = []>>
+            <</button>>\
+        <</if>>\
+    </div>\
+    <div class="passage-nav passage-nav-left">\
+        <<button "Assembly Station" "AssemblyStation">><</button>>\
+    </div>\
+</div>
+
+:: AssemblyStation
+<div class="phone">\
+    <div class="HUD">\
+        <span><strong>Day:</strong> $currentDay</span> |\
+        <span><strong>Orders Left:</strong> $numOrders</span> |\
+        <span><strong>Score:</strong> $dayScore</span>\
+    </div>\
+    <hr>\
+    <<if $activeOrder>>\
     <div class="ticket-box">\
         <h3>Customer: $activeOrder.custName</h3>\
         <p>Order: $activeOrder.dishName</p>\
         <p>Needs: <<print $activeOrder.requiredIngredients.join(", ")>></p>\
     </div>\
+    <<else>>\
+    <div class="ticket-box">\
+        <p>No active order. Return to the Order Window to take a customer's order.</p>\
+    </div>\
+    <</if>>\
     <div class="prep-area">\
         <h4>Prep Tray</h4>\
-        <div id="tray">
-            <<if $prepTray.length === 0>>
-                <em>Tap ingredients to add them to the tray.</em>
-            <<else>>
-                <<print $prepTray.join(", ")>>
-            <</if>>
-        </div>
+        <div id="tray">\
+            <<if $prepTray.length === 0>>\
+                <em>Tap ingredients to add them to the tray.</em>\
+            <<else>>\
+                <<print $prepTray.join(", ")>>\
+            <</if>>\
+        </div>\
     </div>\
+    <<if $activeOrder>>\
     <div class="ingredient-shelf">\
         <h4>Ingredient Bins</h4>\
         <div class="ingredient-grid">\
-            <<for _i = 0; _i < $menuIngredients.length; _i++>>
-                <<capture _i>>
+            <<for _i = 0; _i < $menuIngredients.length; _i++>>\
+                <<capture _i>>\
                 <<button `$menuIngredients[_i].img + "\n" + $menuIngredients[_i].name`>>
                     <<run $prepTray.push($menuIngredients[_i].name)>>
                     <<replace "#tray">>
-                    <<print $prepTray.join(" + ")>>
-                    <</replace>>
-                <</button>>
-                <</capture>>
-            <</for>>
-        </div>
-    </div>
+                        <<print $prepTray.join(" + ")>>
+                    <<</replace>>
+                <</button>>\
+                <</capture>>\
+            <</for>>\
+        </div>\
+    </div>\
+    <</if>>\
+    <div class="passage-nav passage-nav-right">\
+        <<button "Order Window" "TakeOrderScreen">><</button>>\
+    </div>\
 </div>

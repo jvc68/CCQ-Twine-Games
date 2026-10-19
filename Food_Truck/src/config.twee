@@ -20,9 +20,9 @@ Food Truck Game
     { id: "tortilla", name: "Tortilla",    img: "🌮" },
     { id: "beans",    name: "Black Beans", img: "🫘" },
     { id: "squash",   name: "Squash",      img: "🎃" },
-    { id: "turkey",   name: "Lean Turkey", img: "🍗" },
+    { id: "turkey",   name: "Turkey",      img: "🍗" },
     { id: "garlic",   name: "Garlic",      img: "🧄" },
-    { id: "sage",     name: "Wild Sage",   img: "🌿" }
+    { id: "sage",     name: "Sage",        img: "🌿" }
 ]>>
 
 <<set $activeOrder = {
@@ -30,3 +30,21 @@ Food Truck Game
     dishName: "Dish1",
     requiredIngredients: ["Garlic", "Sage"]
 }>>
+
+<<set $orderOptions = [
+    {
+        custName: "Alice",
+        dishName: "Black Bean Taco",
+        requiredIngredients: ["Tortilla", "Black Beans", "Garlic"]
+    },
+    {
+        custName: "Jordan",
+        dishName: "Sage Turkey Taco",
+        requiredIngredients: ["Tortilla", "Turkey", "Sage"]
+    },
+    {
+        custName: "Sam",
+        dishName: "Squash and Black Bean Bowl",
+        requiredIngredients: ["Squash", "Black Beans", "Garlic"]
+    }
+]>>
