@@ -25,26 +25,4 @@ Food Truck Game
     { id: "sage",     name: "Sage",        img: "🌿" }
 ]>>
 
-<<set $activeOrder = {
-    custName: "Name1",
-    dishName: "Dish1",
-    requiredIngredients: ["Garlic", "Sage"]
-}>>
-
-<<set $orderOptions = [
-    {
-        custName: "Alice",
-        dishName: "Black Bean Taco",
-        requiredIngredients: ["Tortilla", "Black Beans", "Garlic"]
-    },
-    {
-        custName: "Jordan",
-        dishName: "Sage Turkey Taco",
-        requiredIngredients: ["Tortilla", "Turkey", "Sage"]
-    },
-    {
-        custName: "Sam",
-        dishName: "Squash and Black Bean Bowl",
-        requiredIngredients: ["Squash", "Black Beans", "Garlic"]
-    }
-]>>
+<<set $activeOrder = null>>

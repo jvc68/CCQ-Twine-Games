@@ -104,7 +104,8 @@ body {
 }
 
 .action-button button,
-.passage-nav button {
+.passage-nav button,
+.tray-controls button {
   appearance: none;
   display: inline-flex;
   align-items: center;
@@ -126,12 +127,14 @@ body {
 }
 
 .action-button button:hover,
-.passage-nav button:hover {
+.passage-nav button:hover,
+.tray-controls button:hover {
   background: #a8ffdb;
 }
 
 .action-button button:focus-visible,
-.passage-nav button:focus-visible {
+.passage-nav button:focus-visible,
+.tray-controls button:focus-visible {
   outline: 3px solid #a8ffdb;
   outline-offset: 2px;
 }
@@ -141,8 +144,23 @@ body {
   font-size: 0.85rem;
 }
 
-.fulfill-button {
-  margin-top: 10px;
+.fulfill-hint {
+  flex: 1;
+  font-size: 0.75rem;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.tray-controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 6px;
+}
+
+.tray-controls button {
+  min-height: 34px;
+  padding: 6px 10px;
+  font-size: 0.8rem;
 }
 
 .passage-nav {
@@ -154,7 +172,9 @@ body {
 }
 
 .passage-nav-left {
-  justify-content: flex-start;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
 }
 
 .passage-nav-right {

@@ -2,13 +2,7 @@
 <div class="phone">
     Welcome to your Food Truck! Are you ready to start serving customers?
 
-    <<button "Start Day" "TakeOrderScreen">>
-        <<set $numOrders = 5>>
-        <<set $dayScore = 0>>
-        <<set $ordersCompleted = 0>>
-        <<set $prepTray = []>>
-        <<set $activeOrder = null>>
-    <</button>>
+    <<button "Start Day" "TakeOrderScreen">><<run FoodTruck.startDay()>><</button>>
 </div>
 
 :: TakeOrderScreen
@@ -38,11 +32,9 @@
     </section>\
     <div class="action-button">\
         <<if !$activeOrder && $numOrders > 0>>\
-            <<button "Take Order" "TakeOrderScreen">>
-                <<set $activeOrder = $orderOptions[Math.floor(Math.random() * $orderOptions.length)]>>
-            <</button>>\
+            <<button "Take Order" "TakeOrderScreen">><<run FoodTruck.takeOrder()>><</button>>\
         <<elseif $activeOrder>>\
-            <p class="order-status">Order received. Head to the truck window to prepare it.</p>\
+            <p class="order-status">Order received. Head to the assembly station to prepare it.</p>\
         <</if>>\
     </div>\
     <div class="prep-area">\
@@ -55,18 +47,12 @@
             <</if>>\
         </div>\
     </div>\
-    <div class="action-button fulfill-button">\
-        <<if $activeOrder>>\
-            <<button "Fulfill Order" "TakeOrderScreen">>
-                <<set $ordersCompleted += 1>>
-                <<set $dayScore += 1>>
-                <<set $numOrders -= 1>>
-                <<set $activeOrder = null>>
-                <<set $prepTray = []>>
-            <</button>>\
-        <</if>>\
-    </div>\
     <div class="passage-nav passage-nav-left">\
+        <<if FoodTruck.canFulfillOrder()>>\
+            <<button "Fulfill Order" "TakeOrderScreen">><<run FoodTruck.fulfillOrder()>><</button>>\
+        <<elseif $activeOrder>>\
+            <span class="fulfill-hint">Complete Order to Fulfill.</span>\
+        <</if>>\
         <<button "Assembly Station" "AssemblyStation">><</button>>\
     </div>\
 </div>
@@ -99,6 +85,9 @@
                 <<print $prepTray.join(", ")>>\
             <</if>>\
         </div>\
+        <div class="tray-controls">\
+            <<button "Clear Tray">><<run FoodTruck.clearTray()>><</button>>\
+        </div>\
     </div>\
     <<if $activeOrder>>\
     <div class="ingredient-shelf">\
@@ -106,12 +95,7 @@
         <div class="ingredient-grid">\
             <<for _i = 0; _i < $menuIngredients.length; _i++>>\
                 <<capture _i>>\
-                <<button `$menuIngredients[_i].img + "\n" + $menuIngredients[_i].name`>>
-                    <<run $prepTray.push($menuIngredients[_i].name)>>
-                    <<replace "#tray">>
-                        <<print $prepTray.join(" + ")>>
-                    <<</replace>>
-                <</button>>\
+                <<button `FoodTruck.ingredientLabel(_i)`>><<run FoodTruck.addIngredient(_i)>><</button>>\
                 <</capture>>\
             <</for>>\
         </div>\

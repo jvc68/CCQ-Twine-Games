@@ -210,7 +210,8 @@ body {
 }
 
 .action-button button,
-.passage-nav button {
+.passage-nav button,
+.tray-controls button {
   appearance: none;
   display: inline-flex;
   align-items: center;
@@ -232,12 +233,14 @@ body {
 }
 
 .action-button button:hover,
-.passage-nav button:hover {
+.passage-nav button:hover,
+.tray-controls button:hover {
   background: #a8ffdb;
 }
 
 .action-button button:focus-visible,
-.passage-nav button:focus-visible {
+.passage-nav button:focus-visible,
+.tray-controls button:focus-visible {
   outline: 3px solid #a8ffdb;
   outline-offset: 2px;
 }
@@ -247,8 +250,23 @@ body {
   font-size: 0.85rem;
 }
 
-.fulfill-button {
-  margin-top: 10px;
+.fulfill-hint {
+  flex: 1;
+  font-size: 0.75rem;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.tray-controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 6px;
+}
+
+.tray-controls button {
+  min-height: 34px;
+  padding: 6px 10px;
+  font-size: 0.8rem;
 }
 
 .passage-nav {
@@ -260,7 +278,9 @@ body {
 }
 
 .passage-nav-left {
-  justify-content: flex-start;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
 }
 
 .passage-nav-right {
@@ -387,8 +407,114 @@ body {
 .ingredient-grid button:focus-visible {
   outline: 3px solid #a8ffdb;
   outline-offset: 2px;
-}</style><script role="script" id="twine-user-script" type="text/twine-javascript">window.checkRecipe = function(tray, required) {
-    print("Hello World!");
+}</style><script role="script" id="twine-user-script" type="text/twine-javascript">var orderOptions = [
+    {
+        custName: "Alice",
+        dishName: "Black Bean Taco",
+        requiredIngredients: ["Tortilla", "Black Beans", "Garlic"]
+    },
+    {
+        custName: "Jordan",
+        dishName: "Sage Turkey Taco",
+        requiredIngredients: ["Tortilla", "Turkey", "Sage"]
+    },
+    {
+        custName: "Sam",
+        dishName: "Squash and Black Bean Bowl",
+        requiredIngredients: ["Squash", "Black Beans", "Garlic"]
+    }
+];
+
+window.FoodTruck = {
+    startDay: function() {
+        var state = SugarCube.State.variables;
+        state.numOrders = 5;
+        state.dayScore = 0;
+        state.ordersCompleted = 0;
+        state.prepTray = [];
+        state.activeOrder = null;
+    },
+
+    takeOrder: function() {
+        var state = SugarCube.State.variables;
+
+        if (state.numOrders < 1 || state.activeOrder) {
+            return;
+        }
+
+        state.activeOrder = orderOptions[Math.floor(Math.random() * orderOptions.length)];
+    },
+
+    ingredientLabel: function(index) {
+        var ingredients = SugarCube.State.variables.menuIngredients;
+        var ingredient = ingredients[index];
+
+        if (!ingredient) {
+            throw new RangeError("Unknown ingredient index: " + index);
+        }
+
+        return ingredient.img + "\n" + ingredient.name;
+    },
+
+    addIngredient: function(index) {
+        var state = SugarCube.State.variables;
+        var ingredient = state.menuIngredients[index];
+
+        if (!state.activeOrder) {
+            throw new Error("Cannot add an ingredient without an active order.");
+        }
+        if (!ingredient) {
+            throw new RangeError("Unknown ingredient index: " + index);
+        }
+
+        state.prepTray.push(ingredient.name);
+        window.jQuery("#tray").text(state.prepTray.join(" + "));
+    },
+
+    clearTray: function() {
+        SugarCube.State.variables.prepTray = [];
+        window.jQuery("#tray").html("<em>Tap ingredients to add them to the tray.</em>");
+    },
+
+    canFulfillOrder: function() {
+        var state = SugarCube.State.variables;
+        var tray = state.prepTray;
+        var required = state.activeOrder && state.activeOrder.requiredIngredients;
+
+        if (!Array.isArray(tray) || !Array.isArray(required) || tray.length !== required.length) {
+            return false;
+        }
+
+        var counts = new Map();
+        tray.forEach(function(ingredient) {
+            counts.set(ingredient, (counts.get(ingredient) || 0) + 1);
+        });
+
+        return required.every(function(ingredient) {
+            var count = counts.get(ingredient) || 0;
+
+            if (count === 0) {
+                return false;
+            }
+
+            counts.set(ingredient, count - 1);
+            return true;
+        });
+    },
+
+    fulfillOrder: function() {
+        var state = SugarCube.State.variables;
+
+        if (!this.canFulfillOrder()) {
+            throw new Error("The prep tray does not match the active order.");
+        }
+
+        state.ordersCompleted += 1;
+        state.dayScore += 1;
+        state.numOrders -= 1;
+        state.activeOrder = null;
+        state.prepTray = [];
+    }
 };</script><tw-passagedata pid="1" name="StoryInit" tags="" position="100,100" size="100,100">&lt;&lt;set $numOrders = 0&gt;&gt;
 &lt;&lt;set $currentDay = 1&gt;&gt;
 &lt;&lt;set $dayScore = 0&gt;&gt;
@@ -404,38 +530,10 @@ body {
     { id: &quot;sage&quot;,     name: &quot;Sage&quot;,        img: &quot;🌿&quot; }
 ]&gt;&gt;
 
-&lt;&lt;set $activeOrder = {
-    custName: &quot;Name1&quot;,
-    dishName: &quot;Dish1&quot;,
-    requiredIngredients: [&quot;Garlic&quot;, &quot;Sage&quot;]
-}&gt;&gt;
-
-&lt;&lt;set $orderOptions = [
-    {
-        custName: &quot;Alice&quot;,
-        dishName: &quot;Black Bean Taco&quot;,
-        requiredIngredients: [&quot;Tortilla&quot;, &quot;Black Beans&quot;, &quot;Garlic&quot;]
-    },
-    {
-        custName: &quot;Jordan&quot;,
-        dishName: &quot;Sage Turkey Taco&quot;,
-        requiredIngredients: [&quot;Tortilla&quot;, &quot;Turkey&quot;, &quot;Sage&quot;]
-    },
-    {
-        custName: &quot;Sam&quot;,
-        dishName: &quot;Squash and Black Bean Bowl&quot;,
-        requiredIngredients: [&quot;Squash&quot;, &quot;Black Beans&quot;, &quot;Garlic&quot;]
-    }
-]&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="Start" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;
+&lt;&lt;set $activeOrder = null&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="Start" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;
     Welcome to your Food Truck! Are you ready to start serving customers?
 
-    &lt;&lt;button &quot;Start Day&quot; &quot;TakeOrderScreen&quot;&gt;&gt;
-        &lt;&lt;set $numOrders = 5&gt;&gt;
-        &lt;&lt;set $dayScore = 0&gt;&gt;
-        &lt;&lt;set $ordersCompleted = 0&gt;&gt;
-        &lt;&lt;set $prepTray = []&gt;&gt;
-        &lt;&lt;set $activeOrder = null&gt;&gt;
-    &lt;&lt;/button&gt;&gt;
+    &lt;&lt;button &quot;Start Day&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.startDay()&gt;&gt;&lt;&lt;/button&gt;&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="TakeOrderScreen" tags="" position="350,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
     &lt;div class=&quot;HUD&quot;&gt;\
         &lt;span&gt;&lt;strong&gt;Day:&lt;/strong&gt; $currentDay&lt;/span&gt; |\
@@ -462,11 +560,9 @@ body {
     &lt;/section&gt;\
     &lt;div class=&quot;action-button&quot;&gt;\
         &lt;&lt;if !$activeOrder &amp;&amp; $numOrders &gt; 0&gt;&gt;\
-            &lt;&lt;button &quot;Take Order&quot; &quot;TakeOrderScreen&quot;&gt;&gt;
-                &lt;&lt;set $activeOrder = $orderOptions[Math.floor(Math.random() * $orderOptions.length)]&gt;&gt;
-            &lt;&lt;/button&gt;&gt;\
+            &lt;&lt;button &quot;Take Order&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.takeOrder()&gt;&gt;&lt;&lt;/button&gt;&gt;\
         &lt;&lt;elseif $activeOrder&gt;&gt;\
-            &lt;p class=&quot;order-status&quot;&gt;Order received. Head to the truck window to prepare it.&lt;/p&gt;\
+            &lt;p class=&quot;order-status&quot;&gt;Order received. Head to the assembly station to prepare it.&lt;/p&gt;\
         &lt;&lt;/if&gt;&gt;\
     &lt;/div&gt;\
     &lt;div class=&quot;prep-area&quot;&gt;\
@@ -479,18 +575,12 @@ body {
             &lt;&lt;/if&gt;&gt;\
         &lt;/div&gt;\
     &lt;/div&gt;\
-    &lt;div class=&quot;action-button fulfill-button&quot;&gt;\
-        &lt;&lt;if $activeOrder&gt;&gt;\
-            &lt;&lt;button &quot;Fulfill Order&quot; &quot;TakeOrderScreen&quot;&gt;&gt;
-                &lt;&lt;set $ordersCompleted += 1&gt;&gt;
-                &lt;&lt;set $dayScore += 1&gt;&gt;
-                &lt;&lt;set $numOrders -= 1&gt;&gt;
-                &lt;&lt;set $activeOrder = null&gt;&gt;
-                &lt;&lt;set $prepTray = []&gt;&gt;
-            &lt;&lt;/button&gt;&gt;\
-        &lt;&lt;/if&gt;&gt;\
-    &lt;/div&gt;\
     &lt;div class=&quot;passage-nav passage-nav-left&quot;&gt;\
+        &lt;&lt;if FoodTruck.canFulfillOrder()&gt;&gt;\
+            &lt;&lt;button &quot;Fulfill Order&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.fulfillOrder()&gt;&gt;&lt;&lt;/button&gt;&gt;\
+        &lt;&lt;elseif $activeOrder&gt;&gt;\
+            &lt;span class=&quot;fulfill-hint&quot;&gt;Complete Order to Fulfill.&lt;/span&gt;\
+        &lt;&lt;/if&gt;&gt;\
         &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="4" name="AssemblyStation" tags="" position="475,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
@@ -520,6 +610,9 @@ body {
                 &lt;&lt;print $prepTray.join(&quot;, &quot;)&gt;&gt;\
             &lt;&lt;/if&gt;&gt;\
         &lt;/div&gt;\
+        &lt;div class=&quot;tray-controls&quot;&gt;\
+            &lt;&lt;button &quot;Clear Tray&quot;&gt;&gt;&lt;&lt;run FoodTruck.clearTray()&gt;&gt;&lt;&lt;/button&gt;&gt;\
+        &lt;/div&gt;\
     &lt;/div&gt;\
     &lt;&lt;if $activeOrder&gt;&gt;\
     &lt;div class=&quot;ingredient-shelf&quot;&gt;\
@@ -527,11 +620,7 @@ body {
         &lt;div class=&quot;ingredient-grid&quot;&gt;\
             &lt;&lt;for _i = 0; _i &lt; $menuIngredients.length; _i++&gt;&gt;\
                 &lt;&lt;capture _i&gt;&gt;\
-                &lt;&lt;button `$menuIngredients[_i].img + &quot;\n&quot; + $menuIngredients[_i].name`&gt;&gt;
-                    &lt;&lt;run $prepTray.push($menuIngredients[_i].name)&gt;&gt;
-                    &lt;&lt;replace &quot;#tray&quot;&gt;&gt;
-                        &lt;&lt;print $prepTray.join(&quot; + &quot;)&gt;&gt;
-                    &lt;&lt;&lt;/replace&gt;&gt;&lt;&lt;/button&gt;&gt;\
+                &lt;&lt;button `FoodTruck.ingredientLabel(_i)`&gt;&gt;&lt;&lt;run FoodTruck.addIngredient(_i)&gt;&gt;&lt;&lt;/button&gt;&gt;\
                 &lt;&lt;/capture&gt;&gt;\
             &lt;&lt;/for&gt;&gt;\
         &lt;/div&gt;\
