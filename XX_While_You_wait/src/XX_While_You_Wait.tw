@@ -14,11 +14,10 @@ While You Wait
 <<set $zombieDistance = 10000>>
 <<set $currentFidget = "bubbleWrap">>
 
-
-
 :: Home
 <div class="phone">Time Spent: TODO
 Bubble Wrap
 <div class="fidgetInterface" id="container"></div>
+  <div class="options" id="postContainer"></div>
   <<done>><<run setup.populateFidget("bubbleWrap")>><</done>>
 </div>
