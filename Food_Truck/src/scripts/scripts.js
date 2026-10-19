@@ -14,6 +14,7 @@ var orderOptions = [
         dishName: "Squash and Black Bean Bowl",
         requiredIngredients: ["Squash", "Black Beans", "Garlic"]
     }
+    // Add more orders as needed
 ];
 
 window.FoodTruck = {
@@ -24,6 +25,10 @@ window.FoodTruck = {
         state.ordersCompleted = 0;
         state.prepTray = [];
         state.activeOrder = null;
+        state.dayPreparationChoices = [];
+        state.pendingIngredient = null;
+        state.pendingMethod = null;
+        state.cookingResult = null;
     },
 
     takeOrder: function() {
@@ -47,7 +52,18 @@ window.FoodTruck = {
         return ingredient.img + "\n" + ingredient.name;
     },
 
-    addIngredient: function(index) {
+    methodLabel: function(type) {
+        var ingredient = SugarCube.State.variables.pendingIngredient;
+
+        if (!ingredient || !ingredient.methods || !ingredient.methods[type]) {
+            throw new Error("Cannot display a preparation method without a valid ingredient and method.");
+        }
+
+        return (type === "healthy" ? "A. " : "B. ") + ingredient.methods[type] +
+            (type === "healthy" ? " (Healthy)" : " (Unhealthy)");
+    },
+
+    selectIngredient: function(index) {
         var state = SugarCube.State.variables;
         var ingredient = state.menuIngredients[index];
 
@@ -58,8 +74,60 @@ window.FoodTruck = {
             throw new RangeError("Unknown ingredient index: " + index);
         }
 
-        state.prepTray.push(ingredient.name);
-        window.jQuery("#tray").text(state.prepTray.join(" + "));
+        state.pendingIngredient = ingredient;
+        state.pendingMethod = null;
+        state.cookingResult = null;
+    },
+
+    chooseMethod: function(type) {
+        var state = SugarCube.State.variables;
+        var ingredient = state.pendingIngredient;
+
+        if (!ingredient || !ingredient.methods || !ingredient.methods[type]) {
+            throw new Error("Cannot choose a preparation method without a valid ingredient and method.");
+        }
+
+        state.pendingMethod = {
+            type: type,
+            label: ingredient.methods[type]
+        };
+        state.cookingResult = null;
+    },
+
+    stopCooking: function() {
+        var state = SugarCube.State.variables;
+        var marker = document.getElementById("skill-marker");
+        var track = document.querySelector(".skill-track");
+
+        if (!state.pendingIngredient || !state.pendingMethod) {
+            throw new Error("Cannot finish cooking without an ingredient and preparation method.");
+        }
+        if (state.cookingResult) {
+            return;
+        }
+        if (!marker || !track || track.getBoundingClientRect().width === 0) {
+            throw new Error("The cooking skill-check track or marker is unavailable.");
+        }
+
+        var trackBounds = track.getBoundingClientRect();
+        var markerBounds = marker.getBoundingClientRect();
+        var markerCenter = markerBounds.left + markerBounds.width / 2;
+        var position = Math.max(0, Math.min(100,
+            ((markerCenter - trackBounds.left) / trackBounds.width) * 100
+        ));
+        var doneness = position < 42 ? "Raw" : position <= 58 ? "Perfect" : "Overcooked";
+        var choice = {
+            ingredient: state.pendingIngredient.name,
+            method: state.pendingMethod.label,
+            healthy: state.pendingMethod.type === "healthy",
+            doneness: doneness,
+            position: position
+        };
+
+        marker.style.animationPlayState = "paused";
+        state.dayPreparationChoices.push(choice);
+        state.prepTray.push(choice.ingredient);
+        state.cookingResult = choice;
     },
 
     clearTray: function() {

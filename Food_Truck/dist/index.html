@@ -407,6 +407,103 @@ body {
 .ingredient-grid button:focus-visible {
   outline: 3px solid #a8ffdb;
   outline-offset: 2px;
+}
+
+.method-options {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.method-options button {
+  appearance: none;
+  min-height: 58px;
+  padding: 12px 16px;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 14px;
+  background: #fff;
+  color: #123;
+  font: inherit;
+  font-weight: 700;
+  line-height: 1.25;
+  cursor: pointer;
+}
+
+.method-options button:hover {
+  background: #a8ffdb;
+}
+
+.method-options button:focus-visible {
+  outline: 3px solid #a8ffdb;
+  outline-offset: 2px;
+}
+
+.skill-instructions {
+  margin: 20px 0 12px;
+  text-align: center;
+}
+
+.skill-track {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 44px;
+  overflow: visible;
+  border: 3px solid #fff;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.24);
+}
+
+.skill-zone-raw,
+.skill-zone-overcooked {
+  width: 42%;
+}
+
+.skill-zone-raw {
+  background: #2563eb;
+  border-radius: 8px 0 0 8px;
+}
+
+.skill-zone-perfect {
+  width: 16%;
+  background: #16a34a;
+}
+
+.skill-zone-overcooked {
+  background: #dc2626;
+  border-radius: 0 8px 8px 0;
+}
+
+.skill-marker {
+  position: absolute;
+  top: -8px;
+  bottom: -8px;
+  left: 0;
+  width: 5px;
+  border: 1px solid #111;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+  transform: translateX(-50%);
+  animation: skill-slide 3.2s linear infinite alternate;
+}
+
+@keyframes skill-slide {
+  from { left: 0; }
+  to { left: 100%; }
+}
+
+.skill-legend {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 0.7rem;
+  text-align: center;
+}
+
+.skill-legend span {
+  flex: 1;
 }</style><script role="script" id="twine-user-script" type="text/twine-javascript">var orderOptions = [
     {
         custName: "Alice",
@@ -423,6 +520,7 @@ body {
         dishName: "Squash and Black Bean Bowl",
         requiredIngredients: ["Squash", "Black Beans", "Garlic"]
     }
+    // Add more orders as needed
 ];
 
 window.FoodTruck = {
@@ -433,6 +531,10 @@ window.FoodTruck = {
         state.ordersCompleted = 0;
         state.prepTray = [];
         state.activeOrder = null;
+        state.dayPreparationChoices = [];
+        state.pendingIngredient = null;
+        state.pendingMethod = null;
+        state.cookingResult = null;
     },
 
     takeOrder: function() {
@@ -456,7 +558,18 @@ window.FoodTruck = {
         return ingredient.img + "\n" + ingredient.name;
     },
 
-    addIngredient: function(index) {
+    methodLabel: function(type) {
+        var ingredient = SugarCube.State.variables.pendingIngredient;
+
+        if (!ingredient || !ingredient.methods || !ingredient.methods[type]) {
+            throw new Error("Cannot display a preparation method without a valid ingredient and method.");
+        }
+
+        return (type === "healthy" ? "A. " : "B. ") + ingredient.methods[type] +
+            (type === "healthy" ? " (Healthy)" : " (Unhealthy)");
+    },
+
+    selectIngredient: function(index) {
         var state = SugarCube.State.variables;
         var ingredient = state.menuIngredients[index];
 
@@ -467,8 +580,60 @@ window.FoodTruck = {
             throw new RangeError("Unknown ingredient index: " + index);
         }
 
-        state.prepTray.push(ingredient.name);
-        window.jQuery("#tray").text(state.prepTray.join(" + "));
+        state.pendingIngredient = ingredient;
+        state.pendingMethod = null;
+        state.cookingResult = null;
+    },
+
+    chooseMethod: function(type) {
+        var state = SugarCube.State.variables;
+        var ingredient = state.pendingIngredient;
+
+        if (!ingredient || !ingredient.methods || !ingredient.methods[type]) {
+            throw new Error("Cannot choose a preparation method without a valid ingredient and method.");
+        }
+
+        state.pendingMethod = {
+            type: type,
+            label: ingredient.methods[type]
+        };
+        state.cookingResult = null;
+    },
+
+    stopCooking: function() {
+        var state = SugarCube.State.variables;
+        var marker = document.getElementById("skill-marker");
+        var track = document.querySelector(".skill-track");
+
+        if (!state.pendingIngredient || !state.pendingMethod) {
+            throw new Error("Cannot finish cooking without an ingredient and preparation method.");
+        }
+        if (state.cookingResult) {
+            return;
+        }
+        if (!marker || !track || track.getBoundingClientRect().width === 0) {
+            throw new Error("The cooking skill-check track or marker is unavailable.");
+        }
+
+        var trackBounds = track.getBoundingClientRect();
+        var markerBounds = marker.getBoundingClientRect();
+        var markerCenter = markerBounds.left + markerBounds.width / 2;
+        var position = Math.max(0, Math.min(100,
+            ((markerCenter - trackBounds.left) / trackBounds.width) * 100
+        ));
+        var doneness = position < 42 ? "Raw" : position <= 58 ? "Perfect" : "Overcooked";
+        var choice = {
+            ingredient: state.pendingIngredient.name,
+            method: state.pendingMethod.label,
+            healthy: state.pendingMethod.type === "healthy",
+            doneness: doneness,
+            position: position
+        };
+
+        marker.style.animationPlayState = "paused";
+        state.dayPreparationChoices.push(choice);
+        state.prepTray.push(choice.ingredient);
+        state.cookingResult = choice;
     },
 
     clearTray: function() {
@@ -520,14 +685,18 @@ window.FoodTruck = {
 &lt;&lt;set $dayScore = 0&gt;&gt;
 &lt;&lt;set $ordersCompleted = 0&gt;&gt;
 &lt;&lt;set $prepTray = []&gt;&gt;
+&lt;&lt;set $dayPreparationChoices = []&gt;&gt;
+&lt;&lt;set $pendingIngredient = null&gt;&gt;
+&lt;&lt;set $pendingMethod = null&gt;&gt;
+&lt;&lt;set $cookingResult = null&gt;&gt;
 
 &lt;&lt;set $menuIngredients = [
-    { id: &quot;tortilla&quot;, name: &quot;Tortilla&quot;,    img: &quot;🌮&quot; },
-    { id: &quot;beans&quot;,    name: &quot;Black Beans&quot;, img: &quot;🫘&quot; },
-    { id: &quot;squash&quot;,   name: &quot;Squash&quot;,      img: &quot;🎃&quot; },
-    { id: &quot;turkey&quot;,   name: &quot;Turkey&quot;,      img: &quot;🍗&quot; },
-    { id: &quot;garlic&quot;,   name: &quot;Garlic&quot;,      img: &quot;🧄&quot; },
-    { id: &quot;sage&quot;,     name: &quot;Sage&quot;,        img: &quot;🌿&quot; }
+    { id: &quot;tortilla&quot;, name: &quot;Tortilla&quot;,    img: &quot;🌮&quot;, methods: { healthy: &quot;Toast on a dry griddle&quot;, unhealthy: &quot;Deep-fry until crisp&quot; } },
+    { id: &quot;beans&quot;,    name: &quot;Black Beans&quot;, img: &quot;🫘&quot;, methods: { healthy: &quot;Simmer with herbs&quot;, unhealthy: &quot;Refry with extra oil&quot; } },
+    { id: &quot;squash&quot;,   name: &quot;Squash&quot;,      img: &quot;🎃&quot;, methods: { healthy: &quot;Roast until tender&quot;, unhealthy: &quot;Deep-fry until crisp&quot; } },
+    { id: &quot;turkey&quot;,   name: &quot;Turkey&quot;,      img: &quot;🍗&quot;, methods: { healthy: &quot;Grill until cooked&quot;, unhealthy: &quot;Deep-fry until crisp&quot; } },
+    { id: &quot;garlic&quot;,   name: &quot;Garlic&quot;,      img: &quot;🧄&quot;, methods: { healthy: &quot;Roast until soft&quot;, unhealthy: &quot;Fry in extra oil&quot; } },
+    { id: &quot;sage&quot;,     name: &quot;Sage&quot;,        img: &quot;🌿&quot;, methods: { healthy: &quot;Use fresh leaves&quot;, unhealthy: &quot;Fry until crisp&quot; } }
 ]&gt;&gt;
 
 &lt;&lt;set $activeOrder = null&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="Start" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;
@@ -620,7 +789,7 @@ window.FoodTruck = {
         &lt;div class=&quot;ingredient-grid&quot;&gt;\
             &lt;&lt;for _i = 0; _i &lt; $menuIngredients.length; _i++&gt;&gt;\
                 &lt;&lt;capture _i&gt;&gt;\
-                &lt;&lt;button `FoodTruck.ingredientLabel(_i)`&gt;&gt;&lt;&lt;run FoodTruck.addIngredient(_i)&gt;&gt;&lt;&lt;/button&gt;&gt;\
+            &lt;&lt;button `FoodTruck.ingredientLabel(_i)` &quot;PrepareIngredient&quot;&gt;&gt;&lt;&lt;run FoodTruck.selectIngredient(_i)&gt;&gt;&lt;&lt;/button&gt;&gt;\
                 &lt;&lt;/capture&gt;&gt;\
             &lt;&lt;/for&gt;&gt;\
         &lt;/div&gt;\
@@ -628,6 +797,87 @@ window.FoodTruck = {
     &lt;&lt;/if&gt;&gt;\
     &lt;div class=&quot;passage-nav passage-nav-right&quot;&gt;\
         &lt;&lt;button &quot;Order Window&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
+    &lt;/div&gt;\
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="5" name="PrepareIngredient" tags="" position="600,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+    &lt;div class=&quot;HUD&quot;&gt;\
+        &lt;span&gt;&lt;strong&gt;Day:&lt;/strong&gt; $currentDay&lt;/span&gt; |\
+        &lt;span&gt;&lt;strong&gt;Orders Left:&lt;/strong&gt; $numOrders&lt;/span&gt; |\
+        &lt;span&gt;&lt;strong&gt;Score:&lt;/strong&gt; $dayScore&lt;/span&gt;\
+    &lt;/div&gt;\
+    &lt;hr&gt;\
+    &lt;&lt;if $pendingIngredient&gt;&gt;\
+        &lt;div class=&quot;ticket-box&quot;&gt;\
+            &lt;h3&gt;Prepare $pendingIngredient.name&lt;/h3&gt;\
+            &lt;p&gt;Choose a preparation method:&lt;/p&gt;\
+        &lt;/div&gt;\
+        &lt;div class=&quot;method-options&quot;&gt;\
+            &lt;&lt;button `FoodTruck.methodLabel(&quot;healthy&quot;)` &quot;CookingMinigame&quot;&gt;&gt;&lt;&lt;run FoodTruck.chooseMethod(&quot;healthy&quot;)&gt;&gt;&lt;&lt;/button&gt;&gt;\
+            &lt;&lt;button `FoodTruck.methodLabel(&quot;unhealthy&quot;)` &quot;CookingMinigame&quot;&gt;&gt;&lt;&lt;run FoodTruck.chooseMethod(&quot;unhealthy&quot;)&gt;&gt;&lt;&lt;/button&gt;&gt;\
+        &lt;/div&gt;\
+    &lt;&lt;else&gt;&gt;\
+        &lt;p&gt;Select an ingredient from the assembly station to prepare it.&lt;/p&gt;\
+    &lt;&lt;/if&gt;&gt;\
+    &lt;div class=&quot;passage-nav passage-nav-right&quot;&gt;\
+        &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
+    &lt;/div&gt;\
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="6" name="CookingMinigame" tags="" position="725,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+    &lt;div class=&quot;HUD&quot;&gt;\
+        &lt;span&gt;&lt;strong&gt;Day:&lt;/strong&gt; $currentDay&lt;/span&gt; |\
+        &lt;span&gt;&lt;strong&gt;Orders Left:&lt;/strong&gt; $numOrders&lt;/span&gt; |\
+        &lt;span&gt;&lt;strong&gt;Score:&lt;/strong&gt; $dayScore&lt;/span&gt;\
+    &lt;/div&gt;\
+    &lt;hr&gt;\
+    &lt;&lt;if $pendingIngredient &amp;&amp; $pendingMethod&gt;&gt;\
+        &lt;div class=&quot;ticket-box&quot;&gt;\
+            &lt;h3&gt;Cooking $pendingIngredient.name&lt;/h3&gt;\
+            &lt;p&gt;Method: $pendingMethod.label&lt;/p&gt;\
+        &lt;/div&gt;\
+        &lt;&lt;if $cookingResult&gt;&gt;\
+            &lt;p&gt;The ingredient has already been prepared.&lt;/p&gt;\
+            &lt;&lt;button &quot;View Cooking Result&quot; &quot;CookingResult&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
+        &lt;&lt;else&gt;&gt;\
+            &lt;p class=&quot;skill-instructions&quot;&gt;Stop the marker in the green section for a perfect cook.&lt;/p&gt;\
+            &lt;div class=&quot;skill-track&quot; role=&quot;img&quot; aria-label=&quot;Cooking skill check: blue is raw, green is perfect, and red is overcooked&quot;&gt;\
+                &lt;div class=&quot;skill-zone skill-zone-raw&quot;&gt;&lt;/div&gt;\
+                &lt;div class=&quot;skill-zone skill-zone-perfect&quot;&gt;&lt;/div&gt;\
+                &lt;div class=&quot;skill-zone skill-zone-overcooked&quot;&gt;&lt;/div&gt;\
+                &lt;div id=&quot;skill-marker&quot; class=&quot;skill-marker&quot;&gt;&lt;/div&gt;\
+            &lt;/div&gt;\
+            &lt;div class=&quot;skill-legend&quot;&gt;\
+                &lt;span&gt;Blue: Raw&lt;/span&gt;\
+                &lt;span&gt;Green: Perfect&lt;/span&gt;\
+                &lt;span&gt;Red: Overcooked&lt;/span&gt;\
+            &lt;/div&gt;\
+            &lt;div class=&quot;action-button&quot;&gt;\
+                &lt;&lt;button &quot;Stop Cooking&quot; &quot;CookingResult&quot;&gt;&gt;&lt;&lt;run FoodTruck.stopCooking()&gt;&gt;&lt;&lt;/button&gt;&gt;\
+            &lt;/div&gt;\
+        &lt;&lt;/if&gt;&gt;\
+    &lt;&lt;else&gt;&gt;\
+        &lt;p&gt;Choose a preparation method before starting the cooking check.&lt;/p&gt;\
+        &lt;&lt;button &quot;Choose a Method&quot; &quot;PrepareIngredient&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
+    &lt;&lt;/if&gt;&gt;\
+    &lt;div class=&quot;passage-nav passage-nav-right&quot;&gt;\
+        &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
+    &lt;/div&gt;\
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="7" name="CookingResult" tags="" position="850,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+    &lt;div class=&quot;HUD&quot;&gt;\
+        &lt;span&gt;&lt;strong&gt;Day:&lt;/strong&gt; $currentDay&lt;/span&gt; |\
+        &lt;span&gt;&lt;strong&gt;Orders Left:&lt;/strong&gt; $numOrders&lt;/span&gt; |\
+        &lt;span&gt;&lt;strong&gt;Score:&lt;/strong&gt; $dayScore&lt;/span&gt;\
+    &lt;/div&gt;\
+    &lt;hr&gt;\
+    &lt;&lt;if $cookingResult&gt;&gt;\
+        &lt;div class=&quot;ticket-box&quot;&gt;\
+            &lt;h3&gt;$cookingResult.doneness!&lt;/h3&gt;\
+            &lt;p&gt;$cookingResult.ingredient was added to the prep tray.&lt;/p&gt;\
+            &lt;p&gt;Preparation method: $cookingResult.method&lt;/p&gt;\
+            &lt;p&gt;Method type: &lt;&lt;if $cookingResult.healthy&gt;&gt;Healthy&lt;&lt;else&gt;&gt;Unhealthy&lt;&lt;/if&gt;&gt;&lt;/p&gt;\
+        &lt;/div&gt;\
+    &lt;&lt;else&gt;&gt;\
+        &lt;p&gt;Finish the cooking check before adding this ingredient to the tray.&lt;/p&gt;\
+    &lt;&lt;/if&gt;&gt;\
+    &lt;div class=&quot;passage-nav passage-nav-right&quot;&gt;\
+        &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
 &lt;/div&gt;</tw-passagedata></tw-storydata>
 	<script id="script-sugarcube" type="text/javascript">
