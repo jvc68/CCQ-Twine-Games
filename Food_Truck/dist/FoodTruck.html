@@ -255,6 +255,7 @@ body {
   font-size: 0.75rem;
   line-height: 1.2;
   text-align: center;
+  align-self: center;
 }
 
 .tray-controls {
@@ -298,6 +299,13 @@ body {
   flex-direction: column;
   /* border: 6px solid #00f187; */
   gap: 2px;
+}
+
+.ticket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
 }
 
 .ticket-box h3,
@@ -522,9 +530,12 @@ body {
     // Add more orders as needed
 ];
 
+var orderTimerInterval = null;
+
 window.FoodTruck = {
     startDay: function() {
         var state = SugarCube.State.variables;
+        this.stopOrderTimer();
         state.numOrders = 5;
         state.dayScore = 0;
         state.ordersCompleted = 0;
@@ -534,6 +545,7 @@ window.FoodTruck = {
         state.pendingIngredient = null;
         state.pendingMethod = null;
         state.cookingResult = null;
+        state.orderTimer = 120;
     },
 
     takeOrder: function() {
@@ -544,6 +556,8 @@ window.FoodTruck = {
         }
 
         state.activeOrder = orderOptions[Math.floor(Math.random() * orderOptions.length)];
+        state.orderTimer = 120;
+        this.startOrderTimer();
     },
 
     ingredientLabel: function(index) {
@@ -678,6 +692,64 @@ window.FoodTruck = {
         state.numOrders -= 1;
         state.activeOrder = null;
         state.prepTray = [];
+        this.stopOrderTimer();
+    },
+
+    startOrderTimer: function() {
+        var self = this;
+
+        this.stopOrderTimer();
+        if (!SugarCube.State.variables.activeOrder) {
+            return;
+        }
+
+        orderTimerInterval = setInterval(function() {
+            var state = SugarCube.State.variables;
+
+            if (!state.activeOrder) {
+                self.stopOrderTimer();
+                return;
+            }
+
+            state.orderTimer = Math.max(0, state.orderTimer - 1);
+            self.updateOrderTimerDisplay();
+
+            // clear all order details after reaching 0 on the timer
+            if (state.orderTimer <= 0) {
+                self.stopOrderTimer();
+                state.activeOrder = null;
+                state.prepTray = [];
+                state.pendingIngredient = null;
+                state.pendingMethod = null;
+                state.cookingResult = null;
+                state.numOrders -= 1;
+                SugarCube.Engine.play("TakeOrderScreen");
+            }
+        }, 1000);
+    },
+
+    stopOrderTimer: function() {
+        if (orderTimerInterval !== null) {
+            clearInterval(orderTimerInterval);
+            orderTimerInterval = null;
+        }
+    },
+
+    orderTimerDisplay: function() {
+        var seconds = Math.max(0, SugarCube.State.variables.orderTimer || 0);
+        var minutes = Math.floor(seconds / 60);
+        var remainingSeconds = seconds % 60;
+
+        return String(minutes).padStart(2, "0") + ":" +
+            String(remainingSeconds).padStart(2, "0");
+    },
+
+    updateOrderTimerDisplay: function() {
+        var timerElement = document.getElementById("order-timer");
+
+        if (timerElement) {
+            timerElement.textContent = this.orderTimerDisplay();
+        }
     }
 };</script><tw-passagedata pid="1" name="StoryInit" tags="" position="100,100" size="100,100">&lt;&lt;set $numOrders = 0&gt;&gt;
 &lt;&lt;set $currentDay = 1&gt;&gt;
@@ -698,7 +770,8 @@ window.FoodTruck = {
     { id: &quot;sage&quot;,     name: &quot;Sage&quot;,        img: &quot;🌿&quot;, methods: { healthy: &quot;Use fresh leaves&quot;, unhealthy: &quot;Fry until crisp&quot; } }
 ]&gt;&gt;
 
-&lt;&lt;set $activeOrder = null&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="Start" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;
+&lt;&lt;set $activeOrder = null&gt;&gt;
+&lt;&lt;set $orderTimer = 120&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="Start" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;
     Welcome to your Food Truck! Are you ready to start serving customers?
 
     &lt;&lt;button &quot;Start Day&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.startDay()&gt;&gt;&lt;&lt;/button&gt;&gt;
@@ -743,7 +816,7 @@ window.FoodTruck = {
             &lt;&lt;/if&gt;&gt;\
         &lt;/div&gt;\
     &lt;/div&gt;\
-    &lt;div class=&quot;passage-nav passage-nav-left&quot;&gt;\
+    &lt;div class=&quot;passage-nav passage-nav-right&quot;&gt;\
         &lt;&lt;if FoodTruck.canFulfillOrder()&gt;&gt;\
             &lt;&lt;button &quot;Fulfill Order&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.fulfillOrder()&gt;&gt;&lt;&lt;/button&gt;&gt;\
         &lt;&lt;elseif $activeOrder&gt;&gt;\
@@ -760,6 +833,13 @@ window.FoodTruck = {
     &lt;hr&gt;\
     &lt;&lt;if $activeOrder&gt;&gt;\
     &lt;div class=&quot;ticket-box&quot;&gt;\
+        &lt;div class=&quot;ticket-header&quot;&gt;\
+            &lt;h3&gt;Active Order&lt;/h3&gt;\
+            &lt;div class=&quot;timer-display&quot;&gt;\
+                &lt;span class=&quot;timer-label&quot;&gt;Time Left:&lt;/span&gt;\
+                &lt;span id=&quot;order-timer&quot; class=&quot;timer-value&quot;&gt;&lt;&lt;print FoodTruck.orderTimerDisplay()&gt;&gt;&lt;/span&gt;\
+            &lt;/div&gt;\
+        &lt;/div&gt;\
         &lt;h3&gt;Customer: $activeOrder.custName&lt;/h3&gt;\
         &lt;p&gt;Order: $activeOrder.dishName&lt;/p&gt;\
         &lt;p&gt;Needs: &lt;&lt;print $activeOrder.requiredIngredients.join(&quot;, &quot;)&gt;&gt;&lt;/p&gt;\

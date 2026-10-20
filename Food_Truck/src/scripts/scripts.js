@@ -17,9 +17,12 @@ var orderOptions = [
     // Add more orders as needed
 ];
 
+var orderTimerInterval = null;
+
 window.FoodTruck = {
     startDay: function() {
         var state = SugarCube.State.variables;
+        this.stopOrderTimer();
         state.numOrders = 5;
         state.dayScore = 0;
         state.ordersCompleted = 0;
@@ -29,6 +32,7 @@ window.FoodTruck = {
         state.pendingIngredient = null;
         state.pendingMethod = null;
         state.cookingResult = null;
+        state.orderTimer = 120;
     },
 
     takeOrder: function() {
@@ -39,6 +43,8 @@ window.FoodTruck = {
         }
 
         state.activeOrder = orderOptions[Math.floor(Math.random() * orderOptions.length)];
+        state.orderTimer = 120;
+        this.startOrderTimer();
     },
 
     ingredientLabel: function(index) {
@@ -173,5 +179,63 @@ window.FoodTruck = {
         state.numOrders -= 1;
         state.activeOrder = null;
         state.prepTray = [];
+        this.stopOrderTimer();
+    },
+
+    startOrderTimer: function() {
+        var self = this;
+
+        this.stopOrderTimer();
+        if (!SugarCube.State.variables.activeOrder) {
+            return;
+        }
+
+        orderTimerInterval = setInterval(function() {
+            var state = SugarCube.State.variables;
+
+            if (!state.activeOrder) {
+                self.stopOrderTimer();
+                return;
+            }
+
+            state.orderTimer = Math.max(0, state.orderTimer - 1);
+            self.updateOrderTimerDisplay();
+
+            // clear all order details after reaching 0 on the timer
+            if (state.orderTimer <= 0) {
+                self.stopOrderTimer();
+                state.activeOrder = null;
+                state.prepTray = [];
+                state.pendingIngredient = null;
+                state.pendingMethod = null;
+                state.cookingResult = null;
+                state.numOrders -= 1;
+                SugarCube.Engine.play("TakeOrderScreen");
+            }
+        }, 1000);
+    },
+
+    stopOrderTimer: function() {
+        if (orderTimerInterval !== null) {
+            clearInterval(orderTimerInterval);
+            orderTimerInterval = null;
+        }
+    },
+
+    orderTimerDisplay: function() {
+        var seconds = Math.max(0, SugarCube.State.variables.orderTimer || 0);
+        var minutes = Math.floor(seconds / 60);
+        var remainingSeconds = seconds % 60;
+
+        return String(minutes).padStart(2, "0") + ":" +
+            String(remainingSeconds).padStart(2, "0");
+    },
+
+    updateOrderTimerDisplay: function() {
+        var timerElement = document.getElementById("order-timer");
+
+        if (timerElement) {
+            timerElement.textContent = this.orderTimerDisplay();
+        }
     }
 };

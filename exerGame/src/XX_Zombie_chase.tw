@@ -25,6 +25,7 @@ Zombie Chase
           <<button "Easy" "Chase">><<run setup.setMode('easy')>><</button>>
           <<button "Medium" "Chase">><<run setup.setMode('med')>><</button>>
           <<button "Hard" "Chase">><<run setup.setMode('hard')>><</button>>
+          <<button "Impossible" "Chase">><<run setup.setMode('impossible')>><</button>>
         </div>
       </div>
 
@@ -34,21 +35,23 @@ Zombie Chase
 </div>
 
 :: Chase
-<div class="phone">Chase
+<div class="phone">Step Power: <span id="multi"></span>
   <img src="../../img/zombies.png">
-  Zombies are <span id="zombieDist"></span> Steps Away!
-  <div class="mainTab"> <img src="../../img/bar.png">
-  <<button "Run!" >><<run setup.incZombieDist(1)>><</button>>
-  <<done>><<run setup.startChase()>><</done>>
+  <img src="../../img/bar.png">
+  <span id="zombieDist"></span>
+  <span id="zombieCnt"></span><div class="mainTab"> <<button "Run!" >><<run setup.incZombieDist(1)>><</button>>
 
-
-
-
-
-
-
-
-
+  <div class="extras" id="extras">Extras</div>
   <<button "Return" "Home">><<run setup.clearID()>><</button>>
+  <<done>><<run setup.startChase()>><</done>>
   </div>
+</div>
+
+:: You Win
+<div class="phone">Congrats
+<<button "Return" "Home">><<run setup.reset()>><</button>>
+</div>
+:: You Lose
+<div class="phone">You lose
+<<button "Return" "Home">><<run setup.reset()>><</button>>
 </div>
