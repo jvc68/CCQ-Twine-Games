@@ -47,7 +47,7 @@
             <</if>>\
         </div>\
     </div>\
-    <div class="passage-nav passage-nav-left">\
+    <div class="passage-nav passage-nav-right">\
         <<if FoodTruck.canFulfillOrder()>>\
             <<button "Fulfill Order" "TakeOrderScreen">><<run FoodTruck.fulfillOrder()>><</button>>\
         <<elseif $activeOrder>>\
@@ -67,6 +67,13 @@
     <hr>\
     <<if $activeOrder>>\
     <div class="ticket-box">\
+        <div class="ticket-header">\
+            <h3>Active Ticket</h3>\
+            <div class="timer-display">\
+                <span class="timer-label">Time Left:</span>\
+                <span id="order-timer" class="timer-value"><<print FoodTruck.orderTimerDisplay()>></span>\
+            </div>\
+        </div>\
         <h3>Customer: $activeOrder.custName</h3>\
         <p>Order: $activeOrder.dishName</p>\
         <p>Needs: <<print $activeOrder.requiredIngredients.join(", ")>></p>\

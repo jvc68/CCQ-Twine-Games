@@ -30,3 +30,4 @@ Food Truck Game
 ]>>
 
 <<set $activeOrder = null>>
+<<set $orderTimer = 120>>

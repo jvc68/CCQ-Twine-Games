@@ -149,6 +149,7 @@ body {
   font-size: 0.75rem;
   line-height: 1.2;
   text-align: center;
+  align-self: center;
 }
 
 .tray-controls {
@@ -192,6 +193,13 @@ body {
   flex-direction: column;
   /* border: 6px solid #00f187; */
   gap: 2px;
+}
+
+.ticket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
 }
 
 .ticket-box h3,
