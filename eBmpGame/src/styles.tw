@@ -24,7 +24,7 @@ body {
   padding: 1.5em 0;
 }
 
-/*#ui-bar { display: none; }*/
+#ui-bar { display: none; }
 
 #story {
   margin: 0 auto;

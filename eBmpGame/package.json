@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tweego -o dist/XX_While_You_Wait.html src/",
+    "build": "tweego -o dist/while_you_wait.html src/",
     "watch": "nodemon --watch src --ext tw --exec \"npm run build\""
   },
   "keywords": [],
