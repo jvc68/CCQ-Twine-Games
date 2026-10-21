@@ -569,8 +569,10 @@ body {
 ];
 
 var orderTimerInterval = null;
+var maxPrepTrayIngredients = 3;
 
 window.FoodTruck = {
+    /* Function Description: Initializes the food truck for a new day */
     startDay: function() {
         var state = SugarCube.State.variables;
         this.stopOrderTimer();
@@ -589,11 +591,13 @@ window.FoodTruck = {
         state.orderTimer = 120;
     },
 
+    /* Function Description: Starts the next day by incrementing the current day and calling startDay */
     startNextDay: function() {
         SugarCube.State.variables.currentDay += 1;
         this.startDay();
     },
 
+    /* Function Description: Randomly selects an order from the orderOptions array and sets it as the active order */
     takeOrder: function() {
         var state = SugarCube.State.variables;
 
@@ -606,6 +610,7 @@ window.FoodTruck = {
         this.startOrderTimer();
     },
 
+    /* Function Description: Returns a string representation of the ingredient at the specified index, including its image and name */
     ingredientLabel: function(index) {
         var ingredients = SugarCube.State.variables.menuIngredients;
         var ingredient = ingredients[index];
@@ -638,6 +643,12 @@ window.FoodTruck = {
         if (!ingredient) {
             throw new RangeError("Unknown ingredient index: " + index);
         }
+        if (state.prepTray.length >= maxPrepTrayIngredients) {
+            state.pendingIngredient = null;
+            state.pendingMethod = null;
+            state.cookingResult = null;
+            return;
+        }
 
         state.pendingIngredient = ingredient;
         state.pendingMethod = null;
@@ -668,6 +679,9 @@ window.FoodTruck = {
             throw new Error("Cannot finish cooking without an ingredient and preparation method.");
         }
         if (state.cookingResult) {
+            return;
+        }
+        if (state.prepTray.length >= maxPrepTrayIngredients) {
             return;
         }
         if (!marker || !track || track.getBoundingClientRect().width === 0) {
@@ -768,19 +782,19 @@ window.FoodTruck = {
         if (state.satisfactionScore <= 2) {
             tips.push("Aim for the green zone to serve more perfectly cooked ingredients.");
         } else if (state.satisfactionScore === 3) {
-            tips.push("A little more precision in the cooking check can earn perfect-cook stars.");
+            tips.push("A little more precision in the cooking check can earn more satisfaction score.");
         } else {
-            tips.push("Your ingredients were cooked just right; keep it up.");
+            tips.push("Your ingredients were cooked just right, good job!");
         }
 
         tips.push("\n\n");
 
         if (state.healthinessScore <= 2) {
-            tips.push("Choose healthy preparation methods more often to boost your healthiness score.");
+            tips.push("Try choosing healthier preparation methods more often to boost your healthiness score.");
         } else if (state.healthinessScore === 3) {
             tips.push("Try a few more healthy preparation methods to improve your healthiness score.");
         } else {
-            tips.push("You made healthy choices throughout the day; keep it up.");
+            tips.push("You made healthy choices throughout the day, good job!");
         }
 
         return tips.join(" ");
@@ -941,13 +955,13 @@ window.FoodTruck = {
             &lt;&lt;/if&gt;&gt;\
         &lt;/div&gt;\
     &lt;/div&gt;\
-    &lt;div class=&quot;passage-nav passage-nav-right&quot;&gt;\
+    &lt;div class=&quot;passage-nav passage-nav-left&quot;&gt;\
+        &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
         &lt;&lt;if FoodTruck.canFulfillOrder()&gt;&gt;\
             &lt;&lt;button &quot;Fulfill Order&quot;&gt;&gt;&lt;&lt;run FoodTruck.fulfillOrder()&gt;&gt;&lt;&lt;/button&gt;&gt;\
         &lt;&lt;elseif $activeOrder&gt;&gt;\
             &lt;span class=&quot;fulfill-hint&quot;&gt;Complete Order to Fulfill.&lt;/span&gt;\
         &lt;&lt;/if&gt;&gt;\
-        &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="4" name="DayTally" tags="" position="475,100" size="100,100">&lt;div class=&quot;phone day-tally-screen&quot;&gt;\
     &lt;section class=&quot;day-tally-box&quot;&gt;\

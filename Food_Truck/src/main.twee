@@ -47,13 +47,13 @@
             <</if>>\
         </div>\
     </div>\
-    <div class="passage-nav passage-nav-right">\
+    <div class="passage-nav passage-nav-left">\
+        <<button "Assembly Station" "AssemblyStation">><</button>>\
         <<if FoodTruck.canFulfillOrder()>>\
             <<button "Fulfill Order">><<run FoodTruck.fulfillOrder()>><</button>>\
         <<elseif $activeOrder>>\
             <span class="fulfill-hint">Complete Order to Fulfill.</span>\
         <</if>>\
-        <<button "Assembly Station" "AssemblyStation">><</button>>\
     </div>\
 </div>
 

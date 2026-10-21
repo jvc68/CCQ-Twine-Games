@@ -18,6 +18,7 @@ var orderOptions = [
 ];
 
 var orderTimerInterval = null;
+var maxPrepTrayIngredients = 3;
 
 window.FoodTruck = {
     /* Function Description: Initializes the food truck for a new day */
@@ -91,6 +92,12 @@ window.FoodTruck = {
         if (!ingredient) {
             throw new RangeError("Unknown ingredient index: " + index);
         }
+        if (state.prepTray.length >= maxPrepTrayIngredients) {
+            state.pendingIngredient = null;
+            state.pendingMethod = null;
+            state.cookingResult = null;
+            return;
+        }
 
         state.pendingIngredient = ingredient;
         state.pendingMethod = null;
@@ -121,6 +128,9 @@ window.FoodTruck = {
             throw new Error("Cannot finish cooking without an ingredient and preparation method.");
         }
         if (state.cookingResult) {
+            return;
+        }
+        if (state.prepTray.length >= maxPrepTrayIngredients) {
             return;
         }
         if (!marker || !track || track.getBoundingClientRect().width === 0) {
@@ -221,19 +231,19 @@ window.FoodTruck = {
         if (state.satisfactionScore <= 2) {
             tips.push("Aim for the green zone to serve more perfectly cooked ingredients.");
         } else if (state.satisfactionScore === 3) {
-            tips.push("A little more precision in the cooking check can earn perfect-cook stars.");
+            tips.push("A little more precision in the cooking check can earn more satisfaction score.");
         } else {
-            tips.push("Your ingredients were cooked just right; keep it up.");
+            tips.push("Your ingredients were cooked just right, good job!");
         }
 
         tips.push("\n\n");
 
         if (state.healthinessScore <= 2) {
-            tips.push("Choose healthy preparation methods more often to boost your healthiness score.");
+            tips.push("Try choosing healthier preparation methods more often to boost your healthiness score.");
         } else if (state.healthinessScore === 3) {
             tips.push("Try a few more healthy preparation methods to improve your healthiness score.");
         } else {
-            tips.push("You made healthy choices throughout the day; keep it up.");
+            tips.push("You made healthy choices throughout the day, good job!");
         }
 
         return tips.join(" ");
