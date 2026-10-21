@@ -20,6 +20,7 @@ var orderOptions = [
 var orderTimerInterval = null;
 
 window.FoodTruck = {
+    /* Function Description: Initializes the food truck for a new day */
     startDay: function() {
         var state = SugarCube.State.variables;
         this.stopOrderTimer();
@@ -38,11 +39,13 @@ window.FoodTruck = {
         state.orderTimer = 120;
     },
 
+    /* Function Description: Starts the next day by incrementing the current day and calling startDay */
     startNextDay: function() {
         SugarCube.State.variables.currentDay += 1;
         this.startDay();
     },
 
+    /* Function Description: Randomly selects an order from the orderOptions array and sets it as the active order */
     takeOrder: function() {
         var state = SugarCube.State.variables;
 
@@ -55,6 +58,7 @@ window.FoodTruck = {
         this.startOrderTimer();
     },
 
+    /* Function Description: Returns a string representation of the ingredient at the specified index, including its image and name */
     ingredientLabel: function(index) {
         var ingredients = SugarCube.State.variables.menuIngredients;
         var ingredient = ingredients[index];
