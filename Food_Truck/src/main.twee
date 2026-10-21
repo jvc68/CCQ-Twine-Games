@@ -47,14 +47,28 @@
             <</if>>\
         </div>\
     </div>\
-    <div class="passage-nav passage-nav-right">\
+    <div class="passage-nav passage-nav-left">\
+        <<button "Assembly Station" "AssemblyStation">><</button>>\
         <<if FoodTruck.canFulfillOrder()>>\
-            <<button "Fulfill Order" "TakeOrderScreen">><<run FoodTruck.fulfillOrder()>><</button>>\
+            <<button "Fulfill Order">><<run FoodTruck.fulfillOrder()>><</button>>\
         <<elseif $activeOrder>>\
             <span class="fulfill-hint">Complete Order to Fulfill.</span>\
         <</if>>\
-        <<button "Assembly Station" "AssemblyStation">><</button>>\
     </div>\
+</div>
+
+:: DayTally
+<div class="phone day-tally-screen">\
+    <section class="day-tally-box">\
+        <h2>Customer Satisfaction</h2>\
+        <p class="tally-stars" aria-label="Customer satisfaction: $satisfactionScore out of 5 stars"><<print FoodTruck.starRating($satisfactionScore)>></p>\
+        <h2>Healthiness</h2>\
+        <p class="tally-stars" aria-label="Healthiness: $healthinessScore out of 5 stars"><<print FoodTruck.starRating($healthinessScore)>></p>\
+        <p class="tally-tip"><<print FoodTruck.dayTips()>></p>\
+        <div class="action-button">\
+            <<button "Start Next Day" "TakeOrderScreen">><<run FoodTruck.startNextDay()>><</button>>\
+        </div>\
+    </section>\
 </div>
 
 :: AssemblyStation

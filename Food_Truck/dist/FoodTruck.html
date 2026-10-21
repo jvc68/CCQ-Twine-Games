@@ -324,6 +324,44 @@ body {
   font-size: 0.9rem;
 }
 
+.day-tally-box {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1a1a1a;
+  border-radius: 16px;
+  padding: 20px 16px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.day-tally-screen {
+  display: flex;
+  align-items: center;
+}
+
+.day-tally-box h2 {
+  margin: 0;
+  color: #0d1b2a;
+  font-size: 1.15rem;
+}
+
+.tally-stars {
+  margin: 4px 0 18px;
+  color: #e09b00;
+  font-size: 1.8rem;
+  letter-spacing: 0.08em;
+}
+
+.tally-tip {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.day-tally-box .action-button button {
+  background-color: #00f187;
+  margin-bottom: 0;
+}
+
 .prep-area {
   background: rgba(0, 0, 0, 0.35);
   border-radius: 16px;
@@ -531,14 +569,19 @@ body {
 ];
 
 var orderTimerInterval = null;
+var maxPrepTrayIngredients = 3;
 
 window.FoodTruck = {
+    /* Function Description: Initializes the food truck for a new day */
     startDay: function() {
         var state = SugarCube.State.variables;
         this.stopOrderTimer();
-        state.numOrders = 5;
+        /* REMEMBER TO RESET NUM ORDERS BACK TO 5 WHEN TESTING IS DONE */
+        state.numOrders = 1;
         state.dayScore = 0;
         state.ordersCompleted = 0;
+        state.satisfactionScore = 0;
+        state.healthinessScore = 0;
         state.prepTray = [];
         state.activeOrder = null;
         state.dayPreparationChoices = [];
@@ -548,6 +591,13 @@ window.FoodTruck = {
         state.orderTimer = 120;
     },
 
+    /* Function Description: Starts the next day by incrementing the current day and calling startDay */
+    startNextDay: function() {
+        SugarCube.State.variables.currentDay += 1;
+        this.startDay();
+    },
+
+    /* Function Description: Randomly selects an order from the orderOptions array and sets it as the active order */
     takeOrder: function() {
         var state = SugarCube.State.variables;
 
@@ -560,6 +610,7 @@ window.FoodTruck = {
         this.startOrderTimer();
     },
 
+    /* Function Description: Returns a string representation of the ingredient at the specified index, including its image and name */
     ingredientLabel: function(index) {
         var ingredients = SugarCube.State.variables.menuIngredients;
         var ingredient = ingredients[index];
@@ -592,6 +643,12 @@ window.FoodTruck = {
         if (!ingredient) {
             throw new RangeError("Unknown ingredient index: " + index);
         }
+        if (state.prepTray.length >= maxPrepTrayIngredients) {
+            state.pendingIngredient = null;
+            state.pendingMethod = null;
+            state.cookingResult = null;
+            return;
+        }
 
         state.pendingIngredient = ingredient;
         state.pendingMethod = null;
@@ -622,6 +679,9 @@ window.FoodTruck = {
             throw new Error("Cannot finish cooking without an ingredient and preparation method.");
         }
         if (state.cookingResult) {
+            return;
+        }
+        if (state.prepTray.length >= maxPrepTrayIngredients) {
             return;
         }
         if (!marker || !track || track.getBoundingClientRect().width === 0) {
@@ -680,6 +740,72 @@ window.FoodTruck = {
         });
     },
 
+    calculateDayScores: function() {
+        var state = SugarCube.State.variables;
+        var choices = state.dayPreparationChoices;
+        var totalChoices = choices.length;
+        var healthyChoices = 0;
+        var perfectChoices = 0;
+
+        choices.forEach(function(choice) {
+            if (choice.healthy) {
+                healthyChoices += 1;
+            }
+            if (choice.doneness === "Perfect") {
+                perfectChoices += 1;
+            }
+        });
+
+        state.healthinessScore = totalChoices === 0
+            ? 0
+            : Math.round(healthyChoices / totalChoices * 5);
+        state.satisfactionScore = totalChoices === 0
+            ? 0
+            : Math.round(perfectChoices / totalChoices * 5);
+
+        return {
+            healthinessScore: state.healthinessScore,
+            satisfactionScore: state.satisfactionScore
+        };
+    },
+
+    starRating: function(score) {
+        var filledStars = Math.max(0, Math.min(5, Math.round(score || 0)));
+
+        return "★".repeat(filledStars) + "☆".repeat(5 - filledStars);
+    },
+
+    dayTips: function() {
+        var state = SugarCube.State.variables;
+        var tips = [];
+
+        if (state.satisfactionScore <= 2) {
+            tips.push("Aim for the green zone to serve more perfectly cooked ingredients.");
+        } else if (state.satisfactionScore === 3) {
+            tips.push("A little more precision in the cooking check can earn more satisfaction score.");
+        } else {
+            tips.push("Your ingredients were cooked just right, good job!");
+        }
+
+        tips.push("\n\n");
+
+        if (state.healthinessScore <= 2) {
+            tips.push("Try choosing healthier preparation methods more often to boost your healthiness score.");
+        } else if (state.healthinessScore === 3) {
+            tips.push("Try a few more healthy preparation methods to improve your healthiness score.");
+        } else {
+            tips.push("You made healthy choices throughout the day, good job!");
+        }
+
+        return tips.join(" ");
+    },
+
+    finishDay: function() {
+        this.stopOrderTimer();
+        this.calculateDayScores();
+        SugarCube.Engine.play("DayTally");
+    },
+
     fulfillOrder: function() {
         var state = SugarCube.State.variables;
 
@@ -693,6 +819,12 @@ window.FoodTruck = {
         state.activeOrder = null;
         state.prepTray = [];
         this.stopOrderTimer();
+
+        if (state.numOrders === 0) {
+            this.finishDay();
+        } else {
+            SugarCube.Engine.play("TakeOrderScreen");
+        }
     },
 
     startOrderTimer: function() {
@@ -723,7 +855,12 @@ window.FoodTruck = {
                 state.pendingMethod = null;
                 state.cookingResult = null;
                 state.numOrders -= 1;
-                SugarCube.Engine.play("TakeOrderScreen");
+
+                if (state.numOrders === 0) {
+                    self.finishDay();
+                } else {
+                    SugarCube.Engine.play("TakeOrderScreen");
+                }
             }
         }, 1000);
     },
@@ -760,6 +897,8 @@ window.FoodTruck = {
 &lt;&lt;set $pendingIngredient = null&gt;&gt;
 &lt;&lt;set $pendingMethod = null&gt;&gt;
 &lt;&lt;set $cookingResult = null&gt;&gt;
+&lt;&lt;set $satisfactionScore = 0&gt;&gt;
+&lt;&lt;set $healthinessScore = 0&gt;&gt;
 
 &lt;&lt;set $menuIngredients = [
     { id: &quot;tortilla&quot;, name: &quot;Tortilla&quot;,    img: &quot;🌮&quot;, methods: { healthy: &quot;Toast on a dry griddle&quot;, unhealthy: &quot;Deep-fry until crisp&quot; } },
@@ -816,15 +955,26 @@ window.FoodTruck = {
             &lt;&lt;/if&gt;&gt;\
         &lt;/div&gt;\
     &lt;/div&gt;\
-    &lt;div class=&quot;passage-nav passage-nav-right&quot;&gt;\
+    &lt;div class=&quot;passage-nav passage-nav-left&quot;&gt;\
+        &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
         &lt;&lt;if FoodTruck.canFulfillOrder()&gt;&gt;\
-            &lt;&lt;button &quot;Fulfill Order&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.fulfillOrder()&gt;&gt;&lt;&lt;/button&gt;&gt;\
+            &lt;&lt;button &quot;Fulfill Order&quot;&gt;&gt;&lt;&lt;run FoodTruck.fulfillOrder()&gt;&gt;&lt;&lt;/button&gt;&gt;\
         &lt;&lt;elseif $activeOrder&gt;&gt;\
             &lt;span class=&quot;fulfill-hint&quot;&gt;Complete Order to Fulfill.&lt;/span&gt;\
         &lt;&lt;/if&gt;&gt;\
-        &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="4" name="AssemblyStation" tags="" position="475,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="4" name="DayTally" tags="" position="475,100" size="100,100">&lt;div class=&quot;phone day-tally-screen&quot;&gt;\
+    &lt;section class=&quot;day-tally-box&quot;&gt;\
+        &lt;h2&gt;Customer Satisfaction&lt;/h2&gt;\
+        &lt;p class=&quot;tally-stars&quot; aria-label=&quot;Customer satisfaction: $satisfactionScore out of 5 stars&quot;&gt;&lt;&lt;print FoodTruck.starRating($satisfactionScore)&gt;&gt;&lt;/p&gt;\
+        &lt;h2&gt;Healthiness&lt;/h2&gt;\
+        &lt;p class=&quot;tally-stars&quot; aria-label=&quot;Healthiness: $healthinessScore out of 5 stars&quot;&gt;&lt;&lt;print FoodTruck.starRating($healthinessScore)&gt;&gt;&lt;/p&gt;\
+        &lt;p class=&quot;tally-tip&quot;&gt;&lt;&lt;print FoodTruck.dayTips()&gt;&gt;&lt;/p&gt;\
+        &lt;div class=&quot;action-button&quot;&gt;\
+            &lt;&lt;button &quot;Start Next Day&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.startNextDay()&gt;&gt;&lt;&lt;/button&gt;&gt;\
+        &lt;/div&gt;\
+    &lt;/section&gt;\
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="5" name="AssemblyStation" tags="" position="600,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
     &lt;div class=&quot;HUD&quot;&gt;\
         &lt;span&gt;&lt;strong&gt;Day:&lt;/strong&gt; $currentDay&lt;/span&gt; |\
         &lt;span&gt;&lt;strong&gt;Orders Left:&lt;/strong&gt; $numOrders&lt;/span&gt; |\
@@ -834,7 +984,7 @@ window.FoodTruck = {
     &lt;&lt;if $activeOrder&gt;&gt;\
     &lt;div class=&quot;ticket-box&quot;&gt;\
         &lt;div class=&quot;ticket-header&quot;&gt;\
-            &lt;h3&gt;Active Order&lt;/h3&gt;\
+            &lt;h3&gt;Active Ticket&lt;/h3&gt;\
             &lt;div class=&quot;timer-display&quot;&gt;\
                 &lt;span class=&quot;timer-label&quot;&gt;Time Left:&lt;/span&gt;\
                 &lt;span id=&quot;order-timer&quot; class=&quot;timer-value&quot;&gt;&lt;&lt;print FoodTruck.orderTimerDisplay()&gt;&gt;&lt;/span&gt;\
@@ -877,7 +1027,7 @@ window.FoodTruck = {
     &lt;div class=&quot;passage-nav passage-nav-right&quot;&gt;\
         &lt;&lt;button &quot;Order Window&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="5" name="PrepareIngredient" tags="" position="600,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="6" name="PrepareIngredient" tags="" position="725,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
     &lt;div class=&quot;HUD&quot;&gt;\
         &lt;span&gt;&lt;strong&gt;Day:&lt;/strong&gt; $currentDay&lt;/span&gt; |\
         &lt;span&gt;&lt;strong&gt;Orders Left:&lt;/strong&gt; $numOrders&lt;/span&gt; |\
@@ -899,7 +1049,7 @@ window.FoodTruck = {
     &lt;div class=&quot;passage-nav passage-nav-right&quot;&gt;\
         &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="6" name="CookingMinigame" tags="" position="725,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="7" name="CookingMinigame" tags="" position="850,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
     &lt;div class=&quot;HUD&quot;&gt;\
         &lt;span&gt;&lt;strong&gt;Day:&lt;/strong&gt; $currentDay&lt;/span&gt; |\
         &lt;span&gt;&lt;strong&gt;Orders Left:&lt;/strong&gt; $numOrders&lt;/span&gt; |\
@@ -938,7 +1088,7 @@ window.FoodTruck = {
     &lt;div class=&quot;passage-nav passage-nav-right&quot;&gt;\
         &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="7" name="CookingResult" tags="" position="850,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="8" name="CookingResult" tags="" position="975,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
     &lt;div class=&quot;HUD&quot;&gt;\
         &lt;span&gt;&lt;strong&gt;Day:&lt;/strong&gt; $currentDay&lt;/span&gt; |\
         &lt;span&gt;&lt;strong&gt;Orders Left:&lt;/strong&gt; $numOrders&lt;/span&gt; |\

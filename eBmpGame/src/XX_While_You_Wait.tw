@@ -13,11 +13,27 @@ While You Wait
 :: StoryInit {"position": "100,100", "size": "100,100"}
 <<set $zombieDistance = 10000>>
 <<set $currentFidget = "bubbleWrap">>
+<<run setInterval(setup.updateTimer, 1000)>>
+<<=setup.formattedTime = "00:00:00">>
 
 :: Home
-<div class="phone">Time Spent: TODO
-Bubble Wrap
+<div class="phone">Time Spent: <span id="timer"><<=setup.formattedTime>></span>
+<span id="currentFidget">Switch</span>
 <div class="fidgetInterface" id="container"></div>
   <div class="options" id="postContainer"></div>
-  <<done>><<run setup.populateFidget("bubbleWrap")>><</done>>
+  <<done>><<run setup.populateFidget()>><</done>>
+  <div class="flButton"> 
+    <<button "Fidget Library" "Fidget Library">><</button>>
+  </div>
+</div>
+
+:: Fidget Library
+<div class="phone">Fidget Library
+Time Spent: <span id="timer"><<=setup.formattedTime>></span>
+  <div class="library">
+    <<button "Bubble Wrap">><<run setup.swapFidget("bubbleWrap")>><</button>>
+    <<button "Light Switch">><<run setup.swapFidget("switch")>><</button>>
+  </div> 
+
+
 </div>

@@ -18,14 +18,19 @@ var orderOptions = [
 ];
 
 var orderTimerInterval = null;
+var maxPrepTrayIngredients = 3;
 
 window.FoodTruck = {
+    /* Function Description: Initializes the food truck for a new day */
     startDay: function() {
         var state = SugarCube.State.variables;
         this.stopOrderTimer();
-        state.numOrders = 5;
+        /* REMEMBER TO RESET NUM ORDERS BACK TO 5 WHEN TESTING IS DONE */
+        state.numOrders = 1;
         state.dayScore = 0;
         state.ordersCompleted = 0;
+        state.satisfactionScore = 0;
+        state.healthinessScore = 0;
         state.prepTray = [];
         state.activeOrder = null;
         state.dayPreparationChoices = [];
@@ -35,6 +40,13 @@ window.FoodTruck = {
         state.orderTimer = 120;
     },
 
+    /* Function Description: Starts the next day by incrementing the current day and calling startDay */
+    startNextDay: function() {
+        SugarCube.State.variables.currentDay += 1;
+        this.startDay();
+    },
+
+    /* Function Description: Randomly selects an order from the orderOptions array and sets it as the active order */
     takeOrder: function() {
         var state = SugarCube.State.variables;
 
@@ -47,6 +59,7 @@ window.FoodTruck = {
         this.startOrderTimer();
     },
 
+    /* Function Description: Returns a string representation of the ingredient at the specified index, including its image and name */
     ingredientLabel: function(index) {
         var ingredients = SugarCube.State.variables.menuIngredients;
         var ingredient = ingredients[index];
@@ -79,6 +92,12 @@ window.FoodTruck = {
         if (!ingredient) {
             throw new RangeError("Unknown ingredient index: " + index);
         }
+        if (state.prepTray.length >= maxPrepTrayIngredients) {
+            state.pendingIngredient = null;
+            state.pendingMethod = null;
+            state.cookingResult = null;
+            return;
+        }
 
         state.pendingIngredient = ingredient;
         state.pendingMethod = null;
@@ -109,6 +128,9 @@ window.FoodTruck = {
             throw new Error("Cannot finish cooking without an ingredient and preparation method.");
         }
         if (state.cookingResult) {
+            return;
+        }
+        if (state.prepTray.length >= maxPrepTrayIngredients) {
             return;
         }
         if (!marker || !track || track.getBoundingClientRect().width === 0) {
@@ -167,6 +189,72 @@ window.FoodTruck = {
         });
     },
 
+    calculateDayScores: function() {
+        var state = SugarCube.State.variables;
+        var choices = state.dayPreparationChoices;
+        var totalChoices = choices.length;
+        var healthyChoices = 0;
+        var perfectChoices = 0;
+
+        choices.forEach(function(choice) {
+            if (choice.healthy) {
+                healthyChoices += 1;
+            }
+            if (choice.doneness === "Perfect") {
+                perfectChoices += 1;
+            }
+        });
+
+        state.healthinessScore = totalChoices === 0
+            ? 0
+            : Math.round(healthyChoices / totalChoices * 5);
+        state.satisfactionScore = totalChoices === 0
+            ? 0
+            : Math.round(perfectChoices / totalChoices * 5);
+
+        return {
+            healthinessScore: state.healthinessScore,
+            satisfactionScore: state.satisfactionScore
+        };
+    },
+
+    starRating: function(score) {
+        var filledStars = Math.max(0, Math.min(5, Math.round(score || 0)));
+
+        return "★".repeat(filledStars) + "☆".repeat(5 - filledStars);
+    },
+
+    dayTips: function() {
+        var state = SugarCube.State.variables;
+        var tips = [];
+
+        if (state.satisfactionScore <= 2) {
+            tips.push("Aim for the green zone to serve more perfectly cooked ingredients.");
+        } else if (state.satisfactionScore === 3) {
+            tips.push("A little more precision in the cooking check can earn more satisfaction score.");
+        } else {
+            tips.push("Your ingredients were cooked just right, good job!");
+        }
+
+        tips.push("\n\n");
+
+        if (state.healthinessScore <= 2) {
+            tips.push("Try choosing healthier preparation methods more often to boost your healthiness score.");
+        } else if (state.healthinessScore === 3) {
+            tips.push("Try a few more healthy preparation methods to improve your healthiness score.");
+        } else {
+            tips.push("You made healthy choices throughout the day, good job!");
+        }
+
+        return tips.join(" ");
+    },
+
+    finishDay: function() {
+        this.stopOrderTimer();
+        this.calculateDayScores();
+        SugarCube.Engine.play("DayTally");
+    },
+
     fulfillOrder: function() {
         var state = SugarCube.State.variables;
 
@@ -180,6 +268,12 @@ window.FoodTruck = {
         state.activeOrder = null;
         state.prepTray = [];
         this.stopOrderTimer();
+
+        if (state.numOrders === 0) {
+            this.finishDay();
+        } else {
+            SugarCube.Engine.play("TakeOrderScreen");
+        }
     },
 
     startOrderTimer: function() {
@@ -210,7 +304,12 @@ window.FoodTruck = {
                 state.pendingMethod = null;
                 state.cookingResult = null;
                 state.numOrders -= 1;
-                SugarCube.Engine.play("TakeOrderScreen");
+
+                if (state.numOrders === 0) {
+                    self.finishDay();
+                } else {
+                    SugarCube.Engine.play("TakeOrderScreen");
+                }
             }
         }, 1000);
     },

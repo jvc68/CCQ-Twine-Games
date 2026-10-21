@@ -218,6 +218,44 @@ body {
   font-size: 0.9rem;
 }
 
+.day-tally-box {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1a1a1a;
+  border-radius: 16px;
+  padding: 20px 16px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.day-tally-screen {
+  display: flex;
+  align-items: center;
+}
+
+.day-tally-box h2 {
+  margin: 0;
+  color: #0d1b2a;
+  font-size: 1.15rem;
+}
+
+.tally-stars {
+  margin: 4px 0 18px;
+  color: #e09b00;
+  font-size: 1.8rem;
+  letter-spacing: 0.08em;
+}
+
+.tally-tip {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.day-tally-box .action-button button {
+  background-color: #00f187;
+  margin-bottom: 0;
+}
+
 .prep-area {
   background: rgba(0, 0, 0, 0.35);
   border-radius: 16px;
