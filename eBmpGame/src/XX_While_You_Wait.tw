@@ -32,8 +32,7 @@ Time Spent: <span id="timer"><<=setup.formattedTime>></span>
     <<button "Bubble Wrap">><<run setup.swapFidget("bubbleWrap")>><</button>>
     <<button "Light Switch">><<run setup.swapFidget("switch")>><</button>>
     <<button "Drums">><<run setup.swapFidget("drums")>><</button>>
-    <<button "Buttons">><<run setup.swapFidget("controlPanel")>><</button>>
+    <<button "Control Panel">><<run setup.swapFidget("controlPanel")>><</button>>
   </div> 
-
 
 </div>

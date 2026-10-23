@@ -223,12 +223,16 @@ body {
   display: block;
 }</style><script role="script" id="twine-user-script" type="text/twine-javascript">/* twine-user-script #1: "script.js" */
 setup.prevRand = -1
-setup.currentFidget = "controlPanel"
+setup.currentFidget = "bubbleWrap"
 
 setup.isMouseDown = false;
 
 document.addEventListener('mousedown', () => { setup.isMouseDown = true; });
 document.addEventListener('mouseup', () => { setup.isMouseDown = false; });
+
+setup.con = function con(bur) {
+	console.log(bur)
+}
 
 /*This function allows for clicking and dragging to pop bubbles */
 setup.bubbleRespondDrag = function bubbleRespond(obj) {
@@ -343,12 +347,15 @@ setup.populateFidget = function populateFidget() {
 				newButton.classList.add("bubble");
 				container.appendChild(newButton);
 			}
+
 			let refreshButton = document.createElement('button');
 			refreshButton.addEventListener('click', () => setup.populateFidget(setup.currentFidget));
 			refreshButton.classList.add("refreshButton");
 			refreshButton.textContent = "Refresh Bubble Wrap"
 			postContainer.appendChild(refreshButton);
+
 			break;
+
 		case "switch":
 			fidgetLabel.textContent = "Light Switch"
 			let newButton = document.createElement('button');
@@ -357,7 +364,9 @@ setup.populateFidget = function populateFidget() {
 			newButton.style.backgroundColor = "#5C5C5C";
 			newButton.id = "on"
 			container.appendChild(newButton);
+
 			break;
+
 		case "controlPanel":
 			fidgetLabel.textContent = "Control Panel"
 			let newDiv = document.createElement('div');
@@ -378,6 +387,7 @@ setup.populateFidget = function populateFidget() {
 				newLight.classList.add("light");
 				lightRow.appendChild(newLight);
 				setup.light[i] = [newLight, 1, 1]
+
 				let newButton = document.createElement('button');
 				newButton.classList.add("lightButton");
 				newButton.addEventListener('click', () => setup.toggleLight(setup.light[i]));
@@ -397,14 +407,28 @@ setup.populateFidget = function populateFidget() {
 					flipCol.appendChild(newFlip)
 				}
 				flipRow.appendChild(flipCol);
-
 			}
 
 			newDiv.appendChild(lightRow)
 			newDiv.appendChild(flipRow)
 			newDiv.appendChild(buttonRow)
 			container.appendChild(newDiv);
+
 			break;
+
+		case "drums":
+			fidgetLabel.textContent = "Drum Kit"
+			container.innerHTML = `
+			<button class="snare">snare</button>
+  			<button class="bass">bass</button>
+  			<button class="hihat">hihat</button>
+  			<button class="lowTom">lowTom</button>
+  			<button class="medTom">medTom</button>
+  			<button class="topTom">topTom</button>
+  			<button class="crash">crash</button>`;
+
+			break;
+
 		default:
 			console.log(`Something went wrong when populating fidget, given ${setup.currentFidget}`)
 	}
@@ -487,9 +511,8 @@ Time Spent: &lt;span id=&quot;timer&quot;&gt;&lt;&lt;=setup.formattedTime&gt;&gt
     &lt;&lt;button &quot;Bubble Wrap&quot;&gt;&gt;&lt;&lt;run setup.swapFidget(&quot;bubbleWrap&quot;)&gt;&gt;&lt;&lt;/button&gt;&gt;
     &lt;&lt;button &quot;Light Switch&quot;&gt;&gt;&lt;&lt;run setup.swapFidget(&quot;switch&quot;)&gt;&gt;&lt;&lt;/button&gt;&gt;
     &lt;&lt;button &quot;Drums&quot;&gt;&gt;&lt;&lt;run setup.swapFidget(&quot;drums&quot;)&gt;&gt;&lt;&lt;/button&gt;&gt;
-    &lt;&lt;button &quot;Buttons&quot;&gt;&gt;&lt;&lt;run setup.swapFidget(&quot;controlPanel&quot;)&gt;&gt;&lt;&lt;/button&gt;&gt;
+    &lt;&lt;button &quot;Control Panel&quot;&gt;&gt;&lt;&lt;run setup.swapFidget(&quot;controlPanel&quot;)&gt;&gt;&lt;&lt;/button&gt;&gt;
   &lt;/div&gt; 
-
 
 &lt;/div&gt;</tw-passagedata></tw-storydata>
 	<script id="script-sugarcube" type="text/javascript">

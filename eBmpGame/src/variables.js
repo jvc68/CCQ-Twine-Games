@@ -9,6 +9,9 @@ SimpleAudio.tracks.add("bub6", "audio/bub6.mp3");
 /*The best one, do not change*/SimpleAudio.tracks.add("bub7", "audio/bub7.mp3");
 /*Feels too long*/SimpleAudio.tracks.add("bub8", "audio/bub8.mp3");
 
+/*Array For drums, makes code look cleaner */
+setup.instruments = ["snare", "bass", "hihat", "lowTom", "medTom", "topTom", "crash"]
+
 /*Color dictionary for Control panel */
 setup.lightColors = {
 	"1": [`0px 0px 10px rgba(255, 255, 255, 1),

@@ -1,10 +1,14 @@
 setup.prevRand = -1
-setup.currentFidget = "controlPanel"
+setup.currentFidget = "bubbleWrap"
 
 setup.isMouseDown = false;
 
 document.addEventListener('mousedown', () => { setup.isMouseDown = true; });
 document.addEventListener('mouseup', () => { setup.isMouseDown = false; });
+
+setup.con = function con(bur) {
+	console.log(bur)
+}
 
 /*This function allows for clicking and dragging to pop bubbles */
 setup.bubbleRespondDrag = function bubbleRespond(obj) {
@@ -119,12 +123,15 @@ setup.populateFidget = function populateFidget() {
 				newButton.classList.add("bubble");
 				container.appendChild(newButton);
 			}
+
 			let refreshButton = document.createElement('button');
 			refreshButton.addEventListener('click', () => setup.populateFidget(setup.currentFidget));
 			refreshButton.classList.add("refreshButton");
 			refreshButton.textContent = "Refresh Bubble Wrap"
 			postContainer.appendChild(refreshButton);
+
 			break;
+
 		case "switch":
 			fidgetLabel.textContent = "Light Switch"
 			let newButton = document.createElement('button');
@@ -133,7 +140,9 @@ setup.populateFidget = function populateFidget() {
 			newButton.style.backgroundColor = "#5C5C5C";
 			newButton.id = "on"
 			container.appendChild(newButton);
+
 			break;
+
 		case "controlPanel":
 			fidgetLabel.textContent = "Control Panel"
 			let newDiv = document.createElement('div');
@@ -154,6 +163,7 @@ setup.populateFidget = function populateFidget() {
 				newLight.classList.add("light");
 				lightRow.appendChild(newLight);
 				setup.light[i] = [newLight, 1, 1]
+
 				let newButton = document.createElement('button');
 				newButton.classList.add("lightButton");
 				newButton.addEventListener('click', () => setup.toggleLight(setup.light[i]));
@@ -173,14 +183,25 @@ setup.populateFidget = function populateFidget() {
 					flipCol.appendChild(newFlip)
 				}
 				flipRow.appendChild(flipCol);
-
 			}
 
 			newDiv.appendChild(lightRow)
 			newDiv.appendChild(flipRow)
 			newDiv.appendChild(buttonRow)
 			container.appendChild(newDiv);
+
 			break;
+
+		case "drums":
+			fidgetLabel.textContent = "Drum Kit"
+			for (item in setup.instruments) {
+				let newButton = document.createElement('button');
+				newButton.classList.add(item);
+				newButton.addEventListener('click', () => setup.play(item));
+				container.appendChild(newButton);
+			}
+			break;
+
 		default:
 			console.log(`Something went wrong when populating fidget, given ${setup.currentFidget}`)
 	}
