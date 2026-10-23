@@ -1,40 +1,51 @@
-SimpleAudio.tracks.add("bub1", "audio/bub1.mp3");
-/*I don't like two*/SimpleAudio.tracks.add("bub2", "audio/bub2.mp3");
-SimpleAudio.tracks.add("bub3", "audio/bub3.mp3");
-SimpleAudio.tracks.add("bub4", "audio/bub4.mp3");
-/*I can change this*/SimpleAudio.tracks.add("bub5", "audio/bub5.mp3");
-SimpleAudio.tracks.add("bub6", "audio/bub6.mp3");
-SimpleAudio.tracks.add("bub7", "audio/bub7.mp3");
-/*Feels too long*/SimpleAudio.tracks.add("bub8", "audio/bub8.mp3");
-
 setup.prevRand = -1
-setup.currentFidget = "switch"
+setup.currentFidget = "controlPanel"
 
-setup.respond = function respond(name, obj) {
+setup.isMouseDown = false;
+
+document.addEventListener('mousedown', () => { setup.isMouseDown = true; });
+document.addEventListener('mouseup', () => { setup.isMouseDown = false; });
+
+/*This function allows for clicking and dragging to pop bubbles */
+setup.bubbleRespondDrag = function bubbleRespond(obj) {
+	if (setup.isMouseDown) {
+		if (obj.id == "popped") {
+			return
+		}
+		let random = setup.prevRand
+		do {
+			random = Math.floor(Math.random() * 7) + 1
+		} while (random == setup.prevRand)
+		setup.prevRand = random
+		SimpleAudio.select(`bub${random}`).play();
+		obj.style.backgroundColor = "white";
+		obj.id = "popped"
+	}
+}
+
+setup.bubbleRespond = function bubbleRespond(obj) {
 	if (obj.id == "popped") {
 		return
 	}
-	switch (name) {
-		case "bubbleWrap":
-			let random = setup.prevRand
-			do {
-				random = Math.floor(Math.random() * 7) + 1
-			} while (random == setup.prevRand)
-			setup.prevRand = random
-			SimpleAudio.select(`bub${random}`).play();
-			obj.style.backgroundColor = "white";
-			obj.id = "popped"
-			break;
-		case "switch":
-			SimpleAudio.select(`bub7`).stop();
-			SimpleAudio.select(`bub7`).play();
-			if (obj.id == "on") {
-				obj.style.backgroundColor = "#2B2B2B";
-				obj.id = "off"
-			} else {
-				obj.style.backgroundColor = "#5C5C5C";
-				obj.id = "on"
-			}
+	let random = setup.prevRand
+	do {
+		random = Math.floor(Math.random() * 7) + 1
+	} while (random == setup.prevRand)
+	setup.prevRand = random
+	SimpleAudio.select(`bub${random}`).play();
+	obj.style.backgroundColor = "white";
+	obj.id = "popped"
+}
+
+setup.switchRespond = function switchRespond(obj) {
+	SimpleAudio.select(`bub7`).stop();
+	SimpleAudio.select(`bub7`).play();
+	if (obj.id == "on") {
+		obj.style.backgroundColor = "#2B2B2B";
+		obj.id = "off"
+	} else {
+		obj.style.backgroundColor = "#5C5C5C";
+		obj.id = "on"
 	}
 }
 
@@ -42,6 +53,53 @@ setup.swapFidget = function swapFidget(id) {
 	setup.currentFidget = id
 	setTimeout(function () { Engine.play("Home") }, 600);
 }
+
+
+setup.toggleLight = function toggleLight(light) {
+
+	/*light is an array, that looks like:
+	[obj, int1, int2] where 
+	obj is the html element,
+	int1 is whether its on or off,
+	int2 is the current color it is*/
+
+	/*1 means on, 0 means off */
+	if (light[1] == 1) {
+		light[0].style.boxShadow = `none`
+		light[0].style.backgroundColor = 'transparent'
+		light[1] = 0
+	} else {
+		light[0].style.boxShadow = setup.lightColors[light[2]][0]
+		light[0].style.backgroundColor = setup.lightColors[light[2]][1]
+		light[1] = 1
+	}
+}
+
+setup.incLight = function incLight(light) {
+	if (light[2] == 8) {
+		light[2] = 1
+	} else {
+		light[2] += 1
+	}
+
+	light[0].style.boxShadow = setup.lightColors[light[2]][0]
+	console.log(setup.lightColors[light[2]][0])
+	light[0].style.backgroundColor = setup.lightColors[light[2]][1]
+}
+
+setup.decLight = function decLight(light) {
+	if (light[2] == 1) {
+		light[2] = 8
+	} else {
+		light[2] -= 1
+	}
+
+	light[0].style.boxShadow = setup.lightColors[light[2]][0]
+	console.log(setup.lightColors[light[2]][0])
+	light[0].style.backgroundColor = setup.lightColors[light[2]][1]
+}
+
+setup.light = [0, 0, 0, 0]
 
 setup.populateFidget = function populateFidget() {
 	let container = document.getElementById("container");
@@ -56,7 +114,8 @@ setup.populateFidget = function populateFidget() {
 			for (let i = 0; i < (13 * 12); i++) {
 				let newButton = document.createElement('button');
 				newButton.id = "notPopped"
-				newButton.addEventListener('click', () => setup.respond(setup.currentFidget, newButton));
+				newButton.addEventListener('mouseover', () => setup.bubbleRespondDrag(newButton));
+				newButton.addEventListener('click', () => setup.bubbleRespond(newButton));
 				newButton.classList.add("bubble");
 				container.appendChild(newButton);
 			}
@@ -67,16 +126,63 @@ setup.populateFidget = function populateFidget() {
 			postContainer.appendChild(refreshButton);
 			break;
 		case "switch":
-			fidgetLabel.textContent = "Switch"
+			fidgetLabel.textContent = "Light Switch"
 			let newButton = document.createElement('button');
-			newButton.addEventListener('click', () => setup.respond(setup.currentFidget, newButton));
+			newButton.addEventListener('click', () => setup.switchRespond(newButton));
 			newButton.classList.add("switch");
 			newButton.style.backgroundColor = "#5C5C5C";
 			newButton.id = "on"
 			container.appendChild(newButton);
 			break;
+		case "controlPanel":
+			fidgetLabel.textContent = "Control Panel"
+			let newDiv = document.createElement('div');
+			newDiv.classList.add("controlPanel");
+
+
+			let buttonRow = document.createElement('div');
+			buttonRow.classList.add("row");
+
+			let lightRow = document.createElement('span');
+			lightRow.classList.add("row");
+
+			let flipRow = document.createElement('div');
+			flipRow.classList.add("row");
+
+			for (let i = 0; i < 4; i++) {
+				let newLight = document.createElement('div');
+				newLight.classList.add("light");
+				lightRow.appendChild(newLight);
+				setup.light[i] = [newLight, 1, 1]
+				let newButton = document.createElement('button');
+				newButton.classList.add("lightButton");
+				newButton.addEventListener('click', () => setup.toggleLight(setup.light[i]));
+				buttonRow.appendChild(newButton);
+
+				let flipCol = document.createElement('div');
+				flipCol.classList.add("flipCol");
+				for (let k = 0; k < 2; k++) {
+					let newFlip = document.createElement('button');
+					newFlip.id = "flip"
+					newFlip.classList.add("flip");
+					if (k == 0) {
+						newFlip.addEventListener('click', () => setup.incLight(setup.light[i]));
+					} else {
+						newFlip.addEventListener('click', () => setup.decLight(setup.light[i]));
+					}
+					flipCol.appendChild(newFlip)
+				}
+				flipRow.appendChild(flipCol);
+
+			}
+
+			newDiv.appendChild(lightRow)
+			newDiv.appendChild(flipRow)
+			newDiv.appendChild(buttonRow)
+			container.appendChild(newDiv);
+			break;
 		default:
-			console.log("Something went wrong when populating fidget")
+			console.log(`Something went wrong when populating fidget, given ${setup.currentFidget}`)
 	}
 }
 
