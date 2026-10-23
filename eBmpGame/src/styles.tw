@@ -42,6 +42,7 @@ body {
   color: white;
   position: relative;
   min-height: 660px;
+  height: 660px;
   max-height: 100px;
   width: 100%;
   max-width: 100%;
@@ -63,12 +64,92 @@ body {
   text-align: center;
 }
 
+
+/* Bass Drum (Bottom Center) */
+.bass {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid #555;
+  width: 140px;
+  height: 140px;
+  top: 42%;
+  left: 30%;
+}
+
+/* Snare (Bottom Left) */
+.snare {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid #555;
+  width: 70px;
+  height: 70px;
+  top: 45%;
+  left: 12%;
+}
+
+/* Hi-Hat (Top Left) */
+.hihat {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid #555;
+  width: 75px;
+  height: 75px;
+  top: 34%;
+  left: 12%;
+}
+
+/* Top Tom (Upper-Mid Left) */
+.topTom {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid #555;
+  width: 60px;
+  height: 60px;
+  top: 34%;
+  left: 31%;
+}
+
+/* Med Tom (Upper-Mid Right) */
+.medTom {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid #555;
+  width: 75px;
+  height: 75px;
+  top: 31.5%;
+  left: 46%;
+}
+
+/* Low Tom / Floor Tom (Bottom Right) */
+.lowTom {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid #555;
+  width: 100px;
+  height: 100px;
+  top: 42%;
+  left: 64%;
+}
+
+/* Crash Cymbal (Top Right) */
+.crash {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid #555;
+  width: 75px;
+  height: 75px;
+  top: 32%;
+  left: 65%;
+}
+
+/*Bubble Wrap */
 .bubble {
   border-radius: 32px;
   min-width: 25px;
   min-height: 25px
 }
 
+/*Light Switch */
 .switch {
   
   padding: 100px;
@@ -79,7 +160,7 @@ body {
 
 }
 
-/*Control Panel */
+/*rol Panel */
 
 .controlPanel {
   background-color: #a7a69b;

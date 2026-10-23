@@ -9,6 +9,20 @@ SimpleAudio.tracks.add("bub6", "audio/bub6.mp3");
 /*The best one, do not change*/SimpleAudio.tracks.add("bub7", "audio/bub7.mp3");
 /*Feels too long*/SimpleAudio.tracks.add("bub8", "audio/bub8.mp3");
 
+/*Audio for Light Switch */
+SimpleAudio.tracks.add("on", "audio/lightOn.mp3");
+SimpleAudio.tracks.add("off", "audio/lightOff.mp3");
+
+/*Audio for drums*/
+SimpleAudio.tracks.add("snare", "audio/Snare.mp3");
+SimpleAudio.tracks.add("bass", "audio/bass.mp3");
+SimpleAudio.tracks.add("hihat", "audio/hihat.mp3");
+SimpleAudio.tracks.add("lowTom", "audio/floorTom.mp3");
+SimpleAudio.tracks.add("medTom", "audio/MedTom.mp3");
+SimpleAudio.tracks.add("topTom", "audio/highTom.mp3");
+SimpleAudio.tracks.add("crash", "audio/crash2.mp3");
+
+
 /*Array For drums, makes code look cleaner */
 setup.instruments = ["snare", "bass", "hihat", "lowTom", "medTom", "topTom", "crash"]
 

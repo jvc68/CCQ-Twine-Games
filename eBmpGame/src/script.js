@@ -1,14 +1,12 @@
 setup.prevRand = -1
-setup.currentFidget = "bubbleWrap"
+setup.currentFidget = "switch"
 
 setup.isMouseDown = false;
+setup.light = [0, 0, 0, 0]
+
 
 document.addEventListener('mousedown', () => { setup.isMouseDown = true; });
 document.addEventListener('mouseup', () => { setup.isMouseDown = false; });
-
-setup.con = function con(bur) {
-	console.log(bur)
-}
 
 /*This function allows for clicking and dragging to pop bubbles */
 setup.bubbleRespondDrag = function bubbleRespond(obj) {
@@ -42,14 +40,16 @@ setup.bubbleRespond = function bubbleRespond(obj) {
 }
 
 setup.switchRespond = function switchRespond(obj) {
-	SimpleAudio.select(`bub7`).stop();
-	SimpleAudio.select(`bub7`).play();
 	if (obj.id == "on") {
 		obj.style.backgroundColor = "#2B2B2B";
 		obj.id = "off"
+		SimpleAudio.select(`off`).stop();
+		SimpleAudio.select(`off`).play();
 	} else {
 		obj.style.backgroundColor = "#5C5C5C";
 		obj.id = "on"
+		SimpleAudio.select(`on`).stop();
+		SimpleAudio.select(`on`).play();
 	}
 }
 
@@ -87,7 +87,6 @@ setup.incLight = function incLight(light) {
 	}
 
 	light[0].style.boxShadow = setup.lightColors[light[2]][0]
-	console.log(setup.lightColors[light[2]][0])
 	light[0].style.backgroundColor = setup.lightColors[light[2]][1]
 }
 
@@ -99,20 +98,24 @@ setup.decLight = function decLight(light) {
 	}
 
 	light[0].style.boxShadow = setup.lightColors[light[2]][0]
-	console.log(setup.lightColors[light[2]][0])
 	light[0].style.backgroundColor = setup.lightColors[light[2]][1]
 }
 
-setup.light = [0, 0, 0, 0]
+setup.drumPlay = function drumPlay(item) {
+	let newAudio = SimpleAudio.tracks.get(item);
+	newAudio.clone().play();
+}
 
 setup.populateFidget = function populateFidget() {
 	let container = document.getElementById("container");
+	let blankSpace = document.getElementById("blankSpace");
 	let postContainer = document.getElementById("postContainer");
 	let fidgetLabel = document.getElementById("currentFidget");
 	container.replaceChildren();
 	postContainer.replaceChildren();
 	switch (setup.currentFidget) {
 		case "bubbleWrap":
+			blankSpace.style.height = '0'
 			fidgetLabel.textContent = "Bubble Wrap"
 			/*Do math here based on size of screen to know how many bubbles to make */
 			for (let i = 0; i < (13 * 12); i++) {
@@ -133,6 +136,8 @@ setup.populateFidget = function populateFidget() {
 			break;
 
 		case "switch":
+			blankSpace.style.height = '1%'
+			container.style.height = '72%'
 			fidgetLabel.textContent = "Light Switch"
 			let newButton = document.createElement('button');
 			newButton.addEventListener('click', () => setup.switchRespond(newButton));
@@ -144,6 +149,9 @@ setup.populateFidget = function populateFidget() {
 			break;
 
 		case "controlPanel":
+			blankSpace.style.height = '5%'
+			container.style.height = '50%'
+
 			fidgetLabel.textContent = "Control Panel"
 			let newDiv = document.createElement('div');
 			newDiv.classList.add("controlPanel");
@@ -193,11 +201,15 @@ setup.populateFidget = function populateFidget() {
 			break;
 
 		case "drums":
+			blankSpace.style.height = '5%'
+			container.style.height = '50%'
 			fidgetLabel.textContent = "Drum Kit"
-			for (item in setup.instruments) {
+			console.log(setup.instruments)
+
+			for (let drum in setup.instruments) {
 				let newButton = document.createElement('button');
-				newButton.classList.add(item);
-				newButton.addEventListener('click', () => setup.play(item));
+				newButton.classList.add(setup.instruments[drum]);
+				newButton.addEventListener('click', () => setup.drumPlay(setup.instruments[drum]));
 				container.appendChild(newButton);
 			}
 			break;

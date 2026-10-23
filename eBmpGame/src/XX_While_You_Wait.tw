@@ -17,6 +17,7 @@ While You Wait
 :: Home
 <div class="phone">Time Spent: <span id="timer"><<=setup.formattedTime>></span>
 <span id="currentFidget">Switch</span>
+<div id="blankSpace"></div>
 <div class="fidgetInterface" id="container"></div>
   <div class="options" id="postContainer"></div>
   <<done>><<run setup.populateFidget()>><</done>>
