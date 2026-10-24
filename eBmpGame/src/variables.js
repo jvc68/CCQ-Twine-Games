@@ -13,18 +13,20 @@ SimpleAudio.tracks.add("bub6", "audio/bub6.mp3");
 SimpleAudio.tracks.add("on", "audio/lightOn.mp3");
 SimpleAudio.tracks.add("off", "audio/lightOff.mp3");
 
-/*Audio for drums*/
-SimpleAudio.tracks.add("snare", "audio/Snare.mp3");
-SimpleAudio.tracks.add("bass", "audio/bass.mp3");
-SimpleAudio.tracks.add("hihat", "audio/hihat.mp3");
-SimpleAudio.tracks.add("lowTom", "audio/floorTom.mp3");
-SimpleAudio.tracks.add("medTom", "audio/MedTom.mp3");
-SimpleAudio.tracks.add("topTom", "audio/highTom.mp3");
-SimpleAudio.tracks.add("crash", "audio/crash2.mp3");
-
-
 /*Array For drums, makes code look cleaner */
 setup.instruments = ["snare", "bass", "hihat", "lowTom", "medTom", "topTom", "crash"]
+
+/*Audio for control panel*/
+SimpleAudio.tracks.add("1", "audio/C.wav");
+SimpleAudio.tracks.add("2", "audio/D.wav");
+SimpleAudio.tracks.add("3", "audio/E.wav");
+SimpleAudio.tracks.add("4", "audio/F.wav");
+SimpleAudio.tracks.add("5", "audio/G.wav");
+SimpleAudio.tracks.add("6", "audio/A.wav");
+SimpleAudio.tracks.add("7", "audio/B.wav");
+SimpleAudio.tracks.add("8", "audio/C2.wav");
+SimpleAudio.tracks.add("buttonClick", "audio/buttonClick.wav");
+
 
 /*Color dictionary for Control panel */
 setup.lightColors = {
