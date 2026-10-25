@@ -11,13 +11,52 @@ While You Wait
 }
 
 :: StoryInit {"position": "100,100", "size": "100,100"}
-<<set $zombieDistance = 10000>>
-<<set $currentFidget = "bubbleWrap">>
+<<run setInterval(setup.updateTimer, 1000)>>
+<<=setup.formattedTime = "00:02:00">>
+<<run 
+/*Necessary set up for low latency drums*/
+setup.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+setup.drumBuffers = {};
+
+async function loadDrumSound(name, url) {
+    try {
+        const response = await fetch(url);
+        const arrayBuffer = await response.arrayBuffer();
+        setup.drumBuffers[name] = await setup.audioCtx.decodeAudioData(arrayBuffer);
+    } catch (e) {
+        console.error(`Failed to load sound: ${name}`, e);
+    }
+}
+
+loadDrumSound("bass", "audio/bass.wav");
+loadDrumSound("hihat", "audio/hihat.wav");
+loadDrumSound("lowTom", "audio/floorTom.wav");
+loadDrumSound("medTom", "audio/MedTom.wav");
+loadDrumSound("snare", "audio/Snare.wav");
+loadDrumSound("topTom", "audio/highTom.wav");
+loadDrumSound("crash", "audio/crash2.wav");
+>>
 
 :: Home
-<div class="phone">Time Spent: TODO
-Bubble Wrap
+<div class="phone">Time Spent: <span id="timer"><<=setup.formattedTime>></span>
+<span id="currentFidget">Switch</span>
+<div id="blankSpace"></div>
 <div class="fidgetInterface" id="container"></div>
   <div class="options" id="postContainer"></div>
-  <<done>><<run setup.populateFidget("bubbleWrap")>><</done>>
+  <<done>><<run setup.populateFidget()>><</done>>
+  <div class="flButton"> 
+    <<button "Fidget Library" "Fidget Library">><</button>>
+  </div>
+</div>
+
+:: Fidget Library
+<div class="phone">Fidget Library
+Time Spent: <span id="timer"><<=setup.formattedTime>></span>
+  <div class="library">
+    <<button "Bubble Wrap">><<run setup.swapFidget("bubbleWrap")>><</button>>
+    <<button "Light Switch">><<run setup.swapFidget("switch")>><</button>>
+    <<button "Drums">><<run setup.swapFidget("drums")>><</button>>
+    <<button "Control Panel">><<run setup.swapFidget("controlPanel")>><</button>>
+  </div> 
+
 </div>

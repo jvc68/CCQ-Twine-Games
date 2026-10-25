@@ -24,7 +24,7 @@ body {
   padding: 1.5em 0;
 }
 
-/*#ui-bar { display: none; }*/
+#ui-bar { display: none; }
 
 #story {
   margin: 0 auto;
@@ -42,10 +42,16 @@ body {
   color: white;
   position: relative;
   min-height: 660px;
+  height: 660px;
   max-height: 100px;
   width: 100%;
   max-width: 100%;
   font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.flButton {
+  position: absolute;
+  bottom: 4%;
 }
 
 .fidgetInterface {
@@ -54,10 +60,146 @@ body {
   border: 1px solid black;
   padding: 8px;
   padding-left: 13px;
+  align-content: center;
+  text-align: center;
 }
 
+
+/* Bass Drum (Bottom Center) */
+.bass {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid #555;
+  width: 140px;
+  height: 140px;
+  top: 42%;
+  left: 30%;
+}
+
+/* Snare (Bottom Left) */
+.snare {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid #555;
+  width: 70px;
+  height: 70px;
+  top: 45%;
+  left: 12%;
+}
+
+/* Hi-Hat (Top Left) */
+.hihat {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid #555;
+  width: 75px;
+  height: 75px;
+  top: 34%;
+  left: 12%;
+}
+
+/* Top Tom (Upper-Mid Left) */
+.topTom {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid #555;
+  width: 60px;
+  height: 60px;
+  top: 34%;
+  left: 31%;
+}
+
+/* Med Tom (Upper-Mid Right) */
+.medTom {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid #555;
+  width: 75px;
+  height: 75px;
+  top: 31.5%;
+  left: 46%;
+}
+
+/* Low Tom / Floor Tom (Bottom Right) */
+.lowTom {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid #555;
+  width: 100px;
+  height: 100px;
+  top: 42%;
+  left: 64%;
+}
+
+/* Crash Cymbal (Top Right) */
+.crash {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid #555;
+  width: 75px;
+  height: 75px;
+  top: 32%;
+  left: 65%;
+}
+
+/*Bubble Wrap */
 .bubble {
   border-radius: 32px;
   min-width: 25px;
   min-height: 25px
+}
+
+/*Light Switch */
+.switch {
+  background-color: darkgrey;
+  height: 10px;
+  width: 10px;
+  
+}
+
+.switchImg {
+  width: 160px;
+  height: 350px;
+  position: absolute;
+  left: 29%;
+  top: 24%;
+}
+
+/*rol Panel */
+
+.controlPanel {
+  background-color: #a7a69b;
+}
+
+.row{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  padding: 10px;
+  justify-items: center; 
+  
+}
+
+.light {
+  border-radius: 50px;
+  background-color: white;
+  border: 1px solid black;
+  box-shadow: 
+  0px 0px 10px rgba(255, 255, 255, 1),
+  4px 4px 10px rgba(255, 255, 255, 1),
+  -4px -4px 10px rgba(255, 255, 255, 1);
+  width: 18px;
+  height: 18px;
+  text-align: center;
+}
+
+.lightButton {
+  border-radius: 50px;
+  background-color: red;
+  width: 35px;
+  height: 35px;
+  
+}
+
+.flip {
+  display: block;
 }

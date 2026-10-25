@@ -19,6 +19,8 @@ Food Truck Game
 <<set $pendingIngredient = null>>
 <<set $pendingMethod = null>>
 <<set $cookingResult = null>>
+<<set $satisfactionScore = 0>>
+<<set $healthinessScore = 0>>
 
 <<set $menuIngredients = [
     { id: "tortilla", name: "Tortilla",    img: "🌮", methods: { healthy: "Toast on a dry griddle", unhealthy: "Deep-fry until crisp" } },
@@ -30,3 +32,4 @@ Food Truck Game
 ]>>
 
 <<set $activeOrder = null>>
+<<set $orderTimer = 120>>
