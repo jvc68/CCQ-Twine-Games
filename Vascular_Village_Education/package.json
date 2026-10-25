@@ -1,11 +1,12 @@
+
 {
   "name": "EducationGame",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tweego -o dist/index.html src/",
-    "watch": "nodemon --watch src --ext twee --exec \"npm run build\""
+    "build": "tweego -o dist/index.html scripts/ data/ src/",
+    "watch": "nodemon --watch src --watch data --watch scripts --ext twee,js,css --exec \"npm run build\""
   },
   "keywords": [],
   "author": "",

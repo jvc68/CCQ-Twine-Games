@@ -107,13 +107,14 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
 
 
 #story {
-    background: linear-gradient(to top, #00f187, #0004fd);
+    background: linear-gradient(180deg, #440154 0%, #3b528b 50%, #21918c 100%);
     border-radius: 32px;
-    padding: 25px;
+    padding: 4px 8px 6px;
     overflow: hidden;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
     color: white;
     position: relative;
+    height: 660px;
     min-height: 660px;
     width: 100%;
     max-width: 390px;
@@ -125,67 +126,73 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
 
 
 
-.activity-page h1 {
-    text-align: center;
-}
+
 
 .activity-message {
     background: rgba(255, 255, 255, 0.15);
-    padding: 15px;
-    border-radius: 12px;
-    line-height: 1.5;
+    font-size: 14px;
 }
 
 .activity-page h2 {
-    margin-top: 25px;
-    padding-bottom: 8px;
+    font-size: 10px;
+    margin: 12px 0 7px;
+    padding-bottom: 5px;
     border-bottom: 2px solid rgba(255, 255, 255, 0.4);
 }
 
 .activity-card {
     background: white;
     color: #172033;
-    padding: 15px;
-    margin: 12px 0;
-    border-radius: 14px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
 }
 
 .activity-card h3 {
-    margin-top: 0;
+    font-size: 15px;
+    margin: 0 0 4px;
 }
 
 .activity-card p {
-    line-height: 1.5;
+    font-size: 13px;
+    line-height: 1.35;
 }
 
 .activity-card a {
     display: inline-block;
     background: #b5f5d0;
     color: #173c2b;
-    padding: 10px 14px;
+    padding: 8px 11px;
     border-radius: 8px;
     text-decoration: none;
+    font-size: 13px;
     font-weight: bold;
+}
+
+.activity-card a:hover {
+    background: #8cebb8;
 }
 
 .activity-locked {
     color: #687385;
+    font-size: 13px;
     font-style: italic;
 }
 
 .completed {
-    border-left: 5px solid #00c878;
+    border-left: 4px solid #00c878;
 }
 
 .completed-label {
     color: #16834f;
+    font-size: 13px;
     font-weight: bold;
 }
 
 .back-link {
-    margin-top: 25px;
+    margin: 12px 0 4px;
+    text-align: center;
+    font-size: 14px;
 }
+
 
 /* for popup window styling */
 
@@ -231,20 +238,21 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
 }
 
 .home-screen h1 {
-    font-size: 26px;
-    margin-bottom: 8px;
+    font-size: 24px;
+    margin: 4px 0 4px;
 }
 
 .home-screen p {
-    font-size: 15px;
+    font-size: 14px;
+    margin: 4px 0;
 }
 
 .body-map {
     position: relative;
     width: 100%;
-    max-width: 360px;
-    height: 390px;
-    margin: 25px auto;
+    max-width: 340px;
+    height: 320px;
+    margin: 8px auto;
 }
 
 /* Five topic circles */
@@ -326,12 +334,1005 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
 .home-hint {
     margin-top: 10px;
     font-style: italic;
-}</style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-passagedata pid="1" name="Start" tags="" position="625,275" size="100,100">&lt;h1&gt;Vascular Village&lt;/h1&gt;
-&lt;p class=&quot;tagline&quot;&gt;
-&quot;A village lives inside your blood vessels. Your daily care keeps 
-it thriving.&quot;
-&lt;/p&gt;
-[[Start Quest-&gt;HomeScreen]]</tw-passagedata><tw-passagedata pid="2" name="HomeScreen" tags="" position="225,100" size="100,100">&lt;div class=&quot;home-screen&quot;&gt;
+}
+
+/* Blood Vessels activity menu */
+.blood-vessels-menu {
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.blood-vessels-menu h1 {
+    font-size: 21px;
+    margin: 0 0 3px;
+    line-height: 1.2;
+}
+
+.blood-vessels-menu .activity-message {
+    font-size: 12px;
+    line-height: 1.2;
+    padding: 5px 7px;
+    margin: 3px 0 6px;
+}
+
+/* Completed and New tabs */
+.activity-tabs {
+    display: flex;
+    gap: 5px;
+}
+
+.activity-tabs a {
+    flex: 1;
+    padding: 6px 5px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+
+.blood-vessels-menu .activity-card {
+    margin: 0;
+    padding: 6px 8px;
+    text-align: left;
+    border-radius: 9px;
+}
+
+.blood-vessels-menu .activity-card h3 {
+    font-size: 13px;
+    margin: 0 0 2px;
+    line-height: 1.2;
+}
+
+.blood-vessels-menu .activity-card p {
+    font-size: 11px;
+    line-height: 1.2;
+    margin: 2px 0 3px;
+}
+
+.blood-vessels-menu .activity-card a {
+    padding: 5px 7px;
+    font-size: 11px;
+}
+
+
+.activity-pagination a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 25px;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.22);
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.blood-vessels-menu .back-link {
+    margin: 4px 0 0;
+    font-size: 11px;
+}
+
+
+
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+}
+
+.activity-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin: 4px 0 0;
+    padding: 0;
+    margin-top: 10px;
+}</style><script role="script" id="twine-user-script" type="text/twine-javascript">/* twine-user-script #1: "scripts.js" */
+
+/*
+ * scripts.js
+ * Reusable activity functions for SugarCube 2.30.0
+ */
+
+(function () {
+    "use strict";
+
+    setup.activityLibraries = setup.activityLibraries || {};
+
+    
+    // Find an activity in one of the activity dictionaries.
+    
+    setup.getActivity = function (category, activityId) {
+    var library = setup.activityLibraries[category];
+
+    if (!library || activityId === "menu" || !library[activityId]) {
+        console.error(
+            "Activity not found:",
+            category,
+            activityId
+        );
+        return null;
+    }
+
+    return library[activityId];
+};
+
+    
+    //  Get or create the saved progress for an activity.
+    //  Progress is stored in SugarCube's story variables.
+    
+    setup.getActivityProgress = function (activityKey) {
+        var variables = State.variables;
+
+        if (!variables.activityProgress) {
+            variables.activityProgress = {};
+        }
+
+        if (!variables.activityProgress[activityKey]) {
+            variables.activityProgress[activityKey] = {
+                correctChoices: []
+            };
+        }
+
+        return variables.activityProgress[activityKey];
+    };
+
+    /*
+     * Show feedback in SugarCube's dialog popup.
+     */
+    setup.showFeedback = function (title, message) {
+        Dialog.setup(title);
+        Dialog.wiki(message);
+        Dialog.open();
+    };
+
+    /*
+     * Update the activity's progress display.
+     */
+    
+    setup.renderProgress = function (
+        activity,
+        progress,
+        container
+    ) {
+        container.replaceChildren();
+
+        var count = progress.correctChoices.length;
+        var total = activity.requiredCorrect;
+
+        var summary = document.createElement("p");
+
+        if (count >= total) {
+            var heading = document.createElement("h3");
+            heading.textContent =
+                activity.completionHeading ||
+                "Activity completed!";
+
+            var nextButton = document.createElement("button");
+            nextButton.type = "button";
+            nextButton.textContent =
+                activity.continueLabel || "Continue";
+
+            nextButton.addEventListener("click", function () {
+                Engine.play(activity.nextPassage);
+            });
+
+            container.appendChild(heading);
+            container.appendChild(nextButton);
+        } else {
+            var hint = document.createElement("p");
+            hint.textContent =
+                "Choose " + (total - count) +
+                " more healthy action(s) to continue.";
+
+            container.appendChild(hint);
+        }
+    };
+
+
+    /*
+     * Process a player's answer.
+     */
+    setup.checkAnswer = function (
+        activity,
+        choice,
+        progress,
+        progressContainer
+    ) {
+        var alreadyChosen =
+            progress.correctChoices.indexOf(choice.id) !== -1;
+
+        if (choice.correct && alreadyChosen) {
+            setup.showFeedback(
+                "Already Completed",
+                "You've already chosen that healthy action. Try another one!"
+            );
+            return;
+        }
+
+        if (choice.correct) {
+            progress.correctChoices.push(choice.id);
+        }
+
+        setup.showFeedback(
+            choice.feedbackTitle,
+            choice.feedback
+        );
+
+        setup.renderProgress(
+            activity,
+            progress,
+            progressContainer
+        );
+    };
+
+    /*
+     * Render an activity from its dictionary.
+     */
+    setup.renderActivity = function (
+        category,
+        activityId,
+        containerId
+    ) {
+        var activity = setup.getActivity(
+            category,
+            activityId
+        );
+
+        var container = document.getElementById(containerId);
+
+        if (!activity || !container) {
+            console.error(
+                "Could not render activity:",
+                activityId
+            );
+            return;
+        }
+
+        var activityKey = category + "." + activityId;
+        var progress = setup.getActivityProgress(activityKey);
+
+        container.replaceChildren();
+
+        var intro = document.createElement("p");
+        intro.textContent = activity.introduction;
+        container.appendChild(intro);
+
+        var character = document.createElement("p");
+        var characterName = document.createElement("strong");
+
+        characterName.textContent = activity.characterName || "";
+        character.appendChild(characterName);
+
+        if (activity.characterLine) {
+            character.appendChild(
+                document.createTextNode(" " + activity.characterLine)
+            );
+        }
+
+        container.appendChild(character);
+
+        var mission = document.createElement("h3");
+        mission.textContent = activity.mission;
+        container.appendChild(mission);
+
+        var instructions = document.createElement("p");
+        instructions.textContent = activity.instructions;
+        container.appendChild(instructions);
+
+        var buttons = document.createElement("div");
+        buttons.className = "answer-buttons";
+
+        var progressContainer = document.createElement("div");
+        progressContainer.id = "activity-progress";
+
+        activity.choices.forEach(function (choice) {
+            var button = document.createElement("button");
+            button.type = "button";
+            button.textContent = choice.label;
+
+            button.addEventListener("click", function () {
+                setup.checkAnswer(
+                    activity,
+                    choice,
+                    progress,
+                    progressContainer
+                );
+            });
+
+            buttons.appendChild(button);
+        });
+
+        container.appendChild(buttons);
+        container.appendChild(document.createElement("hr"));
+        container.appendChild(progressContainer);
+
+        setup.renderProgress(
+            activity,
+            progress,
+            progressContainer
+        );
+    };
+    
+setup.renderActivityMenu = function (category, containerId) {
+    var library = setup.activityLibraries[category];
+    var menu = library && library.menu;
+    var container = document.getElementById(containerId);
+
+    if (!menu || !container) {
+        console.error("Could not render activity menu:", category);
+        return;
+    }
+
+    var variables = State.variables;
+    var tabKey;
+    var pageKey;
+    var passageName;
+
+    if (category === "lungs") {
+    tabKey = "lungsTab";
+    pageKey = "lungsPage";
+    passageName = "Lungs";
+    } else if (category === "bloodVessels") {
+        tabKey = "bvTab";
+        pageKey = "bvPage";
+        passageName = "Blood Vessels";
+    } else if (category === "bloodCells") {
+        tabKey = "bloodCellsTab";
+        pageKey = "bloodCellsPage";
+        passageName = "Blood Cells";
+    } else if (category === "brain") {
+        tabKey = "brainTab";
+        pageKey = "brainPage";
+        passageName = "Brain";
+    } else if (category === "heart") {
+    tabKey = "heartTab";
+    pageKey = "heartPage";
+    passageName = "Heart";
+    }
+    else {
+        console.error("Unknown activity category:", category);
+        return;
+    }
+
+    if (variables[tabKey] === undefined) variables[tabKey] = "new";
+    if (variables[pageKey] === undefined) variables[pageKey] = 1;
+
+    var tab = variables[tabKey];
+    var page = variables[pageKey];
+    var items = menu[tab] || [];
+    var start = (page - 1) * 2;
+    var visibleItems = items.slice(start, start + 2);
+
+    container.replaceChildren();
+
+    var wrapper = container;
+    wrapper.className = "activity-page blood-vessels-menu";
+
+    var heading = document.createElement("h1");
+    heading.textContent = menu.title;
+    wrapper.appendChild(heading);
+
+    var message = document.createElement("p");
+    message.className = "activity-message";
+    message.textContent = menu.description;
+    wrapper.appendChild(message);
+
+    var tabs = document.createElement("div");
+    tabs.className = "activity-tabs";
+
+    ["completed", "new"].forEach(function (tabName) {
+        var link = document.createElement("a");
+        link.href = "#";
+        link.textContent = tabName === "completed" ? "Completed" : "New";
+
+        link.addEventListener("click", function (event) {
+            event.preventDefault();
+            variables[tabKey] = tabName;
+            variables[pageKey] = 1;
+            Engine.play(passageName);
+        });
+
+        tabs.appendChild(link);
+    });
+
+    wrapper.appendChild(tabs);
+
+    var list = document.createElement("div");
+    list.className = "activity-list";
+
+    visibleItems.forEach(function (item) {
+        var card = document.createElement("div");
+        card.className = "activity-card";
+
+        if (tab === "completed" && item.completed) {
+            card.classList.add("completed");
+        }
+
+        var title = document.createElement("h3");
+        title.textContent = item.title;
+        card.appendChild(title);
+
+        var description = document.createElement("p");
+        description.textContent = item.description;
+        card.appendChild(description);
+
+        if (item.completed) {
+            var completed = document.createElement("span");
+            completed.className = "completed-label";
+            completed.textContent = "✓ Completed";
+            card.appendChild(completed);
+        } else if (item.locked || !item.passage) {
+            var locked = document.createElement("span");
+            locked.className = "activity-locked";
+            locked.textContent = "Coming soon!";
+            card.appendChild(locked);
+        } else {
+            var play = document.createElement("a");
+            play.href = "#";
+            play.textContent = "Play Activity →";
+
+            play.addEventListener("click", function (event) {
+                event.preventDefault();
+                Engine.play(item.passage);
+            });
+
+            card.appendChild(play);
+        }
+
+        list.appendChild(card);
+    });
+
+    wrapper.appendChild(list);
+
+    var pagination = document.createElement("div");
+    pagination.className = "activity-pagination";
+
+    [1, 2].forEach(function (pageNumber) {
+        var link = document.createElement("a");
+        link.href = "#";
+        link.textContent = String(pageNumber);
+
+        link.addEventListener("click", function (event) {
+            event.preventDefault();
+            variables[pageKey] = pageNumber;
+            Engine.play(passageName);
+        });
+
+        pagination.appendChild(link);
+    });
+
+    wrapper.appendChild(pagination);
+
+    var back = document.createElement("p");
+    back.className = "back-link";
+
+    var backLink = document.createElement("button");
+    backLink.type = "button";
+    backLink.textContent = "← Body Map";
+
+    backLink.addEventListener("click", function () {
+        Engine.play("HomeScreen");
+    });
+
+    backLink.addEventListener("click", function (event) {
+        event.preventDefault();
+        Engine.play("HomeScreen");
+    });
+
+    back.appendChild(backLink);
+    wrapper.appendChild(back);
+};
+
+})();
+/* twine-user-script #2: "bloodCellActivities.js" */
+
+setup.activityLibraries = setup.activityLibraries || {};
+
+setup.activityLibraries.bloodCells = {
+    menu: {
+        title: "🩸 Blood Cells",
+        description: "Help Ruby discover how blood cells keep the body healthy!",
+        new: [
+            {
+                title: "🔴 Red Cell Rescue",
+                description: "Learn how red blood cells carry oxygen around the body.",
+                activityId: "redCellRescue",
+                passage: "BloodCellActivity"
+            },
+            {
+                title: "⚪ White Cell Defenders",
+                description: "Discover how white blood cells help fight germs.",
+                locked: true
+            },
+            {
+                title: "🩹 Platelet Power",
+                description: "Explore how platelets help stop bleeding.",
+                locked: true
+            },
+            {
+                title: "🩸 Cell Teamwork",
+                description: "See how different blood cells work together.",
+                locked: true
+            }
+        ],
+        completed: [
+            {
+                title: "🫁 Oxygen Delivery",
+                description: "Discover how oxygen travels to the body's cells.",
+                completed: true
+            },
+            {
+                title: "🛡️ Germ Fighters",
+                description: "Learn how the body defends itself against germs.",
+                completed: true
+            },
+            {
+                title: "🏆 More Achievements",
+                description: "Your future completed blood cell activities will appear here.",
+                locked: true
+            },
+            {
+                title: "✨ Tiny Heroes",
+                description: "More blood cell discoveries are on their way.",
+                locked: true
+            }
+        ]
+    },
+
+    redCellRescue: {
+        title: "Red Cell Rescue",
+        introduction: "Help Ruby learn how red blood cells deliver oxygen throughout the body.",
+        characterName: "Ruby",
+        characterLine: "Let's discover how our blood cells help us!",
+        mission: "Help Ruby understand the important jobs of blood cells!",
+        instructions: "Choose TWO correct facts about blood cells.",
+        requiredCorrect: 2,
+
+        choices: [
+            {
+                id: "carryOxygen",
+                label: "Red blood cells carry oxygen around the body",
+                correct: true,
+                feedbackTitle: "Great choice!",
+                feedback: "Red blood cells contain hemoglobin, which carries oxygen to body tissues."
+            },
+            {
+                id: "fightGerms",
+                label: "White blood cells help defend the body against germs",
+                correct: true,
+                feedbackTitle: "Correct!",
+                feedback: "White blood cells help the immune system protect the body from infections."
+            },
+            {
+                id: "redCellsFight",
+                label: "Red blood cells are the main cells that fight infections",
+                correct: false,
+                feedbackTitle: "Try again!",
+                feedback: "White blood cells play the main role in defending the body against infections."
+            },
+            {
+                id: "plateletsCarry",
+                label: "Platelets carry most of the oxygen in the blood",
+                correct: false,
+                feedbackTitle: "Not quite!",
+                feedback: "Red blood cells carry most of the oxygen. Platelets help blood clot."
+            }
+        ],
+
+        completionHeading: "Blood Cell Heroes!",
+        completionMessage: "Ruby has discovered how blood cells help the body.",
+        continueLabel: "Continue to the lesson",
+        nextPassage: "BloodCellLesson"
+    }
+};
+/* twine-user-script #3: "bloodVesselsActivities.js" */
+setup.activityLibraries.bloodVessels = {
+    menu: {
+        title: "🩸 Blood Vessels",
+        description: "Help Ruby keep blood flowing and discover healthy habits!",
+        new: [
+            {
+                title: "🩸 The Long Pause",
+                description: "Help Ruby make healthy choices after sitting too long.",
+                activityId: "longPause",
+                passage: "BloodVesselsActivity"
+            },
+            {
+                title: "🏃 Keep the Blood Moving",
+                description: "Discover how movement supports circulation.",
+                locked: true
+            },
+            {
+                title: "💓 Heartbeat Heroes",
+                description: "Discover how your heart keeps blood moving.",
+                locked: true
+            },
+            {
+                title: "🩸 Vessel Voyage",
+                description: "Explore how blood travels around the body.",
+                locked: true
+            }
+        ],
+        completed: [
+            {
+                title: "💧 Hydration Station",
+                description: "Learn why drinking enough water matters.",
+                completed: true
+            },
+            {
+                title: "🥗 Fuel Your Flow",
+                description: "Explore healthy food choices for your circulation.",
+                completed: true
+            },
+            {
+                title: "🏆 More Achievements",
+                description: "Your future completed activities will appear here.",
+                locked: true
+            },
+            {
+                title: "✨ Hidden Discoveries",
+                description: "More achievements are on their way.",
+                locked: true
+            }
+        ]
+    },
+    
+    longPause: {
+        title: "The Long Pause",
+        introduction: "Help Ruby get moving after sitting for a long time.",
+        characterName: "Ruby",
+        characterLine: "Let's choose some healthy actions!",
+        mission: "Help Ruby's person!",
+        instructions: "Choose TWO healthy actions.",
+        requiredCorrect: 2,
+        choices: [
+            {
+                id: "stretch",
+                label: "Stand up and stretch",
+                correct: true,
+                feedbackTitle: "Correct!",
+                feedback: "Taking a movement break is a healthy choice."
+            },
+            {
+                id: "walk",
+                label: "Take a short walk",
+                correct: true,
+                feedbackTitle: "Great choice!",
+                feedback: "Walking helps you stay active."
+            },
+            {
+                id: "keepSitting",
+                label: "Keep sitting for hours",
+                correct: false,
+                feedbackTitle: "Try again!",
+                feedback: "Take a movement break instead."
+            },
+            {
+                id: "chips",
+                label: "Eat high-sodium chips",
+                correct: false,
+                feedbackTitle: "Try again!",
+                feedback: "Too much sodium can make blood pressure harder to manage."
+            }
+        ],
+        completionHeading: "Both choices completed!",
+        completionMessage: "Ruby is ready to continue.",
+        continueLabel: "Continue to the lesson",
+        nextPassage: "LongPauseLesson"
+    }
+};
+/* twine-user-script #4: "brainActivities.js" */
+
+setup.activityLibraries = setup.activityLibraries || {};
+
+setup.activityLibraries.brain = {
+    menu: {
+        title: "🧠 Brain",
+        description: "Help Ruby discover how the brain controls the body and keeps us thinking!",
+        new: [
+            {
+                title: "🧠 Brain Control Center",
+                description: "Discover how the brain sends messages throughout the body.",
+                activityId: "brainControlCenter",
+                passage: "BrainActivity"
+            },
+            {
+                title: "⚡ Message Mission",
+                description: "Explore how the brain and nerves send signals.",
+                locked: true
+            },
+            {
+                title: "🧩 Memory Masters",
+                description: "Learn how the brain helps us remember and learn.",
+                locked: true
+            },
+            {
+                title: "😴 Brain Recharge",
+                description: "Discover why sleep helps the brain work well.",
+                locked: true
+            }
+        ],
+        completed: [
+            {
+                title: "💡 Thinking Power",
+                description: "Explore how the brain helps us think and solve problems.",
+                completed: true
+            },
+            {
+                title: "🛡️ Brain Protector",
+                description: "Learn why protecting your head is important.",
+                completed: true
+            },
+            {
+                title: "🏆 More Achievements",
+                description: "Your future completed brain activities will appear here.",
+                locked: true
+            },
+            {
+                title: "✨ Mind Explorers",
+                description: "More brain discoveries are on their way.",
+                locked: true
+            }
+        ]
+    },
+
+    brainControlCenter: {
+        title: "Brain Control Center",
+        introduction: "Help Ruby discover how the brain helps the body move, think, and respond.",
+        characterName: "Ruby",
+        characterLine: "Let's find out how my brain helps me every day!",
+        mission: "Help Ruby identify the brain's important jobs!",
+        instructions: "Choose TWO correct facts about the brain.",
+        requiredCorrect: 2,
+
+        choices: [
+            {
+                id: "controlsMovement",
+                label: "The brain helps control body movements",
+                correct: true,
+                feedbackTitle: "Great choice!",
+                feedback: "The brain sends signals through nerves to help coordinate movement."
+            },
+            {
+                id: "processesInformation",
+                label: "The brain helps us think, learn, and remember",
+                correct: true,
+                feedbackTitle: "Correct!",
+                feedback: "Different parts of the brain work together to process information, learn, and form memories."
+            },
+            {
+                id: "pumpsBlood",
+                label: "The brain pumps blood around the body",
+                correct: false,
+                feedbackTitle: "Try again!",
+                feedback: "The heart pumps blood around the body. The brain helps control many body functions."
+            },
+            {
+                id: "digestsFood",
+                label: "The brain directly digests the food we eat",
+                correct: false,
+                feedbackTitle: "Not quite!",
+                feedback: "The digestive system breaks down food. The brain helps regulate and coordinate many body processes."
+            }
+        ],
+
+        completionHeading: "Brain Power!",
+        completionMessage: "Ruby has learned some important jobs of the brain.",
+        continueLabel: "Continue to the lesson",
+        nextPassage: "BrainLesson"
+    }
+};
+/* twine-user-script #5: "heartActivities.js" */
+
+setup.activityLibraries = setup.activityLibraries || {};
+
+setup.activityLibraries.heart = {
+    menu: {
+        title: "❤️ Heart",
+        description: "Help Ruby discover how the heart works and how to keep it healthy!",
+        new: [
+            {
+                title: "❤️ Heartbeat Heroes",
+                description: "Discover how the heart pumps blood around the body.",
+                activityId: "heartbeatHeroes",
+                passage: "HeartActivity"
+            },
+            {
+                title: "🏃 Move for Your Heart",
+                description: "Learn how physical activity helps the heart.",
+                locked: true
+            },
+            {
+                title: "💓 Pulse Detectives",
+                description: "Explore how your heartbeat changes with activity.",
+                locked: true
+            },
+            {
+                title: "🥗 Heart-Healthy Habits",
+                description: "Discover everyday ways to care for your heart.",
+                locked: true
+            }
+        ],
+        completed: [
+            {
+                title: "🩸 Blood Flow Journey",
+                description: "Discover how the heart moves blood through the body.",
+                completed: true
+            },
+            {
+                title: "💗 Heart Care Basics",
+                description: "Learn simple ways to support heart health.",
+                completed: true
+            },
+            {
+                title: "🏆 More Achievements",
+                description: "Your future completed heart activities will appear here.",
+                locked: true
+            },
+            {
+                title: "✨ Heart Explorers",
+                description: "More heart discoveries are on their way.",
+                locked: true
+            }
+        ]
+    },
+
+    heartbeatHeroes: {
+        title: "Heartbeat Heroes",
+        introduction: "Help Ruby learn how the heart keeps blood moving around the body.",
+        characterName: "Ruby",
+        characterLine: "Let's discover why our heart is so important!",
+        mission: "Help Ruby understand the heart's important job!",
+        instructions: "Choose TWO correct facts about the heart.",
+        requiredCorrect: 2,
+
+        choices: [
+            {
+                id: "pumpsBlood",
+                label: "The heart pumps blood around the body",
+                correct: true,
+                feedbackTitle: "Great choice!",
+                feedback: "The heart pumps blood, helping deliver oxygen and nutrients to the body's tissues."
+            },
+            {
+                id: "exerciseHeart",
+                label: "Physical activity can help keep the heart healthy",
+                correct: true,
+                feedbackTitle: "Correct!",
+                feedback: "Regular physical activity helps strengthen the heart and supports cardiovascular health."
+            },
+            {
+                id: "makesOxygen",
+                label: "The heart makes the oxygen we breathe",
+                correct: false,
+                feedbackTitle: "Try again!",
+                feedback: "The lungs bring oxygen into the body. The heart pumps blood that carries oxygen to tissues."
+            },
+            {
+                id: "digestsFood",
+                label: "The heart breaks down food for digestion",
+                correct: false,
+                feedbackTitle: "Not quite!",
+                feedback: "The digestive system breaks down food. The heart's main job is to pump blood."
+            }
+        ],
+
+        completionHeading: "Heart Heroes!",
+        completionMessage: "Ruby has learned how the heart pumps blood and how activity supports heart health.",
+        continueLabel: "Continue to the lesson",
+        nextPassage: "HeartLesson"
+    }
+};
+/* twine-user-script #6: "lungsActivities.js" */
+setup.activityLibraries = setup.activityLibraries || {};
+
+setup.activityLibraries.lungs = {
+    menu: {
+        title: "🫁 Lungs",
+        description: "Help Ruby breathe easier and discover how to keep her lungs healthy!",
+        new: [
+            {
+                title: "🌬️ Breath by Breath",
+                description: "Help Ruby learn how breathing brings air into her lungs.",
+                activityId: "longPause",
+                passage: "LungsActivity"
+            },
+            {
+                title: "🏃 Breathe and Move",
+                description: "Discover how breathing changes when you exercise.",
+                locked: true
+            },
+            {
+                title: "💨 Air Adventure",
+                description: "Explore the journey air takes through your respiratory system.",
+                locked: true
+            },
+            {
+                title: "🌿 Lung Protectors",
+                description: "Learn about everyday habits that help keep lungs healthy.",
+                locked: true
+            }
+        ],
+        completed: [
+            {
+                title: "💧 Fresh Air Finder",
+                description: "Discover why clean air matters for your lungs.",
+                completed: true
+            },
+            {
+                title: "🫁 Breathing Basics",
+                description: "Learn how your lungs help your body get oxygen.",
+                completed: true
+            },
+            {
+                title: "🏆 More Achievements",
+                description: "Your future completed lung activities will appear here.",
+                locked: true
+            },
+            {
+                title: "✨ Hidden Discoveries",
+                description: "More lung health achievements are on their way.",
+                locked: true
+            }
+        ]
+    },
+    
+    longPause: {
+        title: "Breathe Easy",
+        introduction: "Help Ruby make healthy choices to keep their persons lungs working well.",
+        characterName: "Ruby",
+        characterLine: "Let's take care of our lungs!",
+        mission: "Help Ruby protect their persons respiratory system!",
+        instructions: "Choose TWO healthy actions.",
+        requiredCorrect: 2,
+
+        choices: [
+            {
+                id: "exercise",
+                label: "Go for a walk outside in clean air",
+                correct: true,
+                feedbackTitle: "Great choice!",
+                feedback: "Physical activity helps your lungs and heart work together."
+            },
+            {
+                id: "avoidSmoke",
+                label: "Stay away from cigarette smoke",
+                correct: true,
+                feedbackTitle: "Correct!",
+                feedback: "Avoiding smoke helps protect your lungs from harmful substances."
+            },
+            {
+                id: "smoke",
+                label: "Spend time breathing in cigarette smoke",
+                correct: false,
+                feedbackTitle: "Try again!",
+                feedback: "Cigarette smoke contains harmful substances that can damage your lungs."
+            },
+            {
+                id: "ignoreAir",
+                label: "Ignore smoky or polluted air",
+                correct: false,
+                feedbackTitle: "Not quite!",
+                feedback: "Avoiding polluted air when possible helps protect your respiratory system."
+            }
+        ],
+
+        completionHeading: "Breathe Easy!",
+        completionMessage: "Ruby has made two healthy choices to help protect their lungs.",
+        continueLabel: "Continue to the lesson",
+        nextPassage: "LungsLesson"
+    }
+};</script><tw-passagedata pid="1" name="Start" tags="" position="625,275" size="100,100">&lt;h1&gt;Welcome to Vascular Village!&lt;/h1&gt;&lt;p&gt;Meet Ruby, your guide on an amazing adventure inside the human body! 🔬&lt;/p&gt;&lt;p&gt;Follow Ruby as she explores the body&#39;s incredible systems, discovers how they work together, and learns the little things we can do every day to stay healthy.&lt;/p&gt;&lt;p&gt;From the heart pumping blood to the lungs bringing in oxygen, every discovery brings Ruby one step closer to understanding how our bodies keep us going!&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Are you ready to join Ruby and explore the wonders of Vascular Village?&lt;/strong&gt;&lt;/p&gt;[[Let&#39;s Explore! →-&gt;HomeScreen]]</tw-passagedata><tw-passagedata pid="2" name="HomeScreen" tags="" position="225,100" size="100,100">&lt;div class=&quot;home-screen&quot;&gt;
     &lt;h1&gt;❤️ CardioCare Quest&lt;/h1&gt;
     &lt;p&gt;Choose a part of your health journey!&lt;/p&gt;
 
@@ -342,11 +1343,11 @@ it thriving.&quot;
         &lt;/div&gt;
 
         &lt;div class=&quot;body-circle left&quot;&gt;
-            [[🩸Blood Cells-&gt;BloodCells]]
+            [[🩸Blood Cells-&gt;Blood Cells]]
         &lt;/div&gt;
 
         &lt;div class=&quot;body-circle center&quot;&gt;
-            [[❤️Heartbeat-&gt;Heartbeat]]
+            [[❤️Heartbeat-&gt;Heart]]
         &lt;/div&gt;
 
         &lt;div class=&quot;body-circle right&quot;&gt;
@@ -358,134 +1359,90 @@ it thriving.&quot;
         &lt;/div&gt;
 
     &lt;/div&gt;
-
+    
     &lt;p class=&quot;home-hint&quot;&gt;Tap a circle to begin exploring!&lt;/p&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="Brain" tags="" position="350,100" size="100,100">&lt;h1&gt;Brain&lt;/h1&gt;
-&lt;p&gt;In Development&lt;/p&gt;
-[[Return to the body map-&gt;HomeScreen]]</tw-passagedata><tw-passagedata pid="4" name="BloodCells" tags="" position="475,100" size="100,100">&lt;h1&gt;Blood Cells&lt;/h1&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="BloodCells" tags="" position="350,100" size="100,100">&lt;h1&gt;Blood Cells&lt;/h1&gt;
 &lt;p&gt;In development&lt;/p&gt;
-[[Return to the body map-&gt;HomeScreen]]</tw-passagedata><tw-passagedata pid="5" name="Heartbeat" tags="" position="600,100" size="100,100">&lt;h1&gt;Heartbeat&lt;/h1&gt;
-&lt;p&gt;In development&lt;/p&gt;
-[[Return to the body map-&gt;HomeScreen]]</tw-passagedata><tw-passagedata pid="6" name="Lungs" tags="" position="725,100" size="100,100">&lt;h1&gt;Lungs&lt;/h1&gt;
-&lt;p&gt;In development&lt;/p&gt;
-[[Return to the body map-&gt;HomeScreen]]</tw-passagedata><tw-passagedata pid="7" name="Blood Vessels" tags="" position="850,100" size="100,100">&lt;div class=&quot;activity-page&quot;&gt;
-
-    &lt;h1&gt;Blood Vessels&lt;/h1&gt;
-
-    &lt;p class=&quot;activity-message&quot;&gt;Welcome to the vascular system! Join Ruby on her journey
-        and discover how healthy choices help keep your blood flowing.
-    &lt;/p&gt;
-
-    &lt;h2&gt;🌟 New Activities&lt;/h2&gt;
-
-    &lt;div class=&quot;activity-card&quot;&gt;
-        &lt;h3&gt;🩸 The Long Pause&lt;/h3&gt;
-        &lt;p&gt;Help Ruby choose healthy actions after sitting for too long.&lt;/p&gt;
-        [[Play Activity →-&gt;LongPause]]
-    &lt;/div&gt;
-
-    &lt;div class=&quot;activity-card&quot;&gt;
-        &lt;h3&gt;🏃 Keep the Blood Moving&lt;/h3&gt;
-        &lt;p&gt;Discover how movement supports healthy blood circulation.&lt;/p&gt;
-        &lt;span class=&quot;activity-locked&quot;&gt;Coming soon!&lt;/span&gt;
-    &lt;/div&gt;
-
-    &lt;h2&gt;✅ Completed Activities&lt;/h2&gt;
-
-    &lt;div class=&quot;activity-card completed&quot;&gt;
-        &lt;h3&gt;💧 Hydration Station&lt;/h3&gt;
-        &lt;p&gt;Learn why drinking enough water is important for your body.&lt;/p&gt;
-        &lt;span class=&quot;completed-label&quot;&gt;Completed&lt;/span&gt;
-    &lt;/div&gt;
-
-    &lt;div class=&quot;activity-card completed&quot;&gt;
-        &lt;h3&gt;🥗 Fuel Your Flow&lt;/h3&gt;
-        &lt;p&gt;Explore how balanced food choices support cardiovascular health.&lt;/p&gt;
-        &lt;span class=&quot;completed-label&quot;&gt;Completed&lt;/span&gt;
-    &lt;/div&gt;
-
-    &lt;p class=&quot;back-link&quot;&gt;
-        [[← Return to the body map-&gt;HomeScreen]]
-    &lt;/p&gt;
-
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="8" name="LongPause" tags="" position="975,100" size="100,100">&lt;h1&gt;The Long Pause&lt;/h1&gt;
-
-&lt;p&gt;Follow Ruby, a red blood cell traveling through the body&#39;s vascular highway. Ruby&#39;s person has spent hours sitting at a desk, and the body&#39;s movement signals have been quiet.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Ruby:&lt;/strong&gt; &quot;It&#39;s been a long time since we&#39;ve moved! Let&#39;s help the body get moving again. Can you help me choose what to do?&quot;&lt;/p&gt;
-
-&lt;&lt;set $didStretch = false&gt;&gt;
-&lt;&lt;set $didWalk = false&gt;&gt;
-
-&lt;h3&gt;Mission: Help Ruby&#39;s person!&lt;/h3&gt;
-
-&lt;p&gt;Choose TWO healthy actions to support cardiovascular health.&lt;/p&gt;
-
-&lt;div class=&quot;answer-buttons&quot;&gt;
-
-&lt;&lt;button &quot;Stand up and stretch for a little while&quot;&gt;&gt;
-    &lt;&lt;if !$didStretch&gt;&gt;
-        &lt;&lt;set $didStretch = true&gt;&gt;
-        &lt;&lt;run Dialog.setup(&quot;Correct! Time to Stretch&quot;)&gt;&gt;
-        &lt;&lt;run Dialog.wiki(&quot;Ruby cheers! Taking a movement break helps interrupt long periods of sitting. Even small movement breaks are a great start!&quot;)&gt;&gt;
-        &lt;&lt;run Dialog.open()&gt;&gt;
-        &lt;&lt;replace &quot;#progress&quot;&gt;&gt;&lt;&lt;include &quot;LongPauseProgress&quot;&gt;&gt;&lt;&lt;/replace&gt;&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;&lt;run Dialog.setup(&quot;Already Completed&quot;)&gt;&gt;
-        &lt;&lt;run Dialog.wiki(&quot;You&#39;ve already chosen stretching! Try the other healthy action.&quot;)&gt;&gt;
-        &lt;&lt;run Dialog.open()&gt;&gt;
-    &lt;&lt;/if&gt;&gt;
-&lt;&lt;/button&gt;&gt;
-
-&lt;&lt;button &quot;Take a short walk around the room&quot;&gt;&gt;
-    &lt;&lt;if !$didWalk&gt;&gt;
-        &lt;&lt;set $didWalk = true&gt;&gt;
-        &lt;&lt;run Dialog.setup(&quot;Correct! Let&#39;s Get Moving&quot;)&gt;&gt;
-        &lt;&lt;run Dialog.wiki(&quot;Ruby happily travels along the bloodstream. Walking gets the body moving, and regular physical activity can help manage blood pressure over time.&quot;)&gt;&gt;
-        &lt;&lt;run Dialog.open()&gt;&gt;
-        &lt;&lt;replace &quot;#progress&quot;&gt;&gt;&lt;&lt;include &quot;LongPauseProgress&quot;&gt;&gt;&lt;&lt;/replace&gt;&gt;
-    &lt;&lt;else&gt;&gt;
-        &lt;&lt;run Dialog.setup(&quot;Already Completed&quot;)&gt;&gt;
-        &lt;&lt;run Dialog.wiki(&quot;You&#39;ve already chosen walking! Try the other healthy action.&quot;)&gt;&gt;
-        &lt;&lt;run Dialog.open()&gt;&gt;
-    &lt;&lt;/if&gt;&gt;
-&lt;&lt;/button&gt;&gt;
-
-&lt;&lt;button &quot;Keep sitting for several more hours without a break&quot;&gt;&gt;
-    &lt;&lt;run Dialog.setup(&quot;Not Quite!&quot;)&gt;&gt;
-    &lt;&lt;run Dialog.wiki(&quot;Ruby explains: Sitting for long periods without breaks means missing opportunities to move. Try a short movement break instead.&quot;)&gt;&gt;
-    &lt;&lt;run Dialog.open()&gt;&gt;
-&lt;&lt;/button&gt;&gt;
-
-&lt;&lt;button &quot;Open a bag of high-sodium chips&quot;&gt;&gt;
-    &lt;&lt;run Dialog.setup(&quot;Not Quite!&quot;)&gt;&gt;
-    &lt;&lt;run Dialog.wiki(&quot;Ruby explains: Regularly eating too much sodium can make blood pressure harder to manage. Let&#39;s make choices that support cardiovascular health!&quot;)&gt;&gt;
-    &lt;&lt;run Dialog.open()&gt;&gt;
-&lt;&lt;/button&gt;&gt;
-
-&lt;/div&gt;
-
-&lt;hr&gt;
-
-&lt;div id=&quot;progress&quot;&gt;
-    &lt;&lt;include &quot;LongPauseProgress&quot;&gt;&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="9" name="LongPauseProgress" tags="" position="1100,100" size="100,100">&lt;p&gt;&lt;strong&gt;Healthy choices:&lt;/strong&gt;
-&lt;&lt;if $didStretch &amp;&amp; !$didWalk&gt;&gt;1&lt;&lt;/if&gt;&gt;&lt;&lt;if $didStretch and $didWalk&gt;&gt; 2 &lt;&lt;/if&gt;&gt;&lt;&lt;if $didWalk &amp;&amp; !$didStretch&gt;&gt;1&lt;&lt;/if&gt;&gt; / 2&lt;/p&gt;
-
-&lt;&lt;if $didStretch and $didWalk&gt;&gt;
-    &lt;h3&gt;Both choices completed!&lt;/h3&gt;
-    &lt;p&gt;Ruby is ready to continue the journey.&lt;/p&gt;
-    [[Continue to the lesson-&gt;LongPauseLesson]]
-&lt;&lt;else&gt;&gt;
-    &lt;p&gt;Choose both healthy actions to unlock the next lesson.&lt;/p&gt;
-&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="10" name="LongPauseLesson" tags="" position="1225,100" size="100,100">&lt;h1&gt;Lesson Learned!&lt;/h1&gt;
-
+[[Return to the body map-&gt;HomeScreen]]</tw-passagedata><tw-passagedata pid="4" name="Lungs" tags="" position="475,100" size="100,100">&lt;div id=&quot;activity-menu&quot;&gt;&lt;/div&gt;
+&lt;&lt;script&gt;&gt;
+$(document).one(&quot;:passagedisplay&quot;, function () {
+    setup.renderActivityMenu(&quot;lungs&quot;, &quot;activity-menu&quot;);
+});
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="5" name="Blood Vessels" tags="" position="600,100" size="100,100">&lt;div id=&quot;activity-menu&quot;&gt;&lt;/div&gt;
+&lt;&lt;script&gt;&gt;
+$(document).one(&quot;:passagedisplay&quot;, function () {
+    setup.renderActivityMenu(&quot;bloodVessels&quot;, &quot;activity-menu&quot;);
+});
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="6" name="Brain" tags="" position="725,100" size="100,100">&lt;div id=&quot;activity-menu&quot;&gt;&lt;/div&gt;
+&lt;&lt;script&gt;&gt;
+$(document).one(&quot;:passagedisplay&quot;, function () {
+    setup.renderActivityMenu(&quot;brain&quot;, &quot;activity-menu&quot;);
+});
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="7" name="BrainActivity" tags="" position="850,100" size="100,100">&lt;div id=&quot;activity-content&quot;&gt;&lt;/div&gt;
+&lt;&lt;script&gt;&gt;
+$(document).one(&quot;:passagedisplay&quot;, function () {
+    setup.renderActivity(&quot;brain&quot;, &quot;brainControlCenter&quot;, &quot;activity-content&quot;);
+});
+&lt;&lt;/script&gt;&gt;&lt;p class=&quot;back-link&quot;&gt;&lt;&lt;button &quot;← Return to the Brain&quot;&gt;&gt;
+    &lt;&lt;goto &quot;Brain&quot;&gt;&gt;
+&lt;&lt;/button&gt;&gt;&lt;/p&gt;</tw-passagedata><tw-passagedata pid="8" name="Heart" tags="" position="975,100" size="100,100">&lt;div id=&quot;activity-menu&quot;&gt;&lt;/div&gt;
+&lt;&lt;script&gt;&gt;
+$(document).one(&quot;:passagedisplay&quot;, function () {
+    setup.renderActivityMenu(&quot;heart&quot;, &quot;activity-menu&quot;);
+});
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="9" name="HeartActivity" tags="" position="1100,100" size="100,100">&lt;div id=&quot;activity-content&quot;&gt;&lt;/div&gt;
+&lt;&lt;script&gt;&gt;
+$(document).one(&quot;:passagedisplay&quot;, function () {
+    setup.renderActivity(&quot;heart&quot;, &quot;heartbeatHeroes&quot;, &quot;activity-content&quot;);
+});
+&lt;&lt;/script&gt;&gt;&lt;p class=&quot;back-link&quot;&gt;&lt;&lt;button &quot;← Return to the Heart&quot;&gt;&gt;
+    &lt;&lt;goto &quot;Heart&quot;&gt;&gt;
+&lt;&lt;/button&gt;&gt;&lt;/p&gt;</tw-passagedata><tw-passagedata pid="10" name="BloodVesselsActivity" tags="" position="1225,100" size="100,100">&lt;div class=&quot;activity-page&quot;&gt;&lt;h1&gt;Blood Vessels Activities&lt;/h1&gt;&lt;div id=&quot;activity-content&quot;&gt;&lt;/div&gt;&lt;&lt;script&gt;&gt;
+        $(document).one(&quot;:passagedisplay&quot;, function () {
+            setup.renderActivity(
+                &quot;bloodVessels&quot;,
+                &quot;longPause&quot;,
+                &quot;activity-content&quot;)});&lt;&lt;/script&gt;&gt;&lt;p class=&quot;back-link&quot;&gt;&lt;&lt;button &quot;← Return to Blood Vessels&quot;&gt;&gt;
+    &lt;&lt;goto &quot;Blood Vessels&quot;&gt;&gt;
+&lt;&lt;/button&gt;&gt;&lt;/p&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="11" name="LungsActivity" tags="" position="100,225" size="100,100">&lt;div class=&quot;activity-page&quot;&gt;&lt;h1&gt;Lungs Activities&lt;/h1&gt;&lt;div id=&quot;activity-content&quot;&gt;&lt;/div&gt;&lt;&lt;script&gt;&gt;
+        $(document).one(&quot;:passagedisplay&quot;, function () {
+            setup.renderActivity(
+                &quot;lungs&quot;,
+                &quot;longPause&quot;,
+                &quot;activity-content&quot;);});&lt;&lt;/script&gt;&gt;&lt;p class=&quot;back-link&quot;&gt;&lt;&lt;button &quot;← Return to Lungs&quot;&gt;&gt;
+    &lt;&lt;goto &quot;Lungs&quot;&gt;&gt;
+&lt;&lt;/button&gt;&gt;&lt;/p&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="12" name="Blood Cells" tags="" position="225,225" size="100,100">&lt;div id=&quot;activity-menu&quot;&gt;&lt;/div&gt;
+&lt;&lt;script&gt;&gt;
+$(document).one(&quot;:passagedisplay&quot;, function () {
+    setup.renderActivityMenu(&quot;bloodCells&quot;, &quot;activity-menu&quot;);
+});
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="13" name="BloodCellActivity" tags="" position="350,225" size="100,100">&lt;div id=&quot;activity-content&quot;&gt;&lt;/div&gt;
+&lt;&lt;script&gt;&gt;
+$(document).one(&quot;:passagedisplay&quot;, function () {
+    setup.renderActivity(&quot;bloodCells&quot;, &quot;redCellRescue&quot;, &quot;activity-content&quot;);
+});
+&lt;&lt;/script&gt;&gt;&lt;p class=&quot;back-link&quot;&gt;&lt;&lt;button &quot;← Return to the Blood Cells&quot;&gt;&gt;&lt;&lt;goto &quot;Blood Cells&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/p&gt;</tw-passagedata><tw-passagedata pid="14" name="LongPauseLesson" tags="" position="475,225" size="100,100">&lt;h1&gt;Lesson Learned!&lt;/h1&gt;
 &lt;p&gt;Ruby travels onward through the bloodstream.&lt;/p&gt;
-
 &lt;p&gt;&lt;strong&gt;Ruby:&lt;/strong&gt; &quot;You did it! Small choices can make a difference when we practice them regularly.&quot;&lt;/p&gt;
-
 &lt;p&gt;&lt;strong&gt;Remember:&lt;/strong&gt; Sitting for long periods can be interrupted with basic movement breaks. Regular physical activity and a balanced, lower-sodium eating pattern can help manage blood pressure over time.&lt;/p&gt;
-
+[[Return to the body map-&gt;HomeScreen]]</tw-passagedata><tw-passagedata pid="15" name="LungsLesson" tags="" position="600,225" size="100,100">&lt;h1&gt;Lesson Learned!&lt;/h1&gt;
+&lt;p&gt;Ruby continues her journey, taking a fresh breath as she explores the lungs.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ruby:&lt;/strong&gt; &quot;You did it! Every breath helps bring oxygen into your body. Taking care of your lungs helps you keep breathing and moving!&quot;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Remember:&lt;/strong&gt; Regular physical activity can help your lungs and body work well. Avoiding smoke and other harmful air pollutants can help protect your lungs. Taking steady breaths and staying active are simple ways to support healthy breathing.&lt;/p&gt;
+[[Return to the body map-&gt;HomeScreen]]</tw-passagedata><tw-passagedata pid="16" name="BloodCellLesson" tags="" position="725,225" size="100,100">&lt;h1&gt;Lesson Learned!&lt;/h1&gt;
+&lt;p&gt;Ruby continues onward through the bloodstream, discovering the tiny cells that help keep the body healthy.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ruby:&lt;/strong&gt; &quot;You did it! Blood cells have important jobs that help our bodies stay healthy.&quot;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Remember:&lt;/strong&gt; Red blood cells carry oxygen from the lungs to body tissues. White blood cells help defend the body against germs and infections. Platelets help blood clot when a blood vessel is injured and help stop bleeding.&lt;/p&gt;
+[[Return to the body map-&gt;HomeScreen]]</tw-passagedata><tw-passagedata pid="17" name="BrainLesson" tags="" position="850,225" size="100,100">&lt;h1&gt;Lesson Learned!&lt;/h1&gt;
+&lt;p&gt;Ruby continues her journey, discovering how the brain helps the body work together.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ruby:&lt;/strong&gt; &quot;You did it! Your brain helps you think, learn, remember, move, and respond to the world around you.&quot;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Remember:&lt;/strong&gt; The brain is part of the nervous system. It processes information and sends signals through nerves to help control movement and coordinate many body functions. Getting enough sleep, staying physically active, and protecting your head can help support brain health.&lt;/p&gt;
+[[Return to the body map-&gt;HomeScreen]]</tw-passagedata><tw-passagedata pid="18" name="HeartLesson" tags="" position="975,225" size="100,100">&lt;h1&gt;Lesson Learned!&lt;/h1&gt;
+&lt;p&gt;Ruby has discovered how the heart helps keep blood flowing throughout the body.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ruby:&lt;/strong&gt; &quot;You did it! Your heart pumps blood to help deliver oxygen and nutrients where your body needs them.&quot;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Remember:&lt;/strong&gt; The heart is a muscular organ that pumps blood through the circulatory system. The lungs add oxygen to the blood, and the heart helps circulate that oxygen throughout the body. Regular physical activity and other healthy habits can help support heart health.&lt;/p&gt;
 [[Return to the body map-&gt;HomeScreen]]
 
 

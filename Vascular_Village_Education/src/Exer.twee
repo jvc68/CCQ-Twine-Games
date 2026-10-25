@@ -1,0 +1,210 @@
+:: StoryTitle
+Education Game
+
+:: StoryData
+{
+"ifid": "BAE48670-5730-4DC7-B1BA-608EFEDA5280",
+"format": "SugarCube",
+"format-version": "2.30.0",
+"start": "Start",
+"zoom": 1
+}
+
+:: Start {"position": "625,275", "size": "100,100"}
+<h1>Welcome to Vascular Village!</h1><p>Meet Ruby, your guide on an amazing adventure inside the human body! 🔬</p><p>Follow Ruby as she explores the body's incredible systems, discovers how they work together, and learns the little things we can do every day to stay healthy.</p><p>From the heart pumping blood to the lungs bringing in oxygen, every discovery brings Ruby one step closer to understanding how our bodies keep us going!</p><p><strong>Are you ready to join Ruby and explore the wonders of Vascular Village?</strong></p>[[Let's Explore! →->HomeScreen]]
+
+
+
+:: HomeScreen
+
+<div class="home-screen">
+    <h1>❤️ CardioCare Quest</h1>
+    <p>Choose a part of your health journey!</p>
+
+    <div class="body-map">
+
+        <div class="body-circle head">
+            [[🧠Brain->Brain]]
+        </div>
+
+        <div class="body-circle left">
+            [[🩸Blood Cells->Blood Cells]]
+        </div>
+
+        <div class="body-circle center">
+            [[❤️Heartbeat->Heart]]
+        </div>
+
+        <div class="body-circle right">
+            [[🩸Blood Vessels->Blood Vessels]]
+        </div>
+
+        <div class="body-circle legs">
+            [[🫁Lungs->Lungs]]
+        </div>
+
+    </div>
+    
+    <p class="home-hint">Tap a circle to begin exploring!</p>
+</div>
+
+
+
+:: BloodCells
+<h1>Blood Cells</h1>
+<p>In development</p>
+[[Return to the body map->HomeScreen]]
+
+
+
+
+
+:: Lungs
+<div id="activity-menu"></div>
+<<script>>
+$(document).one(":passagedisplay", function () {
+    setup.renderActivityMenu("lungs", "activity-menu");
+});
+<</script>>
+
+
+
+
+:: Blood Vessels
+<div id="activity-menu"></div>
+<<script>>
+$(document).one(":passagedisplay", function () {
+    setup.renderActivityMenu("bloodVessels", "activity-menu");
+});
+<</script>>
+
+
+:: Brain
+<div id="activity-menu"></div>
+<<script>>
+$(document).one(":passagedisplay", function () {
+    setup.renderActivityMenu("brain", "activity-menu");
+});
+<</script>>
+
+
+:: BrainActivity
+<div id="activity-content"></div>
+<<script>>
+$(document).one(":passagedisplay", function () {
+    setup.renderActivity("brain", "brainControlCenter", "activity-content");
+});
+<</script>><p class="back-link"><<button "← Return to the Brain">>
+    <<goto "Brain">>
+<</button>></p>
+
+
+:: Heart
+
+<div id="activity-menu"></div>
+<<script>>
+$(document).one(":passagedisplay", function () {
+    setup.renderActivityMenu("heart", "activity-menu");
+});
+<</script>>
+
+
+:: HeartActivity
+<div id="activity-content"></div>
+<<script>>
+$(document).one(":passagedisplay", function () {
+    setup.renderActivity("heart", "heartbeatHeroes", "activity-content");
+});
+<</script>><p class="back-link"><<button "← Return to the Heart">>
+    <<goto "Heart">>
+<</button>></p>
+
+
+
+:: BloodVesselsActivity
+<div class="activity-page"><h1>Blood Vessels Activities</h1><div id="activity-content"></div><<script>>
+        $(document).one(":passagedisplay", function () {
+            setup.renderActivity(
+                "bloodVessels",
+                "longPause",
+                "activity-content")});<</script>><p class="back-link"><<button "← Return to Blood Vessels">>
+    <<goto "Blood Vessels">>
+<</button>></p>
+</div>
+
+:: LungsActivity
+
+<div class="activity-page"><h1>Lungs Activities</h1><div id="activity-content"></div><<script>>
+        $(document).one(":passagedisplay", function () {
+            setup.renderActivity(
+                "lungs",
+                "longPause",
+                "activity-content");});<</script>><p class="back-link"><<button "← Return to Lungs">>
+    <<goto "Lungs">>
+<</button>></p>
+</div>
+
+
+
+:: Blood Cells
+<div id="activity-menu"></div>
+<<script>>
+$(document).one(":passagedisplay", function () {
+    setup.renderActivityMenu("bloodCells", "activity-menu");
+});
+<</script>>
+
+:: BloodCellActivity
+<div id="activity-content"></div>
+<<script>>
+$(document).one(":passagedisplay", function () {
+    setup.renderActivity("bloodCells", "redCellRescue", "activity-content");
+});
+<</script>><p class="back-link"><<button "← Return to the Blood Cells">><<goto "Blood Cells">><</button>></p>
+
+
+:: LongPauseLesson
+<h1>Lesson Learned!</h1>
+<p>Ruby travels onward through the bloodstream.</p>
+<p><strong>Ruby:</strong> "You did it! Small choices can make a difference when we practice them regularly."</p>
+<p><strong>Remember:</strong> Sitting for long periods can be interrupted with basic movement breaks. Regular physical activity and a balanced, lower-sodium eating pattern can help manage blood pressure over time.</p>
+[[Return to the body map->HomeScreen]]
+
+:: LungsLesson
+<h1>Lesson Learned!</h1>
+<p>Ruby continues her journey, taking a fresh breath as she explores the lungs.</p>
+<p><strong>Ruby:</strong> "You did it! Every breath helps bring oxygen into your body. Taking care of your lungs helps you keep breathing and moving!"</p>
+<p><strong>Remember:</strong> Regular physical activity can help your lungs and body work well. Avoiding smoke and other harmful air pollutants can help protect your lungs. Taking steady breaths and staying active are simple ways to support healthy breathing.</p>
+[[Return to the body map->HomeScreen]]
+
+
+:: BloodCellLesson
+<h1>Lesson Learned!</h1>
+<p>Ruby continues onward through the bloodstream, discovering the tiny cells that help keep the body healthy.</p>
+<p><strong>Ruby:</strong> "You did it! Blood cells have important jobs that help our bodies stay healthy."</p>
+<p><strong>Remember:</strong> Red blood cells carry oxygen from the lungs to body tissues. White blood cells help defend the body against germs and infections. Platelets help blood clot when a blood vessel is injured and help stop bleeding.</p>
+[[Return to the body map->HomeScreen]]
+
+
+:: BrainLesson
+<h1>Lesson Learned!</h1>
+<p>Ruby continues her journey, discovering how the brain helps the body work together.</p>
+<p><strong>Ruby:</strong> "You did it! Your brain helps you think, learn, remember, move, and respond to the world around you."</p>
+<p><strong>Remember:</strong> The brain is part of the nervous system. It processes information and sends signals through nerves to help control movement and coordinate many body functions. Getting enough sleep, staying physically active, and protecting your head can help support brain health.</p>
+[[Return to the body map->HomeScreen]]
+
+
+:: HeartLesson
+
+<h1>Lesson Learned!</h1>
+<p>Ruby has discovered how the heart helps keep blood flowing throughout the body.</p>
+<p><strong>Ruby:</strong> "You did it! Your heart pumps blood to help deliver oxygen and nutrients where your body needs them."</p>
+<p><strong>Remember:</strong> The heart is a muscular organ that pumps blood through the circulatory system. The lungs add oxygen to the blood, and the heart helps circulate that oxygen throughout the body. Regular physical activity and other healthy habits can help support heart health.</p>
+[[Return to the body map->HomeScreen]]
+
+
+/*
+to run on webpage
+in terminal: npm run watch
+Open in live server
+*/
