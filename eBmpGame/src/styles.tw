@@ -1,20 +1,4 @@
 :: UserStylesheet [stylesheet]
-/* ============================================================
-   Daily archer — visual stylesheet
-   Arial font, click handler on cells (no passage refresh on
-   click), compact phone height.
-
-   CardioCareQuest viridis palette (canonical across all games):
-     #440154  deep purple   — phone gradient stop 1
-     #3b528b  blue          — phone gradient stop 2
-     #21918c  teal          — phone gradient stop 3 / marked cell
-     #5ec962  green          — win banner / success
-     #fde725  yellow         — title / FREE / primary CTA
-     #f4f1d8  cream          — page background
-   2026-05-10: phone gradient + dark-text accent (#1a1a1a) replaced
-   to align with viridis anchor stops.
-   ============================================================ */
-
 * { box-sizing: border-box; }
 
 body {
@@ -49,13 +33,33 @@ body {
   font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
+.library {
+  display: grid;
+  grid-template-columns: auto auto auto auto ;
+  gap: 18px;
+  max-width: 300px;
+  margin: 5% -2%;
+}
+
+.library button{ 
+  border-radius:12px;
+  background: snow;
+  border: 2px solid darkgrey;
+}
+
+.fidgetIcon {
+  width: 120px;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+}
+
 .flButton {
   position: absolute;
   bottom: 4%;
 }
 
 .fidgetInterface {
-  background: lightgrey;
+  background: snow;
   border-radius: 12px;
   border: 1px solid black;
   padding: 8px;
@@ -64,15 +68,34 @@ body {
   text-align: center;
 }
 
+/*Drums */
+.drums img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: none;
+  image-rendering: pixelated;
+}
+
+.drums {
+  background:transparent;
+  border: none;
+}
+
+.drums:active {
+  transform: scale(1.1);
+}
 
 /* Bass Drum (Bottom Center) */
 .bass {
   position: absolute;
   border-radius: 50%;
-  border: 2px solid #555;
-  width: 140px;
-  height: 140px;
-  top: 42%;
+  width: 136px;
+  height: 65px;
+  top: 47%;
   left: 30%;
 }
 
@@ -80,66 +103,60 @@ body {
 .snare {
   position: absolute;
   border-radius: 50%;
-  border: 2px solid #555;
   width: 70px;
   height: 70px;
-  top: 45%;
-  left: 12%;
+  top: 46%;
+  left: 12.5%;
 }
 
 /* Hi-Hat (Top Left) */
 .hihat {
   position: absolute;
   border-radius: 50%;
-  border: 2px solid #555;
   width: 75px;
   height: 75px;
-  top: 34%;
-  left: 12%;
+  top: 35%;
+  left: 17%;
 }
 
 /* Top Tom (Upper-Mid Left) */
 .topTom {
   position: absolute;
   border-radius: 50%;
-  border: 2px solid #555;
   width: 60px;
   height: 60px;
-  top: 34%;
-  left: 31%;
+  top: 38%;
+  left: 36%;
 }
 
 /* Med Tom (Upper-Mid Right) */
 .medTom {
   position: absolute;
   border-radius: 50%;
-  border: 2px solid #555;
   width: 75px;
   height: 75px;
-  top: 31.5%;
-  left: 46%;
+  top: 37%;
+  left: 50.5%;
 }
 
 /* Low Tom / Floor Tom (Bottom Right) */
 .lowTom {
   position: absolute;
   border-radius: 50%;
-  border: 2px solid #555;
   width: 100px;
   height: 100px;
-  top: 42%;
-  left: 64%;
+  top: 43%;
+  left: 65%;
 }
 
 /* Crash Cymbal (Top Right) */
 .crash {
   position: absolute;
   border-radius: 50%;
-  border: 2px solid #555;
   width: 75px;
   height: 75px;
   top: 32%;
-  left: 65%;
+  left: 67%;
 }
 
 /*Bubble Wrap */
@@ -158,24 +175,23 @@ body {
 }
 
 .switchImg {
-  width: 160px;
-  height: 350px;
+  width: 45%;
+  height: 55%;
   position: absolute;
-  left: 29%;
+  left: 27%;
   top: 24%;
+  padding: -20px;
 }
 
-/*rol Panel */
+/*Control Panel */
 
-.controlPanel {
-  background-color: #a7a69b;
-}
 
 .row{
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  padding: 10px;
+  padding: 14px;
   justify-items: center; 
+  
   
 }
 
@@ -187,19 +203,63 @@ body {
   0px 0px 10px rgba(255, 255, 255, 1),
   4px 4px 10px rgba(255, 255, 255, 1),
   -4px -4px 10px rgba(255, 255, 255, 1);
-  width: 18px;
-  height: 18px;
+  width: 40%;
+  aspect-ratio: 1 / 1;
   text-align: center;
 }
 
 .lightButton {
-  border-radius: 50px;
+  border-radius: 50%;
   background-color: red;
-  width: 35px;
-  height: 35px;
+  border: 3px double darkred;
+  width: 65%;
+  aspect-ratio: 1 / 1;
   
 }
 
 .flip {
   display: block;
+  background:transparent;
+  border: none;
+
+  height: .1px;
+  width: .1px;
+  padding:20px;
+}
+
+.flip:hover {
+  background:transparent;
+  border: none;
+}
+
+.flipImg {
+  position: relative;
+  left: -12px;
+  top: -12px;
+  transition: filter 0.1s ease;
+}
+
+.flipImg:hover {
+  filter: brightness(60%);
+}
+
+.flipImg:active {
+  transform: translate(0px, 2px);
+}
+
+.flipped {
+  position: relative;
+  left: -12px;
+  top: -12px;
+  transition: filter 0.1s ease;
+  transform: scaleY(-1);
+}
+
+.flipped:hover {
+  filter: brightness(60%);
+}
+
+.flipped:active {
+  transform: scaleY(-1) translate(0px, -2px);
+
 }

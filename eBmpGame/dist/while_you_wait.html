@@ -154,13 +154,33 @@ body {
   font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
+.library {
+  display: grid;
+  grid-template-columns: auto auto auto auto ;
+  gap: 18px;
+  max-width: 300px;
+  margin: 5% -2%;
+}
+
+.library button{ 
+  border-radius:12px;
+  background: snow;
+  border: 2px solid darkgrey;
+}
+
+.fidgetIcon {
+  width: 120px;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+}
+
 .flButton {
   position: absolute;
   bottom: 4%;
 }
 
 .fidgetInterface {
-  background: lightgrey;
+  background: snow;
   border-radius: 12px;
   border: 1px solid black;
   padding: 8px;
@@ -169,15 +189,34 @@ body {
   text-align: center;
 }
 
+/*Drums */
+.drums img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: none;
+  image-rendering: pixelated;
+}
+
+.drums {
+  background:transparent;
+  border: none;
+}
+
+.drums:active {
+  transform: scale(1.1);
+}
 
 /* Bass Drum (Bottom Center) */
 .bass {
   position: absolute;
   border-radius: 50%;
-  border: 2px solid #555;
-  width: 140px;
-  height: 140px;
-  top: 42%;
+  width: 136px;
+  height: 65px;
+  top: 47%;
   left: 30%;
 }
 
@@ -185,66 +224,60 @@ body {
 .snare {
   position: absolute;
   border-radius: 50%;
-  border: 2px solid #555;
   width: 70px;
   height: 70px;
-  top: 45%;
-  left: 12%;
+  top: 46%;
+  left: 12.5%;
 }
 
 /* Hi-Hat (Top Left) */
 .hihat {
   position: absolute;
   border-radius: 50%;
-  border: 2px solid #555;
   width: 75px;
   height: 75px;
-  top: 34%;
-  left: 12%;
+  top: 35%;
+  left: 17%;
 }
 
 /* Top Tom (Upper-Mid Left) */
 .topTom {
   position: absolute;
   border-radius: 50%;
-  border: 2px solid #555;
   width: 60px;
   height: 60px;
-  top: 34%;
-  left: 31%;
+  top: 38%;
+  left: 36%;
 }
 
 /* Med Tom (Upper-Mid Right) */
 .medTom {
   position: absolute;
   border-radius: 50%;
-  border: 2px solid #555;
   width: 75px;
   height: 75px;
-  top: 31.5%;
-  left: 46%;
+  top: 37%;
+  left: 50.5%;
 }
 
 /* Low Tom / Floor Tom (Bottom Right) */
 .lowTom {
   position: absolute;
   border-radius: 50%;
-  border: 2px solid #555;
   width: 100px;
   height: 100px;
-  top: 42%;
-  left: 64%;
+  top: 43%;
+  left: 65%;
 }
 
 /* Crash Cymbal (Top Right) */
 .crash {
   position: absolute;
   border-radius: 50%;
-  border: 2px solid #555;
   width: 75px;
   height: 75px;
   top: 32%;
-  left: 65%;
+  left: 67%;
 }
 
 /*Bubble Wrap */
@@ -263,24 +296,23 @@ body {
 }
 
 .switchImg {
-  width: 160px;
-  height: 350px;
+  width: 45%;
+  height: 55%;
   position: absolute;
-  left: 29%;
+  left: 27%;
   top: 24%;
+  padding: -20px;
 }
 
-/*rol Panel */
+/*Control Panel */
 
-.controlPanel {
-  background-color: #a7a69b;
-}
 
 .row{
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  padding: 10px;
+  padding: 14px;
   justify-items: center; 
+  
   
 }
 
@@ -292,21 +324,65 @@ body {
   0px 0px 10px rgba(255, 255, 255, 1),
   4px 4px 10px rgba(255, 255, 255, 1),
   -4px -4px 10px rgba(255, 255, 255, 1);
-  width: 18px;
-  height: 18px;
+  width: 40%;
+  aspect-ratio: 1 / 1;
   text-align: center;
 }
 
 .lightButton {
-  border-radius: 50px;
+  border-radius: 50%;
   background-color: red;
-  width: 35px;
-  height: 35px;
+  border: 3px double darkred;
+  width: 65%;
+  aspect-ratio: 1 / 1;
   
 }
 
 .flip {
   display: block;
+  background:transparent;
+  border: none;
+
+  height: .1px;
+  width: .1px;
+  padding:20px;
+}
+
+.flip:hover {
+  background:transparent;
+  border: none;
+}
+
+.flipImg {
+  position: relative;
+  left: -12px;
+  top: -12px;
+  transition: filter 0.1s ease;
+}
+
+.flipImg:hover {
+  filter: brightness(60%);
+}
+
+.flipImg:active {
+  transform: translate(0px, 2px);
+}
+
+.flipped {
+  position: relative;
+  left: -12px;
+  top: -12px;
+  transition: filter 0.1s ease;
+  transform: scaleY(-1);
+}
+
+.flipped:hover {
+  filter: brightness(60%);
+}
+
+.flipped:active {
+  transform: scaleY(-1) translate(0px, -2px);
+
 }</style><script role="script" id="twine-user-script" type="text/twine-javascript">/* twine-user-script #1: "script.js" */
 setup.prevRand = -1
 setup.currentFidget = "controlPanel"
@@ -445,6 +521,7 @@ setup.populateFidget = function populateFidget() {
 	let fidgetLabel = document.getElementById("currentFidget");
 	container.replaceChildren();
 	postContainer.replaceChildren();
+	container.style.backgroundColor = 'snow'
 	switch (setup.currentFidget) {
 		case "bubbleWrap":
 			blankSpace.style.height = '0'
@@ -490,6 +567,7 @@ setup.populateFidget = function populateFidget() {
 		case "controlPanel":
 			blankSpace.style.height = '5%'
 			container.style.height = '50%'
+			container.style.backgroundColor = 'gainsboro'
 
 			fidgetLabel.textContent = "Control Panel"
 			let newDiv = document.createElement('div');
@@ -524,9 +602,17 @@ setup.populateFidget = function populateFidget() {
 					newFlip.id = "flip"
 					newFlip.classList.add("flip");
 					if (k == 0) {
+						let newImg = document.createElement('img');
+						newImg.src = "../../img/arrow.png"
+						newImg.classList.add("flipImg")
+						newFlip.appendChild(newImg)
 						newFlip.addEventListener('click', () => setup.incLight(setup.light[i]));
 					} else {
 						newFlip.addEventListener('click', () => setup.decLight(setup.light[i]));
+						let newImg = document.createElement('img');
+						newImg.src = "../../img/arrow.png"
+						newImg.classList.add("flipped");
+						newFlip.appendChild(newImg)
 					}
 					flipCol.appendChild(newFlip)
 				}
@@ -546,9 +632,19 @@ setup.populateFidget = function populateFidget() {
 			fidgetLabel.textContent = "Drum Kit"
 			console.log(setup.instruments)
 
+			/*For unique drum parts: bass, hihat, crash, and lowTom */
+			setup.createUniqueDrums(container, "lowTom");
+			setup.createUniqueDrums(container, "crash");
+			setup.createUniqueDrums(container, "hihat");
+			setup.createUniqueDrums(container, "bass");
+
+
 			for (let drum in setup.instruments) {
 				let newButton = document.createElement('button');
-				newButton.classList.add(setup.instruments[drum]);
+				newButton.classList.add(setup.instruments[drum], "drums");
+				let newImg = document.createElement('img');
+				newImg.src = "../../img/drumSnareNoTag.png"
+				newButton.appendChild(newImg)
 
 				//Credit to Google Gemini for teaching me WebAudio API
 				newButton.addEventListener('click', () => {
@@ -574,6 +670,48 @@ setup.populateFidget = function populateFidget() {
 	}
 }
 
+/*For unique drum parts: bass, hihat, crash, and lowTom */
+setup.createUniqueDrums = function createUniqueDrums(container, which) {
+	let drum = document.createElement('button');
+	drum.classList.add(which, "drums");
+	let drumImg = document.createElement('img');
+
+	switch (which) {
+		case "bass":
+			drumImg.src = `../../img/bassDrum.png`
+			drum.appendChild(drumImg)
+			break;
+		case "crash":
+			drumImg.src = `../../img/brassDrum2.png`
+			drum.appendChild(drumImg)
+			break;
+		case "hihat":
+			drumImg.src = `../../img/brassDrum2.png`
+			drum.appendChild(drumImg)
+			break;
+		case "lowTom":
+			drumImg.src = `../../img/drumSnare.png`
+			drum.appendChild(drumImg)
+			break;
+
+	}
+
+	drum.addEventListener('click', () => {
+		if (setup.audioCtx.state === 'suspended') {
+			setup.audioCtx.resume();
+		}
+		const buffer = setup.drumBuffers[which];
+
+		if (buffer) {
+			const source = setup.audioCtx.createBufferSource();
+			source.buffer = buffer;
+			source.connect(setup.audioCtx.destination);
+			source.start(0);
+		}
+	});
+	container.appendChild(drum);
+}
+
 setup.totalSeconds = 120;
 
 setup.updateTimer = function updateTimer() {
@@ -584,15 +722,13 @@ setup.updateTimer = function updateTimer() {
 	const seconds = setup.totalSeconds % 60;
 
 	setup.formattedTime =
-		String(hours).padStart(2, '0') + ':' +
 		String(minutes).padStart(2, '0') + ':' +
 		String(seconds).padStart(2, '0');
 
 	if (setup.totalSeconds <= 0) {
-		document.getElementById('timer').textContent = "00:00:00"
-	} else {
-		document.getElementById('timer').textContent = setup.formattedTime;
+		setup.formattedTime = "00:00"
 	}
+	document.getElementById('timer').textContent = setup.formattedTime;
 
 }
 /* twine-user-script #2: "variables.js" */
@@ -612,7 +748,7 @@ SimpleAudio.tracks.add("on", "audio/lightOn.mp3");
 SimpleAudio.tracks.add("off", "audio/lightOff.mp3");
 
 /*Array For drums, makes code look cleaner */
-setup.instruments = ["snare", "bass", "hihat", "lowTom", "medTom", "topTom", "crash"]
+setup.instruments = ["snare", "medTom", "topTom"]
 
 /*Audio for control panel*/
 SimpleAudio.tracks.add("1", "audio/C.wav");
@@ -661,7 +797,7 @@ setup.lightColors = {
   		-4px -4px 10px rgb(238, 130, 238)`, 'violet'],
 
 }</script><tw-passagedata pid="1" name="StoryInit" tags="" position="100,100" size="100,100">&lt;&lt;run setInterval(setup.updateTimer, 1000)&gt;&gt;
-&lt;&lt;=setup.formattedTime = &quot;00:02:00&quot;&gt;&gt;
+&lt;&lt;=setup.formattedTime = &quot;02:00&quot;&gt;&gt;
 &lt;&lt;run 
 /*Necessary set up for low latency drums*/
 setup.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -696,10 +832,10 @@ loadDrumSound(&quot;crash&quot;, &quot;audio/crash2.wav&quot;);
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="Fidget Library" tags="" position="350,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;Fidget Library
 Time Spent: &lt;span id=&quot;timer&quot;&gt;&lt;&lt;=setup.formattedTime&gt;&gt;&lt;/span&gt;
   &lt;div class=&quot;library&quot;&gt;
-    &lt;&lt;button &quot;Bubble Wrap&quot;&gt;&gt;&lt;&lt;run setup.swapFidget(&quot;bubbleWrap&quot;)&gt;&gt;&lt;&lt;/button&gt;&gt;
-    &lt;&lt;button &quot;Light Switch&quot;&gt;&gt;&lt;&lt;run setup.swapFidget(&quot;switch&quot;)&gt;&gt;&lt;&lt;/button&gt;&gt;
-    &lt;&lt;button &quot;Drums&quot;&gt;&gt;&lt;&lt;run setup.swapFidget(&quot;drums&quot;)&gt;&gt;&lt;&lt;/button&gt;&gt;
-    &lt;&lt;button &quot;Control Panel&quot;&gt;&gt;&lt;&lt;run setup.swapFidget(&quot;controlPanel&quot;)&gt;&gt;&lt;&lt;/button&gt;&gt;
+    &lt;&lt;button &quot;&lt;img class=&#39;fidgetIcon&#39; src=&#39;../../img/bubbleWrap.png&#39;&gt;&quot;&gt;&gt;&lt;&lt;run setup.swapFidget(&quot;bubbleWrap&quot;)&gt;&gt; &lt;&lt;/button&gt;&gt;
+    &lt;&lt;button &quot;&lt;img class=&#39;fidgetIcon&#39; src=&#39;../../img/lightSwitch.png&#39;&gt;&quot;&gt;&gt;&lt;&lt;run setup.swapFidget(&quot;switch&quot;)&gt;&gt; &lt;&lt;/button&gt;&gt;
+    &lt;&lt;button &quot;&lt;img class=&#39;fidgetIcon&#39; src=&#39;../../img/controlPanel.png&#39;&gt;&quot;&gt;&gt;&lt;&lt;run setup.swapFidget(&quot;controlPanel&quot;)&gt;&gt; &lt;&lt;/button&gt;&gt;
+    &lt;&lt;button &quot;&lt;img class=&#39;fidgetIcon&#39; src=&#39;../../img/drums.png&#39;&gt;&quot;&gt;&gt;&lt;&lt;run setup.swapFidget(&quot;drums&quot;)&gt;&gt; &lt;&lt;/button&gt;&gt;
   &lt;/div&gt; 
 
 &lt;/div&gt;</tw-passagedata></tw-storydata>

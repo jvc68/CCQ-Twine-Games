@@ -1,20 +1,20 @@
 /*Audio for Bubble Wrap */
 
 SimpleAudio.tracks.add("bub1", "audio/bub1.mp3");
-/*I don't like two*/SimpleAudio.tracks.add("bub2", "audio/bub2.mp3");
+SimpleAudio.tracks.add("bub2", "audio/bub2.mp3");
 SimpleAudio.tracks.add("bub3", "audio/bub3.mp3");
 SimpleAudio.tracks.add("bub4", "audio/bub4.mp3");
-/*I can change this*/SimpleAudio.tracks.add("bub5", "audio/bub5.mp3");
+SimpleAudio.tracks.add("bub5", "audio/bub5.mp3");
 SimpleAudio.tracks.add("bub6", "audio/bub6.mp3");
-/*The best one, do not change*/SimpleAudio.tracks.add("bub7", "audio/bub7.mp3");
-/*Feels too long*/SimpleAudio.tracks.add("bub8", "audio/bub8.mp3");
+SimpleAudio.tracks.add("bub7", "audio/bub7.mp3");
+SimpleAudio.tracks.add("bub8", "audio/bub8.mp3");
 
 /*Audio for Light Switch */
 SimpleAudio.tracks.add("on", "audio/lightOn.mp3");
 SimpleAudio.tracks.add("off", "audio/lightOff.mp3");
 
 /*Array For drums, makes code look cleaner */
-setup.instruments = ["snare", "bass", "hihat", "lowTom", "medTom", "topTom", "crash"]
+setup.instruments = ["snare", "medTom", "topTom"]
 
 /*Audio for control panel*/
 SimpleAudio.tracks.add("1", "audio/C.wav");

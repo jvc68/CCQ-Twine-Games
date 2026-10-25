@@ -12,7 +12,7 @@ While You Wait
 
 :: StoryInit {"position": "100,100", "size": "100,100"}
 <<run setInterval(setup.updateTimer, 1000)>>
-<<=setup.formattedTime = "00:02:00">>
+<<=setup.formattedTime = "02:00">>
 <<run 
 /*Necessary set up for low latency drums*/
 setup.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -53,10 +53,10 @@ loadDrumSound("crash", "audio/crash2.wav");
 <div class="phone">Fidget Library
 Time Spent: <span id="timer"><<=setup.formattedTime>></span>
   <div class="library">
-    <<button "Bubble Wrap">><<run setup.swapFidget("bubbleWrap")>><</button>>
-    <<button "Light Switch">><<run setup.swapFidget("switch")>><</button>>
-    <<button "Drums">><<run setup.swapFidget("drums")>><</button>>
-    <<button "Control Panel">><<run setup.swapFidget("controlPanel")>><</button>>
+    <<button "<img class='fidgetIcon' src='../../img/bubbleWrap.png'>">><<run setup.swapFidget("bubbleWrap")>> <</button>>
+    <<button "<img class='fidgetIcon' src='../../img/lightSwitch.png'>">><<run setup.swapFidget("switch")>> <</button>>
+    <<button "<img class='fidgetIcon' src='../../img/controlPanel.png'>">><<run setup.swapFidget("controlPanel")>> <</button>>
+    <<button "<img class='fidgetIcon' src='../../img/drums.png'>">><<run setup.swapFidget("drums")>> <</button>>
   </div> 
 
 </div>

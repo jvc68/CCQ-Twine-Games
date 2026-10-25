@@ -135,6 +135,7 @@ setup.populateFidget = function populateFidget() {
 	let fidgetLabel = document.getElementById("currentFidget");
 	container.replaceChildren();
 	postContainer.replaceChildren();
+	container.style.backgroundColor = 'snow'
 	switch (setup.currentFidget) {
 		case "bubbleWrap":
 			blankSpace.style.height = '0'
@@ -180,6 +181,7 @@ setup.populateFidget = function populateFidget() {
 		case "controlPanel":
 			blankSpace.style.height = '5%'
 			container.style.height = '50%'
+			container.style.backgroundColor = 'gainsboro'
 
 			fidgetLabel.textContent = "Control Panel"
 			let newDiv = document.createElement('div');
@@ -214,9 +216,17 @@ setup.populateFidget = function populateFidget() {
 					newFlip.id = "flip"
 					newFlip.classList.add("flip");
 					if (k == 0) {
+						let newImg = document.createElement('img');
+						newImg.src = "../../img/arrow.png"
+						newImg.classList.add("flipImg")
+						newFlip.appendChild(newImg)
 						newFlip.addEventListener('click', () => setup.incLight(setup.light[i]));
 					} else {
 						newFlip.addEventListener('click', () => setup.decLight(setup.light[i]));
+						let newImg = document.createElement('img');
+						newImg.src = "../../img/arrow.png"
+						newImg.classList.add("flipped");
+						newFlip.appendChild(newImg)
 					}
 					flipCol.appendChild(newFlip)
 				}
@@ -236,9 +246,19 @@ setup.populateFidget = function populateFidget() {
 			fidgetLabel.textContent = "Drum Kit"
 			console.log(setup.instruments)
 
+			/*For unique drum parts: bass, hihat, crash, and lowTom */
+			setup.createUniqueDrums(container, "lowTom");
+			setup.createUniqueDrums(container, "crash");
+			setup.createUniqueDrums(container, "hihat");
+			setup.createUniqueDrums(container, "bass");
+
+
 			for (let drum in setup.instruments) {
 				let newButton = document.createElement('button');
-				newButton.classList.add(setup.instruments[drum]);
+				newButton.classList.add(setup.instruments[drum], "drums");
+				let newImg = document.createElement('img');
+				newImg.src = "../../img/drumSnareNoTag.png"
+				newButton.appendChild(newImg)
 
 				//Credit to Google Gemini for teaching me WebAudio API
 				newButton.addEventListener('click', () => {
@@ -264,6 +284,48 @@ setup.populateFidget = function populateFidget() {
 	}
 }
 
+/*For unique drum parts: bass, hihat, crash, and lowTom */
+setup.createUniqueDrums = function createUniqueDrums(container, which) {
+	let drum = document.createElement('button');
+	drum.classList.add(which, "drums");
+	let drumImg = document.createElement('img');
+
+	switch (which) {
+		case "bass":
+			drumImg.src = `../../img/bassDrum.png`
+			drum.appendChild(drumImg)
+			break;
+		case "crash":
+			drumImg.src = `../../img/brassDrum2.png`
+			drum.appendChild(drumImg)
+			break;
+		case "hihat":
+			drumImg.src = `../../img/brassDrum2.png`
+			drum.appendChild(drumImg)
+			break;
+		case "lowTom":
+			drumImg.src = `../../img/drumSnare.png`
+			drum.appendChild(drumImg)
+			break;
+
+	}
+
+	drum.addEventListener('click', () => {
+		if (setup.audioCtx.state === 'suspended') {
+			setup.audioCtx.resume();
+		}
+		const buffer = setup.drumBuffers[which];
+
+		if (buffer) {
+			const source = setup.audioCtx.createBufferSource();
+			source.buffer = buffer;
+			source.connect(setup.audioCtx.destination);
+			source.start(0);
+		}
+	});
+	container.appendChild(drum);
+}
+
 setup.totalSeconds = 120;
 
 setup.updateTimer = function updateTimer() {
@@ -274,14 +336,12 @@ setup.updateTimer = function updateTimer() {
 	const seconds = setup.totalSeconds % 60;
 
 	setup.formattedTime =
-		String(hours).padStart(2, '0') + ':' +
 		String(minutes).padStart(2, '0') + ':' +
 		String(seconds).padStart(2, '0');
 
 	if (setup.totalSeconds <= 0) {
-		document.getElementById('timer').textContent = "00:00:00"
-	} else {
-		document.getElementById('timer').textContent = setup.formattedTime;
+		setup.formattedTime = "00:00"
 	}
+	document.getElementById('timer').textContent = setup.formattedTime;
 
 }
