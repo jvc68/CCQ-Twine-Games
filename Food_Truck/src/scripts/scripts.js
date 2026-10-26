@@ -13,26 +13,116 @@ var orderOptions = [
         custName: "Sam",
         dishName: "Squash and Black Bean Bowl",
         requiredIngredients: ["Squash", "Black Beans", "Garlic"]
+    },
+    {
+        custName: "Jesse",
+        dishName: "Turkey and Squash Bowl",
+        requiredIngredients: ["Turkey", "Squash", "Sage"]
+    },
+    {
+        custName: "Tyler",
+        dishName: "Garlic and Sage Medley",
+        requiredIngredients: ["Garlic", "Sage", "Black Beans"]
+    },
+    {
+        custName: "Anna",
+        dishName: "Turkey and Garlic Delight",
+        requiredIngredients: ["Turkey", "Garlic", "Squash"]
+    },
+    {
+        custName: "Rique",
+        dishName: "Sage and Squash Stir Fry",
+        requiredIngredients: ["Sage", "Squash", "Garlic"]
+    },
+    {
+        custName: "Morgan",
+        dishName: "Turkey Bean Taco",
+        requiredIngredients: ["Tortilla", "Turkey", "Black Beans"]
+    },
+    {
+        custName: "Casey",
+        dishName: "Garlic Squash Bowl",
+        requiredIngredients: ["Squash", "Garlic", "Black Beans"]
+    },
+    {
+        custName: "Riley",
+        dishName: "Sage Bean Wrap",
+        requiredIngredients: ["Tortilla", "Black Beans", "Sage"]
+    },
+    {
+        custName: "Avery",
+        dishName: "Turkey Sage Bowl",
+        requiredIngredients: ["Turkey", "Sage", "Squash"]
+    },
+    {
+        custName: "Quinn",
+        dishName: "Garlic Turkey Taco",
+        requiredIngredients: ["Tortilla", "Turkey", "Garlic"]
+    },
+    {
+        custName: "Drew",
+        dishName: "Squash Sage Wrap",
+        requiredIngredients: ["Tortilla", "Squash", "Sage"]
+    },
+    {
+        custName: "Jamie",
+        dishName: "Black Bean Turkey Bowl",
+        requiredIngredients: ["Black Beans", "Turkey", "Garlic"]
+    },
+    {
+        custName: "Parker",
+        dishName: "Sage Garlic Taco",
+        requiredIngredients: ["Tortilla", "Sage", "Garlic"]
+    },
+    {
+        custName: "Cameron",
+        dishName: "Squash Turkey Medley",
+        requiredIngredients: ["Squash", "Turkey", "Black Beans"]
+    },
+    {
+        custName: "Reese",
+        dishName: "Garlic Bean Wrap",
+        requiredIngredients: ["Tortilla", "Garlic", "Black Beans"]
+    },
+    {
+        custName: "Robin",
+        dishName: "Sage Squash Turkey Bowl",
+        requiredIngredients: ["Sage", "Squash", "Turkey"]
+    },
+    {
+        custName: "Devon",
+        dishName: "Black Bean Squash Taco",
+        requiredIngredients: ["Tortilla", "Black Beans", "Squash"]
+    },
+    {
+        custName: "Skyler",
+        dishName: "Sage Garlic Turkey Bowl",
+        requiredIngredients: ["Sage", "Garlic", "Turkey"]
     }
-    // Add more orders as needed
 ];
 
 var orderTimerInterval = null;
 var maxPrepTrayIngredients = 3;
 
 window.FoodTruck = {
+    /* Function Description: Returns the number of orders for the cuurent day,
+       calculated based on current day number */
     ordersForDay: function() {
         var day = SugarCube.State.variables.currentDay;
         return Math.min(20, 2 + 2 * (day - 1));
         /* return Math.min(20, 2 + Math.pow(day - 1, 2)); */
     },
 
+    /* Function Description: Returns the time limit for fulfilling an order for
+       the current day, calculated based on current day number */
     orderTimeForDay: function() {
         var day = SugarCube.State.variables.currentDay;
         return Math.max(50, 120 - 5 * (day - 1));
         /* return Math.max(40, Math.round(40 + 80 / day)); */
     },
 
+    /* Function Description: Updates the speed of the cooking skill-check marker
+       based on the cyrrent day number */
     updateCookingMarkerSpeed: function() {
         var day = SugarCube.State.variables.currentDay;
         var speed = Math.min(3, 1 + (day - 1) * 0.25);
@@ -46,6 +136,7 @@ window.FoodTruck = {
         var state = SugarCube.State.variables;
         this.stopOrderTimer();
         state.numOrders = this.ordersForDay();
+        state.availableOrders = orderOptions.slice();
         state.dayScore = 0;
         state.ordersCompleted = 0;
         state.satisfactionScore = 0;
@@ -59,26 +150,33 @@ window.FoodTruck = {
         state.orderTimer = this.orderTimeForDay();
     },
 
-    /* Function Description: Starts the next day by incrementing the current day and calling startDay */
+    /* Function Description: Starts the next day by incrementing the current
+       day and calling startDay */
     startNextDay: function() {
         SugarCube.State.variables.currentDay += 1;
         this.startDay();
     },
 
-    /* Function Description: Randomly selects an order from the orderOptions array and sets it as the active order */
+    /* Function Description: Randomly selects an order from today's remaining
+       unique customers */
     takeOrder: function() {
         var state = SugarCube.State.variables;
 
         if (state.numOrders < 1 || state.activeOrder) {
             return;
         }
+        if (!state.availableOrders.length) {
+            throw new Error("No customers remain for today's orders (has to be a unique customer).");
+        }
 
-        state.activeOrder = orderOptions[Math.floor(Math.random() * orderOptions.length)];
+        var customerIndex = Math.floor(Math.random() * state.availableOrders.length);
+        state.activeOrder = state.availableOrders.splice(customerIndex, 1)[0];
         state.orderTimer = this.orderTimeForDay();
         this.startOrderTimer();
     },
 
-    /* Function Description: Returns a string representation of the ingredient at the specified index, including its image and name */
+    /* Function Description: Returns a string representation of the ingredient
+       at the specified index, including its image and name */
     ingredientLabel: function(index) {
         var ingredients = SugarCube.State.variables.menuIngredients;
         var ingredient = ingredients[index];
@@ -90,6 +188,9 @@ window.FoodTruck = {
         return ingredient.img + "\n" + ingredient.name;
     },
 
+    /* Function Description: Returns a string representation of the preparation
+       method for the pending ingredient, including its label and whether it's
+       healthy or unhealthy */
     methodLabel: function(type) {
         var ingredient = SugarCube.State.variables.pendingIngredient;
 
@@ -101,6 +202,9 @@ window.FoodTruck = {
             (type === "healthy" ? " (Healthy)" : " (Unhealthy)");
     },
 
+    /* Function Description: Selects an ingredient from the menu by its index,
+       adding it to the prep tray if there's space and resetting any pending
+       preparation method or cooking result */
     selectIngredient: function(index) {
         var state = SugarCube.State.variables;
         var ingredient = state.menuIngredients[index];
@@ -274,6 +378,9 @@ window.FoodTruck = {
         SugarCube.Engine.play("DayTally");
     },
 
+    /* Function Description: Fulfills the current order if the prep tray matches
+       the required ingredients, updating scores and moving to the next order
+       or finishing the day */
     fulfillOrder: function() {
         var state = SugarCube.State.variables;
 
@@ -295,6 +402,8 @@ window.FoodTruck = {
         }
     },
 
+    /* Function Description: Starts the order timer interval, which decrements
+       the order timer every second and handles order expiration */
     startOrderTimer: function() {
         var self = this;
 
@@ -333,6 +442,7 @@ window.FoodTruck = {
         }, 1000);
     },
 
+    /* Function Description: Stops the order timer interval if it's running */
     stopOrderTimer: function() {
         if (orderTimerInterval !== null) {
             clearInterval(orderTimerInterval);
@@ -340,6 +450,8 @@ window.FoodTruck = {
         }
     },
 
+    /* Function Description: Returns a string representation of the order timer
+       in the format "MM:SS" */
     orderTimerDisplay: function() {
         var seconds = Math.max(0, SugarCube.State.variables.orderTimer || 0);
         var minutes = Math.floor(seconds / 60);
@@ -349,6 +461,7 @@ window.FoodTruck = {
             String(remainingSeconds).padStart(2, "0");
     },
 
+    /* Function Description: Updates the order timer display in the UI */
     updateOrderTimerDisplay: function() {
         var timerElement = document.getElementById("order-timer");
 
