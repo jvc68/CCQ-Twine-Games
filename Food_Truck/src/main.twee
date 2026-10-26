@@ -2,6 +2,8 @@
 <div class="phone">
     Welcome to your Food Truck! Are you ready to start serving customers?
 
+    <p>Debug mode: <<if $debugMode>>On (1 order per day)<<else>>Off<</if>></p>
+    <<button "Toggle Debug Mode" "Start">><<run FoodTruck.toggleDebugMode()>><</button>>
     <<button "Start Day" "TakeOrderScreen">><<run FoodTruck.startDay()>><</button>>
 </div>
 
@@ -153,6 +155,7 @@
 </div>
 
 :: CookingMinigame
+<<run FoodTruck.updateCookingMarkerSpeed()>>
 <div class="phone">\
     <div class="HUD">\
         <span><strong>Day:</strong> $currentDay</span> |\

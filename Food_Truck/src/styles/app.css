@@ -424,7 +424,7 @@ body {
   background: #fff;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
   transform: translateX(-50%);
-  animation: skill-slide 3.2s linear infinite alternate;
+  animation: skill-slide var(skill-marker-duration, 3.2s) linear infinite alternate;
 }
 
 @keyframes skill-slide {

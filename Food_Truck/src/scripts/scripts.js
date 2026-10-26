@@ -21,12 +21,31 @@ var orderTimerInterval = null;
 var maxPrepTrayIngredients = 3;
 
 window.FoodTruck = {
+    ordersForDay: function() {
+        var day = SugarCube.State.variables.currentDay;
+        return Math.min(20, 2 + 2 * (day - 1));
+        /* return Math.min(20, 2 + Math.pow(day - 1, 2)); */
+    },
+
+    orderTimeForDay: function() {
+        var day = SugarCube.State.variables.currentDay;
+        return Math.max(50, 120 - 5 * (day - 1));
+        /* return Math.max(40, Math.round(40 + 80 / day)); */
+    },
+
+    updateCookingMarkerSpeed: function() {
+        var day = SugarCube.State.variables.currentDay;
+        var speed = Math.min(3, 1 + (day - 1) * 0.25);
+        var duration = 3.2 / speed;
+
+        document.documentElement.style.setProperty("skill-marker-duration", duration + "s");
+    },
+
     /* Function Description: Initializes the food truck for a new day */
     startDay: function() {
         var state = SugarCube.State.variables;
         this.stopOrderTimer();
-        /* REMEMBER TO RESET NUM ORDERS BACK TO 5 WHEN TESTING IS DONE */
-        state.numOrders = 1;
+        state.numOrders = this.ordersForDay();
         state.dayScore = 0;
         state.ordersCompleted = 0;
         state.satisfactionScore = 0;
@@ -37,7 +56,7 @@ window.FoodTruck = {
         state.pendingIngredient = null;
         state.pendingMethod = null;
         state.cookingResult = null;
-        state.orderTimer = 120;
+        state.orderTimer = this.orderTimeForDay();
     },
 
     /* Function Description: Starts the next day by incrementing the current day and calling startDay */
@@ -55,7 +74,7 @@ window.FoodTruck = {
         }
 
         state.activeOrder = orderOptions[Math.floor(Math.random() * orderOptions.length)];
-        state.orderTimer = 120;
+        state.orderTimer = this.orderTimeForDay();
         this.startOrderTimer();
     },
 

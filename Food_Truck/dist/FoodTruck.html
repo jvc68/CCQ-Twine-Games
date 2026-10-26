@@ -530,7 +530,7 @@ body {
   background: #fff;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
   transform: translateX(-50%);
-  animation: skill-slide 3.2s linear infinite alternate;
+  animation: skill-slide var(skill-marker-duration, 3.2s) linear infinite alternate;
 }
 
 @keyframes skill-slide {
@@ -572,12 +572,31 @@ var orderTimerInterval = null;
 var maxPrepTrayIngredients = 3;
 
 window.FoodTruck = {
+    ordersForDay: function() {
+        var day = SugarCube.State.variables.currentDay;
+        return Math.min(20, 2 + 2 * (day - 1));
+        /* return Math.min(20, 2 + Math.pow(day - 1, 2)); */
+    },
+
+    orderTimeForDay: function() {
+        var day = SugarCube.State.variables.currentDay;
+        return Math.max(50, 120 - 5 * (day - 1));
+        /* return Math.max(40, Math.round(40 + 80 / day)); */
+    },
+
+    updateCookingMarkerSpeed: function() {
+        var day = SugarCube.State.variables.currentDay;
+        var speed = Math.min(3, 1 + (day - 1) * 0.25);
+        var duration = 3.2 / speed;
+
+        document.documentElement.style.setProperty("skill-marker-duration", duration + "s");
+    },
+
     /* Function Description: Initializes the food truck for a new day */
     startDay: function() {
         var state = SugarCube.State.variables;
         this.stopOrderTimer();
-        /* REMEMBER TO RESET NUM ORDERS BACK TO 5 WHEN TESTING IS DONE */
-        state.numOrders = 1;
+        state.numOrders = this.ordersForDay();
         state.dayScore = 0;
         state.ordersCompleted = 0;
         state.satisfactionScore = 0;
@@ -588,7 +607,7 @@ window.FoodTruck = {
         state.pendingIngredient = null;
         state.pendingMethod = null;
         state.cookingResult = null;
-        state.orderTimer = 120;
+        state.orderTimer = this.orderTimeForDay();
     },
 
     /* Function Description: Starts the next day by incrementing the current day and calling startDay */
@@ -606,7 +625,7 @@ window.FoodTruck = {
         }
 
         state.activeOrder = orderOptions[Math.floor(Math.random() * orderOptions.length)];
-        state.orderTimer = 120;
+        state.orderTimer = this.orderTimeForDay();
         this.startOrderTimer();
     },
 
@@ -890,6 +909,7 @@ window.FoodTruck = {
     }
 };</script><tw-passagedata pid="1" name="StoryInit" tags="" position="100,100" size="100,100">&lt;&lt;set $numOrders = 0&gt;&gt;
 &lt;&lt;set $currentDay = 1&gt;&gt;
+&lt;&lt;set $debugMode = false&gt;&gt;
 &lt;&lt;set $dayScore = 0&gt;&gt;
 &lt;&lt;set $ordersCompleted = 0&gt;&gt;
 &lt;&lt;set $prepTray = []&gt;&gt;
@@ -913,6 +933,8 @@ window.FoodTruck = {
 &lt;&lt;set $orderTimer = 120&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="Start" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;
     Welcome to your Food Truck! Are you ready to start serving customers?
 
+    &lt;p&gt;Debug mode: &lt;&lt;if $debugMode&gt;&gt;On (1 order per day)&lt;&lt;else&gt;&gt;Off&lt;&lt;/if&gt;&gt;&lt;/p&gt;
+    &lt;&lt;button &quot;Toggle Debug Mode&quot; &quot;Start&quot;&gt;&gt;&lt;&lt;run FoodTruck.toggleDebugMode()&gt;&gt;&lt;&lt;/button&gt;&gt;
     &lt;&lt;button &quot;Start Day&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.startDay()&gt;&gt;&lt;&lt;/button&gt;&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="TakeOrderScreen" tags="" position="350,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
     &lt;div class=&quot;HUD&quot;&gt;\
@@ -1049,7 +1071,8 @@ window.FoodTruck = {
     &lt;div class=&quot;passage-nav passage-nav-right&quot;&gt;\
         &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="7" name="CookingMinigame" tags="" position="850,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="7" name="CookingMinigame" tags="" position="850,100" size="100,100">&lt;&lt;run FoodTruck.updateCookingMarkerSpeed()&gt;&gt;
+&lt;div class=&quot;phone&quot;&gt;\
     &lt;div class=&quot;HUD&quot;&gt;\
         &lt;span&gt;&lt;strong&gt;Day:&lt;/strong&gt; $currentDay&lt;/span&gt; |\
         &lt;span&gt;&lt;strong&gt;Orders Left:&lt;/strong&gt; $numOrders&lt;/span&gt; |\
