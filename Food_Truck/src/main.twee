@@ -14,7 +14,7 @@
     <div class="HUD">\
         <span><strong>Day:</strong> $currentDay</span> |\
         <span><strong>Orders Left:</strong> $numOrders</span> |\
-        <span><strong>Score:</strong> $dayScore</span>\
+        <span><strong>Completed:</strong> $dayScore</span>\
     </div>\
     <hr>\
     <section class="customer-panel">\
@@ -81,7 +81,7 @@
     <div class="HUD">\
         <span><strong>Day:</strong> $currentDay</span> |\
         <span><strong>Orders Left:</strong> $numOrders</span> |\
-        <span><strong>Score:</strong> $dayScore</span>\
+        <span><strong>Completed:</strong> $dayScore</span>\
     </div>\
     <hr>\
     <<if $activeOrder>>\
@@ -138,7 +138,7 @@
     <div class="HUD">\
         <span><strong>Day:</strong> $currentDay</span> |\
         <span><strong>Orders Left:</strong> $numOrders</span> |\
-        <span><strong>Score:</strong> $dayScore</span>\
+        <span><strong>Completed:</strong> $dayScore</span>\
     </div>\
     <hr>\
     <<if $pendingIngredient>>\
@@ -164,7 +164,7 @@
     <div class="HUD">\
         <span><strong>Day:</strong> $currentDay</span> |\
         <span><strong>Orders Left:</strong> $numOrders</span> |\
-        <span><strong>Score:</strong> $dayScore</span>\
+        <span><strong>Completed:</strong> $dayScore</span>\
     </div>\
     <hr>\
     <<if $pendingIngredient && $pendingMethod>>\
@@ -206,7 +206,7 @@
     <div class="HUD">\
         <span><strong>Day:</strong> $currentDay</span> |\
         <span><strong>Orders Left:</strong> $numOrders</span> |\
-        <span><strong>Score:</strong> $dayScore</span>\
+        <span><strong>Completed:</strong> $dayScore</span>\
     </div>\
     <hr>\
     <<if $cookingResult>>\

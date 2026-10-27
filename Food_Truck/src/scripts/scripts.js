@@ -238,6 +238,8 @@ window.FoodTruck = {
         state.cookingResult = null;
     },
 
+    /* Function Description: Selects a preparation method for the pending
+     ingredient, resetting any previous cooking result */
     chooseMethod: function(type) {
         var state = SugarCube.State.variables;
         var ingredient = state.pendingIngredient;
@@ -253,6 +255,9 @@ window.FoodTruck = {
         state.cookingResult = null;
     },
 
+    /* Function Description: Stops the cooking skill-check, calculates the
+       doneness of the ingredient based on the marker's position, and adds the
+       result to the day's preparation choices and prep tray */
     stopCooking: function() {
         var state = SugarCube.State.variables;
         var marker = document.getElementById("skill-marker");
@@ -292,11 +297,16 @@ window.FoodTruck = {
         state.cookingResult = choice;
     },
 
+    /* Function Description: Clears the prep tray and resets the tray display in
+       the UI */
     clearTray: function() {
         SugarCube.State.variables.prepTray = [];
         window.jQuery("#tray").html("<em>Tap ingredients to add them to the tray.</em>");
     },
 
+    /* Function Description: Checks if the prep tray matches the required
+       ingredients for the active order, returning true if they match and false
+       otherwise */
     canFulfillOrder: function() {
         var state = SugarCube.State.variables;
         var tray = state.prepTray;
@@ -323,6 +333,8 @@ window.FoodTruck = {
         });
     },
 
+    /* Function Description: Calculates the healthiness and satisfaction scores
+       for the day's preparation choices, returning an object with both scores */
     calculateDayScores: function() {
         var state = SugarCube.State.variables;
         var choices = state.dayPreparationChoices;
@@ -352,12 +364,16 @@ window.FoodTruck = {
         };
     },
 
+    /* Function Description: Returns a string representation of a star rating
+       based on the provided score, with filled and empty stars */
     starRating: function(score) {
         var filledStars = Math.max(0, Math.min(5, Math.round(score || 0)));
 
         return "★".repeat(filledStars) + "☆".repeat(5 - filledStars);
     },
 
+    /* Function Description: Returns a string of tips based on the day's
+       satisfaction and healthiness scores, providing feedback for improvement */
     dayTips: function() {
         var state = SugarCube.State.variables;
         var tips = [];
@@ -383,6 +399,8 @@ window.FoodTruck = {
         return tips.join(" ");
     },
 
+    /* Function Description: Stops the order timer, calculates the day's scores,
+       and transitions to the DayTally passage */
     finishDay: function() {
         this.stopOrderTimer();
         this.calculateDayScores();
