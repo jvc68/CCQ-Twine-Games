@@ -108,6 +108,10 @@ window.FoodTruck = {
     /* Function Description: Returns the number of orders for the cuurent day,
        calculated based on current day number */
     ordersForDay: function() {
+        if (SugarCube.State.variables.debugMode) {
+            return 1;
+        }
+
         var day = SugarCube.State.variables.currentDay;
         return Math.min(20, 2 + 2 * (day - 1));
         /* return Math.min(20, 2 + Math.pow(day - 1, 2)); */
@@ -128,7 +132,14 @@ window.FoodTruck = {
         var speed = Math.min(3, 1 + (day - 1) * 0.25);
         var duration = 3.2 / speed;
 
-        document.documentElement.style.setProperty("skill-marker-duration", duration + "s");
+        document.documentElement.style.setProperty("--skill-marker-duration", duration + "s");
+    },
+
+    /* Function Description: Toggles debug mode, which limits new days to one
+       order */
+    toggleDebugMode: function() {
+        var state = SugarCube.State.variables;
+        state.debugMode = !state.debugMode;
     },
 
     /* Function Description: Initializes the food truck for a new day */

@@ -139,8 +139,9 @@ body {
 
 .HUD {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
+  text-align: center;
   font-size: 0.85rem;
   background: rgba(0, 0, 0, 0.39);
   padding: 20px 12px;
@@ -204,9 +205,57 @@ body {
   font-size: 0.88rem;
 }
 
+.start-screen {
+  text-align: center;
+}
+
+.start-screen h1 {
+  margin: 30px 0;
+  font-size: 2rem;
+}
+
+.start-screen > p {
+  margin: 12px auto 60px;
+  max-width: 280px;
+  font-size: 1rem;
+}
+
+.start-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-top: 40px;
+}
+
+.start-actions button {
+  min-width: 190px;
+  height: 70px;
+  padding: 12px 16px;
+  font-size: 1rem;
+}
+
 .action-button {
   margin: 8px 0;
   text-align: center;
+}
+
+.order-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.order-actions .order-status {
+  flex: 1;
+}
+
+.passage-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
 }
 
 .action-button button,
@@ -245,6 +294,12 @@ body {
   outline-offset: 2px;
 }
 
+.passage-nav button {
+  flex: 1;
+  min-height: 44px;
+  padding: 6px 10px;
+}
+
 .order-status {
   margin: 0;
   font-size: 0.85rem;
@@ -276,16 +331,8 @@ body {
   bottom: 16px;
   left: 25px;
   display: flex;
-}
-
-.passage-nav-left {
-  justify-content: space-between;
   align-items: center;
   gap: 8px;
-}
-
-.passage-nav-right {
-  justify-content: flex-end;
 }
 
 .ticket-box {
@@ -530,7 +577,7 @@ body {
   background: #fff;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
   transform: translateX(-50%);
-  animation: skill-slide var(skill-marker-duration, 3.2s) linear infinite alternate;
+  animation: skill-slide var(--skill-marker-duration, 3.2s) linear infinite alternate;
 }
 
 @keyframes skill-slide {
@@ -659,6 +706,10 @@ window.FoodTruck = {
     /* Function Description: Returns the number of orders for the cuurent day,
        calculated based on current day number */
     ordersForDay: function() {
+        if (SugarCube.State.variables.debugMode) {
+            return 1;
+        }
+
         var day = SugarCube.State.variables.currentDay;
         return Math.min(20, 2 + 2 * (day - 1));
         /* return Math.min(20, 2 + Math.pow(day - 1, 2)); */
@@ -679,7 +730,14 @@ window.FoodTruck = {
         var speed = Math.min(3, 1 + (day - 1) * 0.25);
         var duration = 3.2 / speed;
 
-        document.documentElement.style.setProperty("skill-marker-duration", duration + "s");
+        document.documentElement.style.setProperty("--skill-marker-duration", duration + "s");
+    },
+
+    /* Function Description: Toggles debug mode, which limits new days to one
+       order */
+    toggleDebugMode: function() {
+        var state = SugarCube.State.variables;
+        state.debugMode = !state.debugMode;
     },
 
     /* Function Description: Initializes the food truck for a new day */
@@ -1043,13 +1101,15 @@ window.FoodTruck = {
 ]&gt;&gt;
 
 &lt;&lt;set $activeOrder = null&gt;&gt;
-&lt;&lt;set $orderTimer = 120&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="Start" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;
-    Welcome to your Food Truck! Are you ready to start serving customers?
-
-    &lt;p&gt;Debug mode: &lt;&lt;if $debugMode&gt;&gt;On (1 order per day)&lt;&lt;else&gt;&gt;Off&lt;&lt;/if&gt;&gt;&lt;/p&gt;
-    &lt;&lt;button &quot;Toggle Debug Mode&quot; &quot;Start&quot;&gt;&gt;&lt;&lt;run FoodTruck.toggleDebugMode()&gt;&gt;&lt;&lt;/button&gt;&gt;
-    &lt;&lt;button &quot;Start Day&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.startDay()&gt;&gt;&lt;&lt;/button&gt;&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="TakeOrderScreen" tags="" position="350,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+&lt;&lt;set $orderTimer = 120&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="Start" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone start-screen&quot;&gt;\
+    &lt;h1&gt;Food Truck&lt;/h1&gt;\
+    &lt;p&gt;Serve customers, prepare delicious meals, and grow your food truck.&lt;/p&gt;\
+    &lt;div class=&quot;action-button start-actions&quot;&gt;\
+        &lt;&lt;button &quot;Start Day&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.startDay()&gt;&gt;&lt;&lt;/button&gt;&gt;\
+        &lt;&lt;button &quot;Play Tutorial&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
+        &lt;&lt;button &quot;Toggle Debug Mode&quot; &quot;Start&quot;&gt;&gt;&lt;&lt;run FoodTruck.toggleDebugMode()&gt;&gt;&lt;&lt;/button&gt;&gt;\
+    &lt;/div&gt;\
+&lt;/div&gt;\</tw-passagedata><tw-passagedata pid="3" name="TakeOrderScreen" tags="" position="350,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
     &lt;div class=&quot;HUD&quot;&gt;\
         &lt;span&gt;&lt;strong&gt;Day:&lt;/strong&gt; $currentDay&lt;/span&gt; |\
         &lt;span&gt;&lt;strong&gt;Orders Left:&lt;/strong&gt; $numOrders&lt;/span&gt; |\
@@ -1073,11 +1133,16 @@ window.FoodTruck = {
             &lt;&lt;/if&gt;&gt;\
         &lt;/div&gt;\
     &lt;/section&gt;\
-    &lt;div class=&quot;action-button&quot;&gt;\
+    &lt;div class=&quot;action-button order-actions&quot;&gt;\
         &lt;&lt;if !$activeOrder &amp;&amp; $numOrders &gt; 0&gt;&gt;\
             &lt;&lt;button &quot;Take Order&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.takeOrder()&gt;&gt;&lt;&lt;/button&gt;&gt;\
         &lt;&lt;elseif $activeOrder&gt;&gt;\
-            &lt;p class=&quot;order-status&quot;&gt;Order received. Head to the assembly station to prepare it.&lt;/p&gt;\
+            &lt;p class=&quot;order-status&quot;&gt;Order received. Head to the assembly station.&lt;/p&gt;\
+        &lt;&lt;/if&gt;&gt;\
+        &lt;&lt;if FoodTruck.canFulfillOrder()&gt;&gt;\
+            &lt;&lt;button &quot;Fulfill Order&quot;&gt;&gt;&lt;&lt;run FoodTruck.fulfillOrder()&gt;&gt;&lt;&lt;/button&gt;&gt;\
+        &lt;&lt;elseif $activeOrder&gt;&gt;\
+            &lt;span class=&quot;fulfill-hint&quot;&gt;Complete Order to Fulfill.&lt;/span&gt;\
         &lt;&lt;/if&gt;&gt;\
     &lt;/div&gt;\
     &lt;div class=&quot;prep-area&quot;&gt;\
@@ -1090,13 +1155,9 @@ window.FoodTruck = {
             &lt;&lt;/if&gt;&gt;\
         &lt;/div&gt;\
     &lt;/div&gt;\
-    &lt;div class=&quot;passage-nav passage-nav-left&quot;&gt;\
+    &lt;div class=&quot;passage-nav&quot;&gt;\
+        &lt;&lt;button &quot;Exit to Menu&quot; &quot;Start&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
         &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
-        &lt;&lt;if FoodTruck.canFulfillOrder()&gt;&gt;\
-            &lt;&lt;button &quot;Fulfill Order&quot;&gt;&gt;&lt;&lt;run FoodTruck.fulfillOrder()&gt;&gt;&lt;&lt;/button&gt;&gt;\
-        &lt;&lt;elseif $activeOrder&gt;&gt;\
-            &lt;span class=&quot;fulfill-hint&quot;&gt;Complete Order to Fulfill.&lt;/span&gt;\
-        &lt;&lt;/if&gt;&gt;\
     &lt;/div&gt;\
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="4" name="DayTally" tags="" position="475,100" size="100,100">&lt;div class=&quot;phone day-tally-screen&quot;&gt;\
     &lt;section class=&quot;day-tally-box&quot;&gt;\
@@ -1159,7 +1220,8 @@ window.FoodTruck = {
         &lt;/div&gt;\
     &lt;/div&gt;\
     &lt;&lt;/if&gt;&gt;\
-    &lt;div class=&quot;passage-nav passage-nav-right&quot;&gt;\
+    &lt;div class=&quot;passage-nav&quot;&gt;\
+        &lt;&lt;button &quot;Exit to Menu&quot; &quot;Start&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
         &lt;&lt;button &quot;Order Window&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="6" name="PrepareIngredient" tags="" position="725,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
@@ -1181,7 +1243,7 @@ window.FoodTruck = {
     &lt;&lt;else&gt;&gt;\
         &lt;p&gt;Select an ingredient from the assembly station to prepare it.&lt;/p&gt;\
     &lt;&lt;/if&gt;&gt;\
-    &lt;div class=&quot;passage-nav passage-nav-right&quot;&gt;\
+    &lt;div class=&quot;passage-nav&quot;&gt;\
         &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="7" name="CookingMinigame" tags="" position="850,100" size="100,100">&lt;&lt;run FoodTruck.updateCookingMarkerSpeed()&gt;&gt;
@@ -1221,7 +1283,7 @@ window.FoodTruck = {
         &lt;p&gt;Choose a preparation method before starting the cooking check.&lt;/p&gt;\
         &lt;&lt;button &quot;Choose a Method&quot; &quot;PrepareIngredient&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;&lt;/if&gt;&gt;\
-    &lt;div class=&quot;passage-nav passage-nav-right&quot;&gt;\
+    &lt;div class=&quot;passage-nav&quot;&gt;\
         &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="8" name="CookingResult" tags="" position="975,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
@@ -1241,7 +1303,7 @@ window.FoodTruck = {
     &lt;&lt;else&gt;&gt;\
         &lt;p&gt;Finish the cooking check before adding this ingredient to the tray.&lt;/p&gt;\
     &lt;&lt;/if&gt;&gt;\
-    &lt;div class=&quot;passage-nav passage-nav-right&quot;&gt;\
+    &lt;div class=&quot;passage-nav&quot;&gt;\
         &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
 &lt;/div&gt;</tw-passagedata></tw-storydata>
