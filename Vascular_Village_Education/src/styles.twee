@@ -273,6 +273,40 @@ body {
     font-size: 12px;
 }
 
+/* Highlight the currently selected tab */
+.activity-page a.active {
+    background-color: rgba(255, 255, 255, 0.49);
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+}
+
+/* Make text smaller in the activity interface */
+#activity-content h4 {
+    font-size: 1.05em;
+    line-height: 1.4;
+}
+
+#activity-content p {
+    font-size: 0.9em;
+    line-height: 1.5;
+}
+
+#activity-content h4 + p {
+    margin-top: 0.4em;
+}
+
+#activity-content .answer-buttons button {
+    font-size: 0.85em;
+    line-height: 1.4;
+    padding: 8px 12px;
+}
+
+#activity-content #activity-progress {
+    font-size: 0.85em;
+    line-height: 1.5;
+}
+
 
 .blood-vessels-menu .activity-card {
     margin: 0;
