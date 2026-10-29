@@ -1,16 +1,20 @@
 :: Start
-<div class="phone">
-    Welcome to your Food Truck! Are you ready to start serving customers?
-
-    <<button "Start Day" "TakeOrderScreen">><<run FoodTruck.startDay()>><</button>>
-</div>
+<div class="phone start-screen">\
+    <h1>Food Truck</h1>\
+    <p>Serve customers, prepare delicious meals, and grow your food truck.</p>\
+    <div class="action-button start-actions">\
+        <<button "Start Day" "TakeOrderScreen">><<run FoodTruck.startDay()>><</button>>\
+        <<button "Play Tutorial">><</button>>\
+        <<button "Toggle Debug Mode" "Start">><<run FoodTruck.toggleDebugMode()>><</button>>\
+    </div>\
+</div>\
 
 :: TakeOrderScreen
 <div class="phone">\
     <div class="HUD">\
         <span><strong>Day:</strong> $currentDay</span> |\
         <span><strong>Orders Left:</strong> $numOrders</span> |\
-        <span><strong>Score:</strong> $dayScore</span>\
+        <span><strong>Completed:</strong> $dayScore</span>\
     </div>\
     <hr>\
     <section class="customer-panel">\
@@ -30,11 +34,16 @@
             <</if>>\
         </div>\
     </section>\
-    <div class="action-button">\
+    <div class="action-button order-actions">\
         <<if !$activeOrder && $numOrders > 0>>\
             <<button "Take Order" "TakeOrderScreen">><<run FoodTruck.takeOrder()>><</button>>\
         <<elseif $activeOrder>>\
-            <p class="order-status">Order received. Head to the assembly station to prepare it.</p>\
+            <p class="order-status">Order received. Head to the assembly station.</p>\
+        <</if>>\
+        <<if FoodTruck.canFulfillOrder()>>\
+            <<button "Fulfill Order">><<run FoodTruck.fulfillOrder()>><</button>>\
+        <<elseif $activeOrder>>\
+            <span class="fulfill-hint">Complete Order to Fulfill.</span>\
         <</if>>\
     </div>\
     <div class="prep-area">\
@@ -47,13 +56,9 @@
             <</if>>\
         </div>\
     </div>\
-    <div class="passage-nav passage-nav-left">\
+    <div class="passage-nav">\
+        <<button "Exit to Menu" "Start">><</button>>\
         <<button "Assembly Station" "AssemblyStation">><</button>>\
-        <<if FoodTruck.canFulfillOrder()>>\
-            <<button "Fulfill Order">><<run FoodTruck.fulfillOrder()>><</button>>\
-        <<elseif $activeOrder>>\
-            <span class="fulfill-hint">Complete Order to Fulfill.</span>\
-        <</if>>\
     </div>\
 </div>
 
@@ -76,7 +81,7 @@
     <div class="HUD">\
         <span><strong>Day:</strong> $currentDay</span> |\
         <span><strong>Orders Left:</strong> $numOrders</span> |\
-        <span><strong>Score:</strong> $dayScore</span>\
+        <span><strong>Completed:</strong> $dayScore</span>\
     </div>\
     <hr>\
     <<if $activeOrder>>\
@@ -122,7 +127,8 @@
         </div>\
     </div>\
     <</if>>\
-    <div class="passage-nav passage-nav-right">\
+    <div class="passage-nav">\
+        <<button "Exit to Menu" "Start">><</button>>\
         <<button "Order Window" "TakeOrderScreen">><</button>>\
     </div>\
 </div>
@@ -132,7 +138,7 @@
     <div class="HUD">\
         <span><strong>Day:</strong> $currentDay</span> |\
         <span><strong>Orders Left:</strong> $numOrders</span> |\
-        <span><strong>Score:</strong> $dayScore</span>\
+        <span><strong>Completed:</strong> $dayScore</span>\
     </div>\
     <hr>\
     <<if $pendingIngredient>>\
@@ -147,17 +153,18 @@
     <<else>>\
         <p>Select an ingredient from the assembly station to prepare it.</p>\
     <</if>>\
-    <div class="passage-nav passage-nav-right">\
+    <div class="passage-nav">\
         <<button "Assembly Station" "AssemblyStation">><</button>>\
     </div>\
 </div>
 
 :: CookingMinigame
+<<run FoodTruck.updateCookingMarkerSpeed()>>
 <div class="phone">\
     <div class="HUD">\
         <span><strong>Day:</strong> $currentDay</span> |\
         <span><strong>Orders Left:</strong> $numOrders</span> |\
-        <span><strong>Score:</strong> $dayScore</span>\
+        <span><strong>Completed:</strong> $dayScore</span>\
     </div>\
     <hr>\
     <<if $pendingIngredient && $pendingMethod>>\
@@ -189,7 +196,7 @@
         <p>Choose a preparation method before starting the cooking check.</p>\
         <<button "Choose a Method" "PrepareIngredient">><</button>>\
     <</if>>\
-    <div class="passage-nav passage-nav-right">\
+    <div class="passage-nav">\
         <<button "Assembly Station" "AssemblyStation">><</button>>\
     </div>\
 </div>
@@ -199,7 +206,7 @@
     <div class="HUD">\
         <span><strong>Day:</strong> $currentDay</span> |\
         <span><strong>Orders Left:</strong> $numOrders</span> |\
-        <span><strong>Score:</strong> $dayScore</span>\
+        <span><strong>Completed:</strong> $dayScore</span>\
     </div>\
     <hr>\
     <<if $cookingResult>>\
@@ -212,7 +219,7 @@
     <<else>>\
         <p>Finish the cooking check before adding this ingredient to the tray.</p>\
     <</if>>\
-    <div class="passage-nav passage-nav-right">\
+    <div class="passage-nav">\
         <<button "Assembly Station" "AssemblyStation">><</button>>\
     </div>\
 </div>

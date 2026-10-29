@@ -33,8 +33,9 @@ body {
 
 .HUD {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
+  text-align: center;
   font-size: 0.85rem;
   background: rgba(0, 0, 0, 0.39);
   padding: 20px 12px;
@@ -98,9 +99,57 @@ body {
   font-size: 0.88rem;
 }
 
+.start-screen {
+  text-align: center;
+}
+
+.start-screen h1 {
+  margin: 30px 0;
+  font-size: 2rem;
+}
+
+.start-screen > p {
+  margin: 12px auto 60px;
+  max-width: 280px;
+  font-size: 1rem;
+}
+
+.start-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-top: 40px;
+}
+
+.start-actions button {
+  min-width: 190px;
+  height: 70px;
+  padding: 12px 16px;
+  font-size: 1rem;
+}
+
 .action-button {
   margin: 8px 0;
   text-align: center;
+}
+
+.order-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.order-actions .order-status {
+  flex: 1;
+}
+
+.passage-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
 }
 
 .action-button button,
@@ -139,6 +188,12 @@ body {
   outline-offset: 2px;
 }
 
+.passage-nav button {
+  flex: 1;
+  min-height: 44px;
+  padding: 6px 10px;
+}
+
 .order-status {
   margin: 0;
   font-size: 0.85rem;
@@ -170,16 +225,8 @@ body {
   bottom: 16px;
   left: 25px;
   display: flex;
-}
-
-.passage-nav-left {
-  justify-content: space-between;
   align-items: center;
   gap: 8px;
-}
-
-.passage-nav-right {
-  justify-content: flex-end;
 }
 
 .ticket-box {
@@ -424,7 +471,7 @@ body {
   background: #fff;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
   transform: translateX(-50%);
-  animation: skill-slide 3.2s linear infinite alternate;
+  animation: skill-slide var(--skill-marker-duration, 3.2s) linear infinite alternate;
 }
 
 @keyframes skill-slide {

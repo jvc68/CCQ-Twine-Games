@@ -12,6 +12,7 @@ Food Truck Game
 :: StoryInit
 <<set $numOrders = 0>>
 <<set $currentDay = 1>>
+<<set $debugMode = false>>
 <<set $dayScore = 0>>
 <<set $ordersCompleted = 0>>
 <<set $prepTray = []>>
