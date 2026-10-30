@@ -195,14 +195,14 @@ setup.activityLibraries.bloodVessels = {
             },
             {
                 id: "heartMakesOxygen",
-                label: "❌ The heart makes all the oxygen the body needs",
+                label: "🫁 The heart makes all the oxygen the body needs",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "The lungs bring oxygen into the body. The heart pumps blood that carries it."
             },
             {
                 id: "heartStopsBlood",
-                label: "❌ The heart stops blood from moving",
+                label: "🛑 The heart stops blood from moving",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "The heart's pumping action keeps blood moving through the circulatory system."
@@ -248,14 +248,14 @@ setup.activityLibraries.bloodVessels = {
             },
             {
                 id: "vesselsDigest",
-                label: "❌ Blood vessels digest the food we eat",
+                label: "🍎 Blood vessels digest the food we eat",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "Blood vessels transport blood. Digestion takes place in the digestive system."
             },
             {
                 id: "allVesselsSame",
-                label: "❌ Every type of blood vessel has exactly the same job",
+                label: "🔀 Every type of blood vessel has exactly the same job",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "Arteries, veins, and capillaries have different structures and roles."
@@ -301,7 +301,7 @@ setup.activityLibraries.bloodVessels = {
             },
             {
                 id: "neverDrink",
-                label: "❌ Avoid drinking fluids all day",
+                label: "🥤 Avoid drinking fluids all day",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "The body needs water to function properly."

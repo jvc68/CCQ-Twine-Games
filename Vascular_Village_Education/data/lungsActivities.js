@@ -89,14 +89,14 @@ setup.activityLibraries.lungs = {
             },
             {
                 id: "smoke",
-                label: "❌ Spend time breathing in cigarette smoke",
+                label: "🚬 Spend time breathing in cigarette smoke",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "Cigarette smoke contains harmful substances that can damage your lungs."
             },
             {
                 id: "ignoreAir",
-                label: "❌ Ignore smoky or polluted air",
+                label: "🌫️ Ignore smoky or polluted air",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "Avoiding polluted air when possible helps protect your respiratory system."
@@ -128,28 +128,28 @@ setup.activityLibraries.lungs = {
         choices: [
             {
                 id: "moreOxygen",
-                label: "✅ Breathing faster helps bring more oxygen into the body",
+                label: "🌬️ Breathing faster helps bring more oxygen into the body",
                 correct: true,
                 feedbackTitle: "Correct!",
                 feedback: "During exercise, the body needs more oxygen, so breathing usually becomes faster."
             },
             {
                 id: "removeCarbonDioxide",
-                label: "✅ Breathing helps remove carbon dioxide from the body",
+                label: "💨 Breathing helps remove carbon dioxide from the body",
                 correct: true,
                 feedbackTitle: "Great choice!",
                 feedback: "The lungs remove carbon dioxide, a waste gas produced by the body's cells."
             },
             {
                 id: "stopBreathing",
-                label: "❌ The body does not need oxygen during exercise",
+                label: "⛔ The body does not need oxygen during exercise",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "Working muscles need oxygen to help release energy."
             },
             {
                 id: "lungsStop",
-                label: "❌ The lungs stop working when we run",
+                label: "🛑 The lungs stop working when we run",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "Your lungs continue working during exercise, usually with faster and deeper breathing."
@@ -181,28 +181,28 @@ setup.activityLibraries.lungs = {
         choices: [
             {
                 id: "noseAndMouth",
-                label: "✅ Air can enter the body through the nose or mouth",
+                label: "👃 Air can enter the body through the nose or mouth",
                 correct: true,
                 feedbackTitle: "Correct!",
                 feedback: "The nose and mouth provide routes for air to enter the respiratory system."
             },
             {
                 id: "airways",
-                label: "✅ Air travels through airways toward the lungs",
+                label: "🫁 Air travels through airways toward the lungs",
                 correct: true,
                 feedbackTitle: "Great choice!",
                 feedback: "Air passes through the throat and windpipe before moving into the branching airways in the lungs."
             },
             {
                 id: "foodTube",
-                label: "❌ Air normally travels to the lungs through the food pipe",
+                label: "🍽️ Air normally travels to the lungs through the food pipe",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "The food pipe carries food to the stomach. Air travels through the respiratory airways."
             },
             {
                 id: "skin",
-                label: "❌ Air enters the lungs directly through the skin",
+                label: "🧴 Air enters the lungs directly through the skin",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "Air enters through the nose or mouth and travels through the respiratory system."
@@ -234,28 +234,28 @@ setup.activityLibraries.lungs = {
         choices: [
             {
                 id: "avoidSmoking",
-                label: "✅ Avoid smoking and secondhand smoke",
+                label: "🚭 Avoid smoking and secondhand smoke",
                 correct: true,
                 feedbackTitle: "Great choice!",
                 feedback: "Avoiding tobacco smoke helps reduce exposure to substances that damage the lungs."
             },
             {
                 id: "cleanAir",
-                label: "✅ Reduce exposure to polluted air when possible",
+                label: "🌿 Reduce exposure to polluted air when possible",
                 correct: true,
                 feedbackTitle: "Correct!",
                 feedback: "Cleaner air can help reduce exposure to particles and gases that irritate the respiratory system."
             },
             {
                 id: "startSmoking",
-                label: "❌ Start smoking to strengthen the lungs",
+                label: "🚬 Start smoking to strengthen the lungs",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "Smoking harms the lungs. It does not make them stronger."
             },
             {
                 id: "ignoreIrritants",
-                label: "❌ Ignore strong fumes and irritating smoke",
+                label: "⚠️ Ignore strong fumes and irritating smoke",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "Some fumes and smoke can irritate or harm the respiratory system. Avoid exposure when possible."
@@ -287,28 +287,28 @@ setup.activityLibraries.lungs = {
         choices: [
             {
                 id: "lessPollution",
-                label: "✅ Cleaner air can reduce exposure to harmful pollutants",
+                label: "💧 Cleaner air can reduce exposure to harmful pollutants",
                 correct: true,
                 feedbackTitle: "Correct!",
                 feedback: "Reducing exposure to harmful air pollutants can help protect the lungs."
             },
             {
                 id: "avoidSmoke",
-                label: "✅ Avoiding smoke can help protect the respiratory system",
+                label: "🌬️ Avoiding smoke can help protect the respiratory system",
                 correct: true,
                 feedbackTitle: "Great choice!",
                 feedback: "Smoke can contain particles and chemicals that irritate and damage the lungs."
             },
             {
                 id: "pollutionHealthy",
-                label: "❌ Air pollution always makes breathing healthier",
+                label: "🌫️ Air pollution always makes breathing healthier",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "Air pollution can irritate the airways and harm respiratory health."
             },
             {
                 id: "smokeHarmless",
-                label: "❌ Smoke is harmless to the lungs",
+                label: "🧪 Smoke is harmless to the lungs",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "Smoke can contain harmful substances that affect the lungs and airways."
@@ -340,28 +340,28 @@ setup.activityLibraries.lungs = {
         choices: [
             {
                 id: "oxygenEnters",
-                label: "✅ Oxygen moves from the lungs into the blood",
+                label: "🫁 Oxygen moves from the lungs into the blood",
                 correct: true,
                 feedbackTitle: "Correct!",
                 feedback: "Oxygen passes from the air in the lungs into nearby blood vessels."
             },
             {
                 id: "carbonDioxideLeaves",
-                label: "✅ Carbon dioxide moves from the blood into the lungs to be breathed out",
+                label: "💨 Carbon dioxide moves from the blood into the lungs to be breathed out",
                 correct: true,
                 feedbackTitle: "Great choice!",
                 feedback: "The lungs help remove carbon dioxide from the body when we exhale."
             },
             {
                 id: "lungsDigest",
-                label: "❌ The lungs digest food",
+                label: "🍽️ The lungs digest food",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "The digestive system processes food. The lungs help the body exchange oxygen and carbon dioxide."
             },
             {
                 id: "oxygenMade",
-                label: "❌ The lungs create oxygen",
+                label: "✨ The lungs create oxygen",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "The lungs take oxygen from the air and transfer it into the blood; they do not create it."

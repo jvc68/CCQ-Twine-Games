@@ -89,14 +89,14 @@ setup.activityLibraries.bloodCells = {
             },
             {
                 id: "redCellsFight",
-                label: "❌ Red blood cells are the main cells that fight infections",
+                label: "🦠 Red blood cells are the main cells that fight infections",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "White blood cells play the main role in defending the body against infections."
             },
             {
                 id: "plateletsCarry",
-                label: "❌ Platelets carry most of the oxygen in the blood",
+                label: "🩸 Platelets carry most of the oxygen in the blood",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "Red blood cells carry most of the oxygen. Platelets help blood clot."
@@ -142,14 +142,14 @@ setup.activityLibraries.bloodCells = {
             },
             {
                 id: "carryOxygen",
-                label: "❌ White blood cells carry most of the body's oxygen",
+                label: "🔴 White blood cells carry most of the body's oxygen",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "Red blood cells carry most of the oxygen in the blood."
             },
             {
                 id: "stopAllBleeding",
-                label: "❌ White blood cells form the main plug that stops bleeding",
+                label: "🩹 White blood cells form the main plug that stops bleeding",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "Platelets help form plugs at damaged blood vessels to help stop bleeding."
@@ -195,14 +195,14 @@ setup.activityLibraries.bloodCells = {
             },
             {
                 id: "carryOxygen",
-                label: "❌ Platelets carry most of the oxygen in the blood",
+                label: "🔴 Platelets carry most of the oxygen in the blood",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "Red blood cells carry most of the oxygen in the blood."
             },
             {
                 id: "fightAllGerms",
-                label: "❌ Platelets are the main cells that fight all infections",
+                label: "⚪ Platelets are the main cells that fight all infections",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "White blood cells are key parts of the body's immune defenses."
@@ -248,14 +248,14 @@ setup.activityLibraries.bloodCells = {
             },
             {
                 id: "plateletsOxygen",
-                label: "❌ Platelets carry most of the oxygen around the body",
+                label: "🩸 Platelets carry most of the oxygen around the body",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "Red blood cells carry most of the oxygen in the blood."
             },
             {
                 id: "redCellsClot",
-                label: "❌ Red blood cells are the main component responsible for blood clotting",
+                label: "🩹 Red blood cells are the main component responsible for blood clotting",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "Platelets and clotting proteins help the blood clot."
@@ -301,14 +301,14 @@ setup.activityLibraries.bloodCells = {
             },
             {
                 id: "stomachOxygen",
-                label: "❌ Most oxygen enters the blood from the stomach",
+                label: "🍎 Most oxygen enters the blood from the stomach",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "Oxygen enters the blood through gas exchange in the lungs."
             },
             {
                 id: "plateletsDeliver",
-                label: "❌ Platelets carry most oxygen to the body's tissues",
+                label: "🩸 Platelets carry most oxygen to the body's tissues",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "Red blood cells carry most of the oxygen in the blood."
@@ -354,14 +354,14 @@ setup.activityLibraries.bloodCells = {
             },
             {
                 id: "redCellsFight",
-                label: "❌ Red blood cells are the main cells that destroy germs",
+                label: "🔴 Red blood cells are the main cells that destroy germs",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "Red blood cells mainly carry oxygen. White blood cells help defend against infections."
             },
             {
                 id: "plateletsImmune",
-                label: "❌ Platelets are the only part of the immune system",
+                label: "🩹 Platelets are the only part of the immune system",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "The immune system includes many cells, tissues, and processes."

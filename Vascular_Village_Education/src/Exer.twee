@@ -13,38 +13,31 @@ Education Game
 
 :: Start {"position": "625,275", "size": "100,100"}
 <h1>Welcome to Vascular Village!</h1><p>Meet Ruby, your guide on an amazing adventure inside the human body! 🔬</p><p>Follow Ruby as she explores the body's incredible systems, discovers how they work together, and learns the little things we can do every day to stay healthy.</p><p>From the heart pumping blood to the lungs bringing in oxygen, every discovery brings Ruby one step closer to understanding how our bodies keep us going!</p><p><strong>Are you ready to join Ruby and explore the wonders of Vascular Village?</strong></p>
-<p class="back-link"> <<button "Let's Explore! →">><<goto "HomeScreen">><</button>></p>
+<p class="back-link "> <<button "Let's Explore! →">><<goto "HomeScreen">><</button>></p>
 
 
 /* MAIN HOME SCREEN  */
 :: HomeScreen
 <div class="home-screen">
-    <h1>Vascular Village</h1>
-    <p>Choose a part of your health journey!</p>
-    <div class="body-map">
+    <h1>Vascular Village</h1><p>Choose a part of your health journey!</p><div class="body-map">
         <div class="body-circle head">
             [[🧠Brain->Brain]]
         </div>
-
         <div class="body-circle left">
             [[🩸Blood Cells->Blood Cells]]
         </div>
-
         <div class="body-circle center">
             [[❤️Heartbeat->Heart]]
         </div>
-
         <div class="body-circle right">
             [[🩸Blood Vessels->Blood Vessels]]
         </div>
-
         <div class="body-circle legs">
             [[🫁Lungs->Lungs]]
         </div>
+</div>
 
-    </div>
-    
-    <p class="home-hint">Tap a circle to begin exploring!</p>
+    <p class="home-hint">Tap a circle to begin exploring! Or take the tutorial to learn how activities work before you begin!</p><div class="tutorial-home-button"><<button "🎓 Take the Tutorial">><<goto "TutorialStart">><</button>></div>
 </div>
 
 
@@ -65,8 +58,7 @@ $(document).one(":passagedisplay", function () {
     var activityId = State.variables.selectedActivityId || "longPause";
     setup.renderActivity( "bloodVessels", activityId, "activity-content");
 });
-<</script>><p class="back-link"> <<button "← Return to Blood Vessels">> <<goto "Blood Vessels">> <</button>>
-</p>
+<</script>><div class="back-link tutorial-navigation"><<button "← Return to Blood Vessels">><<goto "Blood Vessels">><</button>></div>
 
 
 
@@ -86,8 +78,7 @@ $(document).one(":passagedisplay", function () {
 $(document).one(":passagedisplay", function () {
     setup.renderActivity("bloodCells", "redCellRescue", "activity-content");
 });
-<</script>><p class="back-link"><<button "← Return to the Blood Cells">><<goto "Blood Cells">><</button>></p>
-
+<</script>><div class="back-link tutorial-navigation"><<button "← Return to the Blood Cells">><<goto "Blood Cells">><</button>></div>
 
 /* FOR LUNGS */
 
@@ -106,8 +97,7 @@ $(document).one(":passagedisplay", function () {
     var activityId = State.variables.selectedActivityId || "oxygenAdventure";
     setup.renderActivity( "lungs", activityId,  "activity-content");
 });
-<</script>><p class="back-link"><<button "← Return to the Lungs">><<goto "Lungs">><</button>></p>
-
+<</script>><div class="back-link tutorial-navigation"><<button "← Return to the Lungs">><<goto "Lungs">><</button>></div>
 
 /* FOR HEART */
 
@@ -126,8 +116,7 @@ $(document).one(":passagedisplay", function () {
     var activityId = State.variables.selectedActivityId || "heartbeatHeroes";
     setup.renderActivity("heart", activityId, "activity-content");
 });
-<</script>><p class="back-link"><<button "← Return to the Heart">><<goto "Heart">><</button>></p>
-
+<</script>><p class="back-link"><span class="tutorial-navigation"><<button "← Return to the Heart">><<goto "Heart">><</button>></span></p>
 
 /* FOR BRAIN */
 
@@ -146,7 +135,7 @@ $(document).one(":passagedisplay", function () {
     var activityId = State.variables.selectedActivityId || "brainControlCenter";
     setup.renderActivity("brain", activityId, "activity-content");
 });
-<</script>><p class="back-link"><<button "← Return to the Brain">><<goto "Brain">><</button>>
+<</script>><p class="back-link tutorial-navigation"><<button "← Return to the Brain">><<goto "Brain">><</button>>
 </p>
 
 
@@ -162,6 +151,56 @@ $(document).one(":passagedisplay", function () {
     setup.renderActivityMenu("lungs", "activity-menu");
 });
 <</script>>
+
+
+
+/* TUTORIAL */
+
+:: TutorialStart
+<div class="tutorial-panel"><div class="tutorial-icon">🎓</div>
+    <h2>Welcome to the Tutorial!</h2><p>Hi, explorer! Ruby here! 👋</p><p>I'll show you how to explore Vascular Village and complete activities about the human body.</p><p>You'll learn how to choose an activity, understand answer choices, read feedback, and discover what you've learned.</p><p><strong>Don't worry! You won't need to answer any questions during this tutorial.</strong></p><p>Ready? Let's get started!</p><div class="tutorial-navigation"><<button "Continue →">><<goto "TutorialMission">><</button>></div>
+</div>
+
+
+/* should show the populated menu page, maybe just a popup window at the bottom of the screen to explain how the game works */
+:: TutorialMission
+<div class="tutorial-panel"><h3>Step 1: Choose Your Adventure</h3><p>On the home screen, you'll find five areas to explore:</p><ul>
+        <li>🧠 Brain</li>
+        <li>🩸 Blood Cells</li>
+        <li>❤️ Heart</li>
+        <li>🩸 Blood Vessels</li>
+        <li>🫁 Lungs</li></ul><p>Each area teaches you something different about the human body and how to keep it healthy.</p><p>When you choose an area, you'll enter its activity menu. This is where you can explore the available activities.</p><div class="tutorial-navigation"><<button "Continue →">><<goto "TutorialChoices">><</button>></div>
+</div>
+
+/* again, should show a popup window at the bottom of the screen to explain the choices */
+:: TutorialChoices
+<div class="tutorial-panel"><h3>Step 2: Explore an Activity</h3><p>Each body system has activities designed to help you learn through questions.</p><p>When you select an activity, it opens on its own screen.</p><p>Depending on the activity, you might need to:</p><ul>
+        <li>🔎 Read a question or scenario.</li>
+        <li>💭 Think about what you already know.</li>
+        <li>👆 Select an answer or make a choice.</li>
+    </ul><p>Some activities may work differently from others, so always read the instructions shown on the screen.</p><div class="tutorial-navigation"><<button "Continue →">><<goto "TutorialFeedback">><</button>></div>
+</div>
+
+
+/* popup window at the bottom of screen to explain feedback */
+/* should have button with "Return Home" to finish tutorial */
+:: TutorialFeedback
+<div class="tutorial-panel"><h3>Step 3: Learn from Feedback</h3><p>After making a choice in an activity, you may receive feedback explaining the result.</p><p>Feedback helps you understand:</p><ul>
+        <li>✅ What you got right.</li>
+        <li>💡 Why an answer makes sense.</li>
+        <li>🧠 Important facts about the human body.</li>
+        <li>🌱 What you can learn from a mistake.</li></ul>
+    <p>Don't be discouraged if you get something wrong! The goal is to learn, improve your understanding, and discover something new.</p><p><strong>Take your time and read the feedback before moving on.</strong></p><div class="tutorial-navigation"><<button "Continue →">><<goto "TutorialLesson">><</button>></div>
+</div>
+
+:: TutorialLesson
+<div class="tutorial-panel"><h3>Step 4: Discover What You've Learned</h3><p>Completed activities include a lesson to help you understand the information you've discovered.</p><p>These lessons can help you connect what you've learned to everyday health.</p><p>For example, you might discover how exercise supports your heart or why your lungs need clean air.</p><p>Take a moment to think about what you've learned and how you could use that knowledge in your daily life.</p><p><strong>Every discovery brings you one step closer to becoming a health explorer!</strong></p><div class="tutorial-navigation"><<button "Continue →">><<goto "TutorialComplete">><</button>></div>
+</div>
+
+
+:: TutorialComplete
+<div class="tutorial-panel"><h2>You're Ready to Explore!</h2><p>Great job, explorer! 🎉</p><p>You now know how to navigate Vascular Village, open activities, understand answer choices, and learn from feedback.</p><p>Now it's time to put your knowledge into action!</p><p>Choose your favourite body system and begin your adventure with Ruby.</p><p><strong>Your journey to better health starts here!</strong></p><div class="tutorial-navigation"><<button "🏠 Return Home">><<goto "HomeScreen">><</button>></div>
+</div>
 
 /*
 to run on webpage

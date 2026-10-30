@@ -66,7 +66,7 @@
 
 
 
-    // CHANGE FUNCTION LATER ON TO NOT USE SUGARCUBES WIKITEXT PARSER
+
     // displays popup window in game
     setup.showFeedback = function (title, message) {
         // set popup title
@@ -76,7 +76,7 @@
         // display the popup
         Dialog.open();
     };
-    // is styled using ui-dialog
+    // is styled using CSS .ui-dialog
 
 
 
@@ -117,6 +117,9 @@
             // set button text to textContent from dictionary OR fallback
             nextButton.textContent =
                 activity.continueLabel || "Continue";
+
+            // apply shared button styling
+            nextButton.classList.add("tutorial-button");
 
             // make button navigste to the next passage with eventListener
             nextButton.addEventListener("click", function () {
@@ -596,6 +599,7 @@
         var backLink = document.createElement("button");
         backLink.type = "button";
         backLink.textContent = "← Body Map";
+        backLink.classList.add("tutorial-button");
 
         backLink.addEventListener("click", function () {
             Engine.play("HomeScreen");
@@ -687,6 +691,7 @@
         var returnLink = document.createElement("button");
         returnLink.type = "button";
         returnLink.textContent = "← Return to the body map";
+        returnLink.classList.add("tutorial-button");
 
         returnLink.addEventListener("click", function () {
             Engine.play("BodyMap");

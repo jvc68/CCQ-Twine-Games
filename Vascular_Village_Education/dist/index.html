@@ -360,6 +360,7 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
 .activity-tabs {
     display: flex;
     gap: 5px;
+    margin-bottom: 20px;
 }
 
 .activity-tabs a {
@@ -394,6 +395,56 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
 
 #activity-content h4 + p {
     margin-top: 0.4em;
+}
+
+/* Style the answer feedback popup */
+#ui-dialog {
+    width: 350px;
+    max-width: 500px;
+    margin: 0 auto;
+    box-sizing: border-box;
+
+    border: none;
+    border-radius: 18px;
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+}
+
+
+/* Style the popup title bar */
+#ui-dialog-titlebar {
+    background-color: #3b528b;
+    color: white;
+    padding: 16px 20px;
+    font-size: 1.3em;
+    font-weight: bold;
+    border-bottom: none;
+}
+
+/* Style the popup message area */
+#ui-dialog-body {
+    background-color: #F0F8FA;
+    color: #29434E;
+    padding: 24px;
+    font-size: 1.05em;
+    line-height: 1.6;
+}
+
+/* Style buttons inside the popup */
+#ui-dialog-body button {
+    background-color: #4A90A4;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+/* Change button appearance when hovered */
+#ui-dialog-body button:hover {
+    background-color: #357588;
 }
 
 #activity-content .answer-buttons button {
@@ -461,6 +512,7 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
     gap: 4px;
     margin: 0;
     padding: 0;
+    margin-top: 10px;
 }
 
 .activity-pagination {
@@ -470,6 +522,82 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
     margin: 4px 0 0;
     padding: 0;
     margin-top: 10px;
+}
+
+/* TUTORIAL STYLING */
+/* TUTORIAL */
+
+.tutorial-panel {
+    max-width: 650px;
+    margin: 30px auto;
+    padding: 25px;
+    text-align: center;
+    line-height: 1.6;
+}
+
+.tutorial-icon {
+    font-size: 3rem
+}
+
+.tutorial-panel h2 {
+    margin-top: 0;
+}
+
+.tutorial-panel ul {
+    display: inline-block;
+    text-align: left;
+    margin: 10px auto 20px;
+}
+
+.tutorial-panel li {
+    margin-bottom: 8px;
+}
+
+.tutorial-navigation {
+    margin-top: 25px;
+}
+
+.tutorial-navigation button,
+.tutorial-button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 10px;
+    background: #18584f;
+    color: white;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.tutorial-navigation button:hover,
+.tutorial-button:hover {
+    background: #24766b;
+}
+
+.tutorial-home-button {
+    margin: 25px auto 10px;
+    text-align: center;
+}
+
+.tutorial-home-button button {
+    padding: 14px 24px;
+    border: none;
+    border-radius: 12px;
+    background: #18584f;
+    color: white;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* not this */
+.tutorial-home-button button:hover {
+    background: #24766b;
+}
+
+.tutorial-home-button p {
+    margin-top: 10px;
+    font-size: 0.9em;
 }</style><script role="script" id="twine-user-script" type="text/twine-javascript">/* twine-user-script #1: "scripts.js" */
 
 /*
@@ -539,7 +667,7 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
 
 
 
-    // CHANGE FUNCTION LATER ON TO NOT USE SUGARCUBES WIKITEXT PARSER
+
     // displays popup window in game
     setup.showFeedback = function (title, message) {
         // set popup title
@@ -549,7 +677,7 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
         // display the popup
         Dialog.open();
     };
-    // is styled using ui-dialog
+    // is styled using CSS .ui-dialog
 
 
 
@@ -590,6 +718,9 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
             // set button text to textContent from dictionary OR fallback
             nextButton.textContent =
                 activity.continueLabel || "Continue";
+
+            // apply shared button styling
+            nextButton.classList.add("tutorial-button");
 
             // make button navigste to the next passage with eventListener
             nextButton.addEventListener("click", function () {
@@ -1069,6 +1200,7 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
         var backLink = document.createElement("button");
         backLink.type = "button";
         backLink.textContent = "← Body Map";
+        backLink.classList.add("tutorial-button");
 
         backLink.addEventListener("click", function () {
             Engine.play("HomeScreen");
@@ -1160,6 +1292,7 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
         var returnLink = document.createElement("button");
         returnLink.type = "button";
         returnLink.textContent = "← Return to the body map";
+        returnLink.classList.add("tutorial-button");
 
         returnLink.addEventListener("click", function () {
             Engine.play("BodyMap");
@@ -1266,14 +1399,14 @@ setup.activityLibraries.bloodCells = {
             },
             {
                 id: "redCellsFight",
-                label: "❌ Red blood cells are the main cells that fight infections",
+                label: "🦠 Red blood cells are the main cells that fight infections",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "White blood cells play the main role in defending the body against infections."
             },
             {
                 id: "plateletsCarry",
-                label: "❌ Platelets carry most of the oxygen in the blood",
+                label: "🩸 Platelets carry most of the oxygen in the blood",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "Red blood cells carry most of the oxygen. Platelets help blood clot."
@@ -1319,14 +1452,14 @@ setup.activityLibraries.bloodCells = {
             },
             {
                 id: "carryOxygen",
-                label: "❌ White blood cells carry most of the body's oxygen",
+                label: "🔴 White blood cells carry most of the body's oxygen",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "Red blood cells carry most of the oxygen in the blood."
             },
             {
                 id: "stopAllBleeding",
-                label: "❌ White blood cells form the main plug that stops bleeding",
+                label: "🩹 White blood cells form the main plug that stops bleeding",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "Platelets help form plugs at damaged blood vessels to help stop bleeding."
@@ -1372,14 +1505,14 @@ setup.activityLibraries.bloodCells = {
             },
             {
                 id: "carryOxygen",
-                label: "❌ Platelets carry most of the oxygen in the blood",
+                label: "🔴 Platelets carry most of the oxygen in the blood",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "Red blood cells carry most of the oxygen in the blood."
             },
             {
                 id: "fightAllGerms",
-                label: "❌ Platelets are the main cells that fight all infections",
+                label: "⚪ Platelets are the main cells that fight all infections",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "White blood cells are key parts of the body's immune defenses."
@@ -1425,14 +1558,14 @@ setup.activityLibraries.bloodCells = {
             },
             {
                 id: "plateletsOxygen",
-                label: "❌ Platelets carry most of the oxygen around the body",
+                label: "🩸 Platelets carry most of the oxygen around the body",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "Red blood cells carry most of the oxygen in the blood."
             },
             {
                 id: "redCellsClot",
-                label: "❌ Red blood cells are the main component responsible for blood clotting",
+                label: "🩹 Red blood cells are the main component responsible for blood clotting",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "Platelets and clotting proteins help the blood clot."
@@ -1478,14 +1611,14 @@ setup.activityLibraries.bloodCells = {
             },
             {
                 id: "stomachOxygen",
-                label: "❌ Most oxygen enters the blood from the stomach",
+                label: "🍎 Most oxygen enters the blood from the stomach",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "Oxygen enters the blood through gas exchange in the lungs."
             },
             {
                 id: "plateletsDeliver",
-                label: "❌ Platelets carry most oxygen to the body's tissues",
+                label: "🩸 Platelets carry most oxygen to the body's tissues",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "Red blood cells carry most of the oxygen in the blood."
@@ -1531,14 +1664,14 @@ setup.activityLibraries.bloodCells = {
             },
             {
                 id: "redCellsFight",
-                label: "❌ Red blood cells are the main cells that destroy germs",
+                label: "🔴 Red blood cells are the main cells that destroy germs",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "Red blood cells mainly carry oxygen. White blood cells help defend against infections."
             },
             {
                 id: "plateletsImmune",
-                label: "❌ Platelets are the only part of the immune system",
+                label: "🩹 Platelets are the only part of the immune system",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "The immune system includes many cells, tissues, and processes."
@@ -1756,14 +1889,14 @@ setup.activityLibraries.bloodVessels = {
             },
             {
                 id: "heartMakesOxygen",
-                label: "❌ The heart makes all the oxygen the body needs",
+                label: "🫁 The heart makes all the oxygen the body needs",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "The lungs bring oxygen into the body. The heart pumps blood that carries it."
             },
             {
                 id: "heartStopsBlood",
-                label: "❌ The heart stops blood from moving",
+                label: "🛑 The heart stops blood from moving",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "The heart's pumping action keeps blood moving through the circulatory system."
@@ -1809,14 +1942,14 @@ setup.activityLibraries.bloodVessels = {
             },
             {
                 id: "vesselsDigest",
-                label: "❌ Blood vessels digest the food we eat",
+                label: "🍎 Blood vessels digest the food we eat",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "Blood vessels transport blood. Digestion takes place in the digestive system."
             },
             {
                 id: "allVesselsSame",
-                label: "❌ Every type of blood vessel has exactly the same job",
+                label: "🔀 Every type of blood vessel has exactly the same job",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "Arteries, veins, and capillaries have different structures and roles."
@@ -1862,7 +1995,7 @@ setup.activityLibraries.bloodVessels = {
             },
             {
                 id: "neverDrink",
-                label: "❌ Avoid drinking fluids all day",
+                label: "🥤 Avoid drinking fluids all day",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "The body needs water to function properly."
@@ -2021,28 +2154,28 @@ setup.activityLibraries.brain = {
         choices: [
             {
                 id: "controlsMovement",
-                label: "The brain helps control body movements",
+                label: "🏃 The brain helps control body movements",
                 correct: true,
                 feedbackTitle: "Great choice!",
                 feedback: "The brain sends signals through nerves to help coordinate movement."
             },
             {
                 id: "processesInformation",
-                label: "The brain helps us think, learn, and remember",
+                label: "🧠 The brain helps us think, learn, and remember",
                 correct: true,
                 feedbackTitle: "Correct!",
                 feedback: "Different parts of the brain work together to process information, learn, and form memories."
             },
             {
                 id: "pumpsBlood",
-                label: "The brain pumps blood around the body",
+                label: "❤️ The brain pumps blood around the body",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "The heart pumps blood around the body. The brain helps control many body functions."
             },
             {
                 id: "digestsFood",
-                label: "The brain directly digests the food we eat",
+                label: "🍎 The brain directly digests the food we eat",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "The digestive system breaks down food. The brain helps regulate and coordinate many body processes."
@@ -2076,28 +2209,28 @@ setup.activityLibraries.brain = {
         choices: [
             {
                 id: "nerveSignals",
-                label: "Nerves carry signals between the brain and body",
+                label: "⚡ Nerves carry signals between the brain and body",
                 correct: true,
                 feedbackTitle: "Signal received!",
                 feedback: "Nerves carry information between the brain, spinal cord, and other parts of the body."
             },
             {
                 id: "fastResponses",
-                label: "Nerve signals help the body respond to information",
+                label: "🚀 Nerve signals help the body respond to information",
                 correct: true,
                 feedbackTitle: "Well done!",
                 feedback: "The nervous system helps the body respond to changes inside and around us."
             },
             {
                 id: "bloodMessages",
-                label: "The brain sends every message only through blood",
+                label: "🩸 The brain sends every message only through blood",
                 correct: false,
                 feedbackTitle: "Keep exploring!",
                 feedback: "The nervous system uses nerve signals to communicate information. Blood has other important jobs."
             },
             {
                 id: "noCommunication",
-                label: "The brain works without communicating with the body",
+                label: "🔇 The brain works without communicating with the body",
                 correct: false,
                 feedbackTitle: "Try another answer!",
                 feedback: "The brain communicates with the body through the nervous system."
@@ -2131,28 +2264,28 @@ setup.activityLibraries.brain = {
         choices: [
             {
                 id: "formsMemories",
-                label: "The brain helps us form and recall memories",
+                label: "💭 The brain helps us form and recall memories",
                 correct: true,
                 feedbackTitle: "Memory master!",
                 feedback: "The brain helps us store information and bring it back to mind later."
             },
             {
                 id: "practiceLearning",
-                label: "Practice and learning can help strengthen memories",
+                label: "📚 Practice and learning can help strengthen memories",
                 correct: true,
                 feedbackTitle: "Excellent!",
                 feedback: "Reviewing and practising information can help us learn and remember it."
             },
             {
                 id: "memoryInMuscles",
-                label: "All memories are stored only in our muscles",
+                label: "💪 All memories are stored only in our muscles",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "Memory depends on activity and connections among brain cells, not just the muscles."
             },
             {
                 id: "instantLearning",
-                label: "We remember everything perfectly without learning or practice",
+                label: "✨ We remember everything perfectly without learning or practice",
                 correct: false,
                 feedbackTitle: "Keep thinking!",
                 feedback: "Memory can change over time. Learning, attention, and practice can help us remember information."
@@ -2186,28 +2319,28 @@ setup.activityLibraries.brain = {
         choices: [
             {
                 id: "supportsLearning",
-                label: "Sleep helps support learning and memory",
+                label: "📖 Sleep helps support learning and memory",
                 correct: true,
                 feedbackTitle: "Rest well!",
                 feedback: "Sleep helps the brain process information and supports learning and memory."
             },
             {
                 id: "restoresBody",
-                label: "Sleep helps the brain and body rest and recover",
+                label: "😴 Sleep helps the brain and body rest and recover",
                 correct: true,
                 feedbackTitle: "Correct!",
                 feedback: "Getting enough sleep supports attention, mood, and overall health."
             },
             {
                 id: "noSleepNeeded",
-                label: "The brain never needs sleep to work well",
+                label: "⏰ The brain never needs sleep to work well",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "Sleep is important for healthy brain function and wellbeing."
             },
             {
                 id: "sleepStopsBrain",
-                label: "The brain completely switches off during sleep",
+                label: "🔌 The brain completely switches off during sleep",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "The brain remains active during sleep and carries out important processes."
@@ -2241,28 +2374,28 @@ setup.activityLibraries.brain = {
         choices: [
             {
                 id: "solvesProblems",
-                label: "The brain helps us solve problems and make decisions",
+                label: "🧩 The brain helps us solve problems and make decisions",
                 correct: true,
                 feedbackTitle: "Brilliant thinking!",
                 feedback: "The brain helps us consider information and choose how to respond."
             },
             {
                 id: "usesInformation",
-                label: "The brain processes information from our senses",
+                label: "👀 The brain processes information from our senses",
                 correct: true,
                 feedbackTitle: "Great discovery!",
                 feedback: "The brain interprets information from senses such as sight, hearing, touch, taste, and smell."
             },
             {
                 id: "thinkingHeartOnly",
-                label: "The heart is the body's main organ for solving puzzles",
+                label: "❤️ The heart is the body's main organ for solving puzzles",
                 correct: false,
                 feedbackTitle: "Think it through!",
                 feedback: "The heart pumps blood. The brain plays a major role in thinking and solving problems."
             },
             {
                 id: "noLearning",
-                label: "Thinking never changes as we learn new things",
+                label: "🔒 Thinking never changes as we learn new things",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "Learning and experience can change how we understand information and solve problems."
@@ -2296,28 +2429,28 @@ setup.activityLibraries.brain = {
         choices: [
             {
                 id: "wearHelmet",
-                label: "Wear a properly fitted helmet for activities that require one",
+                label: "⛑️ Wear a properly fitted helmet for activities that require one",
                 correct: true,
                 feedbackTitle: "Safety star!",
                 feedback: "A properly fitted helmet can help reduce the risk of certain head injuries."
             },
             {
                 id: "seatbelt",
-                label: "Wear a seat belt when travelling in a vehicle",
+                label: "🚗 Wear a seat belt when travelling in a vehicle",
                 correct: true,
                 feedbackTitle: "Smart choice!",
                 feedback: "Seat belts help protect people from serious injury during a crash."
             },
             {
                 id: "ignoreInjury",
-                label: "Ignore a head injury even when you feel unwell",
+                label: "🤕 Ignore a head injury even when you feel unwell",
                 correct: false,
                 feedbackTitle: "Stay safe!",
                 feedback: "A head injury should be taken seriously. Tell a trusted adult and seek medical help when needed."
             },
             {
                 id: "unsafePlay",
-                label: "Take unnecessary risks during sports and play",
+                label: "⚠️ Take unnecessary risks during sports and play",
                 correct: false,
                 feedbackTitle: "Think safety!",
                 feedback: "Following safety rules and using suitable protective equipment can help reduce the risk of injury."
@@ -2814,14 +2947,14 @@ setup.activityLibraries.lungs = {
             },
             {
                 id: "smoke",
-                label: "❌ Spend time breathing in cigarette smoke",
+                label: "🚬 Spend time breathing in cigarette smoke",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "Cigarette smoke contains harmful substances that can damage your lungs."
             },
             {
                 id: "ignoreAir",
-                label: "❌ Ignore smoky or polluted air",
+                label: "🌫️ Ignore smoky or polluted air",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "Avoiding polluted air when possible helps protect your respiratory system."
@@ -2853,28 +2986,28 @@ setup.activityLibraries.lungs = {
         choices: [
             {
                 id: "moreOxygen",
-                label: "✅ Breathing faster helps bring more oxygen into the body",
+                label: "🌬️ Breathing faster helps bring more oxygen into the body",
                 correct: true,
                 feedbackTitle: "Correct!",
                 feedback: "During exercise, the body needs more oxygen, so breathing usually becomes faster."
             },
             {
                 id: "removeCarbonDioxide",
-                label: "✅ Breathing helps remove carbon dioxide from the body",
+                label: "💨 Breathing helps remove carbon dioxide from the body",
                 correct: true,
                 feedbackTitle: "Great choice!",
                 feedback: "The lungs remove carbon dioxide, a waste gas produced by the body's cells."
             },
             {
                 id: "stopBreathing",
-                label: "❌ The body does not need oxygen during exercise",
+                label: "⛔ The body does not need oxygen during exercise",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "Working muscles need oxygen to help release energy."
             },
             {
                 id: "lungsStop",
-                label: "❌ The lungs stop working when we run",
+                label: "🛑 The lungs stop working when we run",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "Your lungs continue working during exercise, usually with faster and deeper breathing."
@@ -2906,28 +3039,28 @@ setup.activityLibraries.lungs = {
         choices: [
             {
                 id: "noseAndMouth",
-                label: "✅ Air can enter the body through the nose or mouth",
+                label: "👃 Air can enter the body through the nose or mouth",
                 correct: true,
                 feedbackTitle: "Correct!",
                 feedback: "The nose and mouth provide routes for air to enter the respiratory system."
             },
             {
                 id: "airways",
-                label: "✅ Air travels through airways toward the lungs",
+                label: "🫁 Air travels through airways toward the lungs",
                 correct: true,
                 feedbackTitle: "Great choice!",
                 feedback: "Air passes through the throat and windpipe before moving into the branching airways in the lungs."
             },
             {
                 id: "foodTube",
-                label: "❌ Air normally travels to the lungs through the food pipe",
+                label: "🍽️ Air normally travels to the lungs through the food pipe",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "The food pipe carries food to the stomach. Air travels through the respiratory airways."
             },
             {
                 id: "skin",
-                label: "❌ Air enters the lungs directly through the skin",
+                label: "🧴 Air enters the lungs directly through the skin",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "Air enters through the nose or mouth and travels through the respiratory system."
@@ -2959,28 +3092,28 @@ setup.activityLibraries.lungs = {
         choices: [
             {
                 id: "avoidSmoking",
-                label: "✅ Avoid smoking and secondhand smoke",
+                label: "🚭 Avoid smoking and secondhand smoke",
                 correct: true,
                 feedbackTitle: "Great choice!",
                 feedback: "Avoiding tobacco smoke helps reduce exposure to substances that damage the lungs."
             },
             {
                 id: "cleanAir",
-                label: "✅ Reduce exposure to polluted air when possible",
+                label: "🌿 Reduce exposure to polluted air when possible",
                 correct: true,
                 feedbackTitle: "Correct!",
                 feedback: "Cleaner air can help reduce exposure to particles and gases that irritate the respiratory system."
             },
             {
                 id: "startSmoking",
-                label: "❌ Start smoking to strengthen the lungs",
+                label: "🚬 Start smoking to strengthen the lungs",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "Smoking harms the lungs. It does not make them stronger."
             },
             {
                 id: "ignoreIrritants",
-                label: "❌ Ignore strong fumes and irritating smoke",
+                label: "⚠️ Ignore strong fumes and irritating smoke",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "Some fumes and smoke can irritate or harm the respiratory system. Avoid exposure when possible."
@@ -3012,28 +3145,28 @@ setup.activityLibraries.lungs = {
         choices: [
             {
                 id: "lessPollution",
-                label: "✅ Cleaner air can reduce exposure to harmful pollutants",
+                label: "💧 Cleaner air can reduce exposure to harmful pollutants",
                 correct: true,
                 feedbackTitle: "Correct!",
                 feedback: "Reducing exposure to harmful air pollutants can help protect the lungs."
             },
             {
                 id: "avoidSmoke",
-                label: "✅ Avoiding smoke can help protect the respiratory system",
+                label: "🌬️ Avoiding smoke can help protect the respiratory system",
                 correct: true,
                 feedbackTitle: "Great choice!",
                 feedback: "Smoke can contain particles and chemicals that irritate and damage the lungs."
             },
             {
                 id: "pollutionHealthy",
-                label: "❌ Air pollution always makes breathing healthier",
+                label: "🌫️ Air pollution always makes breathing healthier",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "Air pollution can irritate the airways and harm respiratory health."
             },
             {
                 id: "smokeHarmless",
-                label: "❌ Smoke is harmless to the lungs",
+                label: "🧪 Smoke is harmless to the lungs",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "Smoke can contain harmful substances that affect the lungs and airways."
@@ -3065,28 +3198,28 @@ setup.activityLibraries.lungs = {
         choices: [
             {
                 id: "oxygenEnters",
-                label: "✅ Oxygen moves from the lungs into the blood",
+                label: "🫁 Oxygen moves from the lungs into the blood",
                 correct: true,
                 feedbackTitle: "Correct!",
                 feedback: "Oxygen passes from the air in the lungs into nearby blood vessels."
             },
             {
                 id: "carbonDioxideLeaves",
-                label: "✅ Carbon dioxide moves from the blood into the lungs to be breathed out",
+                label: "💨 Carbon dioxide moves from the blood into the lungs to be breathed out",
                 correct: true,
                 feedbackTitle: "Great choice!",
                 feedback: "The lungs help remove carbon dioxide from the body when we exhale."
             },
             {
                 id: "lungsDigest",
-                label: "❌ The lungs digest food",
+                label: "🍽️ The lungs digest food",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "The digestive system processes food. The lungs help the body exchange oxygen and carbon dioxide."
             },
             {
                 id: "oxygenMade",
-                label: "❌ The lungs create oxygen",
+                label: "✨ The lungs create oxygen",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "The lungs take oxygen from the air and transfer it into the blood; they do not create it."
@@ -3105,38 +3238,30 @@ setup.activityLibraries.lungs = {
         continueLabel: "Continue to the lesson",
         nextPassage: "LessonLearned"
     }
-};
-</script><tw-passagedata pid="1" name="Start" tags="" position="625,275" size="100,100">&lt;h1&gt;Welcome to Vascular Village!&lt;/h1&gt;&lt;p&gt;Meet Ruby, your guide on an amazing adventure inside the human body! 🔬&lt;/p&gt;&lt;p&gt;Follow Ruby as she explores the body&#39;s incredible systems, discovers how they work together, and learns the little things we can do every day to stay healthy.&lt;/p&gt;&lt;p&gt;From the heart pumping blood to the lungs bringing in oxygen, every discovery brings Ruby one step closer to understanding how our bodies keep us going!&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Are you ready to join Ruby and explore the wonders of Vascular Village?&lt;/strong&gt;&lt;/p&gt;
-&lt;p class=&quot;back-link&quot;&gt; &lt;&lt;button &quot;Let&#39;s Explore! →&quot;&gt;&gt;&lt;&lt;goto &quot;HomeScreen&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/p&gt;
+};</script><tw-passagedata pid="1" name="Start" tags="" position="625,275" size="100,100">&lt;h1&gt;Welcome to Vascular Village!&lt;/h1&gt;&lt;p&gt;Meet Ruby, your guide on an amazing adventure inside the human body! 🔬&lt;/p&gt;&lt;p&gt;Follow Ruby as she explores the body&#39;s incredible systems, discovers how they work together, and learns the little things we can do every day to stay healthy.&lt;/p&gt;&lt;p&gt;From the heart pumping blood to the lungs bringing in oxygen, every discovery brings Ruby one step closer to understanding how our bodies keep us going!&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Are you ready to join Ruby and explore the wonders of Vascular Village?&lt;/strong&gt;&lt;/p&gt;
+&lt;p class=&quot;back-link &quot;&gt; &lt;&lt;button &quot;Let&#39;s Explore! →&quot;&gt;&gt;&lt;&lt;goto &quot;HomeScreen&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/p&gt;
 
 
 /* MAIN HOME SCREEN  */</tw-passagedata><tw-passagedata pid="2" name="HomeScreen" tags="" position="225,100" size="100,100">&lt;div class=&quot;home-screen&quot;&gt;
-    &lt;h1&gt;Vascular Village&lt;/h1&gt;
-    &lt;p&gt;Choose a part of your health journey!&lt;/p&gt;
-    &lt;div class=&quot;body-map&quot;&gt;
+    &lt;h1&gt;Vascular Village&lt;/h1&gt;&lt;p&gt;Choose a part of your health journey!&lt;/p&gt;&lt;div class=&quot;body-map&quot;&gt;
         &lt;div class=&quot;body-circle head&quot;&gt;
             [[🧠Brain-&gt;Brain]]
         &lt;/div&gt;
-
         &lt;div class=&quot;body-circle left&quot;&gt;
             [[🩸Blood Cells-&gt;Blood Cells]]
         &lt;/div&gt;
-
         &lt;div class=&quot;body-circle center&quot;&gt;
             [[❤️Heartbeat-&gt;Heart]]
         &lt;/div&gt;
-
         &lt;div class=&quot;body-circle right&quot;&gt;
             [[🩸Blood Vessels-&gt;Blood Vessels]]
         &lt;/div&gt;
-
         &lt;div class=&quot;body-circle legs&quot;&gt;
             [[🫁Lungs-&gt;Lungs]]
         &lt;/div&gt;
+&lt;/div&gt;
 
-    &lt;/div&gt;
-    
-    &lt;p class=&quot;home-hint&quot;&gt;Tap a circle to begin exploring!&lt;/p&gt;
+    &lt;p class=&quot;home-hint&quot;&gt;Tap a circle to begin exploring! Or take the tutorial to learn how activities work before you begin!&lt;/p&gt;&lt;div class=&quot;tutorial-home-button&quot;&gt;&lt;&lt;button &quot;🎓 Take the Tutorial&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialStart&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
 &lt;/div&gt;
 
 
@@ -3151,8 +3276,7 @@ $(document).one(&quot;:passagedisplay&quot;, function () {
     var activityId = State.variables.selectedActivityId || &quot;longPause&quot;;
     setup.renderActivity( &quot;bloodVessels&quot;, activityId, &quot;activity-content&quot;);
 });
-&lt;&lt;/script&gt;&gt;&lt;p class=&quot;back-link&quot;&gt; &lt;&lt;button &quot;← Return to Blood Vessels&quot;&gt;&gt; &lt;&lt;goto &quot;Blood Vessels&quot;&gt;&gt; &lt;&lt;/button&gt;&gt;
-&lt;/p&gt;
+&lt;&lt;/script&gt;&gt;&lt;div class=&quot;back-link tutorial-navigation&quot;&gt;&lt;&lt;button &quot;← Return to Blood Vessels&quot;&gt;&gt;&lt;&lt;goto &quot;Blood Vessels&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
 
 
 
@@ -3166,8 +3290,7 @@ $(document).one(&quot;:passagedisplay&quot;, function () {
 $(document).one(&quot;:passagedisplay&quot;, function () {
     setup.renderActivity(&quot;bloodCells&quot;, &quot;redCellRescue&quot;, &quot;activity-content&quot;);
 });
-&lt;&lt;/script&gt;&gt;&lt;p class=&quot;back-link&quot;&gt;&lt;&lt;button &quot;← Return to the Blood Cells&quot;&gt;&gt;&lt;&lt;goto &quot;Blood Cells&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/p&gt;
-
+&lt;&lt;/script&gt;&gt;&lt;div class=&quot;back-link tutorial-navigation&quot;&gt;&lt;&lt;button &quot;← Return to the Blood Cells&quot;&gt;&gt;&lt;&lt;goto &quot;Blood Cells&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
 
 /* FOR LUNGS */</tw-passagedata><tw-passagedata pid="7" name="Lungs" tags="" position="850,100" size="100,100">&lt;div id=&quot;activity-menu&quot;&gt;&lt;/div&gt;
 &lt;&lt;script&gt;&gt;
@@ -3180,8 +3303,7 @@ $(document).one(&quot;:passagedisplay&quot;, function () {
     var activityId = State.variables.selectedActivityId || &quot;oxygenAdventure&quot;;
     setup.renderActivity( &quot;lungs&quot;, activityId,  &quot;activity-content&quot;);
 });
-&lt;&lt;/script&gt;&gt;&lt;p class=&quot;back-link&quot;&gt;&lt;&lt;button &quot;← Return to the Lungs&quot;&gt;&gt;&lt;&lt;goto &quot;Lungs&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/p&gt;
-
+&lt;&lt;/script&gt;&gt;&lt;div class=&quot;back-link tutorial-navigation&quot;&gt;&lt;&lt;button &quot;← Return to the Lungs&quot;&gt;&gt;&lt;&lt;goto &quot;Lungs&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
 
 /* FOR HEART */</tw-passagedata><tw-passagedata pid="9" name="Heart" tags="" position="1100,100" size="100,100">&lt;div id=&quot;activity-menu&quot;&gt;&lt;/div&gt;
 &lt;&lt;script&gt;&gt;
@@ -3194,8 +3316,7 @@ $(document).one(&quot;:passagedisplay&quot;, function () {
     var activityId = State.variables.selectedActivityId || &quot;heartbeatHeroes&quot;;
     setup.renderActivity(&quot;heart&quot;, activityId, &quot;activity-content&quot;);
 });
-&lt;&lt;/script&gt;&gt;&lt;p class=&quot;back-link&quot;&gt;&lt;&lt;button &quot;← Return to the Heart&quot;&gt;&gt;&lt;&lt;goto &quot;Heart&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/p&gt;
-
+&lt;&lt;/script&gt;&gt;&lt;p class=&quot;back-link&quot;&gt;&lt;span class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;← Return to the Heart&quot;&gt;&gt;&lt;&lt;goto &quot;Heart&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/span&gt;&lt;/p&gt;
 
 /* FOR BRAIN */</tw-passagedata><tw-passagedata pid="11" name="Brain" tags="" position="100,225" size="100,100">&lt;div id=&quot;activity-menu&quot;&gt;&lt;/div&gt;
 &lt;&lt;script&gt;&gt;
@@ -3208,7 +3329,7 @@ $(document).one(&quot;:passagedisplay&quot;, function () {
     var activityId = State.variables.selectedActivityId || &quot;brainControlCenter&quot;;
     setup.renderActivity(&quot;brain&quot;, activityId, &quot;activity-content&quot;);
 });
-&lt;&lt;/script&gt;&gt;&lt;p class=&quot;back-link&quot;&gt;&lt;&lt;button &quot;← Return to the Brain&quot;&gt;&gt;&lt;&lt;goto &quot;Brain&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;
+&lt;&lt;/script&gt;&gt;&lt;p class=&quot;back-link tutorial-navigation&quot;&gt;&lt;&lt;button &quot;← Return to the Brain&quot;&gt;&gt;&lt;&lt;goto &quot;Brain&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;
 &lt;/p&gt;
 
 
@@ -3221,6 +3342,40 @@ $(document).one(&quot;:passagedisplay&quot;, function () {
     setup.renderActivityMenu(&quot;lungs&quot;, &quot;activity-menu&quot;);
 });
 &lt;&lt;/script&gt;&gt;
+
+
+
+/* TUTORIAL */</tw-passagedata><tw-passagedata pid="14" name="TutorialStart" tags="" position="475,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;div class=&quot;tutorial-icon&quot;&gt;🎓&lt;/div&gt;
+    &lt;h2&gt;Welcome to the Tutorial!&lt;/h2&gt;&lt;p&gt;Hi, explorer! Ruby here! 👋&lt;/p&gt;&lt;p&gt;I&#39;ll show you how to explore Vascular Village and complete activities about the human body.&lt;/p&gt;&lt;p&gt;You&#39;ll learn how to choose an activity, understand answer choices, read feedback, and discover what you&#39;ve learned.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Don&#39;t worry! You won&#39;t need to answer any questions during this tutorial.&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Ready? Let&#39;s get started!&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialMission&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+
+/* should show the populated menu page, maybe just a popup window at the bottom of the screen to explain how the game works */</tw-passagedata><tw-passagedata pid="15" name="TutorialMission" tags="" position="600,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h3&gt;Step 1: Choose Your Adventure&lt;/h3&gt;&lt;p&gt;On the home screen, you&#39;ll find five areas to explore:&lt;/p&gt;&lt;ul&gt;
+        &lt;li&gt;🧠 Brain&lt;/li&gt;
+        &lt;li&gt;🩸 Blood Cells&lt;/li&gt;
+        &lt;li&gt;❤️ Heart&lt;/li&gt;
+        &lt;li&gt;🩸 Blood Vessels&lt;/li&gt;
+        &lt;li&gt;🫁 Lungs&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Each area teaches you something different about the human body and how to keep it healthy.&lt;/p&gt;&lt;p&gt;When you choose an area, you&#39;ll enter its activity menu. This is where you can explore the available activities.&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialChoices&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+/* again, should show a popup window at the bottom of the screen to explain the choices */</tw-passagedata><tw-passagedata pid="16" name="TutorialChoices" tags="" position="725,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h3&gt;Step 2: Explore an Activity&lt;/h3&gt;&lt;p&gt;Each body system has activities designed to help you learn through questions.&lt;/p&gt;&lt;p&gt;When you select an activity, it opens on its own screen.&lt;/p&gt;&lt;p&gt;Depending on the activity, you might need to:&lt;/p&gt;&lt;ul&gt;
+        &lt;li&gt;🔎 Read a question or scenario.&lt;/li&gt;
+        &lt;li&gt;💭 Think about what you already know.&lt;/li&gt;
+        &lt;li&gt;👆 Select an answer or make a choice.&lt;/li&gt;
+    &lt;/ul&gt;&lt;p&gt;Some activities may work differently from others, so always read the instructions shown on the screen.&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialFeedback&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+
+/* popup window at the bottom of screen to explain feedback */
+/* should have button with &quot;Return Home&quot; to finish tutorial */</tw-passagedata><tw-passagedata pid="17" name="TutorialFeedback" tags="" position="850,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h3&gt;Step 3: Learn from Feedback&lt;/h3&gt;&lt;p&gt;After making a choice in an activity, you may receive feedback explaining the result.&lt;/p&gt;&lt;p&gt;Feedback helps you understand:&lt;/p&gt;&lt;ul&gt;
+        &lt;li&gt;✅ What you got right.&lt;/li&gt;
+        &lt;li&gt;💡 Why an answer makes sense.&lt;/li&gt;
+        &lt;li&gt;🧠 Important facts about the human body.&lt;/li&gt;
+        &lt;li&gt;🌱 What you can learn from a mistake.&lt;/li&gt;&lt;/ul&gt;
+    &lt;p&gt;Don&#39;t be discouraged if you get something wrong! The goal is to learn, improve your understanding, and discover something new.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Take your time and read the feedback before moving on.&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialLesson&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="18" name="TutorialLesson" tags="" position="975,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h3&gt;Step 4: Discover What You&#39;ve Learned&lt;/h3&gt;&lt;p&gt;Completed activities include a lesson to help you understand the information you&#39;ve discovered.&lt;/p&gt;&lt;p&gt;These lessons can help you connect what you&#39;ve learned to everyday health.&lt;/p&gt;&lt;p&gt;For example, you might discover how exercise supports your heart or why your lungs need clean air.&lt;/p&gt;&lt;p&gt;Take a moment to think about what you&#39;ve learned and how you could use that knowledge in your daily life.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Every discovery brings you one step closer to becoming a health explorer!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialComplete&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="19" name="TutorialComplete" tags="" position="1100,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;You&#39;re Ready to Explore!&lt;/h2&gt;&lt;p&gt;Great job, explorer! 🎉&lt;/p&gt;&lt;p&gt;You now know how to navigate Vascular Village, open activities, understand answer choices, and learn from feedback.&lt;/p&gt;&lt;p&gt;Now it&#39;s time to put your knowledge into action!&lt;/p&gt;&lt;p&gt;Choose your favourite body system and begin your adventure with Ruby.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Your journey to better health starts here!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;🏠 Return Home&quot;&gt;&gt;&lt;&lt;goto &quot;HomeScreen&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+&lt;/div&gt;
 
 /*
 to run on webpage

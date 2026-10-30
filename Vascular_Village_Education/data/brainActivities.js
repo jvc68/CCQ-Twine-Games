@@ -76,28 +76,28 @@ setup.activityLibraries.brain = {
         choices: [
             {
                 id: "controlsMovement",
-                label: "The brain helps control body movements",
+                label: "🏃 The brain helps control body movements",
                 correct: true,
                 feedbackTitle: "Great choice!",
                 feedback: "The brain sends signals through nerves to help coordinate movement."
             },
             {
                 id: "processesInformation",
-                label: "The brain helps us think, learn, and remember",
+                label: "🧠 The brain helps us think, learn, and remember",
                 correct: true,
                 feedbackTitle: "Correct!",
                 feedback: "Different parts of the brain work together to process information, learn, and form memories."
             },
             {
                 id: "pumpsBlood",
-                label: "The brain pumps blood around the body",
+                label: "❤️ The brain pumps blood around the body",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "The heart pumps blood around the body. The brain helps control many body functions."
             },
             {
                 id: "digestsFood",
-                label: "The brain directly digests the food we eat",
+                label: "🍎 The brain directly digests the food we eat",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "The digestive system breaks down food. The brain helps regulate and coordinate many body processes."
@@ -131,28 +131,28 @@ setup.activityLibraries.brain = {
         choices: [
             {
                 id: "nerveSignals",
-                label: "Nerves carry signals between the brain and body",
+                label: "⚡ Nerves carry signals between the brain and body",
                 correct: true,
                 feedbackTitle: "Signal received!",
                 feedback: "Nerves carry information between the brain, spinal cord, and other parts of the body."
             },
             {
                 id: "fastResponses",
-                label: "Nerve signals help the body respond to information",
+                label: "🚀 Nerve signals help the body respond to information",
                 correct: true,
                 feedbackTitle: "Well done!",
                 feedback: "The nervous system helps the body respond to changes inside and around us."
             },
             {
                 id: "bloodMessages",
-                label: "The brain sends every message only through blood",
+                label: "🩸 The brain sends every message only through blood",
                 correct: false,
                 feedbackTitle: "Keep exploring!",
                 feedback: "The nervous system uses nerve signals to communicate information. Blood has other important jobs."
             },
             {
                 id: "noCommunication",
-                label: "The brain works without communicating with the body",
+                label: "🔇 The brain works without communicating with the body",
                 correct: false,
                 feedbackTitle: "Try another answer!",
                 feedback: "The brain communicates with the body through the nervous system."
@@ -186,28 +186,28 @@ setup.activityLibraries.brain = {
         choices: [
             {
                 id: "formsMemories",
-                label: "The brain helps us form and recall memories",
+                label: "💭 The brain helps us form and recall memories",
                 correct: true,
                 feedbackTitle: "Memory master!",
                 feedback: "The brain helps us store information and bring it back to mind later."
             },
             {
                 id: "practiceLearning",
-                label: "Practice and learning can help strengthen memories",
+                label: "📚 Practice and learning can help strengthen memories",
                 correct: true,
                 feedbackTitle: "Excellent!",
                 feedback: "Reviewing and practising information can help us learn and remember it."
             },
             {
                 id: "memoryInMuscles",
-                label: "All memories are stored only in our muscles",
+                label: "💪 All memories are stored only in our muscles",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "Memory depends on activity and connections among brain cells, not just the muscles."
             },
             {
                 id: "instantLearning",
-                label: "We remember everything perfectly without learning or practice",
+                label: "✨ We remember everything perfectly without learning or practice",
                 correct: false,
                 feedbackTitle: "Keep thinking!",
                 feedback: "Memory can change over time. Learning, attention, and practice can help us remember information."
@@ -241,28 +241,28 @@ setup.activityLibraries.brain = {
         choices: [
             {
                 id: "supportsLearning",
-                label: "Sleep helps support learning and memory",
+                label: "📖 Sleep helps support learning and memory",
                 correct: true,
                 feedbackTitle: "Rest well!",
                 feedback: "Sleep helps the brain process information and supports learning and memory."
             },
             {
                 id: "restoresBody",
-                label: "Sleep helps the brain and body rest and recover",
+                label: "😴 Sleep helps the brain and body rest and recover",
                 correct: true,
                 feedbackTitle: "Correct!",
                 feedback: "Getting enough sleep supports attention, mood, and overall health."
             },
             {
                 id: "noSleepNeeded",
-                label: "The brain never needs sleep to work well",
+                label: "⏰ The brain never needs sleep to work well",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "Sleep is important for healthy brain function and wellbeing."
             },
             {
                 id: "sleepStopsBrain",
-                label: "The brain completely switches off during sleep",
+                label: "🔌 The brain completely switches off during sleep",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "The brain remains active during sleep and carries out important processes."
@@ -296,28 +296,28 @@ setup.activityLibraries.brain = {
         choices: [
             {
                 id: "solvesProblems",
-                label: "The brain helps us solve problems and make decisions",
+                label: "🧩 The brain helps us solve problems and make decisions",
                 correct: true,
                 feedbackTitle: "Brilliant thinking!",
                 feedback: "The brain helps us consider information and choose how to respond."
             },
             {
                 id: "usesInformation",
-                label: "The brain processes information from our senses",
+                label: "👀 The brain processes information from our senses",
                 correct: true,
                 feedbackTitle: "Great discovery!",
                 feedback: "The brain interprets information from senses such as sight, hearing, touch, taste, and smell."
             },
             {
                 id: "thinkingHeartOnly",
-                label: "The heart is the body's main organ for solving puzzles",
+                label: "❤️ The heart is the body's main organ for solving puzzles",
                 correct: false,
                 feedbackTitle: "Think it through!",
                 feedback: "The heart pumps blood. The brain plays a major role in thinking and solving problems."
             },
             {
                 id: "noLearning",
-                label: "Thinking never changes as we learn new things",
+                label: "🔒 Thinking never changes as we learn new things",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "Learning and experience can change how we understand information and solve problems."
@@ -351,28 +351,28 @@ setup.activityLibraries.brain = {
         choices: [
             {
                 id: "wearHelmet",
-                label: "Wear a properly fitted helmet for activities that require one",
+                label: "⛑️ Wear a properly fitted helmet for activities that require one",
                 correct: true,
                 feedbackTitle: "Safety star!",
                 feedback: "A properly fitted helmet can help reduce the risk of certain head injuries."
             },
             {
                 id: "seatbelt",
-                label: "Wear a seat belt when travelling in a vehicle",
+                label: "🚗 Wear a seat belt when travelling in a vehicle",
                 correct: true,
                 feedbackTitle: "Smart choice!",
                 feedback: "Seat belts help protect people from serious injury during a crash."
             },
             {
                 id: "ignoreInjury",
-                label: "Ignore a head injury even when you feel unwell",
+                label: "🤕 Ignore a head injury even when you feel unwell",
                 correct: false,
                 feedbackTitle: "Stay safe!",
                 feedback: "A head injury should be taken seriously. Tell a trusted adult and seek medical help when needed."
             },
             {
                 id: "unsafePlay",
-                label: "Take unnecessary risks during sports and play",
+                label: "⚠️ Take unnecessary risks during sports and play",
                 correct: false,
                 feedbackTitle: "Think safety!",
                 feedback: "Following safety rules and using suitable protective equipment can help reduce the risk of injury."
