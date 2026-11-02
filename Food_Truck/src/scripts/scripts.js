@@ -609,5 +609,13 @@ window.FoodTruck = {
 };
 
 window.jQuery(document).on(":passagedisplay", function() {
+    document.querySelectorAll(".ingredient-button").forEach(function(button) {
+        button.addEventListener("click", function() {
+            var ingredientIndex = Number(button.getAttribute("data-ingredient-index"));
+
+            FoodTruck.selectIngredient(ingredientIndex);
+            SugarCube.Engine.play("PrepareIngredient");
+        });
+    });
     window.FoodTruck.updateTutorialHighlights();
 });

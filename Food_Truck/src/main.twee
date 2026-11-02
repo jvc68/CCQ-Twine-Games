@@ -125,7 +125,10 @@
         <div class="ingredient-grid">\
             <<for _i = 0; _i < $menuIngredients.length; _i++>>\
                 <<capture _i>>\
-                <<button `FoodTruck.ingredientLabel(_i)` "PrepareIngredient">><<run FoodTruck.selectIngredient(_i)>><</button>>\
+                <button type="button" class="ingredient-button" data-ingredient-index="<<print _i>>">\
+                    <span class="ingredient-icon"><<print $menuIngredients[_i].img>></span>\
+                    <span class="ingredient-name"><<print $menuIngredients[_i].name>></span>\
+                </button>\
                 <</capture>>\
             <</for>>\
         </div>\
