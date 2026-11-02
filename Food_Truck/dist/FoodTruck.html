@@ -1244,9 +1244,10 @@ window.FoodTruck = {
 window.jQuery(document).on(":passagedisplay", function() {
     document.querySelectorAll(".ingredient-button").forEach(function(button) {
         button.addEventListener("click", function() {
-            var ingredientIndex = Number(button.getAttribute("data-ingredient-index"));
+            var ingredientButtons = document.querySelectorAll(".ingredient-button");
+            var ingredientIndex = Array.prototype.indexOf.call(ingredientButtons, button);
 
-            FoodTruck.selectIngredient(ingredientIndex);
+            window.FoodTruck.selectIngredient(ingredientIndex);
             SugarCube.Engine.play("PrepareIngredient");
         });
     });
@@ -1394,7 +1395,7 @@ window.jQuery(document).on(":passagedisplay", function() {
         &lt;div class=&quot;ingredient-grid&quot;&gt;\
             &lt;&lt;for _i = 0; _i &lt; $menuIngredients.length; _i++&gt;&gt;\
                 &lt;&lt;capture _i&gt;&gt;\
-                &lt;button type=&quot;button&quot; class=&quot;ingredient-button&quot; data-ingredient-index=&quot;&lt;&lt;print _i&gt;&gt;&quot;&gt;\
+                &lt;button type=&quot;button&quot; class=&quot;ingredient-button&quot;&gt;\
                     &lt;span class=&quot;ingredient-icon&quot;&gt;&lt;&lt;print $menuIngredients[_i].img&gt;&gt;&lt;/span&gt;\
                     &lt;span class=&quot;ingredient-name&quot;&gt;&lt;&lt;print $menuIngredients[_i].name&gt;&gt;&lt;/span&gt;\
                 &lt;/button&gt;\

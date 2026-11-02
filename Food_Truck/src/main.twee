@@ -125,7 +125,7 @@
         <div class="ingredient-grid">\
             <<for _i = 0; _i < $menuIngredients.length; _i++>>\
                 <<capture _i>>\
-                <button type="button" class="ingredient-button" data-ingredient-index="<<print _i>>">\
+                <button type="button" class="ingredient-button">\
                     <span class="ingredient-icon"><<print $menuIngredients[_i].img>></span>\
                     <span class="ingredient-name"><<print $menuIngredients[_i].name>></span>\
                 </button>\

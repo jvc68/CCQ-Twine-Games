@@ -611,9 +611,10 @@ window.FoodTruck = {
 window.jQuery(document).on(":passagedisplay", function() {
     document.querySelectorAll(".ingredient-button").forEach(function(button) {
         button.addEventListener("click", function() {
-            var ingredientIndex = Number(button.getAttribute("data-ingredient-index"));
+            var ingredientButtons = document.querySelectorAll(".ingredient-button");
+            var ingredientIndex = Array.prototype.indexOf.call(ingredientButtons, button);
 
-            FoodTruck.selectIngredient(ingredientIndex);
+            window.FoodTruck.selectIngredient(ingredientIndex);
             SugarCube.Engine.play("PrepareIngredient");
         });
     });
