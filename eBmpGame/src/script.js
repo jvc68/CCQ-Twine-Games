@@ -1,5 +1,5 @@
 setup.prevRand = -1
-setup.currentFidget = "controlPanel"
+setup.currentFidget = "drums"
 
 setup.isMouseDown = false;
 setup.light = [0, 0, 0, 0]
@@ -164,7 +164,7 @@ setup.populateFidget = function populateFidget() {
 			fidgetLabel.textContent = "Light Switch"
 
 			let newImg = document.createElement('img');
-			newImg.src = "../../img/switch2.png"
+			newImg.src = "../../img/measurement/switch2.png"
 			newImg.classList.add("switchImg")
 			newImg.style.transform = 'scaleY(-1)';
 
@@ -217,14 +217,14 @@ setup.populateFidget = function populateFidget() {
 					newFlip.classList.add("flip");
 					if (k == 0) {
 						let newImg = document.createElement('img');
-						newImg.src = "../../img/arrow.png"
+						newImg.src = "../../img/measurement/arrow.png"
 						newImg.classList.add("flipImg")
 						newFlip.appendChild(newImg)
 						newFlip.addEventListener('click', () => setup.incLight(setup.light[i]));
 					} else {
 						newFlip.addEventListener('click', () => setup.decLight(setup.light[i]));
 						let newImg = document.createElement('img');
-						newImg.src = "../../img/arrow.png"
+						newImg.src = "../../img/measurement/arrow.png"
 						newImg.classList.add("flipped");
 						newFlip.appendChild(newImg)
 					}
@@ -257,7 +257,7 @@ setup.populateFidget = function populateFidget() {
 				let newButton = document.createElement('button');
 				newButton.classList.add(setup.instruments[drum], "drums");
 				let newImg = document.createElement('img');
-				newImg.src = "../../img/drumSnareNoTag.png"
+				newImg.src = "../../img/measurement/drumSnareNoTag.png"
 				newButton.appendChild(newImg)
 
 				//Credit to Google Gemini for teaching me WebAudio API
@@ -292,19 +292,19 @@ setup.createUniqueDrums = function createUniqueDrums(container, which) {
 
 	switch (which) {
 		case "bass":
-			drumImg.src = `../../img/bassDrum.png`
+			drumImg.src = `../../img/measurement/bassDrum.png`
 			drum.appendChild(drumImg)
 			break;
 		case "crash":
-			drumImg.src = `../../img/brassDrum2.png`
+			drumImg.src = `../../img/measurement/brassDrum2.png`
 			drum.appendChild(drumImg)
 			break;
 		case "hihat":
-			drumImg.src = `../../img/brassDrum2.png`
+			drumImg.src = `../../img/measurement/brassDrum2.png`
 			drum.appendChild(drumImg)
 			break;
 		case "lowTom":
-			drumImg.src = `../../img/drumSnare.png`
+			drumImg.src = `../../img/measurement/drumSnare.png`
 			drum.appendChild(drumImg)
 			break;
 

@@ -53,10 +53,10 @@ loadDrumSound("crash", "audio/crash2.wav");
 <div class="phone">Fidget Library
 Time Spent: <span id="timer"><<=setup.formattedTime>></span>
   <div class="library">
-    <<button "<img class='fidgetIcon' src='../../img/bubbleWrap.png'>">><<run setup.swapFidget("bubbleWrap")>> <</button>>
-    <<button "<img class='fidgetIcon' src='../../img/lightSwitch.png'>">><<run setup.swapFidget("switch")>> <</button>>
-    <<button "<img class='fidgetIcon' src='../../img/controlPanel.png'>">><<run setup.swapFidget("controlPanel")>> <</button>>
-    <<button "<img class='fidgetIcon' src='../../img/drums.png'>">><<run setup.swapFidget("drums")>> <</button>>
+    <<button "<img class='fidgetIcon' src='../../img/measurement/bubbleWrap.png'>">><<run setup.swapFidget("bubbleWrap")>> <</button>>
+    <<button "<img class='fidgetIcon' src='../../img/measurement/lightSwitch.png'>">><<run setup.swapFidget("switch")>> <</button>>
+    <<button "<img class='fidgetIcon' src='../../img/measurement/controlPanel.png'>">><<run setup.swapFidget("controlPanel")>> <</button>>
+    <<button "<img class='fidgetIcon' src='../../img/measurement/drums.png'>">><<run setup.swapFidget("drums")>> <</button>>
   </div> 
 
 </div>
