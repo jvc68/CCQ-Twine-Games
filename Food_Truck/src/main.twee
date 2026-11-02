@@ -3,8 +3,8 @@
     <h1>Food Truck</h1>\
     <p>Serve customers, prepare delicious meals, and grow your food truck.</p>\
     <div class="action-button start-actions">\
-        <<button "Start Day" "TakeOrderScreen">><<run FoodTruck.startDay()>><</button>>\
-        <<button "Play Tutorial">><</button>>\
+        <<button "Start Day" "TakeOrderScreen">><<run FoodTruck.endTutorial()>><<run FoodTruck.startDay()>><</button>>\
+        <<button "Play Tutorial" "TakeOrderScreen">><<run FoodTruck.startTutorial()>><</button>>\
         <<button "Toggle Debug Mode" "Start">><<run FoodTruck.toggleDebugMode()>><</button>>\
     </div>\
 </div>\
@@ -57,8 +57,8 @@
         </div>\
     </div>\
     <div class="passage-nav">\
-        <<button "Exit to Menu" "Start">><</button>>\
-        <<button "Assembly Station" "AssemblyStation">><</button>>\
+        <<button "Exit to Menu" "Start">><<run FoodTruck.endTutorial()>><</button>>\
+        <<button "Assembly Station" "AssemblyStation">><<run FoodTruck.startTutorialIngredients()>><</button>>\
     </div>\
 </div>
 
@@ -71,7 +71,11 @@
         <p class="tally-stars" aria-label="Healthiness: $healthinessScore out of 5 stars"><<print FoodTruck.starRating($healthinessScore)>></p>\
         <p class="tally-tip"><<print FoodTruck.dayTips()>></p>\
         <div class="action-button">\
-            <<button "Start Next Day" "TakeOrderScreen">><<run FoodTruck.startNextDay()>><</button>>\
+            <<if $tutorialMode>>\
+                <<button "Return to Menu" "Start">><<run FoodTruck.endTutorial()>><</button>>\
+            <<else>>\
+                <<button "Start Next Day" "TakeOrderScreen">><<run FoodTruck.startNextDay()>><</button>>\
+            <</if>>\
         </div>\
     </section>\
 </div>
@@ -121,15 +125,15 @@
         <div class="ingredient-grid">\
             <<for _i = 0; _i < $menuIngredients.length; _i++>>\
                 <<capture _i>>\
-            <<button `FoodTruck.ingredientLabel(_i)` "PrepareIngredient">><<run FoodTruck.selectIngredient(_i)>><</button>>\
+                <<button `FoodTruck.ingredientLabel(_i)` "PrepareIngredient">><<run FoodTruck.selectIngredient(_i)>><</button>>\
                 <</capture>>\
             <</for>>\
         </div>\
     </div>\
     <</if>>\
     <div class="passage-nav">\
-        <<button "Exit to Menu" "Start">><</button>>\
-        <<button "Order Window" "TakeOrderScreen">><</button>>\
+        <<button "Exit to Menu" "Start">><<run FoodTruck.endTutorial()>><</button>>\
+        <<button "Order Window" "TakeOrderScreen">><<run FoodTruck.finishTutorialPrep()>><</button>>\
     </div>\
 </div>
 
@@ -220,6 +224,6 @@
         <p>Finish the cooking check before adding this ingredient to the tray.</p>\
     <</if>>\
     <div class="passage-nav">\
-        <<button "Assembly Station" "AssemblyStation">><</button>>\
+        <<button "Assembly Station" "AssemblyStation">><<run FoodTruck.advanceTutorialIngredient()>><</button>>\
     </div>\
 </div>
