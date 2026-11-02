@@ -13,29 +13,6 @@ While You Wait
 :: StoryInit {"position": "100,100", "size": "100,100"}
 <<run setInterval(setup.updateTimer, 1000)>>
 <<=setup.formattedTime = "02:00">>
-<<run 
-/*Necessary set up for low latency drums*/
-setup.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-setup.drumBuffers = {};
-
-async function loadDrumSound(name, url) {
-    try {
-        const response = await fetch(url);
-        const arrayBuffer = await response.arrayBuffer();
-        setup.drumBuffers[name] = await setup.audioCtx.decodeAudioData(arrayBuffer);
-    } catch (e) {
-        console.error(`Failed to load sound: ${name}`, e);
-    }
-}
-
-loadDrumSound("bass", "audio/bass.wav");
-loadDrumSound("hihat", "audio/hihat.wav");
-loadDrumSound("lowTom", "audio/floorTom.wav");
-loadDrumSound("medTom", "audio/MedTom.wav");
-loadDrumSound("snare", "audio/Snare.wav");
-loadDrumSound("topTom", "audio/highTom.wav");
-loadDrumSound("crash", "audio/crash2.wav");
->>
 
 :: Home
 <div class="phone">Time Spent: <span id="timer"><<=setup.formattedTime>></span>

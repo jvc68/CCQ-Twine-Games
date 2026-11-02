@@ -494,6 +494,7 @@ setup.decLight = function decLight(light) {
 }
 
 setup.drumPlay = function drumPlay(item) {
+	console.log(item)
 	let newAudio = SimpleAudio.tracks.get(item);
 	newAudio.clone().play();
 }
@@ -630,20 +631,8 @@ setup.populateFidget = function populateFidget() {
 				newImg.src = "../../img/measurement/drumSnareNoTag.png"
 				newButton.appendChild(newImg)
 
-				//Credit to Google Gemini for teaching me WebAudio API
 				newButton.addEventListener('click', () => {
-					if (setup.audioCtx.state === 'suspended') {
-						setup.audioCtx.resume();
-					}
-					const drumName = setup.instruments[drum];
-					const buffer = setup.drumBuffers[drumName];
-
-					if (buffer) {
-						const source = setup.audioCtx.createBufferSource();
-						source.buffer = buffer;
-						source.connect(setup.audioCtx.destination);
-						source.start(0);
-					}
+					setup.drumPlay(setup.instruments[drum])
 				});
 				container.appendChild(newButton);
 			}
@@ -681,17 +670,7 @@ setup.createUniqueDrums = function createUniqueDrums(container, which) {
 	}
 
 	drum.addEventListener('click', () => {
-		if (setup.audioCtx.state === 'suspended') {
-			setup.audioCtx.resume();
-		}
-		const buffer = setup.drumBuffers[which];
-
-		if (buffer) {
-			const source = setup.audioCtx.createBufferSource();
-			source.buffer = buffer;
-			source.connect(setup.audioCtx.destination);
-			source.start(0);
-		}
+		setup.drumPlay(which)
 	});
 	container.appendChild(drum);
 }
@@ -732,7 +711,17 @@ SimpleAudio.tracks.add("on", "audio/lightOn.mp3");
 SimpleAudio.tracks.add("off", "audio/lightOff.mp3");
 
 /*Array For drums, makes code look cleaner */
+/*For unique drum parts: bass, hihat, crash, and lowTom */
 setup.instruments = ["snare", "medTom", "topTom"]
+
+/*Audio for drums*/
+SimpleAudio.tracks.add("bass", "audio/bass.wav");
+SimpleAudio.tracks.add("hihat", "audio/hihat.wav");
+SimpleAudio.tracks.add("lowTom", "audio/floorTom.wav");
+SimpleAudio.tracks.add("medTom", "audio/MedTom.wav");
+SimpleAudio.tracks.add("snare", "audio/Snare.wav");
+SimpleAudio.tracks.add("topTom", "audio/highTom.wav");
+SimpleAudio.tracks.add("crash", "audio/crash2.wav");
 
 /*Audio for control panel*/
 SimpleAudio.tracks.add("1", "audio/C.wav");
@@ -781,30 +770,7 @@ setup.lightColors = {
   		-4px -4px 10px rgb(238, 130, 238)`, 'violet'],
 
 }</script><tw-passagedata pid="1" name="StoryInit" tags="" position="100,100" size="100,100">&lt;&lt;run setInterval(setup.updateTimer, 1000)&gt;&gt;
-&lt;&lt;=setup.formattedTime = &quot;02:00&quot;&gt;&gt;
-&lt;&lt;run 
-/*Necessary set up for low latency drums*/
-setup.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-setup.drumBuffers = {};
-
-async function loadDrumSound(name, url) {
-    try {
-        const response = await fetch(url);
-        const arrayBuffer = await response.arrayBuffer();
-        setup.drumBuffers[name] = await setup.audioCtx.decodeAudioData(arrayBuffer);
-    } catch (e) {
-        console.error(`Failed to load sound: ${name}`, e);
-    }
-}
-
-loadDrumSound(&quot;bass&quot;, &quot;audio/bass.wav&quot;);
-loadDrumSound(&quot;hihat&quot;, &quot;audio/hihat.wav&quot;);
-loadDrumSound(&quot;lowTom&quot;, &quot;audio/floorTom.wav&quot;);
-loadDrumSound(&quot;medTom&quot;, &quot;audio/MedTom.wav&quot;);
-loadDrumSound(&quot;snare&quot;, &quot;audio/Snare.wav&quot;);
-loadDrumSound(&quot;topTom&quot;, &quot;audio/highTom.wav&quot;);
-loadDrumSound(&quot;crash&quot;, &quot;audio/crash2.wav&quot;);
-&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="Home" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;Time Spent: &lt;span id=&quot;timer&quot;&gt;&lt;&lt;=setup.formattedTime&gt;&gt;&lt;/span&gt;
+&lt;&lt;=setup.formattedTime = &quot;02:00&quot;&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="Home" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;Time Spent: &lt;span id=&quot;timer&quot;&gt;&lt;&lt;=setup.formattedTime&gt;&gt;&lt;/span&gt;
 &lt;span id=&quot;currentFidget&quot;&gt;Switch&lt;/span&gt;
 &lt;div id=&quot;blankSpace&quot;&gt;&lt;/div&gt;
 &lt;div class=&quot;fidgetInterface&quot; id=&quot;container&quot;&gt;&lt;/div&gt;

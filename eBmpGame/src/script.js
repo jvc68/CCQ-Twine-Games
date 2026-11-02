@@ -124,6 +124,7 @@ setup.decLight = function decLight(light) {
 }
 
 setup.drumPlay = function drumPlay(item) {
+	console.log(item)
 	let newAudio = SimpleAudio.tracks.get(item);
 	newAudio.clone().play();
 }
@@ -260,20 +261,8 @@ setup.populateFidget = function populateFidget() {
 				newImg.src = "../../img/measurement/drumSnareNoTag.png"
 				newButton.appendChild(newImg)
 
-				//Credit to Google Gemini for teaching me WebAudio API
 				newButton.addEventListener('click', () => {
-					if (setup.audioCtx.state === 'suspended') {
-						setup.audioCtx.resume();
-					}
-					const drumName = setup.instruments[drum];
-					const buffer = setup.drumBuffers[drumName];
-
-					if (buffer) {
-						const source = setup.audioCtx.createBufferSource();
-						source.buffer = buffer;
-						source.connect(setup.audioCtx.destination);
-						source.start(0);
-					}
+					setup.drumPlay(setup.instruments[drum])
 				});
 				container.appendChild(newButton);
 			}
@@ -311,17 +300,7 @@ setup.createUniqueDrums = function createUniqueDrums(container, which) {
 	}
 
 	drum.addEventListener('click', () => {
-		if (setup.audioCtx.state === 'suspended') {
-			setup.audioCtx.resume();
-		}
-		const buffer = setup.drumBuffers[which];
-
-		if (buffer) {
-			const source = setup.audioCtx.createBufferSource();
-			source.buffer = buffer;
-			source.connect(setup.audioCtx.destination);
-			source.start(0);
-		}
+		setup.drumPlay(which)
 	});
 	container.appendChild(drum);
 }
