@@ -229,11 +229,13 @@
     </div>\
     <hr>\
     <<if $cookingResult>>\
-        <div class="ticket-box">\
-            <h3>$cookingResult.doneness!</h3>\
-            <p>$cookingResult.ingredient was added to the prep tray.</p>\
-            <p>Preparation method: $cookingResult.method</p>\
-            <p>Method type: <<if $cookingResult.healthy>>Healthy<<else>>Unhealthy<</if>></p>\
+        <div class="cooking-result-box">\
+            <h2 class="cooking-doneness">$cookingResult.doneness!</h2>\
+            <div class="cooking-ingredient" role="img" aria-label="$cookingResult.ingredient"><<print $pendingIngredient.img>></div>\
+            <p class="cooking-method-type <<if $cookingResult.healthy>>healthy<<else>>unhealthy<</if>>">\
+                <<if $cookingResult.healthy>>Healthy<<else>>Unhealthy<</if>>\
+            </p>\
+            <p class="cooking-preparation">Preparation method: $cookingResult.method</p>\
         </div>\
     <<else>>\
         <p>Finish the cooking check before adding this ingredient to the tray.</p>\

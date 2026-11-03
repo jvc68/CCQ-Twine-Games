@@ -285,6 +285,55 @@ body {
   font-size: 0.9rem;
 }
 
+.cooking-result-box {
+  position: absolute;
+  top: 50%;
+  right: 25px;
+  left: 25px;
+  width: auto;
+  margin: 0;
+  padding: 24px 18px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1a1a1a;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-50%);
+}
+
+.cooking-doneness {
+  margin: 0;
+  color: #0d1b2a;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.cooking-ingredient {
+  margin: 14px 0;
+  font-size: 5rem;
+  line-height: 1;
+}
+
+.cooking-method-type {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.cooking-method-type.healthy {
+  color: #1261a0;
+}
+
+.cooking-method-type.unhealthy {
+  color: #c47f00;
+}
+
+.cooking-preparation {
+  margin: 20px 0 0;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
 .day-tally-box {
   width: 100%;
   background: rgba(255, 255, 255, 0.95);

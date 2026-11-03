@@ -391,6 +391,55 @@ body {
   font-size: 0.9rem;
 }
 
+.cooking-result-box {
+  position: absolute;
+  top: 50%;
+  right: 25px;
+  left: 25px;
+  width: auto;
+  margin: 0;
+  padding: 24px 18px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1a1a1a;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-50%);
+}
+
+.cooking-doneness {
+  margin: 0;
+  color: #0d1b2a;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.cooking-ingredient {
+  margin: 14px 0;
+  font-size: 5rem;
+  line-height: 1;
+}
+
+.cooking-method-type {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.cooking-method-type.healthy {
+  color: #1261a0;
+}
+
+.cooking-method-type.unhealthy {
+  color: #c47f00;
+}
+
+.cooking-preparation {
+  margin: 20px 0 0;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
 .day-tally-box {
   width: 100%;
   background: rgba(255, 255, 255, 0.95);
@@ -1576,11 +1625,13 @@ window.jQuery(document).on(":passagedisplay", function() {
     &lt;/div&gt;\
     &lt;hr&gt;\
     &lt;&lt;if $cookingResult&gt;&gt;\
-        &lt;div class=&quot;ticket-box&quot;&gt;\
-            &lt;h3&gt;$cookingResult.doneness!&lt;/h3&gt;\
-            &lt;p&gt;$cookingResult.ingredient was added to the prep tray.&lt;/p&gt;\
-            &lt;p&gt;Preparation method: $cookingResult.method&lt;/p&gt;\
-            &lt;p&gt;Method type: &lt;&lt;if $cookingResult.healthy&gt;&gt;Healthy&lt;&lt;else&gt;&gt;Unhealthy&lt;&lt;/if&gt;&gt;&lt;/p&gt;\
+        &lt;div class=&quot;cooking-result-box&quot;&gt;\
+            &lt;h2 class=&quot;cooking-doneness&quot;&gt;$cookingResult.doneness!&lt;/h2&gt;\
+            &lt;div class=&quot;cooking-ingredient&quot; role=&quot;img&quot; aria-label=&quot;$cookingResult.ingredient&quot;&gt;&lt;&lt;print $pendingIngredient.img&gt;&gt;&lt;/div&gt;\
+            &lt;p class=&quot;cooking-method-type &lt;&lt;if $cookingResult.healthy&gt;&gt;healthy&lt;&lt;else&gt;&gt;unhealthy&lt;&lt;/if&gt;&gt;&quot;&gt;\
+                &lt;&lt;if $cookingResult.healthy&gt;&gt;Healthy&lt;&lt;else&gt;&gt;Unhealthy&lt;&lt;/if&gt;&gt;\
+            &lt;/p&gt;\
+            &lt;p class=&quot;cooking-preparation&quot;&gt;Preparation method: $cookingResult.method&lt;/p&gt;\
         &lt;/div&gt;\
     &lt;&lt;else&gt;&gt;\
         &lt;p&gt;Finish the cooking check before adding this ingredient to the tray.&lt;/p&gt;\
