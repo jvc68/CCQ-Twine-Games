@@ -14,10 +14,9 @@ Zombie Chase
 
 :: Home
 <div class="phone">Zombies are Stopped.
-  <img src="../../img/zombies.png">
-  <div class="mainTab"> <img src="../../img/bar.png">
+  <img src="../../img/exercise/zombies.png">
+  <div class="mainTab"> <img src="../../img/exercise/bar.png">
     Zombies are <<= setup.zombieDist>> Steps Away!
-
 
 
       <div class="levelContainer">
@@ -36,11 +35,10 @@ Zombie Chase
 
 :: Chase
 <div class="phone">Step Power: <span id="multi"></span>
-  <img src="../../img/zombies.png">
-  <img src="../../img/bar.png">
+  <img src="../../img/exercise/zombies.png">
+  <img src="../../img/exercise/bar.png">
   <span id="zombieDist"></span>
-  <span id="zombieCnt"></span><div class="mainTab">
-
+  <span id="zombieCnt"></span><div class="mainTab"> <<button "Run!" >><<run setup.incZombieDist(1)>><</button>>
   <div class="extras" id="extras">Extras</div>
   <<button "Return" "Home">><<run setup.stopChase()>><</button>>
   <<done>><<run setup.startChase()>><</done>>

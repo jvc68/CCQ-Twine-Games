@@ -2,13 +2,31 @@ setup.zombieDist = 20022
 setup.zombieAmount = 100
 setup.multi = 1
 setup.gameOver = false
+setup.currentStepGoal = 10
+setup.actualDistance = 0
+setup.exposedExtras = []
+
+// window.GameData = {
+// 	// "extras": {
+// 	// 	"Stretch Your Arms": { "reward": -10, "type": "killZombies" },
+// 	// 	"Stretch Your Legs": { "reward": 1, "type": "multi" },
+// 	// 	"Do 10 Jumping Jacks": { "reward": -100, "type": "killZombies" }
+// 	// }
+
+// }
 
 window.GameData = {
 	"extras": {
-		"Stretch Your Arms": { "reward": -10, "type": "killZombies" },
-		"Stretch Your Legs": { "reward": 1, "type": "multi" },
-		"Do 10 Jumping Jacks": { "reward": -100, "type": "killZombies" }
+		"Walk 100 Steps": { "reward": -1, "type": "killZombies", "requiredSteps": 10 },
+		"Walk 1,000 Steps": { "reward": 1, "type": "multi", "requiredSteps": 1000 },
+		"Walk 3,000 Steps": { "reward": -10, "type": "killZombies", "requiredSteps": 3000 },
+		"Walk 5,000 Steps": { "reward": -10, "type": "killZombies", "requiredSteps": 5000 },
+		"Walk 8,000 Steps": { "reward": -20, "type": "killZombies", "requiredSteps": 8000 },
+		"Walk 10,000 Steps": { "reward": 1, "type": "multi", "requiredSteps": 10000 },
+		"Walk 12,000 Steps": { "reward": -30, "type": "killZombies", "requiredSteps": 12000 },
+		"Walk 15,000 Steps": { "reward": -30, "type": "killZombies", "requiredSteps": 15000 },
 	}
+
 }
 
 // Sends messages from Twine to Flutter.
@@ -52,18 +70,8 @@ setup.incZombieDist = function incZombieDist(amount) {
 	} else {
 		setup.stopChase()
 	}
+	setup.redeem(amount)
 	setup.checkWinLoss()
-}
-
-setup.applySteps = function applySteps(steps) {
-	setup.zombieDist -= steps * setup.multi;
-
-	if (setup.zombieAmount > 0 && setup.zombieDist > 0) {
-		setup.zombieDistText.textContent =
-			`The zombies are ${setup.zombieDist} steps away!`;
-	}
-
-	setup.checkWinLoss();
 }
 
 // Stops the zombie timer and Flutter step tracking.
@@ -71,30 +79,6 @@ setup.stopChase = function stopChase() {
 	clearInterval(setup.intervalId);
 
 	setup.sendFlutterMessage("STOP_STEP_TRACKING");
-}
-
-setup.redeem = function redeem(object, button) {
-	setup.incZombieDist(12)
-	if (button.id != "redeemed") {
-		button.id = "redeemed"
-		button.textContent = "Completed!"
-	} else { return }
-
-	switch (object.type) {
-		case "killZombies":
-			setup.zombieAmount += object.reward
-			if (setup.zombieAmount > 0) {
-				setup.zombieCntText.textContent = `There are ${setup.zombieAmount} left...`
-			}
-			break;
-		case "multi":
-			setup.multi += object.reward
-			setup.multiText.textContent = setup.multi
-			break;
-	}
-
-	setup.checkWinLoss()
-
 }
 
 
@@ -165,40 +149,69 @@ setup.startChase = function startChase() {
 			break;
 	}
 
-	const allKeys = Object.keys(window.GameData["extras"])
+	let allKeys = Object.keys(window.GameData.extras)
+	console.log(allKeys)
 	let container = document.getElementById("extras");
 
 	for (let i = 0; i < 3; i++) {
-		let randomIndex = Math.floor(Math.random() * allKeys.length);
-		let randomKey = allKeys.pop(randomIndex)
-		let randomValue = window.GameData["extras"][randomKey];
-
+		let currentExtra = window.GameData.extras[allKeys[i]]
+		setup.exposedExtras.push([allKeys[i], currentExtra])
 		let newDiv = document.createElement('div');
 		newDiv.classList.add("extra");
+		newDiv.id = allKeys[i]
 
 		let newTask = document.createElement('span')
-		newTask.textContent = randomKey;
+
+		newTask.textContent = `${allKeys[i]}`;
 		newDiv.appendChild(newTask);
 
-		let newButton = document.createElement('button');
+		let newButton = document.createElement('span');
 		newButton.classList.add("extraButton");
 		newButton.id = "notRedeemed"
 
-		switch (randomValue.type) {
+		switch (currentExtra.type) {
 			case "killZombies":
-				newButton.textContent = `Kill ${randomValue.reward} zombies`
+				newButton.textContent = `Kill ${currentExtra.reward} zombies`
 				break;
 			case "multi":
-				newButton.textContent = `Increase Step Power by ${randomValue.reward}`
+				newButton.textContent = `Increase Step Power by ${currentExtra.reward}`
 				break;
 		}
-
-		newButton.addEventListener('click', () => setup.redeem(randomValue, newButton));
 		newDiv.appendChild(newButton);
 
 		container.appendChild(newDiv);
 	}
 
+}
+
+setup.redeem = function redeem(stepsWalked) {
+
+	for (let item of setup.exposedExtras) {
+		item[1].requiredSteps -= stepsWalked
+
+		if (item[1].requiredSteps <= 0) {
+			switch (item[1].type) {
+				case "killZombies":
+					setup.zombieAmount += item[1].reward
+					if (setup.zombieAmount > 0) {
+						setup.zombieCntText.textContent = `There are ${setup.zombieAmount} left...`
+					}
+					break;
+				case "multi":
+					setup.multi += item[1].reward
+					setup.multiText.textContent = setup.multi
+					break;
+			}
+			let theExtra = document.getElementById(item[0])
+			theExtra.style.color = "red"
+			item[1].requiredSteps = 100000000000000000
+
+		}
+	}
+
+
+
+	setup.checkWinLoss()
 }
 
 setup.reset = function reset() {
