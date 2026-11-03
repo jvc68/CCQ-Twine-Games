@@ -70,11 +70,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 4px solid #fff;
   border-radius: 50%;
-  background: #fff;
+  background-color: transparent;
   color: #1a1a1a;
-  font-size: 4rem;
+  font-size: 6rem;
   line-height: 1;
 }
 
