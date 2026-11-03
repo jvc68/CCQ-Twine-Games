@@ -159,6 +159,98 @@ window.FoodTruck = {
         state.pendingMethod = null;
         state.cookingResult = null;
         state.orderTimer = this.orderTimeForDay();
+        if (state.tutorialMode) {
+            state.numOrders = 1;
+            state.availableOrders = [orderOptions[0]];
+            state.tutorialStep = "take-order";
+            state.tutorialIngredientIndex = 0;
+        }
+    },
+
+    startTutorial: function() {
+        var state = SugarCube.State.variables;
+        state.tutorialMode = true;
+        this.startDay();
+    },
+
+    endTutorial: function() {
+        var state = SugarCube.State.variables;
+        state.tutorialMode = false;
+        state.tutorialStep = null;
+        state.tutorialIngredientIndex = 0;
+    },
+
+    advanceTutorialIngredient: function() {
+        var state = SugarCube.State.variables;
+
+        if (!state.tutorialMode || state.tutorialStep !== "result") {
+            return;
+        }
+
+        state.tutorialIngredientIndex += 1;
+        state.tutorialStep = state.tutorialIngredientIndex <
+            state.activeOrder.requiredIngredients.length
+            ? "ingredient"
+            : "return-to-order";
+    },
+
+    startTutorialIngredients: function() {
+        var state = SugarCube.State.variables;
+
+        if (state.tutorialMode && state.tutorialStep === "assembly") {
+            state.tutorialStep = "ingredient";
+        }
+    },
+
+    finishTutorialPrep: function() {
+        var state = SugarCube.State.variables;
+
+        if (state.tutorialMode && state.tutorialStep === "return-to-order") {
+            state.tutorialStep = "fulfill";
+        }
+    },
+
+    updateTutorialHighlights: function() {
+        var state = SugarCube.State.variables;
+        var buttons = document.querySelectorAll("button.tutorial-target");
+        var passage = SugarCube.State.passage;
+        var targetText = null;
+
+        buttons.forEach(function(button) {
+            button.classList.remove("tutorial-target");
+        });
+
+        if (!state.tutorialMode) {
+            return;
+        }
+
+        if (state.tutorialStep === "take-order") {
+            targetText = "Take Order";
+        } else if (state.tutorialStep === "assembly") {
+            targetText = "Assembly Station";
+        } else if (state.tutorialStep === "ingredient" && passage === "AssemblyStation") {
+            targetText = state.activeOrder.requiredIngredients[state.tutorialIngredientIndex];
+        } else if (state.tutorialStep === "method" && passage === "PrepareIngredient") {
+            targetText = "(Healthy)";
+        } else if (state.tutorialStep === "stop" && passage === "CookingMinigame") {
+            targetText = "Stop Cooking";
+        } else if (state.tutorialStep === "result" && passage === "CookingResult") {
+            targetText = "Assembly Station";
+        } else if (state.tutorialStep === "return-to-order" && passage === "AssemblyStation") {
+            targetText = "Order Window";
+        } else if (state.tutorialStep === "fulfill") {
+            targetText = "Fulfill Order";
+        }
+
+        if (!targetText) {
+            return;
+        }
+
+        Array.prototype.forEach.call(document.querySelectorAll("button"), function(button) {
+            if (button.textContent.indexOf(targetText) !== -1) {
+                button.classList.add("tutorial-target");
+            }
+        });
     },
 
     /* Function Description: Starts the next day by incrementing the current
@@ -183,6 +275,9 @@ window.FoodTruck = {
         var customerIndex = Math.floor(Math.random() * state.availableOrders.length);
         state.activeOrder = state.availableOrders.splice(customerIndex, 1)[0];
         state.orderTimer = this.orderTimeForDay();
+        if (state.tutorialMode) {
+            state.tutorialStep = "assembly";
+        }
         this.startOrderTimer();
     },
 
@@ -236,6 +331,9 @@ window.FoodTruck = {
         state.pendingIngredient = ingredient;
         state.pendingMethod = null;
         state.cookingResult = null;
+        if (state.tutorialMode) {
+            state.tutorialStep = "method";
+        }
     },
 
     /* Function Description: Selects a preparation method for the pending
@@ -253,6 +351,9 @@ window.FoodTruck = {
             label: ingredient.methods[type]
         };
         state.cookingResult = null;
+        if (state.tutorialMode) {
+            state.tutorialStep = "stop";
+        }
     },
 
     /* Function Description: Stops the cooking skill-check, calculates the
@@ -295,6 +396,9 @@ window.FoodTruck = {
         state.dayPreparationChoices.push(choice);
         state.prepTray.push(choice.ingredient);
         state.cookingResult = choice;
+        if (state.tutorialMode) {
+            state.tutorialStep = "result";
+        }
     },
 
     /* Function Description: Clears the prep tray and resets the tray display in
@@ -424,6 +528,10 @@ window.FoodTruck = {
         state.prepTray = [];
         this.stopOrderTimer();
 
+        if (state.tutorialMode) {
+            state.tutorialStep = "tally";
+        }
+
         if (state.numOrders === 0) {
             this.finishDay();
         } else {
@@ -499,3 +607,16 @@ window.FoodTruck = {
         }
     }
 };
+
+window.jQuery(document).on(":passagedisplay", function() {
+    document.querySelectorAll(".ingredient-button").forEach(function(button) {
+        button.addEventListener("click", function() {
+            var ingredientButtons = document.querySelectorAll(".ingredient-button");
+            var ingredientIndex = Array.prototype.indexOf.call(ingredientButtons, button);
+
+            window.FoodTruck.selectIngredient(ingredientIndex);
+            SugarCube.Engine.play("PrepareIngredient");
+        });
+    });
+    window.FoodTruck.updateTutorialHighlights();
+});
