@@ -431,6 +431,15 @@ body {
   outline-offset: 2px;
 }
 
+.ingredient-grid button.tutorial-disabled,
+.ingredient-grid button.tutorial-disabled:hover {
+  background: #c7cbd1;
+  color: #68717d;
+  cursor: not-allowed;
+  opacity: 0.65;
+  transform: none;
+}
+
 .method-options {
   display: grid;
   gap: 12px;
@@ -458,6 +467,25 @@ body {
 .method-options button:focus-visible {
   outline: 3px solid #a8ffdb;
   outline-offset: 2px;
+}
+
+.tutorial-message {
+  margin: 18px 0 12px;
+  padding: 12px 16px;
+  border: 2px solid #a8ffdb;
+  border-radius: 12px;
+  background: rgba(168, 255, 219, 0.16);
+  color: #fff;
+  text-align: center;
+}
+
+.tutorial-message strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.tutorial-message p {
+  margin: 0;
 }
 
 .skill-instructions {

@@ -202,11 +202,42 @@ window.FoodTruck = {
         }
     },
 
+    restoreTutorialIngredient: function() {
+        var state = SugarCube.State.variables;
+        var required = state.activeOrder && state.activeOrder.requiredIngredients;
+
+        if (!state.tutorialMode || !Array.isArray(required)) {
+            return;
+        }
+
+        var nextIndex = required.findIndex(function(ingredient) {
+            return state.prepTray.indexOf(ingredient) === -1;
+        });
+
+        if (nextIndex === -1) {
+            state.tutorialStep = "return-to-order";
+            return;
+        }
+
+        state.tutorialIngredientIndex = nextIndex;
+        state.tutorialStep = "ingredient";
+    },
+
+    returnToAssembly: function() {
+        this.restoreTutorialIngredient();
+    },
+
     finishTutorialPrep: function() {
         var state = SugarCube.State.variables;
 
-        if (state.tutorialMode && state.tutorialStep === "return-to-order") {
+        if (!state.tutorialMode) {
+            return;
+        }
+
+        if (this.canFulfillOrder()) {
             state.tutorialStep = "fulfill";
+        } else {
+            state.tutorialStep = "assembly";
         }
     },
 
@@ -218,6 +249,10 @@ window.FoodTruck = {
 
         buttons.forEach(function(button) {
             button.classList.remove("tutorial-target");
+        });
+        document.querySelectorAll(".ingredient-button").forEach(function(button) {
+            button.classList.remove("tutorial-disabled");
+            button.disabled = false;
         });
 
         if (!state.tutorialMode) {
@@ -238,8 +273,12 @@ window.FoodTruck = {
             targetText = "Assembly Station";
         } else if (state.tutorialStep === "return-to-order" && passage === "AssemblyStation") {
             targetText = "Order Window";
-        } else if (state.tutorialStep === "fulfill") {
+        } else if (state.tutorialStep === "fulfill" &&
+            passage === "TakeOrderScreen") {
             targetText = "Fulfill Order";
+        } else if (state.tutorialStep === "fulfill" &&
+            passage === "AssemblyStation") {
+            targetText = "Order Window";
         }
 
         if (!targetText) {
@@ -251,6 +290,16 @@ window.FoodTruck = {
                 button.classList.add("tutorial-target");
             }
         });
+
+        if (passage === "AssemblyStation" &&
+            state.tutorialStep === "ingredient") {
+            document.querySelectorAll(".ingredient-button").forEach(function(button) {
+                if (button.textContent.indexOf(targetText) === -1) {
+                    button.classList.add("tutorial-disabled");
+                    button.disabled = true;
+                }
+            });
+        }
     },
 
     /* Function Description: Starts the next day by incrementing the current
@@ -404,8 +453,17 @@ window.FoodTruck = {
     /* Function Description: Clears the prep tray and resets the tray display in
        the UI */
     clearTray: function() {
-        SugarCube.State.variables.prepTray = [];
-        window.jQuery("#tray").html("<em>Tap ingredients to add them to the tray.</em>");
+        var state = SugarCube.State.variables;
+
+        state.prepTray = [];
+        if (state.tutorialMode && state.tutorialStep !== "assembly") {
+            state.tutorialIngredientIndex = 0;
+            state.tutorialStep = "ingredient";
+        }
+        state.pendingIngredient = null;
+        state.pendingMethod = null;
+        state.cookingResult = null;
+        SugarCube.Engine.play("AssemblyStation");
     },
 
     /* Function Description: Checks if the prep tray matches the required

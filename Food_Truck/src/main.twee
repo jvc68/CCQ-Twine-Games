@@ -153,6 +153,12 @@
             <h3>Prepare $pendingIngredient.name</h3>\
             <p>Choose a preparation method:</p>\
         </div>\
+        <<if $tutorialMode>>\
+            <div class="tutorial-message" role="note">\
+                <strong>TUTORIAL GOAL</strong>\
+                <p>Choose the healthy preparation method to make a healthier meal and increase healthiness score!</p>\
+            </div>\
+        <</if>>\
         <div class="method-options">\
             <<button `FoodTruck.methodLabel("healthy")` "CookingMinigame">><<run FoodTruck.chooseMethod("healthy")>><</button>>\
             <<button `FoodTruck.methodLabel("unhealthy")` "CookingMinigame">><<run FoodTruck.chooseMethod("unhealthy")>><</button>>\
@@ -161,7 +167,7 @@
         <p>Select an ingredient from the assembly station to prepare it.</p>\
     <</if>>\
     <div class="passage-nav">\
-        <<button "Assembly Station" "AssemblyStation">><</button>>\
+        <<button "Assembly Station" "AssemblyStation">><<run FoodTruck.returnToAssembly()>><</button>>\
     </div>\
 </div>
 
@@ -183,6 +189,12 @@
             <p>The ingredient has already been prepared.</p>\
             <<button "View Cooking Result" "CookingResult">><</button>>\
         <<else>>\
+            <<if $tutorialMode>>\
+                <div class="tutorial-message" role="note">\
+                    <strong>TUTORIAL GOAL</strong>\
+                    <p>Stop the marker while it is in the green section for a perfect cook and higher customer satisfaction!</p>\
+                </div>\
+            <</if>>\
             <p class="skill-instructions">Stop the marker in the green section for a perfect cook.</p>\
             <div class="skill-track" role="img" aria-label="Cooking skill check: blue is raw, green is perfect, and red is overcooked">\
                 <div class="skill-zone skill-zone-raw"></div>\
@@ -204,7 +216,7 @@
         <<button "Choose a Method" "PrepareIngredient">><</button>>\
     <</if>>\
     <div class="passage-nav">\
-        <<button "Assembly Station" "AssemblyStation">><</button>>\
+        <<button "Assembly Station" "AssemblyStation">><<run FoodTruck.returnToAssembly()>><</button>>\
     </div>\
 </div>
 
