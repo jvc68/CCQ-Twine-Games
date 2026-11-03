@@ -10,6 +10,25 @@ window.GameData = {
 		"Do 10 Jumping Jacks": { "reward": -100, "type": "killZombies" }
 	}
 }
+
+// Sends messages from Twine to Flutter.
+setup.sendFlutterMessage = function (type) {
+	console.log("Twine is sending message to Flutter:", type);
+
+	if (window.FlutterBridge &&
+		typeof window.FlutterBridge.postMessage === "function") {
+
+		window.FlutterBridge.postMessage(JSON.stringify({
+			type: type
+		}));
+
+		console.log("FlutterBridge message sent successfully.");
+
+	} else {
+		console.error("FlutterBridge is NOT available!");
+	}
+}
+
 setup.setMode = function setMode(mode) {
 	setup.mode = mode
 	setup.multi = 1
@@ -19,24 +38,43 @@ setup.decZombieDist = function decZombieDist(amount) {
 	if (setup.zombieAmount > 0 && setup.zombieDist > 0) {
 		setup.zombieDistText.textContent = `The zombies are ${setup.zombieDist} steps away!`
 	} else {
-		setup.clearID()
+		setup.stopChase()
 	}
 	setup.checkWinLoss()
 
 }
 
 setup.incZombieDist = function incZombieDist(amount) {
-	setup.zombieDist += amount * setup.multi
+	setup.zombieDist += amount * setup.multi;
+
 	if (setup.zombieAmount > 0 && setup.zombieDist > 0) {
 		setup.zombieDistText.textContent = `The zombies are ${setup.zombieDist} steps away!`
+	} else {
+		setup.stopChase()
+	}
+	setup.checkWinLoss()
+}
+
+setup.applySteps = function applySteps(steps) {
+	setup.zombieDist -= steps * setup.multi;
+
+	if (setup.zombieAmount > 0 && setup.zombieDist > 0) {
+		setup.zombieDistText.textContent =
+			`The zombies are ${setup.zombieDist} steps away!`;
 	}
 
+	setup.checkWinLoss();
 }
 
-setup.clearID = function clearID() {
-	clearInterval(setup.intervalId)
+// Stops the zombie timer and Flutter step tracking.
+setup.stopChase = function stopChase() {
+	clearInterval(setup.intervalId);
+
+	setup.sendFlutterMessage("STOP_STEP_TRACKING");
 }
+
 setup.redeem = function redeem(object, button) {
+	setup.incZombieDist(12)
 	if (button.id != "redeemed") {
 		button.id = "redeemed"
 		button.textContent = "Completed!"
@@ -61,23 +99,41 @@ setup.redeem = function redeem(object, button) {
 
 
 setup.checkWinLoss = function checkWinLoss() {
+
 	if (setup.gameOver == true) {
-		return
-	}
-	if (setup.zombieAmount <= 0) {
-		setup.zombieDistText.textContent = "All the zombies are Gone!"
-		setup.zombieCntText.textContent = `There are 0 left...`
-		setup.clearID()
-		setup.gameOver = true;
-		setTimeout(function () { Engine.play("You Win") }, 3000);
+		return;
 	}
 
-	if (setup.zombieDist <= 0) {
-		setup.zombieDistText.textContent = "The zombies caught you..."
-		setup.zombieCntText.textContent = ""
-		setup.clearID()
+	// Player wins when all zombies are eliminated.
+	if (setup.zombieAmount <= 0) {
+
+		setup.zombieDistText.textContent = "All the zombies are Gone!";
+		setup.zombieCntText.textContent = "There are 0 left...";
+
+		setup.stopChase();
+
 		setup.gameOver = true;
-		setTimeout(function () { Engine.play("You Lose") }, 3000);
+
+		setTimeout(function () {
+			Engine.play("You Win");
+		}, 3000);
+
+	}
+
+	// Player loses when the zombies catch them.
+	else if (setup.zombieDist <= 0) {
+
+		setup.zombieDistText.textContent = "The zombies caught you...";
+		setup.zombieCntText.textContent = "";
+
+		setup.stopChase();
+
+		setup.gameOver = true;
+
+		setTimeout(function () {
+			Engine.play("You Lose");
+		}, 3000);
+
 	}
 }
 
@@ -85,13 +141,18 @@ setup.startChase = function startChase() {
 	setup.zombieDistText = document.getElementById("zombieDist")
 	setup.zombieCntText = document.getElementById("zombieCnt")
 	setup.multiText = document.getElementById("multi")
+
 	setup.decZombieDist(0)
+
 	setup.zombieCntText.textContent = `There are ${setup.zombieAmount} left...`
 	setup.multiText.textContent = setup.multi
 
+	// Tell Flutter that the chase has started.
+	setup.sendFlutterMessage("START_STEP_TRACKING");
+
 	switch (setup.mode) {
 		case "easy":
-			setup.intervalId = setInterval(setup.decZombieDist, 1000, -5);
+			setup.intervalId = setInterval(setup.decZombieDist, 9000000, -1);
 			break;
 		case "med":
 			setup.intervalId = setInterval(setup.decZombieDist, 1000, -10);
@@ -141,9 +202,14 @@ setup.startChase = function startChase() {
 }
 
 setup.reset = function reset() {
-	setup.zombieAmount = 100
-	setup.zombieDist = 20000
-	setup.gameOver = false
+
+	setup.stopChase();
+
+	setup.zombieAmount = 100;
+	setup.zombieDist = 20000;
+	setup.gameOver = false;
+
+	setup.multi = 1;
 }
 
 /*

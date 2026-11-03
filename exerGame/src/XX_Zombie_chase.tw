@@ -39,10 +39,10 @@ Zombie Chase
   <img src="../../img/zombies.png">
   <img src="../../img/bar.png">
   <span id="zombieDist"></span>
-  <span id="zombieCnt"></span><div class="mainTab"> <<button "Run!" >><<run setup.incZombieDist(1)>><</button>>
+  <span id="zombieCnt"></span><div class="mainTab">
 
   <div class="extras" id="extras">Extras</div>
-  <<button "Return" "Home">><<run setup.clearID()>><</button>>
+  <<button "Return" "Home">><<run setup.stopChase()>><</button>>
   <<done>><<run setup.startChase()>><</done>>
   </div>
 </div>
