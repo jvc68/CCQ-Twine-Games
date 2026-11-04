@@ -149,7 +149,13 @@ button {
   gap: 8px;
   border: none;
   min-width: 0;
+   transition: opacity 1s ease; /* 1s controls the speed of the disappear effect */
 }
+
+.fade-out {
+  opacity: 0;
+}
+
 
 
 .extraButton {
