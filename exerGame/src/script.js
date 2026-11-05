@@ -6,6 +6,7 @@ setup.currentStepGoal = 10
 setup.actualDistance = 0
 setup.exposedExtras = []
 setup.currentFinalExtra = 0
+setup.mode = "easy"
 
 // window.GameData = {
 // 	// "extras": {
@@ -19,7 +20,7 @@ setup.currentFinalExtra = 0
 window.GameData = {
 	"extras": {
 		"Walk 100 Steps": { "reward": -1, "type": "killZombies", "requiredSteps": 100, "ogRequiredSteps": 100 },
-		"Walk 1,000 Steps": { "reward": 1, "type": "multi", "requiredSteps": 1000, "ogRequiredSteps": 1000 },
+		"Walk 800 Steps": { "reward": 1, "type": "multi", "requiredSteps": 800, "ogRequiredSteps": 800 },
 		"Walk 3,000 Steps": { "reward": -10, "type": "killZombies", "requiredSteps": 3000, "ogRequiredSteps": 3000 },
 		"Walk 5,000 Steps": { "reward": -10, "type": "killZombies", "requiredSteps": 5000, "ogRequiredSteps": 5000 },
 		"Walk 8,000 Steps": { "reward": -20, "type": "killZombies", "requiredSteps": 8000, "ogRequiredSteps": 8000 },
@@ -53,6 +54,7 @@ setup.setMode = function setMode(mode) {
 	setup.multi = 100
 	setup.currentFinalExtra = 0;
 	setup.exposedExtras = []
+	setup.actualDistance = 0
 	for (let [key, value] of Object.entries(window.GameData.extras)) {
 		value.requiredSteps = value.ogRequiredSteps
 	}
@@ -65,6 +67,7 @@ setup.reset = function reset() {
 	setup.zombieAmount = 100;
 	setup.zombieDist = 20000;
 	setup.gameOver = false;
+	setup.actualDistance = 0
 
 	setup.multi = 1;
 	setup.currentFinalExtra = 0;
@@ -78,23 +81,26 @@ setup.reset = function reset() {
 setup.decZombieDist = function decZombieDist(amount) {
 	setup.zombieDist += amount
 	if (setup.zombieAmount > 0 && setup.zombieDist > 0) {
-		setup.zombieDistText.textContent = `The zombies are ${setup.zombieDist} steps away!`
+		setup.zombieDistText.textContent = `The zombies are ${Math.trunc(setup.zombieDist)} steps away!`
 	} else {
 		setup.stopChase()
 	}
 	setup.checkWinLoss()
+	setup.updateTotalDistance()
 
 }
 
 setup.incZombieDist = function incZombieDist(amount) {
+	setup.actualDistance += amount
 	setup.zombieDist += amount * setup.multi;
 	if (setup.zombieAmount > 0 && setup.zombieDist > 0) {
-		setup.zombieDistText.textContent = `The zombies are ${setup.zombieDist} steps away!`
+		setup.zombieDistText.textContent = `The zombies are ${Math.trunc(setup.zombieDist)} steps away!`
 	} else {
 		setup.stopChase()
 	}
 	setup.redeem(amount * setup.multi)
 	setup.checkWinLoss()
+	setup.updateTotalDistance()
 }
 
 // Stops the zombie timer and Flutter step tracking.
@@ -151,25 +157,36 @@ setup.startChase = function startChase() {
 
 	setup.decZombieDist(0)
 
+
 	setup.zombieCntText.textContent = `There are ${setup.zombieAmount} left...`
 	setup.multiText.textContent = setup.multi
 
 	// Tell Flutter that the chase has started.
 	setup.sendFlutterMessage("START_STEP_TRACKING");
 
+	/*
+	This sets the zombies speed to just above the average walking, jogging, and running pace
+	These were set above the average as the game gives double steps per step after walking 800 steps, which 
+	so to outpace the zombies you only need to be going half their speed after roughly 8 minutes of walking.
+	*/
 	switch (setup.mode) {
 		case "easy":
-			setup.intervalId = setInterval(setup.decZombieDist, 9000000, -1);
+			/*This sets zombie speed to 102 steps per minute */
+			setup.intervalId = setInterval(setup.decZombieDist, 1000, -1.7);
 			break;
 		case "med":
-			setup.intervalId = setInterval(setup.decZombieDist, 1000, -10);
+			/*This sets zombie speed to 150 steps per minute */
+			setup.intervalId = setInterval(setup.decZombieDist, 1000, -2.5);
 			break;
 		case "hard":
-			setup.intervalId = setInterval(setup.decZombieDist, 1000, -50);
+			/*This sets zombie speed to 192 steps per minute */
+			setup.intervalId = setInterval(setup.decZombieDist, 1000, -3.2);
 			break;
 		case "impossible":
-			setup.intervalId = setInterval(setup.decZombieDist, 100, -1000);
+			setup.intervalId = setInterval(setup.decZombieDist, 1000, -1000);
 			break;
+		default:
+			console.error(`${setup.mode} is not a mode`)
 	}
 
 	let container = document.getElementById("extras");
@@ -242,6 +259,10 @@ setup.createExtra = function createExtra(container) {
 
 setup.updateExtraProgress = function updateExtraProgress() {
 
+	if (setup.gameOver) {
+		return;
+	}
+
 	for (let item of setup.exposedExtras) {
 		let extraElement = document.getElementById(item[0])
 		let fill = extraElement.querySelector('.progress-fill');
@@ -253,7 +274,22 @@ setup.updateExtraProgress = function updateExtraProgress() {
 
 };
 
+setup.updateTotalDistance = function updateTotalDistance() {
+	let bar = document.getElementById("bar")
+	let fill = bar.querySelector('.progress-fill');
+	if (!fill) return;
+	let stepsCompleted = 20000 - setup.zombieDist;
+	let percent = Math.min(Math.max((stepsCompleted / 20000) * 100, 0));
+	fill.style.width = percent + '%';
+
+}
+
 setup.redeem = function redeem(stepsWalked) {
+
+	if (setup.gameOver) {
+		return;
+	}
+
 	let spotsToDelete = []
 
 	for (let [key, value] of Object.entries(window.GameData.extras)) {

@@ -73,6 +73,12 @@ img {
   padding: 5px;
 }
 
+.endImg {
+  max-width: 100%;
+  border-radius: 30px;
+  padding: 5px;
+}
+
 .mainTab{
   align-items: center;
 }
@@ -169,8 +175,37 @@ button {
   line-height: 1.2;
 }
 
-/*The following CSS was done using AI */
 /* Progress Bar Outer Container (newButton) */
+.totalBarFill {
+  background: linear-gradient(90deg, red 0%, darkred 100%) !important; 
+}
+
+.totalBar {
+  background-color: #2a2a3e;
+}
+
+.totalBarFill::before,
+.totalBarFill::after {
+  content: "";
+  position: absolute;
+  right: -20px !important;
+  top: 7% !important;
+  width: 50px !important;
+  height: 80% !important;
+  background-color: darkred !important;
+  border-radius: 40%;
+  animation: wave-rotate 2.2s infinite linear;
+  opacity: 0.75;
+}
+
+.totalBarFill::after {
+  border-radius: 35%;
+  background-color: maroon !important;
+  opacity: 0.4;
+  animation: wave-rotate 4.2s infinite linear;
+}
+
+/*The following CSS was done using AI */
 .progress-container {
   display: block;
   width: 100%;

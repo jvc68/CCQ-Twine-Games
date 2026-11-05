@@ -3,10 +3,19 @@ setup.currentFidget = "switch"
 
 setup.isMouseDown = false;
 setup.light = [0, 0, 0, 0]
+setup.isPointerDown = false;
 
 
 document.addEventListener('mousedown', () => { setup.isMouseDown = true; });
 document.addEventListener('mouseup', () => { setup.isMouseDown = false; });
+
+document.addEventListener('pointerup', () => {
+	setup.isPointerDown = false;
+});
+
+document.addEventListener('pointercancel', () => {
+	setup.isPointerDown = false;
+});
 
 setup.swapFidget = function swapFidget(id) {
 	setup.currentFidget = id
@@ -14,46 +23,32 @@ setup.swapFidget = function swapFidget(id) {
 }
 
 
-/*This function allows for clicking and dragging to pop bubbles */
-setup.bubbleRespondDrag = function bubbleRespond(obj) {
-	if (setup.isMouseDown) {
-		if (obj.id == "popped") {
-			return
-		}
-		let random = setup.prevRand
-		do {
-			random = Math.floor(Math.random() * 7) + 1
-		} while (random == setup.prevRand)
-		setup.prevRand = random
-		SimpleAudio.select(`bub${random}`).play();
-		obj.style.backgroundColor = "white";
-		obj.id = "popped"
-	}
-}
-
 setup.bubbleRespond = function bubbleRespond(obj) {
 	if (obj.id == "popped") {
-		return
+		return;
 	}
-	let random = setup.prevRand
+
+	let random = setup.prevRand;
+
 	do {
-		random = Math.floor(Math.random() * 7) + 1
-	} while (random == setup.prevRand)
-	setup.prevRand = random
+		random = Math.floor(Math.random() * 7) + 1;
+	} while (random == setup.prevRand);
+
+	setup.prevRand = random;
+
 	SimpleAudio.select(`bub${random}`).play();
+
 	obj.style.backgroundColor = "white";
-	obj.id = "popped"
+	obj.id = "popped";
 }
 
 setup.switchRespond = function switchRespond(obj, img) {
 	if (obj.id == "on") {
-		obj.style.backgroundColor = "#2B2B2B";
 		obj.id = "off"
 		img.src = '../../img/measurement/switchOff.png'
 		SimpleAudio.select(`off`).stop();
 		SimpleAudio.select(`off`).play();
 	} else {
-		obj.style.backgroundColor = "#5C5C5C";
 		obj.id = "on"
 		img.src = '../../img/measurement/switchOn.png'
 		SimpleAudio.select(`on`).stop();
@@ -147,11 +142,35 @@ setup.populateFidget = function populateFidget() {
 			for (let i = 0; i < (13 * 12); i++) {
 				let newButton = document.createElement('button');
 				newButton.id = "notPopped"
-				newButton.addEventListener('mouseover', () => setup.bubbleRespondDrag(newButton));
-				newButton.addEventListener('click', () => setup.bubbleRespond(newButton));
 				newButton.classList.add("bubble");
 				container.appendChild(newButton);
 			}
+
+			// Start popping bubbles when the user touches/clicks one
+			container.onpointerdown = (event) => {
+				let bubble = event.target.closest(".bubble");
+
+				if (!bubble) return;
+
+				setup.isPointerDown = true;
+				setup.bubbleRespond(bubble);
+			};
+
+			// Continue popping bubbles while dragging
+			container.onpointermove = (event) => {
+				if (!setup.isPointerDown) return;
+
+				let bubble = document.elementFromPoint(
+					event.clientX,
+					event.clientY
+				);
+
+				bubble = bubble?.closest(".bubble");
+
+				if (bubble && container.contains(bubble)) {
+					setup.bubbleRespond(bubble);
+				}
+			};
 
 			let refreshButton = document.createElement('button');
 			refreshButton.addEventListener('click', () => setup.populateFidget(setup.currentFidget));
@@ -174,8 +193,9 @@ setup.populateFidget = function populateFidget() {
 			newButton.addEventListener('click', () => setup.switchRespond(newButton, newImg));
 			newButton.appendChild(newImg)
 			newButton.classList.add("switch");
-			newButton.style.backgroundColor = "#5C5C5C";
 			newButton.id = "on"
+
+
 			container.appendChild(newButton);
 			desc.textContent = "Flip the Switch"
 
