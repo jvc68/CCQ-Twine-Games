@@ -13,13 +13,17 @@ While You Wait
 :: StoryInit {"position": "100,100", "size": "100,100"}
 <<run setInterval(setup.updateTimer, 1000)>>
 <<=setup.formattedTime = "02:00">>
+<<run  
+  Dialog.setup("Important Reminder", "reminderPopup");
+  Dialog.wiki("Reminder:\nThis game is meant to relax you before you take your blood pressure measurement.\n\nPlease make sure to play the game with the hand that you are NOT going to use for taking your measurement.");
+  Dialog.open();>>
 
 :: Home
 <div class="phone">Time Spent: <span id="timer"><<=setup.formattedTime>></span>
 <span id="currentFidget">Switch</span>
 <div id="blankSpace"></div>
 <div class="fidgetInterface" id="container"></div>
-  <div class="options" id="postContainer"></div>
+<div class="options" id="postContainer"></div>
   <<done>><<run setup.populateFidget()>><</done>>
   <div class="flButton"> 
     <<button "Fidget Library" "Fidget Library">><</button>>

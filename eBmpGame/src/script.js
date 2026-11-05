@@ -1,5 +1,5 @@
 setup.prevRand = -1
-setup.currentFidget = "drums"
+setup.currentFidget = "bubbleWrap"
 
 setup.isMouseDown = false;
 setup.light = [0, 0, 0, 0]
@@ -139,7 +139,7 @@ setup.populateFidget = function populateFidget() {
 	container.style.backgroundColor = 'snow'
 	switch (setup.currentFidget) {
 		case "bubbleWrap":
-			blankSpace.style.height = '0'
+			blankSpace.style.height = '0px'
 			fidgetLabel.textContent = "Bubble Wrap"
 			/*Do math here based on size of screen to know how many bubbles to make */
 			for (let i = 0; i < (13 * 12); i++) {
@@ -156,7 +156,6 @@ setup.populateFidget = function populateFidget() {
 			refreshButton.classList.add("refreshButton");
 			refreshButton.textContent = "Refresh Bubble Wrap"
 			postContainer.appendChild(refreshButton);
-
 			break;
 
 		case "switch":
@@ -269,7 +268,9 @@ setup.populateFidget = function populateFidget() {
 			break;
 
 		default:
-			console.log(`Something went wrong when populating fidget, given ${setup.currentFidget}`)
+			console.error(`Something went wrong when populating fidget, given ${setup.currentFidget}`)
+			setup.currentFidget = "bubbleWrap"
+			setup.populateFidget()
 	}
 }
 

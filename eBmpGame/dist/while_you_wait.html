@@ -152,6 +152,15 @@ body {
   border: 2px solid darkgrey;
 }
 
+.reminderPopup {
+  box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+  background: linear-gradient(180deg, #440154 0%, #3b528b 50%, #21918c 100%);
+  border-radius:12px;
+  padding-left: 12px;
+  padding: 10px;
+  margin: 10px;
+}
+
 .fidgetIcon {
   width: 120px;
   aspect-ratio: 1 / 1;
@@ -369,7 +378,7 @@ body {
 
 }</style><script role="script" id="twine-user-script" type="text/twine-javascript">/* twine-user-script #1: "script.js" */
 setup.prevRand = -1
-setup.currentFidget = "drums"
+setup.currentFidget = "bubbleWrap"
 
 setup.isMouseDown = false;
 setup.light = [0, 0, 0, 0]
@@ -509,7 +518,7 @@ setup.populateFidget = function populateFidget() {
 	container.style.backgroundColor = 'snow'
 	switch (setup.currentFidget) {
 		case "bubbleWrap":
-			blankSpace.style.height = '0'
+			blankSpace.style.height = '0px'
 			fidgetLabel.textContent = "Bubble Wrap"
 			/*Do math here based on size of screen to know how many bubbles to make */
 			for (let i = 0; i < (13 * 12); i++) {
@@ -526,7 +535,6 @@ setup.populateFidget = function populateFidget() {
 			refreshButton.classList.add("refreshButton");
 			refreshButton.textContent = "Refresh Bubble Wrap"
 			postContainer.appendChild(refreshButton);
-
 			break;
 
 		case "switch":
@@ -639,7 +647,9 @@ setup.populateFidget = function populateFidget() {
 			break;
 
 		default:
-			console.log(`Something went wrong when populating fidget, given ${setup.currentFidget}`)
+			console.error(`Something went wrong when populating fidget, given ${setup.currentFidget}`)
+			setup.currentFidget = "bubbleWrap"
+			setup.populateFidget()
 	}
 }
 
@@ -770,11 +780,15 @@ setup.lightColors = {
   		-4px -4px 10px rgb(238, 130, 238)`, 'violet'],
 
 }</script><tw-passagedata pid="1" name="StoryInit" tags="" position="100,100" size="100,100">&lt;&lt;run setInterval(setup.updateTimer, 1000)&gt;&gt;
-&lt;&lt;=setup.formattedTime = &quot;02:00&quot;&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="Home" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;Time Spent: &lt;span id=&quot;timer&quot;&gt;&lt;&lt;=setup.formattedTime&gt;&gt;&lt;/span&gt;
+&lt;&lt;=setup.formattedTime = &quot;02:00&quot;&gt;&gt;
+&lt;&lt;run  
+  Dialog.setup(&quot;Important Reminder&quot;, &quot;reminderPopup&quot;);
+  Dialog.wiki(&quot;Reminder:\nThis game is meant to relax you before you take your blood pressure measurement.\n\nPlease make sure to play the game with the hand that you are NOT going to use for taking your measurement.&quot;);
+  Dialog.open();&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="Home" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;Time Spent: &lt;span id=&quot;timer&quot;&gt;&lt;&lt;=setup.formattedTime&gt;&gt;&lt;/span&gt;
 &lt;span id=&quot;currentFidget&quot;&gt;Switch&lt;/span&gt;
 &lt;div id=&quot;blankSpace&quot;&gt;&lt;/div&gt;
 &lt;div class=&quot;fidgetInterface&quot; id=&quot;container&quot;&gt;&lt;/div&gt;
-  &lt;div class=&quot;options&quot; id=&quot;postContainer&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;options&quot; id=&quot;postContainer&quot;&gt;&lt;/div&gt;
   &lt;&lt;done&gt;&gt;&lt;&lt;run setup.populateFidget()&gt;&gt;&lt;&lt;/done&gt;&gt;
   &lt;div class=&quot;flButton&quot;&gt; 
     &lt;&lt;button &quot;Fidget Library&quot; &quot;Fidget Library&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;

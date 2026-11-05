@@ -1,6 +1,6 @@
 setup.zombieDist = 20000
 setup.zombieAmount = 100
-setup.multi = 1
+setup.multi = 100
 setup.gameOver = false
 setup.currentStepGoal = 10
 setup.actualDistance = 0
@@ -159,7 +159,17 @@ setup.startChase = function startChase() {
 }
 
 setup.createExtra = function createExtra(container) {
-	if (setup.currentFinalExtra >= Object.keys(window.GameData.extras).length) { return }
+	if (setup.currentFinalExtra >= Object.keys(window.GameData.extras).length) {
+		let newDiv = document.createElement('div');
+		newDiv.classList.add("extra");
+
+		let newTask = document.createElement('span')
+		newTask.textContent = `No New Extras!`;
+
+		newDiv.appendChild(newTask);
+		container.appendChild(newDiv);
+		return
+	}
 	let i = setup.currentFinalExtra
 	let allKeys = Object.keys(window.GameData.extras)
 	let currentExtra = window.GameData.extras[allKeys[i]]

@@ -47,6 +47,15 @@ body {
   border: 2px solid darkgrey;
 }
 
+.reminderPopup {
+  box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+  background: linear-gradient(180deg, #440154 0%, #3b528b 50%, #21918c 100%);
+  border-radius:12px;
+  padding-left: 12px;
+  padding: 10px;
+  margin: 10px;
+}
+
 .fidgetIcon {
   width: 120px;
   aspect-ratio: 1 / 1;
