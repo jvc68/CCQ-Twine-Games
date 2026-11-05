@@ -50,8 +50,31 @@ setup.sendFlutterMessage = function (type) {
 
 setup.setMode = function setMode(mode) {
 	setup.mode = mode
-	setup.multi = 1
+	setup.multi = 100
+	setup.currentFinalExtra = 0;
+	setup.exposedExtras = []
+	for (let [key, value] of Object.entries(window.GameData.extras)) {
+		value.requiredSteps = value.ogRequiredSteps
+	}
 }
+
+setup.reset = function reset() {
+
+	setup.stopChase();
+
+	setup.zombieAmount = 100;
+	setup.zombieDist = 20000;
+	setup.gameOver = false;
+
+	setup.multi = 1;
+	setup.currentFinalExtra = 0;
+	setup.exposedExtras = []
+
+	for (let [key, value] of Object.entries(window.GameData.extras)) {
+		value.requiredSteps = value.ogRequiredSteps
+	}
+}
+
 setup.decZombieDist = function decZombieDist(amount) {
 	setup.zombieDist += amount
 	if (setup.zombieAmount > 0 && setup.zombieDist > 0) {
@@ -65,7 +88,6 @@ setup.decZombieDist = function decZombieDist(amount) {
 
 setup.incZombieDist = function incZombieDist(amount) {
 	setup.zombieDist += amount * setup.multi;
-
 	if (setup.zombieAmount > 0 && setup.zombieDist > 0) {
 		setup.zombieDistText.textContent = `The zombies are ${setup.zombieDist} steps away!`
 	} else {
@@ -151,6 +173,7 @@ setup.startChase = function startChase() {
 	}
 
 	let container = document.getElementById("extras");
+	container.replaceChildren();
 
 	for (let i = 0; i < 3; i++) {
 		setup.createExtra(container)
@@ -184,26 +207,51 @@ setup.createExtra = function createExtra(container) {
 
 	newDiv.appendChild(newTask);
 
-	let newButton = document.createElement('span');
-	newButton.classList.add("extraButton");
-	newButton.id = "notRedeemed"
+	let newButton = document.createElement('div');
+	newButton.classList.add("progress-container");
+	newButton.id = "notRedeemed";
 
+	let fillElement = document.createElement('div');
+	fillElement.classList.add("progress-fill");
+	fillElement.style.width = "0%";
+
+	let labelText = '';
 	switch (currentExtra.type) {
 		case "killZombies":
-			newButton.textContent = `Kill ${currentExtra.reward} zombies`
+			labelText = `${currentExtra.reward} Zombies`;
 			break;
 		case "multi":
-			newButton.textContent = `Increase Step Power by ${currentExtra.reward}`
+			labelText = `+${currentExtra.reward} Step Power`;
 			break;
 	}
 
-	setup.currentFinalExtra += 1
+	let textElement = document.createElement('span');
+	textElement.classList.add("progress-text");
+	textElement.textContent = labelText;
 
+	// Assemble progress bar structure
+	newButton.appendChild(fillElement);
+	newButton.appendChild(textElement);
 
+	setup.currentFinalExtra += 1;
 	newDiv.appendChild(newButton);
-
 	container.appendChild(newDiv);
-}
+	setup.updateExtraProgress();
+};
+
+
+setup.updateExtraProgress = function updateExtraProgress() {
+
+	for (let item of setup.exposedExtras) {
+		let extraElement = document.getElementById(item[0])
+		let fill = extraElement.querySelector('.progress-fill');
+		if (!fill) return;
+		let stepsCompleted = item[1].ogRequiredSteps - item[1].requiredSteps;
+		let percent = Math.min(Math.max((stepsCompleted / item[1].ogRequiredSteps) * 100, 0));
+		fill.style.width = percent + '%';
+	}
+
+};
 
 setup.redeem = function redeem(stepsWalked) {
 	let spotsToDelete = []
@@ -250,22 +298,7 @@ setup.redeem = function redeem(stepsWalked) {
 	}
 
 	setup.checkWinLoss()
-}
-
-setup.reset = function reset() {
-
-	setup.stopChase();
-
-	setup.zombieAmount = 100;
-	setup.zombieDist = 20000;
-	setup.gameOver = false;
-
-	setup.multi = 1;
-	setup.currentFinalExtra = 0;
-
-	for (let [key, value] of Object.entries(window.GameData.extras)) {
-		value.requiredSteps = value.ogRequiredSteps
-	}
+	setup.updateExtraProgress();
 }
 
 /*

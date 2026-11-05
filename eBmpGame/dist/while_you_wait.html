@@ -152,6 +152,15 @@ body {
   border: 2px solid darkgrey;
 }
 
+.desc {
+  margin: 5px;
+  padding: 5px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.18),
+  0px 0px 10px rgba(255, 255, 255, 1);
+  
+  border-radius:12px;
+}
+
 .reminderPopup {
   box-shadow: 0 8px 30px rgba(0,0,0,0.18);
   background: linear-gradient(180deg, #440154 0%, #3b528b 50%, #21918c 100%);
@@ -159,6 +168,10 @@ body {
   padding-left: 12px;
   padding: 10px;
   margin: 10px;
+}
+
+#ui-dialog-titlebar {
+    display: none;
 }
 
 .fidgetIcon {
@@ -289,10 +302,10 @@ body {
 }
 
 .switchImg {
-  width: 45%;
+  width: 55%;
   height: 55%;
   position: absolute;
-  left: 27%;
+  left: 22%;
   top: 24%;
   padding: -20px;
 }
@@ -378,7 +391,7 @@ body {
 
 }</style><script role="script" id="twine-user-script" type="text/twine-javascript">/* twine-user-script #1: "script.js" */
 setup.prevRand = -1
-setup.currentFidget = "bubbleWrap"
+setup.currentFidget = "switch"
 
 setup.isMouseDown = false;
 setup.light = [0, 0, 0, 0]
@@ -428,13 +441,13 @@ setup.switchRespond = function switchRespond(obj, img) {
 	if (obj.id == "on") {
 		obj.style.backgroundColor = "#2B2B2B";
 		obj.id = "off"
-		img.style.transform = 'scaleY(1)';
+		img.src = '../../img/measurement/switchOff.png'
 		SimpleAudio.select(`off`).stop();
 		SimpleAudio.select(`off`).play();
 	} else {
 		obj.style.backgroundColor = "#5C5C5C";
 		obj.id = "on"
-		img.style.transform = 'scaleY(-1)';
+		img.src = '../../img/measurement/switchOn.png'
 		SimpleAudio.select(`on`).stop();
 		SimpleAudio.select(`on`).play();
 	}
@@ -513,6 +526,7 @@ setup.populateFidget = function populateFidget() {
 	let blankSpace = document.getElementById("blankSpace");
 	let postContainer = document.getElementById("postContainer");
 	let fidgetLabel = document.getElementById("currentFidget");
+	let desc = document.getElementById("desc");
 	container.replaceChildren();
 	postContainer.replaceChildren();
 	container.style.backgroundColor = 'snow'
@@ -520,6 +534,7 @@ setup.populateFidget = function populateFidget() {
 		case "bubbleWrap":
 			blankSpace.style.height = '0px'
 			fidgetLabel.textContent = "Bubble Wrap"
+			desc.textContent = "Pop the bubbles"
 			/*Do math here based on size of screen to know how many bubbles to make */
 			for (let i = 0; i < (13 * 12); i++) {
 				let newButton = document.createElement('button');
@@ -538,14 +553,14 @@ setup.populateFidget = function populateFidget() {
 			break;
 
 		case "switch":
-			blankSpace.style.height = '1%'
+			blankSpace.style.height = '0%'
+			blankSpace.style.display = 'hidden'
 			container.style.height = '72%'
 			fidgetLabel.textContent = "Light Switch"
 
 			let newImg = document.createElement('img');
-			newImg.src = "../../img/measurement/switch2.png"
+			newImg.src = "../../img/measurement/switchOn.png"
 			newImg.classList.add("switchImg")
-			newImg.style.transform = 'scaleY(-1)';
 
 			let newButton = document.createElement('button');
 			newButton.addEventListener('click', () => setup.switchRespond(newButton, newImg));
@@ -554,6 +569,7 @@ setup.populateFidget = function populateFidget() {
 			newButton.style.backgroundColor = "#5C5C5C";
 			newButton.id = "on"
 			container.appendChild(newButton);
+			desc.textContent = "Flip the Switch"
 
 			break;
 
@@ -565,7 +581,6 @@ setup.populateFidget = function populateFidget() {
 			fidgetLabel.textContent = "Control Panel"
 			let newDiv = document.createElement('div');
 			newDiv.classList.add("controlPanel");
-
 
 			let buttonRow = document.createElement('div');
 			buttonRow.classList.add("row");
@@ -610,6 +625,7 @@ setup.populateFidget = function populateFidget() {
 					flipCol.appendChild(newFlip)
 				}
 				flipRow.appendChild(flipCol);
+				desc.textContent = "Flip through the Lights"
 			}
 
 			newDiv.appendChild(lightRow)
@@ -623,6 +639,7 @@ setup.populateFidget = function populateFidget() {
 			blankSpace.style.height = '5%'
 			container.style.height = '50%'
 			fidgetLabel.textContent = "Drum Kit"
+			desc.textContent = "Play the drums"
 			console.log(setup.instruments)
 
 			/*For unique drum parts: bass, hihat, crash, and lowTom */
@@ -781,13 +798,17 @@ setup.lightColors = {
 
 }</script><tw-passagedata pid="1" name="StoryInit" tags="" position="100,100" size="100,100">&lt;&lt;run setInterval(setup.updateTimer, 1000)&gt;&gt;
 &lt;&lt;=setup.formattedTime = &quot;02:00&quot;&gt;&gt;
-&lt;&lt;run  
-  Dialog.setup(&quot;Important Reminder&quot;, &quot;reminderPopup&quot;);
-  Dialog.wiki(&quot;Reminder:\nThis game is meant to relax you before you take your blood pressure measurement.\n\nPlease make sure to play the game with the hand that you are NOT going to use for taking your measurement.&quot;);
-  Dialog.open();&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="Home" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;Time Spent: &lt;span id=&quot;timer&quot;&gt;&lt;&lt;=setup.formattedTime&gt;&gt;&lt;/span&gt;
+/* &lt;&lt;run  
+  /* Dialog.setup(&quot;Important Reminder&quot;, &quot;reminderPopup&quot;);
+  Dialog.wiki(`Reminder:\n
+  This game is meant to relax you before you take your blood pressure measurement.\n\n
+  Please make sure to play the game with the hand that you are NOT going to use for taking your measurement.\n
+  Keep your other hand open, relax the arm, and avoid clenching your fist`);
+  Dialog.open();&gt;&gt; */ */</tw-passagedata><tw-passagedata pid="2" name="Home" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;Time Spent: &lt;span id=&quot;timer&quot;&gt;&lt;&lt;=setup.formattedTime&gt;&gt;&lt;/span&gt;
 &lt;span id=&quot;currentFidget&quot;&gt;Switch&lt;/span&gt;
 &lt;div id=&quot;blankSpace&quot;&gt;&lt;/div&gt;
-&lt;div class=&quot;fidgetInterface&quot; id=&quot;container&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;fidgetInterface&quot; id=&quot;container&quot;&gt;&lt;/div&gt;\
+&lt;div class=&quot;desc&quot; id=&quot;desc&quot;&gt;&lt;/div&gt;\
 &lt;div class=&quot;options&quot; id=&quot;postContainer&quot;&gt;&lt;/div&gt;
   &lt;&lt;done&gt;&gt;&lt;&lt;run setup.populateFidget()&gt;&gt;&lt;&lt;/done&gt;&gt;
   &lt;div class=&quot;flButton&quot;&gt; 
@@ -797,7 +818,7 @@ setup.lightColors = {
 Time Spent: &lt;span id=&quot;timer&quot;&gt;&lt;&lt;=setup.formattedTime&gt;&gt;&lt;/span&gt;
   &lt;div class=&quot;library&quot;&gt;
     &lt;&lt;button &quot;&lt;img class=&#39;fidgetIcon&#39; src=&#39;../../img/measurement/bubbleWrap.png&#39;&gt;&quot;&gt;&gt;&lt;&lt;run setup.swapFidget(&quot;bubbleWrap&quot;)&gt;&gt; &lt;&lt;/button&gt;&gt;
-    &lt;&lt;button &quot;&lt;img class=&#39;fidgetIcon&#39; src=&#39;../../img/measurement/lightSwitch.png&#39;&gt;&quot;&gt;&gt;&lt;&lt;run setup.swapFidget(&quot;switch&quot;)&gt;&gt; &lt;&lt;/button&gt;&gt;
+    &lt;&lt;button &quot;&lt;img class=&#39;fidgetIcon&#39; src=&#39;../../img/measurement/switchOn.png&#39;&gt;&quot;&gt;&gt;&lt;&lt;run setup.swapFidget(&quot;switch&quot;)&gt;&gt; &lt;&lt;/button&gt;&gt;
     &lt;&lt;button &quot;&lt;img class=&#39;fidgetIcon&#39; src=&#39;../../img/measurement/controlPanel.png&#39;&gt;&quot;&gt;&gt;&lt;&lt;run setup.swapFidget(&quot;controlPanel&quot;)&gt;&gt; &lt;&lt;/button&gt;&gt;
     &lt;&lt;button &quot;&lt;img class=&#39;fidgetIcon&#39; src=&#39;../../img/measurement/drums.png&#39;&gt;&quot;&gt;&gt;&lt;&lt;run setup.swapFidget(&quot;drums&quot;)&gt;&gt; &lt;&lt;/button&gt;&gt;
   &lt;/div&gt; 

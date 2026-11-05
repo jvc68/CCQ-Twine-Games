@@ -15,14 +15,18 @@ While You Wait
 <<=setup.formattedTime = "02:00">>
 <<run  
   Dialog.setup("Important Reminder", "reminderPopup");
-  Dialog.wiki("Reminder:\nThis game is meant to relax you before you take your blood pressure measurement.\n\nPlease make sure to play the game with the hand that you are NOT going to use for taking your measurement.");
-  Dialog.open();>>
+  Dialog.wiki(`Reminder:\n
+  This game is meant to relax you before you take your blood pressure measurement.\n\n
+  Please make sure to play the game with the hand that you are NOT going to use for taking your measurement.\n
+  Keep your other hand open, relax the arm, and avoid clenching your fist`);
+  Dialog.open();>> 
 
 :: Home
 <div class="phone">Time Spent: <span id="timer"><<=setup.formattedTime>></span>
 <span id="currentFidget">Switch</span>
 <div id="blankSpace"></div>
-<div class="fidgetInterface" id="container"></div>
+<div class="fidgetInterface" id="container"></div>\
+<div class="desc" id="desc"></div>\
 <div class="options" id="postContainer"></div>
   <<done>><<run setup.populateFidget()>><</done>>
   <div class="flButton"> 
@@ -35,7 +39,7 @@ While You Wait
 Time Spent: <span id="timer"><<=setup.formattedTime>></span>
   <div class="library">
     <<button "<img class='fidgetIcon' src='../../img/measurement/bubbleWrap.png'>">><<run setup.swapFidget("bubbleWrap")>> <</button>>
-    <<button "<img class='fidgetIcon' src='../../img/measurement/lightSwitch.png'>">><<run setup.swapFidget("switch")>> <</button>>
+    <<button "<img class='fidgetIcon' src='../../img/measurement/switchOn.png'>">><<run setup.swapFidget("switch")>> <</button>>
     <<button "<img class='fidgetIcon' src='../../img/measurement/controlPanel.png'>">><<run setup.swapFidget("controlPanel")>> <</button>>
     <<button "<img class='fidgetIcon' src='../../img/measurement/drums.png'>">><<run setup.swapFidget("drums")>> <</button>>
   </div> 

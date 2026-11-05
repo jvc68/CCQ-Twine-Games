@@ -1,5 +1,5 @@
 setup.prevRand = -1
-setup.currentFidget = "bubbleWrap"
+setup.currentFidget = "switch"
 
 setup.isMouseDown = false;
 setup.light = [0, 0, 0, 0]
@@ -49,13 +49,13 @@ setup.switchRespond = function switchRespond(obj, img) {
 	if (obj.id == "on") {
 		obj.style.backgroundColor = "#2B2B2B";
 		obj.id = "off"
-		img.style.transform = 'scaleY(1)';
+		img.src = '../../img/measurement/switchOff.png'
 		SimpleAudio.select(`off`).stop();
 		SimpleAudio.select(`off`).play();
 	} else {
 		obj.style.backgroundColor = "#5C5C5C";
 		obj.id = "on"
-		img.style.transform = 'scaleY(-1)';
+		img.src = '../../img/measurement/switchOn.png'
 		SimpleAudio.select(`on`).stop();
 		SimpleAudio.select(`on`).play();
 	}
@@ -134,6 +134,7 @@ setup.populateFidget = function populateFidget() {
 	let blankSpace = document.getElementById("blankSpace");
 	let postContainer = document.getElementById("postContainer");
 	let fidgetLabel = document.getElementById("currentFidget");
+	let desc = document.getElementById("desc");
 	container.replaceChildren();
 	postContainer.replaceChildren();
 	container.style.backgroundColor = 'snow'
@@ -141,6 +142,7 @@ setup.populateFidget = function populateFidget() {
 		case "bubbleWrap":
 			blankSpace.style.height = '0px'
 			fidgetLabel.textContent = "Bubble Wrap"
+			desc.textContent = "Pop the bubbles"
 			/*Do math here based on size of screen to know how many bubbles to make */
 			for (let i = 0; i < (13 * 12); i++) {
 				let newButton = document.createElement('button');
@@ -159,14 +161,14 @@ setup.populateFidget = function populateFidget() {
 			break;
 
 		case "switch":
-			blankSpace.style.height = '1%'
+			blankSpace.style.height = '0%'
+			blankSpace.style.display = 'hidden'
 			container.style.height = '72%'
 			fidgetLabel.textContent = "Light Switch"
 
 			let newImg = document.createElement('img');
-			newImg.src = "../../img/measurement/switch2.png"
+			newImg.src = "../../img/measurement/switchOn.png"
 			newImg.classList.add("switchImg")
-			newImg.style.transform = 'scaleY(-1)';
 
 			let newButton = document.createElement('button');
 			newButton.addEventListener('click', () => setup.switchRespond(newButton, newImg));
@@ -175,6 +177,7 @@ setup.populateFidget = function populateFidget() {
 			newButton.style.backgroundColor = "#5C5C5C";
 			newButton.id = "on"
 			container.appendChild(newButton);
+			desc.textContent = "Flip the Switch"
 
 			break;
 
@@ -186,7 +189,6 @@ setup.populateFidget = function populateFidget() {
 			fidgetLabel.textContent = "Control Panel"
 			let newDiv = document.createElement('div');
 			newDiv.classList.add("controlPanel");
-
 
 			let buttonRow = document.createElement('div');
 			buttonRow.classList.add("row");
@@ -231,6 +233,7 @@ setup.populateFidget = function populateFidget() {
 					flipCol.appendChild(newFlip)
 				}
 				flipRow.appendChild(flipCol);
+				desc.textContent = "Flip through the Lights"
 			}
 
 			newDiv.appendChild(lightRow)
@@ -244,6 +247,7 @@ setup.populateFidget = function populateFidget() {
 			blankSpace.style.height = '5%'
 			container.style.height = '50%'
 			fidgetLabel.textContent = "Drum Kit"
+			desc.textContent = "Play the drums"
 			console.log(setup.instruments)
 
 			/*For unique drum parts: bass, hihat, crash, and lowTom */

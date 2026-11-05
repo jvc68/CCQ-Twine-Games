@@ -272,6 +272,73 @@ button {
   color: black;
   font-size: 16px;
   line-height: 1.2;
+}
+
+/*The following CSS was done using AI */
+/* Progress Bar Outer Container (newButton) */
+.progress-container {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  height: 36px;
+  background-color: #2a2a3e;
+  border-radius: 18px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+  margin: 8px 0;
+}
+
+/* Dynamic Filling Bar */
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+  width: 0%;
+  transition: width 0.3s ease-out;
+  position: relative;
+}
+
+/* Vertical Wave Effect at Leading Edge */
+.progress-fill::before,
+.progress-fill::after {
+  content: "";
+  position: absolute;
+  right: -12px;
+  top: -50%;
+  width: 40px;
+  height: 200%;
+  background-color: #00f2fe;
+  border-radius: 40%;
+  animation: wave-rotate 3s infinite linear;
+  opacity: 0.75;
+}
+
+.progress-fill::after {
+  border-radius: 35%;
+  background-color: #ffffff;
+  opacity: 0.4;
+  animation: wave-rotate 6s infinite linear;
+}
+
+@keyframes wave-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Centered Text Overlay */
+.progress-text {
+  font-size: small;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+  font-weight: bold;
+  font-family: sans-serif;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+  z-index: 2;
+  white-space: nowrap;
 }</style><script role="script" id="twine-user-script" type="text/twine-javascript">setup.zombieDist = 20000
 setup.zombieAmount = 100
 setup.multi = 100
@@ -324,8 +391,31 @@ setup.sendFlutterMessage = function (type) {
 
 setup.setMode = function setMode(mode) {
 	setup.mode = mode
-	setup.multi = 1
+	setup.multi = 100
+	setup.currentFinalExtra = 0;
+	setup.exposedExtras = []
+	for (let [key, value] of Object.entries(window.GameData.extras)) {
+		value.requiredSteps = value.ogRequiredSteps
+	}
 }
+
+setup.reset = function reset() {
+
+	setup.stopChase();
+
+	setup.zombieAmount = 100;
+	setup.zombieDist = 20000;
+	setup.gameOver = false;
+
+	setup.multi = 1;
+	setup.currentFinalExtra = 0;
+	setup.exposedExtras = []
+
+	for (let [key, value] of Object.entries(window.GameData.extras)) {
+		value.requiredSteps = value.ogRequiredSteps
+	}
+}
+
 setup.decZombieDist = function decZombieDist(amount) {
 	setup.zombieDist += amount
 	if (setup.zombieAmount > 0 && setup.zombieDist > 0) {
@@ -339,7 +429,6 @@ setup.decZombieDist = function decZombieDist(amount) {
 
 setup.incZombieDist = function incZombieDist(amount) {
 	setup.zombieDist += amount * setup.multi;
-
 	if (setup.zombieAmount > 0 && setup.zombieDist > 0) {
 		setup.zombieDistText.textContent = `The zombies are ${setup.zombieDist} steps away!`
 	} else {
@@ -425,6 +514,7 @@ setup.startChase = function startChase() {
 	}
 
 	let container = document.getElementById("extras");
+	container.replaceChildren();
 
 	for (let i = 0; i < 3; i++) {
 		setup.createExtra(container)
@@ -458,26 +548,51 @@ setup.createExtra = function createExtra(container) {
 
 	newDiv.appendChild(newTask);
 
-	let newButton = document.createElement('span');
-	newButton.classList.add("extraButton");
-	newButton.id = "notRedeemed"
+	let newButton = document.createElement('div');
+	newButton.classList.add("progress-container");
+	newButton.id = "notRedeemed";
 
+	let fillElement = document.createElement('div');
+	fillElement.classList.add("progress-fill");
+	fillElement.style.width = "0%";
+
+	let labelText = '';
 	switch (currentExtra.type) {
 		case "killZombies":
-			newButton.textContent = `Kill ${currentExtra.reward} zombies`
+			labelText = `${currentExtra.reward} Zombies`;
 			break;
 		case "multi":
-			newButton.textContent = `Increase Step Power by ${currentExtra.reward}`
+			labelText = `+${currentExtra.reward} Step Power`;
 			break;
 	}
 
-	setup.currentFinalExtra += 1
+	let textElement = document.createElement('span');
+	textElement.classList.add("progress-text");
+	textElement.textContent = labelText;
 
+	// Assemble progress bar structure
+	newButton.appendChild(fillElement);
+	newButton.appendChild(textElement);
 
+	setup.currentFinalExtra += 1;
 	newDiv.appendChild(newButton);
-
 	container.appendChild(newDiv);
-}
+	setup.updateExtraProgress();
+};
+
+
+setup.updateExtraProgress = function updateExtraProgress() {
+
+	for (let item of setup.exposedExtras) {
+		let extraElement = document.getElementById(item[0])
+		let fill = extraElement.querySelector('.progress-fill');
+		if (!fill) return;
+		let stepsCompleted = item[1].ogRequiredSteps - item[1].requiredSteps;
+		let percent = Math.min(Math.max((stepsCompleted / item[1].ogRequiredSteps) * 100, 0));
+		fill.style.width = percent + '%';
+	}
+
+};
 
 setup.redeem = function redeem(stepsWalked) {
 	let spotsToDelete = []
@@ -524,22 +639,7 @@ setup.redeem = function redeem(stepsWalked) {
 	}
 
 	setup.checkWinLoss()
-}
-
-setup.reset = function reset() {
-
-	setup.stopChase();
-
-	setup.zombieAmount = 100;
-	setup.zombieDist = 20000;
-	setup.gameOver = false;
-
-	setup.multi = 1;
-	setup.currentFinalExtra = 0;
-
-	for (let [key, value] of Object.entries(window.GameData.extras)) {
-		value.requiredSteps = value.ogRequiredSteps
-	}
+	setup.updateExtraProgress();
 }
 
 /*
