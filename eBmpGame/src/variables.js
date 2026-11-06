@@ -14,7 +14,17 @@ SimpleAudio.tracks.add("on", "audio/lightOn.mp3");
 SimpleAudio.tracks.add("off", "audio/lightOff.mp3");
 
 /*Array For drums, makes code look cleaner */
+/*For unique drum parts: bass, hihat, crash, and lowTom */
 setup.instruments = ["snare", "medTom", "topTom"]
+
+/*Audio for drums*/
+SimpleAudio.tracks.add("bass", "audio/bass.wav");
+SimpleAudio.tracks.add("hihat", "audio/hihat.wav");
+SimpleAudio.tracks.add("lowTom", "audio/floorTom.wav");
+SimpleAudio.tracks.add("medTom", "audio/MedTom.wav");
+SimpleAudio.tracks.add("snare", "audio/Snare.wav");
+SimpleAudio.tracks.add("topTom", "audio/highTom.wav");
+SimpleAudio.tracks.add("crash", "audio/crash2.wav");
 
 /*Audio for control panel*/
 SimpleAudio.tracks.add("1", "audio/C.wav");

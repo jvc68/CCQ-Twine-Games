@@ -14,11 +14,9 @@ Zombie Chase
 
 :: Home
 <div class="phone">Zombies are Stopped.
-  <img src="../../img/zombies.png">
-  <div class="mainTab"> <img src="../../img/bar.png">
-    Zombies are <<= setup.zombieDist>> Steps Away!
-
-
+  <img src="../../img/exercise/zombies.png">
+  <div class="mainTab"> <div class="progress-container" id="bar"><div class="progress-fill totalBarFill"> </div></div>\
+    Zombies are <<= Math.trunc(setup.zombieDist)>> Steps Away!
 
       <div class="levelContainer">
         <div class="levelList"> Begin the Chase:
@@ -28,7 +26,7 @@ Zombie Chase
           <<button "Impossible" "Chase">><<run setup.setMode('impossible')>><</button>>
         </div>
       </div>
-
+      <<done>><<run setup.updateTotalDistance()>><</done>>
 
 
   </div>
@@ -36,22 +34,32 @@ Zombie Chase
 
 :: Chase
 <div class="phone">Step Power: <span id="multi"></span>
-  <img src="../../img/zombies.png">
-  <img src="../../img/bar.png">
+  <img src="../../img/exercise/zombies.png" class="zombies">
+  <div class="progress-container totalBar" id="bar"><div class="progress-fill totalBarFill"> </div></div>\
   <span id="zombieDist"></span>
   <span id="zombieCnt"></span><div class="mainTab"> <<button "Run!" >><<run setup.incZombieDist(1)>><</button>>
-
   <div class="extras" id="extras">Extras</div>
-  <<button "Return" "Home">><<run setup.clearID()>><</button>>
-  <<done>><<run setup.startChase()>><</done>>
+  <<button "Return" "Home">><<run setup.stopChase()>><</button>>
+  <<done>><<run setup.startChase() >><</done>>
+  <<done>><<run setup.updateTotalDistance() >><</done>>
+  
   </div>
 </div>
 
 :: You Win
-<div class="phone">Congrats
-<<button "Return" "Home">><<run setup.reset()>><</button>>
+<div class="phone">Congratulations!
+<img src="" class="endImg">
+Feel free to play again at a different difficulty, and keep on going!
+You travelled: <<=setup.actualDistance>> steps
+<div id="blankSpace"></div>
+
+<<button "Go Again!" "Home">><<run setup.reset()>><</button>>
 </div>
 :: You Lose
-<div class="phone">You lose
-<<button "Return" "Home">><<run setup.reset()>><</button>>
+<div class="phone">The Zombies caught you...
+<img src="" class="endImg">
+But don't worry! You can always try again.
+You travelled: <<=setup.actualDistance>> steps
+<div id="blankSpace"></div>
+<<button "Go Again!" "Home">><<run setup.reset()>><</button>>
 </div>

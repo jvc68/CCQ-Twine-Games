@@ -176,11 +176,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 4px solid #fff;
   border-radius: 50%;
-  background: #fff;
+  background-color: transparent;
   color: #1a1a1a;
-  font-size: 4rem;
+  font-size: 6rem;
   line-height: 1;
 }
 
@@ -294,6 +293,26 @@ body {
   outline-offset: 2px;
 }
 
+.action-button button.tutorial-target,
+.passage-nav button.tutorial-target,
+.ingredient-grid button.tutorial-target,
+.method-options button.tutorial-target {
+  display: inline-flex;
+  border-radius: 14px;
+  animation: tutorial-pulse 900ms ease-in-out infinite alternate;
+}
+
+@keyframes tutorial-pulse {
+  from {
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 0 0 0 rgba(168, 255, 219, 0.25);
+  }
+  to {
+    background: #a8ffdb;
+    box-shadow: 0 0 0 7px rgba(168, 255, 219, 0.5);
+  }
+}
+
 .passage-nav button {
   flex: 1;
   min-height: 44px;
@@ -371,6 +390,55 @@ body {
   font-size: 0.9rem;
 }
 
+.cooking-result-box {
+  position: absolute;
+  top: 50%;
+  right: 25px;
+  left: 25px;
+  width: auto;
+  margin: 0;
+  padding: 24px 18px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1a1a1a;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-50%);
+}
+
+.cooking-doneness {
+  margin: 0;
+  color: #0d1b2a;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.cooking-ingredient {
+  margin: 14px 0;
+  font-size: 5rem;
+  line-height: 1;
+}
+
+.cooking-method-type {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.cooking-method-type.healthy {
+  color: #1261a0;
+}
+
+.cooking-method-type.unhealthy {
+  color: #c47f00;
+}
+
+.cooking-preparation {
+  margin: 20px 0 0;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
 .day-tally-box {
   width: 100%;
   background: rgba(255, 255, 255, 0.95);
@@ -442,6 +510,8 @@ body {
 }
 
 .ingredient-shelf h4 {
+  position: relative;
+  top: 5px;
   margin: 0 0 8px;
   font-size: 0.95rem;
   text-transform: uppercase;
@@ -451,9 +521,9 @@ body {
 
 .ingredient-grid {
   display: grid;
-  grid-template-columns: repeat(3,  minmax(0, 72px));
-  justify-content: space-evenly;
-  gap: 4px 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: 72px;
+  gap: 8px;
 }
 
 .ingredient-grid > br {
@@ -464,28 +534,41 @@ body {
   appearance: none;
   width: 100%;
   min-width: 0;
-  aspect-ratio: 1;
+  max-width: none;
+  height: 72px;
+  min-height: 72px;
+  max-height: 72px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  padding: 8px;
+  gap: 2px;
+  padding: 4px;
   border: 2px solid rgba(255, 255, 255, 0.65);
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.94);
   color: #1a1a1a;
   font: inherit;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   line-height: 1.15;
   text-align: center;
-  white-space: pre-line;
   cursor: pointer;
   transition: transform 120ms ease, background-color 120ms ease;
 }
 
-.ingredient-grid button::first-line {
-  font-size: 1.5rem;
+.ingredient-grid .ingredient-button {
+  font-size: 0.8rem;
+}
+
+.ingredient-grid .ingredient-icon {
+  font-size: 2.3rem;
+  line-height: 1;
+}
+
+.ingredient-grid .ingredient-name {
+  font-size: 0.8rem;
+  line-height: 1.15;
+  white-space: nowrap;
 }
 
 .ingredient-grid button:hover {
@@ -500,6 +583,15 @@ body {
 .ingredient-grid button:focus-visible {
   outline: 3px solid #a8ffdb;
   outline-offset: 2px;
+}
+
+.ingredient-grid button.tutorial-disabled,
+.ingredient-grid button.tutorial-disabled:hover {
+  background: #c7cbd1;
+  color: #68717d;
+  cursor: not-allowed;
+  opacity: 0.65;
+  transform: none;
 }
 
 .method-options {
@@ -529,6 +621,25 @@ body {
 .method-options button:focus-visible {
   outline: 3px solid #a8ffdb;
   outline-offset: 2px;
+}
+
+.tutorial-message {
+  margin: 18px 0 12px;
+  padding: 12px 16px;
+  border: 2px solid #a8ffdb;
+  border-radius: 12px;
+  background: rgba(168, 255, 219, 0.16);
+  color: #fff;
+  text-align: center;
+}
+
+.tutorial-message strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.tutorial-message p {
+  margin: 0;
 }
 
 .skill-instructions {
@@ -757,6 +868,147 @@ window.FoodTruck = {
         state.pendingMethod = null;
         state.cookingResult = null;
         state.orderTimer = this.orderTimeForDay();
+        if (state.tutorialMode) {
+            state.numOrders = 1;
+            state.availableOrders = [orderOptions[0]];
+            state.tutorialStep = "take-order";
+            state.tutorialIngredientIndex = 0;
+        }
+    },
+
+    startTutorial: function() {
+        var state = SugarCube.State.variables;
+        state.tutorialMode = true;
+        this.startDay();
+    },
+
+    endTutorial: function() {
+        var state = SugarCube.State.variables;
+        state.tutorialMode = false;
+        state.tutorialStep = null;
+        state.tutorialIngredientIndex = 0;
+    },
+
+    advanceTutorialIngredient: function() {
+        var state = SugarCube.State.variables;
+
+        if (!state.tutorialMode || state.tutorialStep !== "result") {
+            return;
+        }
+
+        state.tutorialIngredientIndex += 1;
+        state.tutorialStep = state.tutorialIngredientIndex <
+            state.activeOrder.requiredIngredients.length
+            ? "ingredient"
+            : "return-to-order";
+    },
+
+    startTutorialIngredients: function() {
+        var state = SugarCube.State.variables;
+
+        if (state.tutorialMode && state.tutorialStep === "assembly") {
+            state.tutorialStep = "ingredient";
+        }
+    },
+
+    restoreTutorialIngredient: function() {
+        var state = SugarCube.State.variables;
+        var required = state.activeOrder && state.activeOrder.requiredIngredients;
+
+        if (!state.tutorialMode || !Array.isArray(required)) {
+            return;
+        }
+
+        var nextIndex = required.findIndex(function(ingredient) {
+            return state.prepTray.indexOf(ingredient) === -1;
+        });
+
+        if (nextIndex === -1) {
+            state.tutorialStep = "return-to-order";
+            return;
+        }
+
+        state.tutorialIngredientIndex = nextIndex;
+        state.tutorialStep = "ingredient";
+    },
+
+    returnToAssembly: function() {
+        this.restoreTutorialIngredient();
+    },
+
+    finishTutorialPrep: function() {
+        var state = SugarCube.State.variables;
+
+        if (!state.tutorialMode) {
+            return;
+        }
+
+        if (this.canFulfillOrder()) {
+            state.tutorialStep = "fulfill";
+        } else {
+            state.tutorialStep = "assembly";
+        }
+    },
+
+    updateTutorialHighlights: function() {
+        var state = SugarCube.State.variables;
+        var buttons = document.querySelectorAll("button.tutorial-target");
+        var passage = SugarCube.State.passage;
+        var targetText = null;
+
+        buttons.forEach(function(button) {
+            button.classList.remove("tutorial-target");
+        });
+        document.querySelectorAll(".ingredient-button").forEach(function(button) {
+            button.classList.remove("tutorial-disabled");
+            button.disabled = false;
+        });
+
+        if (!state.tutorialMode) {
+            return;
+        }
+
+        if (state.tutorialStep === "take-order") {
+            targetText = "Take Order";
+        } else if (state.tutorialStep === "assembly") {
+            targetText = "Assembly Station";
+        } else if (state.tutorialStep === "ingredient" && passage === "AssemblyStation") {
+            targetText = state.activeOrder.requiredIngredients[state.tutorialIngredientIndex];
+        } else if (state.tutorialStep === "method" && passage === "PrepareIngredient") {
+            targetText = "(Healthy)";
+        } else if (state.tutorialStep === "stop" && passage === "CookingMinigame") {
+            targetText = "Stop Cooking";
+        } else if (state.tutorialStep === "result" && passage === "CookingResult") {
+            targetText = "Assembly Station";
+        } else if (state.tutorialStep === "return-to-order" && passage === "AssemblyStation") {
+            targetText = "Order Window";
+        } else if (state.tutorialStep === "fulfill" &&
+            passage === "TakeOrderScreen") {
+            targetText = "Fulfill Order";
+        } else if (state.tutorialStep === "fulfill" &&
+            passage === "AssemblyStation") {
+            targetText = "Order Window";
+        }
+
+        if (!targetText) {
+            return;
+        }
+
+        Array.prototype.forEach.call(document.querySelectorAll("button"), function(button) {
+            if (button.textContent.indexOf(targetText) !== -1) {
+                button.classList.add("tutorial-target");
+            }
+        });
+
+        if (passage === "AssemblyStation" &&
+            state.tutorialStep === "ingredient") {
+            document.querySelectorAll(".ingredient-button").forEach(function(button) {
+                if (button.textContent.indexOf(targetText) === -1) {
+                    button.classList.add("tutorial-disabled");
+                    button.disabled = true;
+                }
+            });
+        }
     },
 
     /* Function Description: Starts the next day by incrementing the current
@@ -781,6 +1033,9 @@ window.FoodTruck = {
         var customerIndex = Math.floor(Math.random() * state.availableOrders.length);
         state.activeOrder = state.availableOrders.splice(customerIndex, 1)[0];
         state.orderTimer = this.orderTimeForDay();
+        if (state.tutorialMode) {
+            state.tutorialStep = "assembly";
+        }
         this.startOrderTimer();
     },
 
@@ -834,8 +1089,13 @@ window.FoodTruck = {
         state.pendingIngredient = ingredient;
         state.pendingMethod = null;
         state.cookingResult = null;
+        if (state.tutorialMode) {
+            state.tutorialStep = "method";
+        }
     },
 
+    /* Function Description: Selects a preparation method for the pending
+     ingredient, resetting any previous cooking result */
     chooseMethod: function(type) {
         var state = SugarCube.State.variables;
         var ingredient = state.pendingIngredient;
@@ -849,8 +1109,14 @@ window.FoodTruck = {
             label: ingredient.methods[type]
         };
         state.cookingResult = null;
+        if (state.tutorialMode) {
+            state.tutorialStep = "stop";
+        }
     },
 
+    /* Function Description: Stops the cooking skill-check, calculates the
+       doneness of the ingredient based on the marker's position, and adds the
+       result to the day's preparation choices and prep tray */
     stopCooking: function() {
         var state = SugarCube.State.variables;
         var marker = document.getElementById("skill-marker");
@@ -888,13 +1154,30 @@ window.FoodTruck = {
         state.dayPreparationChoices.push(choice);
         state.prepTray.push(choice.ingredient);
         state.cookingResult = choice;
+        if (state.tutorialMode) {
+            state.tutorialStep = "result";
+        }
     },
 
+    /* Function Description: Clears the prep tray and resets the tray display in
+       the UI */
     clearTray: function() {
-        SugarCube.State.variables.prepTray = [];
-        window.jQuery("#tray").html("<em>Tap ingredients to add them to the tray.</em>");
+        var state = SugarCube.State.variables;
+
+        state.prepTray = [];
+        if (state.tutorialMode && state.tutorialStep !== "assembly") {
+            state.tutorialIngredientIndex = 0;
+            state.tutorialStep = "ingredient";
+        }
+        state.pendingIngredient = null;
+        state.pendingMethod = null;
+        state.cookingResult = null;
+        SugarCube.Engine.play("AssemblyStation");
     },
 
+    /* Function Description: Checks if the prep tray matches the required
+       ingredients for the active order, returning true if they match and false
+       otherwise */
     canFulfillOrder: function() {
         var state = SugarCube.State.variables;
         var tray = state.prepTray;
@@ -921,6 +1204,8 @@ window.FoodTruck = {
         });
     },
 
+    /* Function Description: Calculates the healthiness and satisfaction scores
+       for the day's preparation choices, returning an object with both scores */
     calculateDayScores: function() {
         var state = SugarCube.State.variables;
         var choices = state.dayPreparationChoices;
@@ -950,12 +1235,16 @@ window.FoodTruck = {
         };
     },
 
+    /* Function Description: Returns a string representation of a star rating
+       based on the provided score, with filled and empty stars */
     starRating: function(score) {
         var filledStars = Math.max(0, Math.min(5, Math.round(score || 0)));
 
         return "★".repeat(filledStars) + "☆".repeat(5 - filledStars);
     },
 
+    /* Function Description: Returns a string of tips based on the day's
+       satisfaction and healthiness scores, providing feedback for improvement */
     dayTips: function() {
         var state = SugarCube.State.variables;
         var tips = [];
@@ -981,6 +1270,8 @@ window.FoodTruck = {
         return tips.join(" ");
     },
 
+    /* Function Description: Stops the order timer, calculates the day's scores,
+       and transitions to the DayTally passage */
     finishDay: function() {
         this.stopOrderTimer();
         this.calculateDayScores();
@@ -1003,6 +1294,10 @@ window.FoodTruck = {
         state.activeOrder = null;
         state.prepTray = [];
         this.stopOrderTimer();
+
+        if (state.tutorialMode) {
+            state.tutorialStep = "tally";
+        }
 
         if (state.numOrders === 0) {
             this.finishDay();
@@ -1078,9 +1373,25 @@ window.FoodTruck = {
             timerElement.textContent = this.orderTimerDisplay();
         }
     }
-};</script><tw-passagedata pid="1" name="StoryInit" tags="" position="100,100" size="100,100">&lt;&lt;set $numOrders = 0&gt;&gt;
+};
+
+window.jQuery(document).on(":passagedisplay", function() {
+    document.querySelectorAll(".ingredient-button").forEach(function(button) {
+        button.addEventListener("click", function() {
+            var ingredientButtons = document.querySelectorAll(".ingredient-button");
+            var ingredientIndex = Array.prototype.indexOf.call(ingredientButtons, button);
+
+            window.FoodTruck.selectIngredient(ingredientIndex);
+            SugarCube.Engine.play("PrepareIngredient");
+        });
+    });
+    window.FoodTruck.updateTutorialHighlights();
+});</script><tw-passagedata pid="1" name="StoryInit" tags="" position="100,100" size="100,100">&lt;&lt;set $numOrders = 0&gt;&gt;
 &lt;&lt;set $currentDay = 1&gt;&gt;
 &lt;&lt;set $debugMode = false&gt;&gt;
+&lt;&lt;set $tutorialMode = false&gt;&gt;
+&lt;&lt;set $tutorialStep = null&gt;&gt;
+&lt;&lt;set $tutorialIngredientIndex = 0&gt;&gt;
 &lt;&lt;set $dayScore = 0&gt;&gt;
 &lt;&lt;set $ordersCompleted = 0&gt;&gt;
 &lt;&lt;set $prepTray = []&gt;&gt;
@@ -1105,8 +1416,8 @@ window.FoodTruck = {
     &lt;h1&gt;Food Truck&lt;/h1&gt;\
     &lt;p&gt;Serve customers, prepare delicious meals, and grow your food truck.&lt;/p&gt;\
     &lt;div class=&quot;action-button start-actions&quot;&gt;\
-        &lt;&lt;button &quot;Start Day&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.startDay()&gt;&gt;&lt;&lt;/button&gt;&gt;\
-        &lt;&lt;button &quot;Play Tutorial&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
+        &lt;&lt;button &quot;Start Day&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.endTutorial()&gt;&gt;&lt;&lt;run FoodTruck.startDay()&gt;&gt;&lt;&lt;/button&gt;&gt;\
+        &lt;&lt;button &quot;Play Tutorial&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.startTutorial()&gt;&gt;&lt;&lt;/button&gt;&gt;\
         &lt;&lt;button &quot;Toggle Debug Mode&quot; &quot;Start&quot;&gt;&gt;&lt;&lt;run FoodTruck.toggleDebugMode()&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
 &lt;/div&gt;\</tw-passagedata><tw-passagedata pid="3" name="TakeOrderScreen" tags="" position="350,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
@@ -1156,8 +1467,8 @@ window.FoodTruck = {
         &lt;/div&gt;\
     &lt;/div&gt;\
     &lt;div class=&quot;passage-nav&quot;&gt;\
-        &lt;&lt;button &quot;Exit to Menu&quot; &quot;Start&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
-        &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
+        &lt;&lt;button &quot;Exit to Menu&quot; &quot;Start&quot;&gt;&gt;&lt;&lt;run FoodTruck.endTutorial()&gt;&gt;&lt;&lt;/button&gt;&gt;\
+        &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;run FoodTruck.startTutorialIngredients()&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="4" name="DayTally" tags="" position="475,100" size="100,100">&lt;div class=&quot;phone day-tally-screen&quot;&gt;\
     &lt;section class=&quot;day-tally-box&quot;&gt;\
@@ -1167,7 +1478,11 @@ window.FoodTruck = {
         &lt;p class=&quot;tally-stars&quot; aria-label=&quot;Healthiness: $healthinessScore out of 5 stars&quot;&gt;&lt;&lt;print FoodTruck.starRating($healthinessScore)&gt;&gt;&lt;/p&gt;\
         &lt;p class=&quot;tally-tip&quot;&gt;&lt;&lt;print FoodTruck.dayTips()&gt;&gt;&lt;/p&gt;\
         &lt;div class=&quot;action-button&quot;&gt;\
-            &lt;&lt;button &quot;Start Next Day&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.startNextDay()&gt;&gt;&lt;&lt;/button&gt;&gt;\
+            &lt;&lt;if $tutorialMode&gt;&gt;\
+                &lt;&lt;button &quot;Return to Menu&quot; &quot;Start&quot;&gt;&gt;&lt;&lt;run FoodTruck.endTutorial()&gt;&gt;&lt;&lt;/button&gt;&gt;\
+            &lt;&lt;else&gt;&gt;\
+                &lt;&lt;button &quot;Start Next Day&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.startNextDay()&gt;&gt;&lt;&lt;/button&gt;&gt;\
+            &lt;&lt;/if&gt;&gt;\
         &lt;/div&gt;\
     &lt;/section&gt;\
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="5" name="AssemblyStation" tags="" position="600,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
@@ -1214,15 +1529,18 @@ window.FoodTruck = {
         &lt;div class=&quot;ingredient-grid&quot;&gt;\
             &lt;&lt;for _i = 0; _i &lt; $menuIngredients.length; _i++&gt;&gt;\
                 &lt;&lt;capture _i&gt;&gt;\
-            &lt;&lt;button `FoodTruck.ingredientLabel(_i)` &quot;PrepareIngredient&quot;&gt;&gt;&lt;&lt;run FoodTruck.selectIngredient(_i)&gt;&gt;&lt;&lt;/button&gt;&gt;\
+                &lt;button type=&quot;button&quot; class=&quot;ingredient-button&quot;&gt;\
+                    &lt;span class=&quot;ingredient-icon&quot;&gt;&lt;&lt;print $menuIngredients[_i].img&gt;&gt;&lt;/span&gt;\
+                    &lt;span class=&quot;ingredient-name&quot;&gt;&lt;&lt;print $menuIngredients[_i].name&gt;&gt;&lt;/span&gt;\
+                &lt;/button&gt;\
                 &lt;&lt;/capture&gt;&gt;\
             &lt;&lt;/for&gt;&gt;\
         &lt;/div&gt;\
     &lt;/div&gt;\
     &lt;&lt;/if&gt;&gt;\
     &lt;div class=&quot;passage-nav&quot;&gt;\
-        &lt;&lt;button &quot;Exit to Menu&quot; &quot;Start&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
-        &lt;&lt;button &quot;Order Window&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
+        &lt;&lt;button &quot;Exit to Menu&quot; &quot;Start&quot;&gt;&gt;&lt;&lt;run FoodTruck.endTutorial()&gt;&gt;&lt;&lt;/button&gt;&gt;\
+        &lt;&lt;button &quot;Order Window&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.finishTutorialPrep()&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="6" name="PrepareIngredient" tags="" position="725,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
     &lt;div class=&quot;HUD&quot;&gt;\
@@ -1236,6 +1554,12 @@ window.FoodTruck = {
             &lt;h3&gt;Prepare $pendingIngredient.name&lt;/h3&gt;\
             &lt;p&gt;Choose a preparation method:&lt;/p&gt;\
         &lt;/div&gt;\
+        &lt;&lt;if $tutorialMode&gt;&gt;\
+            &lt;div class=&quot;tutorial-message&quot; role=&quot;note&quot;&gt;\
+                &lt;strong&gt;TUTORIAL GOAL&lt;/strong&gt;\
+                &lt;p&gt;Choose the healthy preparation method to make a healthier meal and increase healthiness score!&lt;/p&gt;\
+            &lt;/div&gt;\
+        &lt;&lt;/if&gt;&gt;\
         &lt;div class=&quot;method-options&quot;&gt;\
             &lt;&lt;button `FoodTruck.methodLabel(&quot;healthy&quot;)` &quot;CookingMinigame&quot;&gt;&gt;&lt;&lt;run FoodTruck.chooseMethod(&quot;healthy&quot;)&gt;&gt;&lt;&lt;/button&gt;&gt;\
             &lt;&lt;button `FoodTruck.methodLabel(&quot;unhealthy&quot;)` &quot;CookingMinigame&quot;&gt;&gt;&lt;&lt;run FoodTruck.chooseMethod(&quot;unhealthy&quot;)&gt;&gt;&lt;&lt;/button&gt;&gt;\
@@ -1244,7 +1568,7 @@ window.FoodTruck = {
         &lt;p&gt;Select an ingredient from the assembly station to prepare it.&lt;/p&gt;\
     &lt;&lt;/if&gt;&gt;\
     &lt;div class=&quot;passage-nav&quot;&gt;\
-        &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
+        &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;run FoodTruck.returnToAssembly()&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="7" name="CookingMinigame" tags="" position="850,100" size="100,100">&lt;&lt;run FoodTruck.updateCookingMarkerSpeed()&gt;&gt;
 &lt;div class=&quot;phone&quot;&gt;\
@@ -1263,6 +1587,12 @@ window.FoodTruck = {
             &lt;p&gt;The ingredient has already been prepared.&lt;/p&gt;\
             &lt;&lt;button &quot;View Cooking Result&quot; &quot;CookingResult&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
         &lt;&lt;else&gt;&gt;\
+            &lt;&lt;if $tutorialMode&gt;&gt;\
+                &lt;div class=&quot;tutorial-message&quot; role=&quot;note&quot;&gt;\
+                    &lt;strong&gt;TUTORIAL GOAL&lt;/strong&gt;\
+                    &lt;p&gt;Stop the marker while it is in the green section for a perfect cook and higher customer satisfaction!&lt;/p&gt;\
+                &lt;/div&gt;\
+            &lt;&lt;/if&gt;&gt;\
             &lt;p class=&quot;skill-instructions&quot;&gt;Stop the marker in the green section for a perfect cook.&lt;/p&gt;\
             &lt;div class=&quot;skill-track&quot; role=&quot;img&quot; aria-label=&quot;Cooking skill check: blue is raw, green is perfect, and red is overcooked&quot;&gt;\
                 &lt;div class=&quot;skill-zone skill-zone-raw&quot;&gt;&lt;/div&gt;\
@@ -1284,7 +1614,7 @@ window.FoodTruck = {
         &lt;&lt;button &quot;Choose a Method&quot; &quot;PrepareIngredient&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;&lt;/if&gt;&gt;\
     &lt;div class=&quot;passage-nav&quot;&gt;\
-        &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
+        &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;run FoodTruck.returnToAssembly()&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="8" name="CookingResult" tags="" position="975,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
     &lt;div class=&quot;HUD&quot;&gt;\
@@ -1294,17 +1624,19 @@ window.FoodTruck = {
     &lt;/div&gt;\
     &lt;hr&gt;\
     &lt;&lt;if $cookingResult&gt;&gt;\
-        &lt;div class=&quot;ticket-box&quot;&gt;\
-            &lt;h3&gt;$cookingResult.doneness!&lt;/h3&gt;\
-            &lt;p&gt;$cookingResult.ingredient was added to the prep tray.&lt;/p&gt;\
-            &lt;p&gt;Preparation method: $cookingResult.method&lt;/p&gt;\
-            &lt;p&gt;Method type: &lt;&lt;if $cookingResult.healthy&gt;&gt;Healthy&lt;&lt;else&gt;&gt;Unhealthy&lt;&lt;/if&gt;&gt;&lt;/p&gt;\
+        &lt;div class=&quot;cooking-result-box&quot;&gt;\
+            &lt;h2 class=&quot;cooking-doneness&quot;&gt;$cookingResult.doneness!&lt;/h2&gt;\
+            &lt;div class=&quot;cooking-ingredient&quot; role=&quot;img&quot; aria-label=&quot;$cookingResult.ingredient&quot;&gt;&lt;&lt;print $pendingIngredient.img&gt;&gt;&lt;/div&gt;\
+            &lt;p class=&quot;cooking-method-type &lt;&lt;if $cookingResult.healthy&gt;&gt;healthy&lt;&lt;else&gt;&gt;unhealthy&lt;&lt;/if&gt;&gt;&quot;&gt;\
+                &lt;&lt;if $cookingResult.healthy&gt;&gt;Healthy&lt;&lt;else&gt;&gt;Unhealthy&lt;&lt;/if&gt;&gt;\
+            &lt;/p&gt;\
+            &lt;p class=&quot;cooking-preparation&quot;&gt;Preparation method: $cookingResult.method&lt;/p&gt;\
         &lt;/div&gt;\
     &lt;&lt;else&gt;&gt;\
         &lt;p&gt;Finish the cooking check before adding this ingredient to the tray.&lt;/p&gt;\
     &lt;&lt;/if&gt;&gt;\
     &lt;div class=&quot;passage-nav&quot;&gt;\
-        &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
+        &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;run FoodTruck.advanceTutorialIngredient()&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
 &lt;/div&gt;</tw-passagedata></tw-storydata>
 	<script id="script-sugarcube" type="text/javascript">

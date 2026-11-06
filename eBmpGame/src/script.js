@@ -1,12 +1,21 @@
 setup.prevRand = -1
-setup.currentFidget = "controlPanel"
+setup.currentFidget = "switch"
 
 setup.isMouseDown = false;
 setup.light = [0, 0, 0, 0]
+setup.isPointerDown = false;
 
 
 document.addEventListener('mousedown', () => { setup.isMouseDown = true; });
 document.addEventListener('mouseup', () => { setup.isMouseDown = false; });
+
+document.addEventListener('pointerup', () => {
+	setup.isPointerDown = false;
+});
+
+document.addEventListener('pointercancel', () => {
+	setup.isPointerDown = false;
+});
 
 setup.swapFidget = function swapFidget(id) {
 	setup.currentFidget = id
@@ -14,48 +23,34 @@ setup.swapFidget = function swapFidget(id) {
 }
 
 
-/*This function allows for clicking and dragging to pop bubbles */
-setup.bubbleRespondDrag = function bubbleRespond(obj) {
-	if (setup.isMouseDown) {
-		if (obj.id == "popped") {
-			return
-		}
-		let random = setup.prevRand
-		do {
-			random = Math.floor(Math.random() * 7) + 1
-		} while (random == setup.prevRand)
-		setup.prevRand = random
-		SimpleAudio.select(`bub${random}`).play();
-		obj.style.backgroundColor = "white";
-		obj.id = "popped"
-	}
-}
-
 setup.bubbleRespond = function bubbleRespond(obj) {
 	if (obj.id == "popped") {
-		return
+		return;
 	}
-	let random = setup.prevRand
+
+	let random = setup.prevRand;
+
 	do {
-		random = Math.floor(Math.random() * 7) + 1
-	} while (random == setup.prevRand)
-	setup.prevRand = random
+		random = Math.floor(Math.random() * 7) + 1;
+	} while (random == setup.prevRand);
+
+	setup.prevRand = random;
+
 	SimpleAudio.select(`bub${random}`).play();
+
 	obj.style.backgroundColor = "white";
-	obj.id = "popped"
+	obj.id = "popped";
 }
 
 setup.switchRespond = function switchRespond(obj, img) {
 	if (obj.id == "on") {
-		obj.style.backgroundColor = "#2B2B2B";
 		obj.id = "off"
-		img.style.transform = 'scaleY(1)';
+		img.src = '../../img/measurement/switchOff.png'
 		SimpleAudio.select(`off`).stop();
 		SimpleAudio.select(`off`).play();
 	} else {
-		obj.style.backgroundColor = "#5C5C5C";
 		obj.id = "on"
-		img.style.transform = 'scaleY(-1)';
+		img.src = '../../img/measurement/switchOn.png'
 		SimpleAudio.select(`on`).stop();
 		SimpleAudio.select(`on`).play();
 	}
@@ -124,6 +119,7 @@ setup.decLight = function decLight(light) {
 }
 
 setup.drumPlay = function drumPlay(item) {
+	console.log(item)
 	let newAudio = SimpleAudio.tracks.get(item);
 	newAudio.clone().play();
 }
@@ -133,48 +129,75 @@ setup.populateFidget = function populateFidget() {
 	let blankSpace = document.getElementById("blankSpace");
 	let postContainer = document.getElementById("postContainer");
 	let fidgetLabel = document.getElementById("currentFidget");
+	let desc = document.getElementById("desc");
 	container.replaceChildren();
 	postContainer.replaceChildren();
 	container.style.backgroundColor = 'snow'
 	switch (setup.currentFidget) {
 		case "bubbleWrap":
-			blankSpace.style.height = '0'
+			blankSpace.style.height = '0px'
 			fidgetLabel.textContent = "Bubble Wrap"
+			desc.textContent = "Pop the bubbles"
 			/*Do math here based on size of screen to know how many bubbles to make */
 			for (let i = 0; i < (13 * 12); i++) {
 				let newButton = document.createElement('button');
 				newButton.id = "notPopped"
-				newButton.addEventListener('mouseover', () => setup.bubbleRespondDrag(newButton));
-				newButton.addEventListener('click', () => setup.bubbleRespond(newButton));
 				newButton.classList.add("bubble");
 				container.appendChild(newButton);
 			}
+
+			// Start popping bubbles when the user touches/clicks one
+			container.onpointerdown = (event) => {
+				let bubble = event.target.closest(".bubble");
+
+				if (!bubble) return;
+
+				setup.isPointerDown = true;
+				setup.bubbleRespond(bubble);
+			};
+
+			// Continue popping bubbles while dragging
+			container.onpointermove = (event) => {
+				if (!setup.isPointerDown) return;
+
+				let bubble = document.elementFromPoint(
+					event.clientX,
+					event.clientY
+				);
+
+				bubble = bubble?.closest(".bubble");
+
+				if (bubble && container.contains(bubble)) {
+					setup.bubbleRespond(bubble);
+				}
+			};
 
 			let refreshButton = document.createElement('button');
 			refreshButton.addEventListener('click', () => setup.populateFidget(setup.currentFidget));
 			refreshButton.classList.add("refreshButton");
 			refreshButton.textContent = "Refresh Bubble Wrap"
 			postContainer.appendChild(refreshButton);
-
 			break;
 
 		case "switch":
-			blankSpace.style.height = '1%'
+			blankSpace.style.height = '0%'
+			blankSpace.style.display = 'hidden'
 			container.style.height = '72%'
 			fidgetLabel.textContent = "Light Switch"
 
 			let newImg = document.createElement('img');
-			newImg.src = "../../img/switch2.png"
+			newImg.src = "../../img/measurement/switchOn.png"
 			newImg.classList.add("switchImg")
-			newImg.style.transform = 'scaleY(-1)';
 
 			let newButton = document.createElement('button');
 			newButton.addEventListener('click', () => setup.switchRespond(newButton, newImg));
 			newButton.appendChild(newImg)
 			newButton.classList.add("switch");
-			newButton.style.backgroundColor = "#5C5C5C";
 			newButton.id = "on"
+
+
 			container.appendChild(newButton);
+			desc.textContent = "Flip the Switch"
 
 			break;
 
@@ -186,7 +209,6 @@ setup.populateFidget = function populateFidget() {
 			fidgetLabel.textContent = "Control Panel"
 			let newDiv = document.createElement('div');
 			newDiv.classList.add("controlPanel");
-
 
 			let buttonRow = document.createElement('div');
 			buttonRow.classList.add("row");
@@ -217,20 +239,21 @@ setup.populateFidget = function populateFidget() {
 					newFlip.classList.add("flip");
 					if (k == 0) {
 						let newImg = document.createElement('img');
-						newImg.src = "../../img/arrow.png"
+						newImg.src = "../../img/measurement/arrow.png"
 						newImg.classList.add("flipImg")
 						newFlip.appendChild(newImg)
 						newFlip.addEventListener('click', () => setup.incLight(setup.light[i]));
 					} else {
 						newFlip.addEventListener('click', () => setup.decLight(setup.light[i]));
 						let newImg = document.createElement('img');
-						newImg.src = "../../img/arrow.png"
+						newImg.src = "../../img/measurement/arrow.png"
 						newImg.classList.add("flipped");
 						newFlip.appendChild(newImg)
 					}
 					flipCol.appendChild(newFlip)
 				}
 				flipRow.appendChild(flipCol);
+				desc.textContent = "Flip through the Lights"
 			}
 
 			newDiv.appendChild(lightRow)
@@ -244,6 +267,7 @@ setup.populateFidget = function populateFidget() {
 			blankSpace.style.height = '5%'
 			container.style.height = '50%'
 			fidgetLabel.textContent = "Drum Kit"
+			desc.textContent = "Play the drums"
 			console.log(setup.instruments)
 
 			/*For unique drum parts: bass, hihat, crash, and lowTom */
@@ -257,30 +281,20 @@ setup.populateFidget = function populateFidget() {
 				let newButton = document.createElement('button');
 				newButton.classList.add(setup.instruments[drum], "drums");
 				let newImg = document.createElement('img');
-				newImg.src = "../../img/drumSnareNoTag.png"
+				newImg.src = "../../img/measurement/drumSnareNoTag.png"
 				newButton.appendChild(newImg)
 
-				//Credit to Google Gemini for teaching me WebAudio API
 				newButton.addEventListener('click', () => {
-					if (setup.audioCtx.state === 'suspended') {
-						setup.audioCtx.resume();
-					}
-					const drumName = setup.instruments[drum];
-					const buffer = setup.drumBuffers[drumName];
-
-					if (buffer) {
-						const source = setup.audioCtx.createBufferSource();
-						source.buffer = buffer;
-						source.connect(setup.audioCtx.destination);
-						source.start(0);
-					}
+					setup.drumPlay(setup.instruments[drum])
 				});
 				container.appendChild(newButton);
 			}
 			break;
 
 		default:
-			console.log(`Something went wrong when populating fidget, given ${setup.currentFidget}`)
+			console.error(`Something went wrong when populating fidget, given ${setup.currentFidget}`)
+			setup.currentFidget = "bubbleWrap"
+			setup.populateFidget()
 	}
 }
 
@@ -292,36 +306,26 @@ setup.createUniqueDrums = function createUniqueDrums(container, which) {
 
 	switch (which) {
 		case "bass":
-			drumImg.src = `../../img/bassDrum.png`
+			drumImg.src = `../../img/measurement/bassDrum.png`
 			drum.appendChild(drumImg)
 			break;
 		case "crash":
-			drumImg.src = `../../img/brassDrum2.png`
+			drumImg.src = `../../img/measurement/brassDrum2.png`
 			drum.appendChild(drumImg)
 			break;
 		case "hihat":
-			drumImg.src = `../../img/brassDrum2.png`
+			drumImg.src = `../../img/measurement/brassDrum2.png`
 			drum.appendChild(drumImg)
 			break;
 		case "lowTom":
-			drumImg.src = `../../img/drumSnare.png`
+			drumImg.src = `../../img/measurement/drumSnare.png`
 			drum.appendChild(drumImg)
 			break;
 
 	}
 
 	drum.addEventListener('click', () => {
-		if (setup.audioCtx.state === 'suspended') {
-			setup.audioCtx.resume();
-		}
-		const buffer = setup.drumBuffers[which];
-
-		if (buffer) {
-			const source = setup.audioCtx.createBufferSource();
-			source.buffer = buffer;
-			source.connect(setup.audioCtx.destination);
-			source.start(0);
-		}
+		setup.drumPlay(which)
 	});
 	container.appendChild(drum);
 }

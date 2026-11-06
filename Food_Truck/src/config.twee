@@ -13,6 +13,9 @@ Food Truck Game
 <<set $numOrders = 0>>
 <<set $currentDay = 1>>
 <<set $debugMode = false>>
+<<set $tutorialMode = false>>
+<<set $tutorialStep = null>>
+<<set $tutorialIngredientIndex = 0>>
 <<set $dayScore = 0>>
 <<set $ordersCompleted = 0>>
 <<set $prepTray = []>>

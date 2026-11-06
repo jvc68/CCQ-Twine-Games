@@ -13,36 +13,21 @@ While You Wait
 :: StoryInit {"position": "100,100", "size": "100,100"}
 <<run setInterval(setup.updateTimer, 1000)>>
 <<=setup.formattedTime = "02:00">>
-<<run 
-/*Necessary set up for low latency drums*/
-setup.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-setup.drumBuffers = {};
-
-async function loadDrumSound(name, url) {
-    try {
-        const response = await fetch(url);
-        const arrayBuffer = await response.arrayBuffer();
-        setup.drumBuffers[name] = await setup.audioCtx.decodeAudioData(arrayBuffer);
-    } catch (e) {
-        console.error(`Failed to load sound: ${name}`, e);
-    }
-}
-
-loadDrumSound("bass", "audio/bass.wav");
-loadDrumSound("hihat", "audio/hihat.wav");
-loadDrumSound("lowTom", "audio/floorTom.wav");
-loadDrumSound("medTom", "audio/MedTom.wav");
-loadDrumSound("snare", "audio/Snare.wav");
-loadDrumSound("topTom", "audio/highTom.wav");
-loadDrumSound("crash", "audio/crash2.wav");
->>
+<<run  
+  Dialog.setup("Important Reminder", "reminderPopup");
+  Dialog.wiki(`Reminder:\n
+  This game is meant to relax you before you take your blood pressure measurement.\n\n
+  Please make sure to play the game with the hand that you are NOT going to use for taking your measurement.\n
+  Keep your other hand open, relax the arm, and avoid clenching your fist`);
+  Dialog.open();>> 
 
 :: Home
 <div class="phone">Time Spent: <span id="timer"><<=setup.formattedTime>></span>
 <span id="currentFidget">Switch</span>
 <div id="blankSpace"></div>
-<div class="fidgetInterface" id="container"></div>
-  <div class="options" id="postContainer"></div>
+<div class="fidgetInterface" id="container"></div>\
+<div class="desc" id="desc"></div>\
+<div class="options" id="postContainer"></div>
   <<done>><<run setup.populateFidget()>><</done>>
   <div class="flButton"> 
     <<button "Fidget Library" "Fidget Library">><</button>>
@@ -53,10 +38,10 @@ loadDrumSound("crash", "audio/crash2.wav");
 <div class="phone">Fidget Library
 Time Spent: <span id="timer"><<=setup.formattedTime>></span>
   <div class="library">
-    <<button "<img class='fidgetIcon' src='../../img/bubbleWrap.png'>">><<run setup.swapFidget("bubbleWrap")>> <</button>>
-    <<button "<img class='fidgetIcon' src='../../img/lightSwitch.png'>">><<run setup.swapFidget("switch")>> <</button>>
-    <<button "<img class='fidgetIcon' src='../../img/controlPanel.png'>">><<run setup.swapFidget("controlPanel")>> <</button>>
-    <<button "<img class='fidgetIcon' src='../../img/drums.png'>">><<run setup.swapFidget("drums")>> <</button>>
+    <<button "<img class='fidgetIcon' src='../../img/measurement/bubbleWrap.png'>">><<run setup.swapFidget("bubbleWrap")>> <</button>>
+    <<button "<img class='fidgetIcon' src='../../img/measurement/switchOn.png'>">><<run setup.swapFidget("switch")>> <</button>>
+    <<button "<img class='fidgetIcon' src='../../img/measurement/controlPanel.png'>">><<run setup.swapFidget("controlPanel")>> <</button>>
+    <<button "<img class='fidgetIcon' src='../../img/measurement/drums.png'>">><<run setup.swapFidget("drums")>> <</button>>
   </div> 
 
 </div>
