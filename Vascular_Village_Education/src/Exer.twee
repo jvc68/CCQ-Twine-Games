@@ -13,10 +13,11 @@ Education Game
 
 :: Start {"position": "625,275", "size": "100,100"}
 <h1>Welcome to Vascular Village!</h1><p>Meet Ruby, your guide on an amazing adventure inside the human body! 🔬</p><p>Follow Ruby as she explores the body's incredible systems, discovers how they work together, and learns the little things we can do every day to stay healthy.</p><p>From the heart pumping blood to the lungs bringing in oxygen, every discovery brings Ruby one step closer to understanding how our bodies keep us going!</p><p><strong>Are you ready to join Ruby and explore the wonders of Vascular Village?</strong></p>
-<p class="back-link "> <<button "Let's Explore! →">><<goto "HomeScreen">><</button>></p>
+<p class="back-link "> <<button "Let's Explore! →">><<goto "ScenarioMenu">><</button>></p>
 
 
 /* MAIN HOME SCREEN  */
+/* can find body in adobe stock for main screen */
 :: HomeScreen
 <div class="home-screen">
     <h1>Vascular Village</h1><p>Choose a part of your health journey!</p><div class="body-map">
@@ -37,6 +38,7 @@ Education Game
         </div>
 </div>
 
+<p class="back-link "> <<button "Let's Explore! →">><<goto "ScenarioMenu">><</button>></p>
     <p class="home-hint">Tap a circle to begin exploring! Or take the tutorial to learn how activities work before you begin!</p><div class="tutorial-home-button"><<button "🎓 Take the Tutorial">><<goto "TutorialStart">><</button>></div>
 </div>
 
@@ -58,9 +60,7 @@ $(document).one(":passagedisplay", function () {
     var activityId = State.variables.selectedActivityId || "longPause";
     setup.renderActivity( "bloodVessels", activityId, "activity-content");
 });
-<</script>><div class="back-link tutorial-navigation"><<button "← Return to Blood Vessels">><<goto "Blood Vessels">><</button>></div>
-
-
+<</script>>
 
 /* FOR BLOOD CELLS */
 
@@ -78,7 +78,7 @@ $(document).one(":passagedisplay", function () {
 $(document).one(":passagedisplay", function () {
     setup.renderActivity("bloodCells", "redCellRescue", "activity-content");
 });
-<</script>><div class="back-link tutorial-navigation"><<button "← Return to the Blood Cells">><<goto "Blood Cells">><</button>></div>
+<</script>>
 
 /* FOR LUNGS */
 
@@ -97,7 +97,7 @@ $(document).one(":passagedisplay", function () {
     var activityId = State.variables.selectedActivityId || "oxygenAdventure";
     setup.renderActivity( "lungs", activityId,  "activity-content");
 });
-<</script>><div class="back-link tutorial-navigation"><<button "← Return to the Lungs">><<goto "Lungs">><</button>></div>
+<</script>>
 
 /* FOR HEART */
 
@@ -116,7 +116,7 @@ $(document).one(":passagedisplay", function () {
     var activityId = State.variables.selectedActivityId || "heartbeatHeroes";
     setup.renderActivity("heart", activityId, "activity-content");
 });
-<</script>><p class="back-link"><span class="tutorial-navigation"><<button "← Return to the Heart">><<goto "Heart">><</button>></span></p>
+<</script>>
 
 /* FOR BRAIN */
 
@@ -135,12 +135,12 @@ $(document).one(":passagedisplay", function () {
     var activityId = State.variables.selectedActivityId || "brainControlCenter";
     setup.renderActivity("brain", activityId, "activity-content");
 });
-<</script>><p class="back-link tutorial-navigation"><<button "← Return to the Brain">><<goto "Brain">><</button>>
-</p>
+<</script>>
 
 
 /* LESSON LEARNED */
 
+/* individual lesson learned */
 :: LessonLearned
 <div id="lesson-content"></div>
 <<run setTimeout(function () {
@@ -152,7 +152,16 @@ $(document).one(":passagedisplay", function () {
 });
 <</script>>
 
+/* scenario lesson learned  */
+:: ScenarioLesson
 
+<div id="lesson-content"></div>
+
+<<script>>
+$(document).one(":passagedisplay", function () {
+    setup.renderScenarioLesson("lesson-content");
+});
+<</script>>
 
 /* TUTORIAL */
 
@@ -201,6 +210,43 @@ $(document).one(":passagedisplay", function () {
 :: TutorialComplete
 <div class="tutorial-panel"><h2>You're Ready to Explore!</h2><p>Great job, explorer! 🎉</p><p>You now know how to navigate Vascular Village, open activities, understand answer choices, and learn from feedback.</p><p>Now it's time to put your knowledge into action!</p><p>Choose your favourite body system and begin your adventure with Ruby.</p><p><strong>Your journey to better health starts here!</strong></p><div class="tutorial-navigation"><<button "🏠 Return Home">><<goto "HomeScreen">><</button>></div>
 </div>
+
+
+/* NEW SCENARIO MENU */
+:: ScenarioMenu
+
+<div class="home-screen"><h1>Choose Your Scenario</h1><p>Select a situation to begin your adventure!</p>
+
+    <div id="scenario-menu"></div>
+
+    <div class="back-link">
+        <<button "← Return Home">>
+            <<goto "HomeScreen">>
+        <</button>>
+    </div>
+</div>
+
+<<script>>
+$(document).one(":passagedisplay", function () {
+    setup.renderScenarioMenu("scenario-menu");
+});
+<</script>>
+
+:: ScenarioBodyMap
+
+<div class="home-screen">
+    <div id="scenario-body-map"></div>
+
+    <p class="home-hint">
+        The highlighted body systems are involved in your selected scenario!
+    </p>
+</div>
+
+<<script>>
+$(document).one(":passagedisplay", function () {
+    setup.renderScenarioBodyMap("scenario-body-map");
+});
+<</script>>
 
 /*
 to run on webpage

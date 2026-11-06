@@ -253,6 +253,7 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
     max-width: 340px;
     height: 320px;
     margin: 8px auto;
+    margin-bottom: 50px;
 }
 
 /* Five topic circles */
@@ -590,7 +591,6 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
     cursor: pointer;
 }
 
-/* not this */
 .tutorial-home-button button:hover {
     background: #24766b;
 }
@@ -598,6 +598,37 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
 .tutorial-home-button p {
     margin-top: 10px;
     font-size: 0.9em;
+}
+
+/* Body systems connected to the selected scenario */
+.body-circle.scenario-highlighted {
+    opacity: 1;
+    border: 4px solid #FFD700;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+    z-index: 2;
+}
+
+/* Keep centred circles centred when highlighted */
+.body-circle.head.scenario-highlighted,
+.body-circle.center.scenario-highlighted,
+.body-circle.legs.scenario-highlighted {
+    transform: translateX(-50%) scale(1.08);
+}
+
+/* Keep side circles in their original positions */
+.body-circle.left.scenario-highlighted,
+.body-circle.right.scenario-highlighted {
+    transform: scale(1.08);
+}
+
+/* Body systems not connected to the selected scenario */
+.body-circle.scenario-dimmed {
+    opacity: 0.35;
+    filter: grayscale(80%);
+}
+
+#scenario-body-map button {
+    margin: 2px auto;
 }</style><script role="script" id="twine-user-script" type="text/twine-javascript">/* twine-user-script #1: "scripts.js" */
 
 /*
@@ -910,6 +941,24 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
             progress,
             progressContainer
         );
+                // Create a button to return to the scenario body map
+        if (State.variables.selectedScenarioId) {
+
+            var back = document.createElement("p");
+            back.className = "back-link";
+
+            var backButton = document.createElement("button");
+            backButton.type = "button";
+            backButton.textContent = "← Back to Scenario";
+            backButton.classList.add("tutorial-button");
+
+            backButton.addEventListener("click", function () {
+                Engine.play("ScenarioBodyMap");
+            });
+
+            back.appendChild(backButton);
+            container.appendChild(back);
+        }
     };
     
 
@@ -917,7 +966,7 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
     // Generates the menu for a body system
     setup.renderActivityMenu = function (category, containerId) {
 
-        // Retrieve the activity library and menu
+        // Retrieve the activity dictionary and menu
         var library = setup.activityLibraries[category];
         var menu = library && library.menu;
 
@@ -1291,20 +1340,489 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
         // Create the button to return to the body map
         var returnLink = document.createElement("button");
         returnLink.type = "button";
-        returnLink.textContent = "← Return to the body map";
+        returnLink.textContent = "← Return to the scenario";
         returnLink.classList.add("tutorial-button");
 
         returnLink.addEventListener("click", function () {
-            Engine.play("BodyMap");
-        });
 
-        returnLink.addEventListener("click", function (event) {
-            event.preventDefault();
-            Engine.play("HomeScreen");
+            // If the player is completing a scenario, return to its body map
+            if (State.variables.selectedScenarioId) {
+                Engine.play("ScenarioBodyMap");
+            }
+            else {
+                // Otherwise, return to the normal home screen
+                Engine.play("HomeScreen");
+            }
         });
 
         container.appendChild(returnLink);
     };
+
+    // Generates the menu for scenario selection
+    setup.renderScenarioMenu = function (containerId) {
+
+        // Retrieve the scenario dictionary
+        var scenarios = setup.scenarios &&
+            setup.scenarios.bodyScenarios;
+
+        // Find the HTML container where the menu will appear
+        var container = document.getElementById(containerId);
+
+        if (!scenarios || !container) {
+            console.error("Could not render scenario menu.");
+            return;
+        }
+
+        // Access SugarCube variables
+        var variables = State.variables;
+
+        // Clear the existing menu
+        container.replaceChildren();
+
+        // Set menu CSS classes
+        var wrapper = container;
+        wrapper.className = "activity-page scenario-menu";
+
+        // Create the scenario card list
+        var list = document.createElement("div");
+        list.className = "activity-list";
+
+        // Create a card for each scenario
+        Object.keys(scenarios).forEach(function (scenarioId) {
+
+            var scenario = scenarios[scenarioId];
+
+            // Create the scenario card
+            var card = document.createElement("div");
+            card.className = "activity-card";
+
+            // Add the scenario title
+            var title = document.createElement("h3");
+            title.textContent = scenario.title;
+            card.appendChild(title);
+
+            // Add the scenario description
+            var description = document.createElement("p");
+            description.textContent = scenario.description;
+            card.appendChild(description);
+
+            // Create the Choose Scenario link
+            var choose = document.createElement("a");
+            choose.href = "#";
+            choose.textContent = "Choose Scenario →";
+
+            choose.addEventListener("click", function (event) {
+                event.preventDefault();
+
+                // Remember which scenario the player selected
+                variables.selectedScenarioId = scenarioId;
+
+                // Go to the scenario body map passage
+                Engine.play("ScenarioBodyMap");
+            });
+
+            card.appendChild(choose);
+
+            // Add the card to the scenario list
+            list.appendChild(card);
+        });
+
+        wrapper.appendChild(list);
+    };
+
+    
+    // Generates the body map for the selected scenario
+    setup.renderScenarioBodyMap = function (containerId) {
+
+        // Find the HTML container
+        var container = document.getElementById(containerId);
+
+        if (!container) {
+            console.error("Scenario body map container not found:", containerId);
+            return;
+        }
+
+        // Retrieve the selected scenario
+        var scenarioId = State.variables.selectedScenarioId;
+        var scenario = setup.scenarios.bodyScenarios[scenarioId];
+
+        if (!scenario) {
+            console.error("Selected scenario not found:", scenarioId);
+            return;
+        }
+
+        // Clear the existing content
+        container.replaceChildren();
+
+        // Create the page heading
+        var heading = document.createElement("h1");
+        heading.textContent = scenario.title;
+        container.appendChild(heading);
+
+        // Create the scenario description
+        var description = document.createElement("p");
+        description.textContent = scenario.description;
+        container.appendChild(description);
+
+        // Create the body map
+        var bodyMap = document.createElement("div");
+        bodyMap.className = "body-map";
+
+        // Map activity categories to body map circles
+        var bodySystems = {
+            brain: {
+                id: "brain",
+                label: "🧠 Brain",
+                className: "head"
+            },
+            bloodCells: {
+                id: "bloodCells",
+                label: "🩸 Blood Cells",
+                className: "left"
+            },
+            heart: {
+                id: "heart",
+                label: "❤️ Heartbeat",
+                className: "center"
+            },
+            bloodVessels: {
+                id: "bloodVessels",
+                label: "🩸 Blood Vessels",
+                className: "right"
+            },
+            lungs: {
+                id: "lungs",
+                label: "🫁 Lungs",
+                className: "legs"
+            }
+        };
+
+        // Identify the body systems involved in the scenario
+        var highlightedSystems = [];
+        var activityByCategory = {};
+
+        scenario.activities.forEach(function (activityId) {
+
+            var result = setup.getScenarioActivity(activityId);
+
+            if (!result) {
+                console.error("Could not find scenario activity:", activityId);
+                return;
+            }
+
+            if (bodySystems[result.category] &&
+                highlightedSystems.indexOf(result.category) === -1) {
+
+                highlightedSystems.push(result.category);
+                activityByCategory[result.category] = activityId;
+            }
+        });
+
+        // Create all five body map circles
+        Object.keys(bodySystems).forEach(function (category) {
+
+            var system = bodySystems[category];
+
+            var circle = document.createElement("div");
+            circle.className = "body-circle " + system.className;
+            circle.id = system.id;
+            circle.textContent = system.label;
+
+            // Highlight systems connected to the selected scenario
+            if (highlightedSystems.indexOf(category) !== -1) {
+                circle.classList.add("scenario-highlighted");
+
+                // Make the highlighted circle clickable
+                circle.style.cursor = "pointer";
+                circle.setAttribute("role", "button");
+                circle.setAttribute("tabindex", "0");
+
+                // Open the matching activity
+                var activityId = activityByCategory[category];
+
+                circle.addEventListener("click", function () {
+
+                    var result = setup.getScenarioActivity(activityId);
+
+                    if (!result) {
+                        return;
+                    }
+
+                    var library = setup.activityLibraries[result.category];
+                    var menuItem = null;
+
+                    library.menu.activities.forEach(function (item) {
+                        if (item.activityId === activityId) {
+                            menuItem = item;
+                        }
+                    });
+
+                    if (!menuItem || !menuItem.passage) {
+                        console.error("Activity passage not found:", activityId);
+                        return;
+                    }
+
+                    State.variables.selectedActivityId = activityId;
+                    Engine.play(menuItem.passage);
+                });
+
+                // Allow keyboard users to activate the circle
+                circle.addEventListener("keydown", function (event) {
+                    if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        circle.click();
+                    }
+                });
+            }
+            else {
+                circle.classList.add("scenario-dimmed");
+            }
+
+            bodyMap.appendChild(circle);
+        });
+
+        container.appendChild(bodyMap);
+
+        
+        // Check whether all scenario activities are completed
+        var scenarioCompleted = setup.checkScenarioCompletion(scenarioId);
+
+        // Display the scenario lesson button only when all activities are completed
+        if (scenarioCompleted) {
+
+            var lessonButton = document.createElement("button");
+            lessonButton.type = "button";
+            lessonButton.textContent = "View Scenario Lesson →";
+            lessonButton.classList.add("tutorial-button");
+
+            lessonButton.addEventListener("click", function () {
+                Engine.play("ScenarioLesson");
+            });
+
+            container.appendChild(lessonButton);
+        }
+
+        // Create a button to return to the main scenario menu
+        var menuButton = document.createElement("button");
+        menuButton.type = "button";
+        menuButton.textContent = "← Back to Scenario Menu";
+        menuButton.classList.add("tutorial-button");
+
+        menuButton.addEventListener("click", function () {
+            Engine.play("ScenarioMenu");
+        });
+
+        container.appendChild(menuButton);
+
+    };
+
+
+    
+    // Find an activity across all body-system dictionaries
+    setup.getScenarioActivity = function (activityId) {
+
+        // Go through each body-system dictionary
+        for (var category in setup.activityLibraries) {
+
+            var library = setup.activityLibraries[category];
+
+            // Check whether the activity exists in this dictionary
+            if (library && library[activityId]) {
+
+                // Return the activity and its category
+                return {
+                    category: category,
+                    activityId: activityId,
+                    activity: library[activityId]
+                };
+            }
+        }
+
+        // Activity could not be found
+        console.error("Scenario activity not found:", activityId);
+        return null;
+    };
+
+    // Retrieves or creates progress for a scenario
+    setup.getScenarioProgress = function (scenarioId) {
+
+        // Create scenario progress storage if it does not exist
+        if (!State.variables.scenarioProgress) {
+            State.variables.scenarioProgress = {};
+        }
+
+        // Create progress for this scenario if it does not exist
+        if (!State.variables.scenarioProgress[scenarioId]) {
+            State.variables.scenarioProgress[scenarioId] = {
+                activitiesCompleted: []
+            };
+        }
+
+        return State.variables.scenarioProgress[scenarioId];
+    };
+
+
+    // Checks whether all activities in a scenario have been completed
+    setup.checkScenarioCompletion = function (scenarioId) {
+
+        var scenario = setup.scenarios.bodyScenarios[scenarioId];
+
+        if (!scenario) {
+            return false;
+        }
+
+        var progress = setup.getScenarioProgress(scenarioId);
+
+        return scenario.activities.every(function (activityId) {
+            var result = setup.getScenarioActivity(activityId);
+
+            if (!result) {
+                return false;
+            }
+
+            var activityKey = result.category + "." + activityId;
+            var activityProgress =
+                State.variables.activityProgress &&
+                State.variables.activityProgress[activityKey];
+
+            return !!(
+                activityProgress &&
+                activityProgress.completed === true
+            );
+        });
+    };
+
+    
+    // Retrieves or creates progress for a scenario
+    setup.getScenarioProgress = function (scenarioId) {
+
+        if (!State.variables.scenarioProgress) {
+            State.variables.scenarioProgress = {};
+        }
+
+        if (!State.variables.scenarioProgress[scenarioId]) {
+            State.variables.scenarioProgress[scenarioId] = {
+                activitiesCompleted: []
+            };
+        }
+
+        return State.variables.scenarioProgress[scenarioId];
+    };
+
+
+    // Checks whether all activities in a scenario are completed
+    setup.checkScenarioCompletion = function (scenarioId) {
+
+        var scenario = setup.scenarios.bodyScenarios[scenarioId];
+
+        if (!scenario) {
+            return false;
+        }
+
+        var progress = setup.getScenarioProgress(scenarioId);
+
+        return scenario.activities.every(function (activityId) {
+
+            var result = setup.getScenarioActivity(activityId);
+
+            if (!result) {
+                return false;
+            }
+
+            var activityKey = result.category + "." + activityId;
+
+            var activityProgress =
+                State.variables.activityProgress &&
+                State.variables.activityProgress[activityKey];
+
+            if (activityProgress && activityProgress.completed === true) {
+
+                // Record the completed activity for this scenario
+                if (progress.activitiesCompleted.indexOf(activityId) === -1) {
+                    progress.activitiesCompleted.push(activityId);
+                }
+
+                return true;
+            }
+
+            return false;
+        });
+    };
+
+    // Renders the lesson for the completed scenario
+    setup.renderScenarioLesson = function (containerId) {
+
+        // Find the container where the lesson will be displayed
+        var container = document.getElementById(containerId);
+
+        if (!container) {
+            console.error("Scenario lesson container not found:", containerId);
+            return;
+        }
+
+        // Retrieve the currently selected scenario
+        var scenarioId = State.variables.selectedScenarioId;
+        var scenario = setup.scenarios.bodyScenarios[scenarioId];
+
+        if (!scenario || !scenario.lesson) {
+            container.textContent = "No scenario lesson is available.";
+            return;
+        }
+
+        var lesson = scenario.lesson;
+
+        // Clear any previous content
+        container.replaceChildren();
+
+        // Display the scenario heading
+        var heading = document.createElement("h1");
+        heading.textContent = "Scenario Lesson Learned!";
+        container.appendChild(heading);
+
+        // Display the introduction
+        var introduction = document.createElement("p");
+        introduction.textContent = lesson.introduction;
+        container.appendChild(introduction);
+
+        // Display Ruby's message
+        var characterMessage = document.createElement("p");
+
+        var characterName = document.createElement("strong");
+        characterName.textContent = lesson.characterName + ": ";
+
+        characterMessage.appendChild(characterName);
+        characterMessage.appendChild(
+            document.createTextNode('"' + lesson.characterLine + '"')
+        );
+
+        container.appendChild(characterMessage);
+
+        // Display the key lesson to remember
+        var rememberMessage = document.createElement("p");
+
+        var rememberHeading = document.createElement("strong");
+        rememberHeading.textContent = "Remember: ";
+
+        rememberMessage.appendChild(rememberHeading);
+        rememberMessage.appendChild(
+            document.createTextNode(lesson.remember)
+        );
+
+        container.appendChild(rememberMessage);
+
+        // Create a button to return to the scenario body map
+        var returnButton = document.createElement("button");
+        returnButton.type = "button";
+        returnButton.textContent = "← Return to Scenario";
+        returnButton.classList.add("tutorial-button");
+
+        returnButton.addEventListener("click", function () {
+            Engine.play("ScenarioBodyMap");
+        });
+
+        container.appendChild(returnButton);
+    };
+
 
 })();
 /* twine-user-script #2: "bloodCellActivities.js" */
@@ -3238,11 +3756,60 @@ setup.activityLibraries.lungs = {
         continueLabel: "Continue to the lesson",
         nextPassage: "LessonLearned"
     }
+};
+/* twine-user-script #7: "scenarios.js" */
+// Stores all available scenarios
+setup.scenarios = setup.scenarios || {};
+
+// Scenario collection
+setup.scenarios.bodyScenarios = {
+
+    // Scenario 1: Sitting around all day
+    sittingAllDay: {
+        title: "We've Been Sitting Around All Day",
+        description: "Ruby has spent most of the day sitting down. Let's discover how moving our bodies can help us stay healthy!",
+
+        // Activities connected to this scenario
+        activities: [
+            "redCellRescue",
+            "longPause",
+            "brainControlCenter"
+        ],
+
+        // Lesson displayed after all three activities are completed
+        lesson: {
+            introduction: "Ruby has completed all three activities! Let's see how moving around can help different parts of the body.",
+            characterName: "Ruby",
+            characterLine: "I learned that moving our bodies helps different body systems work together!",
+            remember: "Regular movement supports healthy circulation, breathing and brain function. Taking breaks from sitting and being active throughout the day can help keep our bodies healthy."
+        }
+    },
+
+    // Scenario 2: Eating chips all day
+    eatingChipsAllDay: {
+        title: "We've Been Eating Chips All Day",
+        description: "Ruby has spent most of the day eating chips. Let's discover how eating healthy foods can help us stay healthy!",
+
+        activities: [
+            "heartbeatHeroes",
+            "breatheAndMove",
+            "brainControlCenter"
+        ],
+
+        lesson: {
+            introduction: "",
+            characterName: "Ruby",
+            characterLine: "",
+            remember: ""
+        }
+    }
+
 };</script><tw-passagedata pid="1" name="Start" tags="" position="625,275" size="100,100">&lt;h1&gt;Welcome to Vascular Village!&lt;/h1&gt;&lt;p&gt;Meet Ruby, your guide on an amazing adventure inside the human body! 🔬&lt;/p&gt;&lt;p&gt;Follow Ruby as she explores the body&#39;s incredible systems, discovers how they work together, and learns the little things we can do every day to stay healthy.&lt;/p&gt;&lt;p&gt;From the heart pumping blood to the lungs bringing in oxygen, every discovery brings Ruby one step closer to understanding how our bodies keep us going!&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Are you ready to join Ruby and explore the wonders of Vascular Village?&lt;/strong&gt;&lt;/p&gt;
-&lt;p class=&quot;back-link &quot;&gt; &lt;&lt;button &quot;Let&#39;s Explore! →&quot;&gt;&gt;&lt;&lt;goto &quot;HomeScreen&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/p&gt;
+&lt;p class=&quot;back-link &quot;&gt; &lt;&lt;button &quot;Let&#39;s Explore! →&quot;&gt;&gt;&lt;&lt;goto &quot;ScenarioMenu&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/p&gt;
 
 
-/* MAIN HOME SCREEN  */</tw-passagedata><tw-passagedata pid="2" name="HomeScreen" tags="" position="225,100" size="100,100">&lt;div class=&quot;home-screen&quot;&gt;
+/* MAIN HOME SCREEN  */
+/* can find body in adobe stock for main screen */</tw-passagedata><tw-passagedata pid="2" name="HomeScreen" tags="" position="225,100" size="100,100">&lt;div class=&quot;home-screen&quot;&gt;
     &lt;h1&gt;Vascular Village&lt;/h1&gt;&lt;p&gt;Choose a part of your health journey!&lt;/p&gt;&lt;div class=&quot;body-map&quot;&gt;
         &lt;div class=&quot;body-circle head&quot;&gt;
             [[🧠Brain-&gt;Brain]]
@@ -3261,6 +3828,7 @@ setup.activityLibraries.lungs = {
         &lt;/div&gt;
 &lt;/div&gt;
 
+&lt;p class=&quot;back-link &quot;&gt; &lt;&lt;button &quot;Let&#39;s Explore! →&quot;&gt;&gt;&lt;&lt;goto &quot;ScenarioMenu&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/p&gt;
     &lt;p class=&quot;home-hint&quot;&gt;Tap a circle to begin exploring! Or take the tutorial to learn how activities work before you begin!&lt;/p&gt;&lt;div class=&quot;tutorial-home-button&quot;&gt;&lt;&lt;button &quot;🎓 Take the Tutorial&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialStart&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
 &lt;/div&gt;
 
@@ -3276,9 +3844,7 @@ $(document).one(&quot;:passagedisplay&quot;, function () {
     var activityId = State.variables.selectedActivityId || &quot;longPause&quot;;
     setup.renderActivity( &quot;bloodVessels&quot;, activityId, &quot;activity-content&quot;);
 });
-&lt;&lt;/script&gt;&gt;&lt;div class=&quot;back-link tutorial-navigation&quot;&gt;&lt;&lt;button &quot;← Return to Blood Vessels&quot;&gt;&gt;&lt;&lt;goto &quot;Blood Vessels&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
-
-
+&lt;&lt;/script&gt;&gt;
 
 /* FOR BLOOD CELLS */</tw-passagedata><tw-passagedata pid="5" name="Blood Cells" tags="" position="600,100" size="100,100">&lt;div id=&quot;activity-menu&quot;&gt;&lt;/div&gt;
 &lt;&lt;script&gt;&gt;
@@ -3290,7 +3856,7 @@ $(document).one(&quot;:passagedisplay&quot;, function () {
 $(document).one(&quot;:passagedisplay&quot;, function () {
     setup.renderActivity(&quot;bloodCells&quot;, &quot;redCellRescue&quot;, &quot;activity-content&quot;);
 });
-&lt;&lt;/script&gt;&gt;&lt;div class=&quot;back-link tutorial-navigation&quot;&gt;&lt;&lt;button &quot;← Return to the Blood Cells&quot;&gt;&gt;&lt;&lt;goto &quot;Blood Cells&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+&lt;&lt;/script&gt;&gt;
 
 /* FOR LUNGS */</tw-passagedata><tw-passagedata pid="7" name="Lungs" tags="" position="850,100" size="100,100">&lt;div id=&quot;activity-menu&quot;&gt;&lt;/div&gt;
 &lt;&lt;script&gt;&gt;
@@ -3303,7 +3869,7 @@ $(document).one(&quot;:passagedisplay&quot;, function () {
     var activityId = State.variables.selectedActivityId || &quot;oxygenAdventure&quot;;
     setup.renderActivity( &quot;lungs&quot;, activityId,  &quot;activity-content&quot;);
 });
-&lt;&lt;/script&gt;&gt;&lt;div class=&quot;back-link tutorial-navigation&quot;&gt;&lt;&lt;button &quot;← Return to the Lungs&quot;&gt;&gt;&lt;&lt;goto &quot;Lungs&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+&lt;&lt;/script&gt;&gt;
 
 /* FOR HEART */</tw-passagedata><tw-passagedata pid="9" name="Heart" tags="" position="1100,100" size="100,100">&lt;div id=&quot;activity-menu&quot;&gt;&lt;/div&gt;
 &lt;&lt;script&gt;&gt;
@@ -3316,7 +3882,7 @@ $(document).one(&quot;:passagedisplay&quot;, function () {
     var activityId = State.variables.selectedActivityId || &quot;heartbeatHeroes&quot;;
     setup.renderActivity(&quot;heart&quot;, activityId, &quot;activity-content&quot;);
 });
-&lt;&lt;/script&gt;&gt;&lt;p class=&quot;back-link&quot;&gt;&lt;span class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;← Return to the Heart&quot;&gt;&gt;&lt;&lt;goto &quot;Heart&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;&lt;/script&gt;&gt;
 
 /* FOR BRAIN */</tw-passagedata><tw-passagedata pid="11" name="Brain" tags="" position="100,225" size="100,100">&lt;div id=&quot;activity-menu&quot;&gt;&lt;/div&gt;
 &lt;&lt;script&gt;&gt;
@@ -3329,11 +3895,12 @@ $(document).one(&quot;:passagedisplay&quot;, function () {
     var activityId = State.variables.selectedActivityId || &quot;brainControlCenter&quot;;
     setup.renderActivity(&quot;brain&quot;, activityId, &quot;activity-content&quot;);
 });
-&lt;&lt;/script&gt;&gt;&lt;p class=&quot;back-link tutorial-navigation&quot;&gt;&lt;&lt;button &quot;← Return to the Brain&quot;&gt;&gt;&lt;&lt;goto &quot;Brain&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;
-&lt;/p&gt;
+&lt;&lt;/script&gt;&gt;
 
 
-/* LESSON LEARNED */</tw-passagedata><tw-passagedata pid="13" name="LessonLearned" tags="" position="350,225" size="100,100">&lt;div id=&quot;lesson-content&quot;&gt;&lt;/div&gt;
+/* LESSON LEARNED */
+
+/* individual lesson learned */</tw-passagedata><tw-passagedata pid="13" name="LessonLearned" tags="" position="350,225" size="100,100">&lt;div id=&quot;lesson-content&quot;&gt;&lt;/div&gt;
 &lt;&lt;run setTimeout(function () {
     setup.renderLessonLearned(&quot;lesson-content&quot;);
 }, 0)&gt;&gt;
@@ -3343,14 +3910,20 @@ $(document).one(&quot;:passagedisplay&quot;, function () {
 });
 &lt;&lt;/script&gt;&gt;
 
+/* scenario lesson learned  */</tw-passagedata><tw-passagedata pid="14" name="ScenarioLesson" tags="" position="475,225" size="100,100">&lt;div id=&quot;lesson-content&quot;&gt;&lt;/div&gt;
 
+&lt;&lt;script&gt;&gt;
+$(document).one(&quot;:passagedisplay&quot;, function () {
+    setup.renderScenarioLesson(&quot;lesson-content&quot;);
+});
+&lt;&lt;/script&gt;&gt;
 
-/* TUTORIAL */</tw-passagedata><tw-passagedata pid="14" name="TutorialStart" tags="" position="475,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;div class=&quot;tutorial-icon&quot;&gt;🎓&lt;/div&gt;
+/* TUTORIAL */</tw-passagedata><tw-passagedata pid="15" name="TutorialStart" tags="" position="600,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;div class=&quot;tutorial-icon&quot;&gt;🎓&lt;/div&gt;
     &lt;h2&gt;Welcome to the Tutorial!&lt;/h2&gt;&lt;p&gt;Hi, explorer! Ruby here! 👋&lt;/p&gt;&lt;p&gt;I&#39;ll show you how to explore Vascular Village and complete activities about the human body.&lt;/p&gt;&lt;p&gt;You&#39;ll learn how to choose an activity, understand answer choices, read feedback, and discover what you&#39;ve learned.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Don&#39;t worry! You won&#39;t need to answer any questions during this tutorial.&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Ready? Let&#39;s get started!&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialMission&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
 &lt;/div&gt;
 
 
-/* should show the populated menu page, maybe just a popup window at the bottom of the screen to explain how the game works */</tw-passagedata><tw-passagedata pid="15" name="TutorialMission" tags="" position="600,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h3&gt;Step 1: Choose Your Adventure&lt;/h3&gt;&lt;p&gt;On the home screen, you&#39;ll find five areas to explore:&lt;/p&gt;&lt;ul&gt;
+/* should show the populated menu page, maybe just a popup window at the bottom of the screen to explain how the game works */</tw-passagedata><tw-passagedata pid="16" name="TutorialMission" tags="" position="725,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h3&gt;Step 1: Choose Your Adventure&lt;/h3&gt;&lt;p&gt;On the home screen, you&#39;ll find five areas to explore:&lt;/p&gt;&lt;ul&gt;
         &lt;li&gt;🧠 Brain&lt;/li&gt;
         &lt;li&gt;🩸 Blood Cells&lt;/li&gt;
         &lt;li&gt;❤️ Heart&lt;/li&gt;
@@ -3358,7 +3931,7 @@ $(document).one(&quot;:passagedisplay&quot;, function () {
         &lt;li&gt;🫁 Lungs&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Each area teaches you something different about the human body and how to keep it healthy.&lt;/p&gt;&lt;p&gt;When you choose an area, you&#39;ll enter its activity menu. This is where you can explore the available activities.&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialChoices&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
 &lt;/div&gt;
 
-/* again, should show a popup window at the bottom of the screen to explain the choices */</tw-passagedata><tw-passagedata pid="16" name="TutorialChoices" tags="" position="725,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h3&gt;Step 2: Explore an Activity&lt;/h3&gt;&lt;p&gt;Each body system has activities designed to help you learn through questions.&lt;/p&gt;&lt;p&gt;When you select an activity, it opens on its own screen.&lt;/p&gt;&lt;p&gt;Depending on the activity, you might need to:&lt;/p&gt;&lt;ul&gt;
+/* again, should show a popup window at the bottom of the screen to explain the choices */</tw-passagedata><tw-passagedata pid="17" name="TutorialChoices" tags="" position="850,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h3&gt;Step 2: Explore an Activity&lt;/h3&gt;&lt;p&gt;Each body system has activities designed to help you learn through questions.&lt;/p&gt;&lt;p&gt;When you select an activity, it opens on its own screen.&lt;/p&gt;&lt;p&gt;Depending on the activity, you might need to:&lt;/p&gt;&lt;ul&gt;
         &lt;li&gt;🔎 Read a question or scenario.&lt;/li&gt;
         &lt;li&gt;💭 Think about what you already know.&lt;/li&gt;
         &lt;li&gt;👆 Select an answer or make a choice.&lt;/li&gt;
@@ -3367,15 +3940,45 @@ $(document).one(&quot;:passagedisplay&quot;, function () {
 
 
 /* popup window at the bottom of screen to explain feedback */
-/* should have button with &quot;Return Home&quot; to finish tutorial */</tw-passagedata><tw-passagedata pid="17" name="TutorialFeedback" tags="" position="850,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h3&gt;Step 3: Learn from Feedback&lt;/h3&gt;&lt;p&gt;After making a choice in an activity, you may receive feedback explaining the result.&lt;/p&gt;&lt;p&gt;Feedback helps you understand:&lt;/p&gt;&lt;ul&gt;
+/* should have button with &quot;Return Home&quot; to finish tutorial */</tw-passagedata><tw-passagedata pid="18" name="TutorialFeedback" tags="" position="975,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h3&gt;Step 3: Learn from Feedback&lt;/h3&gt;&lt;p&gt;After making a choice in an activity, you may receive feedback explaining the result.&lt;/p&gt;&lt;p&gt;Feedback helps you understand:&lt;/p&gt;&lt;ul&gt;
         &lt;li&gt;✅ What you got right.&lt;/li&gt;
         &lt;li&gt;💡 Why an answer makes sense.&lt;/li&gt;
         &lt;li&gt;🧠 Important facts about the human body.&lt;/li&gt;
         &lt;li&gt;🌱 What you can learn from a mistake.&lt;/li&gt;&lt;/ul&gt;
     &lt;p&gt;Don&#39;t be discouraged if you get something wrong! The goal is to learn, improve your understanding, and discover something new.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Take your time and read the feedback before moving on.&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialLesson&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="18" name="TutorialLesson" tags="" position="975,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h3&gt;Step 4: Discover What You&#39;ve Learned&lt;/h3&gt;&lt;p&gt;Completed activities include a lesson to help you understand the information you&#39;ve discovered.&lt;/p&gt;&lt;p&gt;These lessons can help you connect what you&#39;ve learned to everyday health.&lt;/p&gt;&lt;p&gt;For example, you might discover how exercise supports your heart or why your lungs need clean air.&lt;/p&gt;&lt;p&gt;Take a moment to think about what you&#39;ve learned and how you could use that knowledge in your daily life.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Every discovery brings you one step closer to becoming a health explorer!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialComplete&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="19" name="TutorialComplete" tags="" position="1100,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;You&#39;re Ready to Explore!&lt;/h2&gt;&lt;p&gt;Great job, explorer! 🎉&lt;/p&gt;&lt;p&gt;You now know how to navigate Vascular Village, open activities, understand answer choices, and learn from feedback.&lt;/p&gt;&lt;p&gt;Now it&#39;s time to put your knowledge into action!&lt;/p&gt;&lt;p&gt;Choose your favourite body system and begin your adventure with Ruby.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Your journey to better health starts here!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;🏠 Return Home&quot;&gt;&gt;&lt;&lt;goto &quot;HomeScreen&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="19" name="TutorialLesson" tags="" position="1100,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h3&gt;Step 4: Discover What You&#39;ve Learned&lt;/h3&gt;&lt;p&gt;Completed activities include a lesson to help you understand the information you&#39;ve discovered.&lt;/p&gt;&lt;p&gt;These lessons can help you connect what you&#39;ve learned to everyday health.&lt;/p&gt;&lt;p&gt;For example, you might discover how exercise supports your heart or why your lungs need clean air.&lt;/p&gt;&lt;p&gt;Take a moment to think about what you&#39;ve learned and how you could use that knowledge in your daily life.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Every discovery brings you one step closer to becoming a health explorer!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialComplete&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="20" name="TutorialComplete" tags="" position="1225,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;You&#39;re Ready to Explore!&lt;/h2&gt;&lt;p&gt;Great job, explorer! 🎉&lt;/p&gt;&lt;p&gt;You now know how to navigate Vascular Village, open activities, understand answer choices, and learn from feedback.&lt;/p&gt;&lt;p&gt;Now it&#39;s time to put your knowledge into action!&lt;/p&gt;&lt;p&gt;Choose your favourite body system and begin your adventure with Ruby.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Your journey to better health starts here!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;🏠 Return Home&quot;&gt;&gt;&lt;&lt;goto &quot;HomeScreen&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
 &lt;/div&gt;
+
+
+/* NEW SCENARIO MENU */</tw-passagedata><tw-passagedata pid="21" name="ScenarioMenu" tags="" position="100,350" size="100,100">&lt;div class=&quot;home-screen&quot;&gt;&lt;h1&gt;Choose Your Scenario&lt;/h1&gt;&lt;p&gt;Select a situation to begin your adventure!&lt;/p&gt;
+
+    &lt;div id=&quot;scenario-menu&quot;&gt;&lt;/div&gt;
+
+    &lt;div class=&quot;back-link&quot;&gt;
+        &lt;&lt;button &quot;← Return Home&quot;&gt;&gt;
+            &lt;&lt;goto &quot;HomeScreen&quot;&gt;&gt;
+        &lt;&lt;/button&gt;&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;&lt;script&gt;&gt;
+$(document).one(&quot;:passagedisplay&quot;, function () {
+    setup.renderScenarioMenu(&quot;scenario-menu&quot;);
+});
+&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="22" name="ScenarioBodyMap" tags="" position="225,350" size="100,100">&lt;div class=&quot;home-screen&quot;&gt;
+    &lt;div id=&quot;scenario-body-map&quot;&gt;&lt;/div&gt;
+
+    &lt;p class=&quot;home-hint&quot;&gt;
+        The highlighted body systems are involved in your selected scenario!
+    &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;&lt;script&gt;&gt;
+$(document).one(&quot;:passagedisplay&quot;, function () {
+    setup.renderScenarioBodyMap(&quot;scenario-body-map&quot;);
+});
+&lt;&lt;/script&gt;&gt;
 
 /*
 to run on webpage

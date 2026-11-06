@@ -309,6 +309,24 @@
             progress,
             progressContainer
         );
+                // Create a button to return to the scenario body map
+        if (State.variables.selectedScenarioId) {
+
+            var back = document.createElement("p");
+            back.className = "back-link";
+
+            var backButton = document.createElement("button");
+            backButton.type = "button";
+            backButton.textContent = "← Back to Scenario";
+            backButton.classList.add("tutorial-button");
+
+            backButton.addEventListener("click", function () {
+                Engine.play("ScenarioBodyMap");
+            });
+
+            back.appendChild(backButton);
+            container.appendChild(back);
+        }
     };
     
 
@@ -316,7 +334,7 @@
     // Generates the menu for a body system
     setup.renderActivityMenu = function (category, containerId) {
 
-        // Retrieve the activity library and menu
+        // Retrieve the activity dictionary and menu
         var library = setup.activityLibraries[category];
         var menu = library && library.menu;
 
@@ -690,19 +708,488 @@
         // Create the button to return to the body map
         var returnLink = document.createElement("button");
         returnLink.type = "button";
-        returnLink.textContent = "← Return to the body map";
+        returnLink.textContent = "← Return to the scenario";
         returnLink.classList.add("tutorial-button");
 
         returnLink.addEventListener("click", function () {
-            Engine.play("BodyMap");
-        });
 
-        returnLink.addEventListener("click", function (event) {
-            event.preventDefault();
-            Engine.play("HomeScreen");
+            // If the player is completing a scenario, return to its body map
+            if (State.variables.selectedScenarioId) {
+                Engine.play("ScenarioBodyMap");
+            }
+            else {
+                // Otherwise, return to the normal home screen
+                Engine.play("HomeScreen");
+            }
         });
 
         container.appendChild(returnLink);
     };
+
+    // Generates the menu for scenario selection
+    setup.renderScenarioMenu = function (containerId) {
+
+        // Retrieve the scenario dictionary
+        var scenarios = setup.scenarios &&
+            setup.scenarios.bodyScenarios;
+
+        // Find the HTML container where the menu will appear
+        var container = document.getElementById(containerId);
+
+        if (!scenarios || !container) {
+            console.error("Could not render scenario menu.");
+            return;
+        }
+
+        // Access SugarCube variables
+        var variables = State.variables;
+
+        // Clear the existing menu
+        container.replaceChildren();
+
+        // Set menu CSS classes
+        var wrapper = container;
+        wrapper.className = "activity-page scenario-menu";
+
+        // Create the scenario card list
+        var list = document.createElement("div");
+        list.className = "activity-list";
+
+        // Create a card for each scenario
+        Object.keys(scenarios).forEach(function (scenarioId) {
+
+            var scenario = scenarios[scenarioId];
+
+            // Create the scenario card
+            var card = document.createElement("div");
+            card.className = "activity-card";
+
+            // Add the scenario title
+            var title = document.createElement("h3");
+            title.textContent = scenario.title;
+            card.appendChild(title);
+
+            // Add the scenario description
+            var description = document.createElement("p");
+            description.textContent = scenario.description;
+            card.appendChild(description);
+
+            // Create the Choose Scenario link
+            var choose = document.createElement("a");
+            choose.href = "#";
+            choose.textContent = "Choose Scenario →";
+
+            choose.addEventListener("click", function (event) {
+                event.preventDefault();
+
+                // Remember which scenario the player selected
+                variables.selectedScenarioId = scenarioId;
+
+                // Go to the scenario body map passage
+                Engine.play("ScenarioBodyMap");
+            });
+
+            card.appendChild(choose);
+
+            // Add the card to the scenario list
+            list.appendChild(card);
+        });
+
+        wrapper.appendChild(list);
+    };
+
+    
+    // Generates the body map for the selected scenario
+    setup.renderScenarioBodyMap = function (containerId) {
+
+        // Find the HTML container
+        var container = document.getElementById(containerId);
+
+        if (!container) {
+            console.error("Scenario body map container not found:", containerId);
+            return;
+        }
+
+        // Retrieve the selected scenario
+        var scenarioId = State.variables.selectedScenarioId;
+        var scenario = setup.scenarios.bodyScenarios[scenarioId];
+
+        if (!scenario) {
+            console.error("Selected scenario not found:", scenarioId);
+            return;
+        }
+
+        // Clear the existing content
+        container.replaceChildren();
+
+        // Create the page heading
+        var heading = document.createElement("h1");
+        heading.textContent = scenario.title;
+        container.appendChild(heading);
+
+        // Create the scenario description
+        var description = document.createElement("p");
+        description.textContent = scenario.description;
+        container.appendChild(description);
+
+        // Create the body map
+        var bodyMap = document.createElement("div");
+        bodyMap.className = "body-map";
+
+        // Map activity categories to body map circles
+        var bodySystems = {
+            brain: {
+                id: "brain",
+                label: "🧠 Brain",
+                className: "head"
+            },
+            bloodCells: {
+                id: "bloodCells",
+                label: "🩸 Blood Cells",
+                className: "left"
+            },
+            heart: {
+                id: "heart",
+                label: "❤️ Heartbeat",
+                className: "center"
+            },
+            bloodVessels: {
+                id: "bloodVessels",
+                label: "🩸 Blood Vessels",
+                className: "right"
+            },
+            lungs: {
+                id: "lungs",
+                label: "🫁 Lungs",
+                className: "legs"
+            }
+        };
+
+        // Identify the body systems involved in the scenario
+        var highlightedSystems = [];
+        var activityByCategory = {};
+
+        scenario.activities.forEach(function (activityId) {
+
+            var result = setup.getScenarioActivity(activityId);
+
+            if (!result) {
+                console.error("Could not find scenario activity:", activityId);
+                return;
+            }
+
+            if (bodySystems[result.category] &&
+                highlightedSystems.indexOf(result.category) === -1) {
+
+                highlightedSystems.push(result.category);
+                activityByCategory[result.category] = activityId;
+            }
+        });
+
+        // Create all five body map circles
+        Object.keys(bodySystems).forEach(function (category) {
+
+            var system = bodySystems[category];
+
+            var circle = document.createElement("div");
+            circle.className = "body-circle " + system.className;
+            circle.id = system.id;
+            circle.textContent = system.label;
+
+            // Highlight systems connected to the selected scenario
+            if (highlightedSystems.indexOf(category) !== -1) {
+                circle.classList.add("scenario-highlighted");
+
+                // Make the highlighted circle clickable
+                circle.style.cursor = "pointer";
+                circle.setAttribute("role", "button");
+                circle.setAttribute("tabindex", "0");
+
+                // Open the matching activity
+                var activityId = activityByCategory[category];
+
+                circle.addEventListener("click", function () {
+
+                    var result = setup.getScenarioActivity(activityId);
+
+                    if (!result) {
+                        return;
+                    }
+
+                    var library = setup.activityLibraries[result.category];
+                    var menuItem = null;
+
+                    library.menu.activities.forEach(function (item) {
+                        if (item.activityId === activityId) {
+                            menuItem = item;
+                        }
+                    });
+
+                    if (!menuItem || !menuItem.passage) {
+                        console.error("Activity passage not found:", activityId);
+                        return;
+                    }
+
+                    State.variables.selectedActivityId = activityId;
+                    Engine.play(menuItem.passage);
+                });
+
+                // Allow keyboard users to activate the circle
+                circle.addEventListener("keydown", function (event) {
+                    if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        circle.click();
+                    }
+                });
+            }
+            else {
+                circle.classList.add("scenario-dimmed");
+            }
+
+            bodyMap.appendChild(circle);
+        });
+
+        container.appendChild(bodyMap);
+
+        
+        // Check whether all scenario activities are completed
+        var scenarioCompleted = setup.checkScenarioCompletion(scenarioId);
+
+        // Display the scenario lesson button only when all activities are completed
+        if (scenarioCompleted) {
+
+            var lessonButton = document.createElement("button");
+            lessonButton.type = "button";
+            lessonButton.textContent = "View Scenario Lesson →";
+            lessonButton.classList.add("tutorial-button");
+
+            lessonButton.addEventListener("click", function () {
+                Engine.play("ScenarioLesson");
+            });
+
+            container.appendChild(lessonButton);
+        }
+
+        // Create a button to return to the main scenario menu
+        var menuButton = document.createElement("button");
+        menuButton.type = "button";
+        menuButton.textContent = "← Back to Scenario Menu";
+        menuButton.classList.add("tutorial-button");
+
+        menuButton.addEventListener("click", function () {
+            Engine.play("ScenarioMenu");
+        });
+
+        container.appendChild(menuButton);
+
+    };
+
+
+    
+    // Find an activity across all body-system dictionaries
+    setup.getScenarioActivity = function (activityId) {
+
+        // Go through each body-system dictionary
+        for (var category in setup.activityLibraries) {
+
+            var library = setup.activityLibraries[category];
+
+            // Check whether the activity exists in this dictionary
+            if (library && library[activityId]) {
+
+                // Return the activity and its category
+                return {
+                    category: category,
+                    activityId: activityId,
+                    activity: library[activityId]
+                };
+            }
+        }
+
+        // Activity could not be found
+        console.error("Scenario activity not found:", activityId);
+        return null;
+    };
+
+    // Retrieves or creates progress for a scenario
+    setup.getScenarioProgress = function (scenarioId) {
+
+        // Create scenario progress storage if it does not exist
+        if (!State.variables.scenarioProgress) {
+            State.variables.scenarioProgress = {};
+        }
+
+        // Create progress for this scenario if it does not exist
+        if (!State.variables.scenarioProgress[scenarioId]) {
+            State.variables.scenarioProgress[scenarioId] = {
+                activitiesCompleted: []
+            };
+        }
+
+        return State.variables.scenarioProgress[scenarioId];
+    };
+
+
+    // Checks whether all activities in a scenario have been completed
+    setup.checkScenarioCompletion = function (scenarioId) {
+
+        var scenario = setup.scenarios.bodyScenarios[scenarioId];
+
+        if (!scenario) {
+            return false;
+        }
+
+        var progress = setup.getScenarioProgress(scenarioId);
+
+        return scenario.activities.every(function (activityId) {
+            var result = setup.getScenarioActivity(activityId);
+
+            if (!result) {
+                return false;
+            }
+
+            var activityKey = result.category + "." + activityId;
+            var activityProgress =
+                State.variables.activityProgress &&
+                State.variables.activityProgress[activityKey];
+
+            return !!(
+                activityProgress &&
+                activityProgress.completed === true
+            );
+        });
+    };
+
+    
+    // Retrieves or creates progress for a scenario
+    setup.getScenarioProgress = function (scenarioId) {
+
+        if (!State.variables.scenarioProgress) {
+            State.variables.scenarioProgress = {};
+        }
+
+        if (!State.variables.scenarioProgress[scenarioId]) {
+            State.variables.scenarioProgress[scenarioId] = {
+                activitiesCompleted: []
+            };
+        }
+
+        return State.variables.scenarioProgress[scenarioId];
+    };
+
+
+    // Checks whether all activities in a scenario are completed
+    setup.checkScenarioCompletion = function (scenarioId) {
+
+        var scenario = setup.scenarios.bodyScenarios[scenarioId];
+
+        if (!scenario) {
+            return false;
+        }
+
+        var progress = setup.getScenarioProgress(scenarioId);
+
+        return scenario.activities.every(function (activityId) {
+
+            var result = setup.getScenarioActivity(activityId);
+
+            if (!result) {
+                return false;
+            }
+
+            var activityKey = result.category + "." + activityId;
+
+            var activityProgress =
+                State.variables.activityProgress &&
+                State.variables.activityProgress[activityKey];
+
+            if (activityProgress && activityProgress.completed === true) {
+
+                // Record the completed activity for this scenario
+                if (progress.activitiesCompleted.indexOf(activityId) === -1) {
+                    progress.activitiesCompleted.push(activityId);
+                }
+
+                return true;
+            }
+
+            return false;
+        });
+    };
+
+    // Renders the lesson for the completed scenario
+    setup.renderScenarioLesson = function (containerId) {
+
+        // Find the container where the lesson will be displayed
+        var container = document.getElementById(containerId);
+
+        if (!container) {
+            console.error("Scenario lesson container not found:", containerId);
+            return;
+        }
+
+        // Retrieve the currently selected scenario
+        var scenarioId = State.variables.selectedScenarioId;
+        var scenario = setup.scenarios.bodyScenarios[scenarioId];
+
+        if (!scenario || !scenario.lesson) {
+            container.textContent = "No scenario lesson is available.";
+            return;
+        }
+
+        var lesson = scenario.lesson;
+
+        // Clear any previous content
+        container.replaceChildren();
+
+        // Display the scenario heading
+        var heading = document.createElement("h1");
+        heading.textContent = "Scenario Lesson Learned!";
+        container.appendChild(heading);
+
+        // Display the introduction
+        var introduction = document.createElement("p");
+        introduction.textContent = lesson.introduction;
+        container.appendChild(introduction);
+
+        // Display Ruby's message
+        var characterMessage = document.createElement("p");
+
+        var characterName = document.createElement("strong");
+        characterName.textContent = lesson.characterName + ": ";
+
+        characterMessage.appendChild(characterName);
+        characterMessage.appendChild(
+            document.createTextNode('"' + lesson.characterLine + '"')
+        );
+
+        container.appendChild(characterMessage);
+
+        // Display the key lesson to remember
+        var rememberMessage = document.createElement("p");
+
+        var rememberHeading = document.createElement("strong");
+        rememberHeading.textContent = "Remember: ";
+
+        rememberMessage.appendChild(rememberHeading);
+        rememberMessage.appendChild(
+            document.createTextNode(lesson.remember)
+        );
+
+        container.appendChild(rememberMessage);
+
+        // Create a button to return to the scenario body map
+        var returnButton = document.createElement("button");
+        returnButton.type = "button";
+        returnButton.textContent = "← Return to Scenario";
+        returnButton.classList.add("tutorial-button");
+
+        returnButton.addEventListener("click", function () {
+            Engine.play("ScenarioBodyMap");
+        });
+
+        container.appendChild(returnButton);
+    };
+
 
 })();
