@@ -1,19 +1,4 @@
 :: UserStylesheet [stylesheet]
-/* ============================================================
-   Daily archer — visual stylesheet
-   Arial font, click handler on cells (no passage refresh on
-   click), compact phone height.
-
-   CardioCareQuest viridis palette (canonical across all games):
-     #440154  deep purple   — phone gradient stop 1
-     #3b528b  blue          — phone gradient stop 2
-     #21918c  teal          — phone gradient stop 3 / marked cell
-     #5ec962  green          — win banner / success
-     #fde725  yellow         — title / FREE / primary CTA
-     #f4f1d8  cream          — page background
-   2026-05-10: phone gradient + dark-text accent (#1a1a1a) replaced
-   to align with viridis anchor stops.
-   ============================================================ */
 
 * { box-sizing: border-box; }
 
@@ -112,9 +97,10 @@ img {
   color: black;
 }
 
-button {
-  position: relative;
-  left: 12%;
+.return {
+  position: absolute;
+  left: 10%;
+  bottom: 3%;
   padding: 1px;
   border-radius: 12px;
   min-width: 80%;
@@ -205,7 +191,6 @@ button {
   animation: wave-rotate 4.2s infinite linear;
 }
 
-/*The following CSS was done using AI */
 .progress-container {
   display: block;
   width: 100%;
@@ -219,7 +204,7 @@ button {
   margin: 8px 0;
 }
 
-/* Dynamic Filling Bar */
+
 .progress-fill {
   height: 100%;
   background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
@@ -228,7 +213,6 @@ button {
   position: relative;
 }
 
-/* Vertical Wave Effect at Leading Edge */
 .progress-fill::before,
 .progress-fill::after {
   content: "";
@@ -255,7 +239,6 @@ button {
   to { transform: rotate(360deg); }
 }
 
-/* Centered Text Overlay */
 .progress-text {
   font-size: small;
   position: absolute;

@@ -16,7 +16,7 @@ Zombie Chase
 <div class="phone">Zombies are Stopped.
   <img src="../../img/exercise/zombies.png">
   <div class="mainTab"> <div class="progress-container" id="bar"><div class="progress-fill totalBarFill"> </div></div>\
-    Zombies are <<= Math.trunc(setup.zombieDist)>> Steps Away!
+    <span id="zombieDist"></span>
 
       <div class="levelContainer">
         <div class="levelList"> Begin the Chase:
@@ -26,7 +26,9 @@ Zombie Chase
           <<button "Impossible" "Chase">><<run setup.setMode('impossible')>><</button>>
         </div>
       </div>
-      <<done>><<run setup.updateTotalDistance()>><</done>>
+      <<done>><<run setup.zombieDistText = document.getElementById("zombieDist"); >><</done>>
+      <<done>><<run setup.sendFlutterMessage("GET_ZOMBIE_DISTANCE"); >><</done>>
+      
 
 
   </div>
@@ -37,11 +39,14 @@ Zombie Chase
   <img src="../../img/exercise/zombies.png" class="zombies">
   <div class="progress-container totalBar" id="bar"><div class="progress-fill totalBarFill"> </div></div>\
   <span id="zombieDist"></span>
-  <span id="zombieCnt"></span><div class="mainTab"> <<button "Run!" >><<run setup.incZombieDist(1)>><</button>>
+  <span id="yourDist">You've Walked <<=setup.totalWalked>> Steps!</span>
+  <span id="zombieCnt"></span><div class="mainTab"> /* <<button "Run!" >><<run setup.incZombieDist(1)>><</button>> */
   <div class="extras" id="extras">Extras</div>
-  <<button "Return" "Home">><<run setup.stopChase()>><</button>>
+  <button data-passage="Home" class="return" onclick="SugarCube.setup.stopChase()">Return</button>
   <<done>><<run setup.startChase() >><</done>>
   <<done>><<run setup.updateTotalDistance() >><</done>>
+  <<done>><<run setup.DEVplayInComputer() >><</done>>
+
   
   </div>
 </div>

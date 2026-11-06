@@ -104,23 +104,7 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 		<div id="init-lacking"><p>Browser lacks capabilities required to play.</p><p>Upgrade or switch to another browser.</p></div>
 		<div id="init-loading"><div>Loading&hellip;</div></div>
 	</div>
-	<!-- UUID://637D0CD9-6182-4ACE-9AF0-B6FB94AB090A// --><tw-storydata name="Zombie Chase" startnode="2" creator="Tweego" creator-version="2.1.1+81d1d71" ifid="637D0CD9-6182-4ACE-9AF0-B6FB94AB090A" zoom="1" format="SugarCube" format-version="2.37.3" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">/* ============================================================
-   Daily archer — visual stylesheet
-   Arial font, click handler on cells (no passage refresh on
-   click), compact phone height.
-
-   CardioCareQuest viridis palette (canonical across all games):
-     #440154  deep purple   — phone gradient stop 1
-     #3b528b  blue          — phone gradient stop 2
-     #21918c  teal          — phone gradient stop 3 / marked cell
-     #5ec962  green          — win banner / success
-     #fde725  yellow         — title / FREE / primary CTA
-     #f4f1d8  cream          — page background
-   2026-05-10: phone gradient + dark-text accent (#1a1a1a) replaced
-   to align with viridis anchor stops.
-   ============================================================ */
-
-* { box-sizing: border-box; }
+	<!-- UUID://637D0CD9-6182-4ACE-9AF0-B6FB94AB090A// --><tw-storydata name="Zombie Chase" startnode="2" creator="Tweego" creator-version="2.1.1+81d1d71" ifid="637D0CD9-6182-4ACE-9AF0-B6FB94AB090A" zoom="1" format="SugarCube" format-version="2.37.3" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">* { box-sizing: border-box; }
 
 body {
   font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -217,9 +201,10 @@ img {
   color: black;
 }
 
-button {
-  position: relative;
-  left: 12%;
+.return {
+  position: absolute;
+  left: 10%;
+  bottom: 3%;
   padding: 1px;
   border-radius: 12px;
   min-width: 80%;
@@ -310,7 +295,6 @@ button {
   animation: wave-rotate 4.2s infinite linear;
 }
 
-/*The following CSS was done using AI */
 .progress-container {
   display: block;
   width: 100%;
@@ -324,7 +308,7 @@ button {
   margin: 8px 0;
 }
 
-/* Dynamic Filling Bar */
+
 .progress-fill {
   height: 100%;
   background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
@@ -333,7 +317,6 @@ button {
   position: relative;
 }
 
-/* Vertical Wave Effect at Leading Edge */
 .progress-fill::before,
 .progress-fill::after {
   content: "";
@@ -360,7 +343,6 @@ button {
   to { transform: rotate(360deg); }
 }
 
-/* Centered Text Overlay */
 .progress-text {
   font-size: small;
   position: absolute;
@@ -376,13 +358,14 @@ button {
   white-space: nowrap;
 }</style><script role="script" id="twine-user-script" type="text/twine-javascript">setup.zombieDist = 20000
 setup.zombieAmount = 100
-setup.multi = 100
+setup.multi = 1
 setup.gameOver = false
 setup.currentStepGoal = 10
 setup.actualDistance = 0
 setup.exposedExtras = []
 setup.currentFinalExtra = 0
 setup.mode = "easy"
+setup.totalWalked = 0
 
 // window.GameData = {
 // 	// "extras": {
@@ -408,14 +391,15 @@ window.GameData = {
 }
 
 // Sends messages from Twine to Flutter.
-setup.sendFlutterMessage = function (type) {
+setup.sendFlutterMessage = function (type, extraData = {}) {
 	console.log("Twine is sending message to Flutter:", type);
 
 	if (window.FlutterBridge &&
 		typeof window.FlutterBridge.postMessage === "function") {
 
 		window.FlutterBridge.postMessage(JSON.stringify({
-			type: type
+			type: type,
+			...extraData
 		}));
 
 		console.log("FlutterBridge message sent successfully.");
@@ -425,14 +409,55 @@ setup.sendFlutterMessage = function (type) {
 	}
 }
 
+// Sends the current zombie distance to Flutter for storage.
+setup.saveZombieDistance = function () {
+	setup.sendFlutterMessage("SAVE_ZOMBIE_DISTANCE", {
+		distance: Math.trunc(setup.zombieDist)
+	});
+}
+
+// Receives the saved distance from Flutter.
+setup.setZombieDistance = function (distance) {
+	setup.zombieDist = distance;
+
+	console.log("Zombie Chase: Restored distance =", distance);
+
+	console.log("Zombie Chase: Starting Game")
+
+	setup.beginChase();
+}
+
+setup.getZombieDistance = function (distance) {
+	setup.zombieDist = distance;
+	setup.zombieDistText = document.getElementById("zombieDist");
+	setup.zombieDistText.textContent = `The zombies are ${Math.trunc(setup.zombieDist)} steps away!`
+	setup.updateTotalDistance()
+	console.log("FROM GET ZOMBIE Zombie Chase: Restored distance =", distance);
+
+	console.log("Zombie Chase: Starting Game")
+}
+
 setup.setMode = function setMode(mode) {
 	setup.mode = mode
-	setup.multi = 100
+	setup.multi = 1
 	setup.currentFinalExtra = 0;
 	setup.exposedExtras = []
 	setup.actualDistance = 0
+	setup.totalWalked = 0
 	for (let [key, value] of Object.entries(window.GameData.extras)) {
 		value.requiredSteps = value.ogRequiredSteps
+	}
+}
+
+/*This is exclusively a dev function for enabling the game to still be tested on a computer */
+setup.DEVplayInComputer = function DEVplayInComputer() {
+	if (window.FlutterBridge &&
+		typeof window.FlutterBridge.postMessage === "function") {
+
+		return;
+
+	} else {
+		setup.beginChase();
 	}
 }
 
@@ -441,12 +466,12 @@ setup.reset = function reset() {
 	setup.stopChase();
 
 	setup.zombieAmount = 100;
-	setup.zombieDist = 20000;
 	setup.gameOver = false;
 	setup.actualDistance = 0
 
 	setup.multi = 1;
 	setup.currentFinalExtra = 0;
+	setup.totalWalked = 0
 	setup.exposedExtras = []
 
 	for (let [key, value] of Object.entries(window.GameData.extras)) {
@@ -463,20 +488,28 @@ setup.decZombieDist = function decZombieDist(amount) {
 	}
 	setup.checkWinLoss()
 	setup.updateTotalDistance()
+	setup.saveZombieDistance();
 
 }
 
 setup.incZombieDist = function incZombieDist(amount) {
+	let inGameSteps = amount * setup.multi
+
 	setup.actualDistance += amount
-	setup.zombieDist += amount * setup.multi;
+	setup.zombieDist += inGameSteps;
+	setup.totalWalked += inGameSteps;
+
+	setup.yourDistText.textContent = `You've Walked ${Math.trunc(setup.totalWalked)} steps!`
 	if (setup.zombieAmount > 0 && setup.zombieDist > 0) {
 		setup.zombieDistText.textContent = `The zombies are ${Math.trunc(setup.zombieDist)} steps away!`
 	} else {
 		setup.stopChase()
 	}
-	setup.redeem(amount * setup.multi)
+
+	setup.redeem(inGameSteps)
 	setup.checkWinLoss()
 	setup.updateTotalDistance()
+	setup.saveZombieDistance();
 }
 
 // Stops the zombie timer and Flutter step tracking.
@@ -495,7 +528,8 @@ setup.checkWinLoss = function checkWinLoss() {
 
 	// Player wins when all zombies are eliminated.
 	if (setup.zombieAmount <= 0) {
-
+		setup.zombieDist = 20000
+		setup.saveZombieDistance();
 		setup.zombieDistText.textContent = "All the zombies are Gone!";
 		setup.zombieCntText.textContent = "There are 0 left...";
 
@@ -511,7 +545,8 @@ setup.checkWinLoss = function checkWinLoss() {
 
 	// Player loses when the zombies catch them.
 	else if (setup.zombieDist <= 0) {
-
+		setup.zombieDist = 20000
+		setup.saveZombieDistance();
 		setup.zombieDistText.textContent = "The zombies caught you...";
 		setup.zombieCntText.textContent = "";
 
@@ -526,7 +561,19 @@ setup.checkWinLoss = function checkWinLoss() {
 	}
 }
 
+// Requests the saved distance before starting the game.
 setup.startChase = function startChase() {
+	console.log("Zombie Chase: Requesting saved distance from Flutter.");
+
+	setup.zombieDistText = document.getElementById("zombieDist");
+	setup.yourDistText = document.getElementById("yourDist");
+	setup.zombieCntText = document.getElementById("zombieCnt");
+	setup.multiText = document.getElementById("multi");
+
+	setup.sendFlutterMessage("LOAD_ZOMBIE_DISTANCE");
+}
+
+setup.beginChase = function beginChase() {
 	setup.zombieDistText = document.getElementById("zombieDist")
 	setup.zombieCntText = document.getElementById("zombieCnt")
 	setup.multiText = document.getElementById("multi")
@@ -632,34 +679,6 @@ setup.createExtra = function createExtra(container) {
 	setup.updateExtraProgress();
 };
 
-
-setup.updateExtraProgress = function updateExtraProgress() {
-
-	if (setup.gameOver) {
-		return;
-	}
-
-	for (let item of setup.exposedExtras) {
-		let extraElement = document.getElementById(item[0])
-		let fill = extraElement.querySelector('.progress-fill');
-		if (!fill) return;
-		let stepsCompleted = item[1].ogRequiredSteps - item[1].requiredSteps;
-		let percent = Math.min(Math.max((stepsCompleted / item[1].ogRequiredSteps) * 100, 0));
-		fill.style.width = percent + '%';
-	}
-
-};
-
-setup.updateTotalDistance = function updateTotalDistance() {
-	let bar = document.getElementById("bar")
-	let fill = bar.querySelector('.progress-fill');
-	if (!fill) return;
-	let stepsCompleted = 20000 - setup.zombieDist;
-	let percent = Math.min(Math.max((stepsCompleted / 20000) * 100, 0));
-	fill.style.width = percent + '%';
-
-}
-
 setup.redeem = function redeem(stepsWalked) {
 
 	if (setup.gameOver) {
@@ -692,6 +711,7 @@ setup.redeem = function redeem(stepsWalked) {
 			}
 
 			let theExtra = document.getElementById(item[0])
+			if (theExtra == null) { return; }
 			theExtra.classList.add('fade-out');
 
 			setTimeout(() => {
@@ -704,14 +724,50 @@ setup.redeem = function redeem(stepsWalked) {
 		}
 	}
 
-	for (let spot in spotsToDelete) {
-		console.log(spot)
-		setup.exposedExtras.splice(spot, 1)
+	spotsToDelete.sort((a, b) => b - a);
+
+	for (let spot of spotsToDelete) {
+		setup.exposedExtras.splice(spot, 1);
 	}
 
 	setup.checkWinLoss()
 	setup.updateExtraProgress();
 }
+
+setup.updateExtraProgress = function updateExtraProgress() {
+
+	if (setup.gameOver) {
+		return;
+	}
+
+	for (let item of setup.exposedExtras) {
+		let extraElement = document.getElementById(item[0])
+		if (extraElement == null) { return; }
+		let fill = extraElement.querySelector('.progress-fill');
+		if (!fill) return;
+		let stepsCompleted = item[1].ogRequiredSteps - item[1].requiredSteps;
+		let percent = Math.min(
+			Math.max(
+				(stepsCompleted / item[1].ogRequiredSteps) * 100,
+				0
+			),
+			100
+		);
+		fill.style.width = percent + '%';
+	}
+
+};
+
+setup.updateTotalDistance = function updateTotalDistance() {
+	let bar = document.getElementById("bar")
+	let fill = bar.querySelector('.progress-fill');
+	if (!fill) return;
+	let stepsCompleted = 20000 - setup.zombieDist;
+	let percent = Math.min(Math.max((stepsCompleted / 20000) * 100, 0));
+	fill.style.width = percent + '%';
+
+}
+
 
 /*
 Useful later:
@@ -719,7 +775,7 @@ Useful later:
 */</script><tw-passagedata pid="1" name="StoryInit" tags="" position="100,100" size="100,100"></tw-passagedata><tw-passagedata pid="2" name="Home" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;Zombies are Stopped.
   &lt;img src=&quot;../../img/exercise/zombies.png&quot;&gt;
   &lt;div class=&quot;mainTab&quot;&gt; &lt;div class=&quot;progress-container&quot; id=&quot;bar&quot;&gt;&lt;div class=&quot;progress-fill totalBarFill&quot;&gt; &lt;/div&gt;&lt;/div&gt;\
-    Zombies are &lt;&lt;= Math.trunc(setup.zombieDist)&gt;&gt; Steps Away!
+    &lt;span id=&quot;zombieDist&quot;&gt;&lt;/span&gt;
 
       &lt;div class=&quot;levelContainer&quot;&gt;
         &lt;div class=&quot;levelList&quot;&gt; Begin the Chase:
@@ -729,7 +785,9 @@ Useful later:
           &lt;&lt;button &quot;Impossible&quot; &quot;Chase&quot;&gt;&gt;&lt;&lt;run setup.setMode(&#39;impossible&#39;)&gt;&gt;&lt;&lt;/button&gt;&gt;
         &lt;/div&gt;
       &lt;/div&gt;
-      &lt;&lt;done&gt;&gt;&lt;&lt;run setup.updateTotalDistance()&gt;&gt;&lt;&lt;/done&gt;&gt;
+      &lt;&lt;done&gt;&gt;&lt;&lt;run setup.zombieDistText = document.getElementById(&quot;zombieDist&quot;); &gt;&gt;&lt;&lt;/done&gt;&gt;
+      &lt;&lt;done&gt;&gt;&lt;&lt;run setup.sendFlutterMessage(&quot;GET_ZOMBIE_DISTANCE&quot;); &gt;&gt;&lt;&lt;/done&gt;&gt;
+      
 
 
   &lt;/div&gt;
@@ -737,11 +795,14 @@ Useful later:
   &lt;img src=&quot;../../img/exercise/zombies.png&quot; class=&quot;zombies&quot;&gt;
   &lt;div class=&quot;progress-container totalBar&quot; id=&quot;bar&quot;&gt;&lt;div class=&quot;progress-fill totalBarFill&quot;&gt; &lt;/div&gt;&lt;/div&gt;\
   &lt;span id=&quot;zombieDist&quot;&gt;&lt;/span&gt;
-  &lt;span id=&quot;zombieCnt&quot;&gt;&lt;/span&gt;&lt;div class=&quot;mainTab&quot;&gt; &lt;&lt;button &quot;Run!&quot; &gt;&gt;&lt;&lt;run setup.incZombieDist(1)&gt;&gt;&lt;&lt;/button&gt;&gt;
+  &lt;span id=&quot;yourDist&quot;&gt;You&#39;ve Walked &lt;&lt;=setup.totalWalked&gt;&gt; Steps!&lt;/span&gt;
+  &lt;span id=&quot;zombieCnt&quot;&gt;&lt;/span&gt;&lt;div class=&quot;mainTab&quot;&gt; /* &lt;&lt;button &quot;Run!&quot; &gt;&gt;&lt;&lt;run setup.incZombieDist(1)&gt;&gt;&lt;&lt;/button&gt;&gt; */
   &lt;div class=&quot;extras&quot; id=&quot;extras&quot;&gt;Extras&lt;/div&gt;
-  &lt;&lt;button &quot;Return&quot; &quot;Home&quot;&gt;&gt;&lt;&lt;run setup.stopChase()&gt;&gt;&lt;&lt;/button&gt;&gt;
+  &lt;button data-passage=&quot;Home&quot; class=&quot;return&quot; onclick=&quot;SugarCube.setup.stopChase()&quot;&gt;Return&lt;/button&gt;
   &lt;&lt;done&gt;&gt;&lt;&lt;run setup.startChase() &gt;&gt;&lt;&lt;/done&gt;&gt;
   &lt;&lt;done&gt;&gt;&lt;&lt;run setup.updateTotalDistance() &gt;&gt;&lt;&lt;/done&gt;&gt;
+  &lt;&lt;done&gt;&gt;&lt;&lt;run setup.DEVplayInComputer() &gt;&gt;&lt;&lt;/done&gt;&gt;
+
   
   &lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="4" name="You Win" tags="" position="475,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;Congratulations!
