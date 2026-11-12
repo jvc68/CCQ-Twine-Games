@@ -1,105 +1,61 @@
-var orderOptions = [
-    {
-        custName: "Alice",
-        dishName: "Black Bean Taco",
-        requiredIngredients: ["Tortilla", "Black Beans", "Garlic"]
-    },
-    {
-        custName: "Jordan",
-        dishName: "Sage Turkey Taco",
-        requiredIngredients: ["Tortilla", "Turkey", "Sage"]
-    },
-    {
-        custName: "Sam",
-        dishName: "Squash and Black Bean Bowl",
-        requiredIngredients: ["Squash", "Black Beans", "Garlic"]
-    },
-    {
-        custName: "Jesse",
-        dishName: "Turkey and Squash Bowl",
-        requiredIngredients: ["Turkey", "Squash", "Sage"]
-    },
-    {
-        custName: "Tyler",
-        dishName: "Garlic and Sage Medley",
-        requiredIngredients: ["Garlic", "Sage", "Black Beans"]
-    },
-    {
-        custName: "Anna",
-        dishName: "Turkey and Garlic Delight",
-        requiredIngredients: ["Turkey", "Garlic", "Squash"]
-    },
-    {
-        custName: "Rique",
-        dishName: "Sage and Squash Stir Fry",
-        requiredIngredients: ["Sage", "Squash", "Garlic"]
-    },
-    {
-        custName: "Morgan",
-        dishName: "Turkey Bean Taco",
-        requiredIngredients: ["Tortilla", "Turkey", "Black Beans"]
-    },
-    {
-        custName: "Casey",
-        dishName: "Garlic Squash Bowl",
-        requiredIngredients: ["Squash", "Garlic", "Black Beans"]
-    },
-    {
-        custName: "Riley",
-        dishName: "Sage Bean Wrap",
-        requiredIngredients: ["Tortilla", "Black Beans", "Sage"]
-    },
-    {
-        custName: "Avery",
-        dishName: "Turkey Sage Bowl",
-        requiredIngredients: ["Turkey", "Sage", "Squash"]
-    },
-    {
-        custName: "Quinn",
-        dishName: "Garlic Turkey Taco",
-        requiredIngredients: ["Tortilla", "Turkey", "Garlic"]
-    },
-    {
-        custName: "Drew",
-        dishName: "Squash Sage Wrap",
-        requiredIngredients: ["Tortilla", "Squash", "Sage"]
-    },
-    {
-        custName: "Jamie",
-        dishName: "Black Bean Turkey Bowl",
-        requiredIngredients: ["Black Beans", "Turkey", "Garlic"]
-    },
-    {
-        custName: "Parker",
-        dishName: "Sage Garlic Taco",
-        requiredIngredients: ["Tortilla", "Sage", "Garlic"]
-    },
-    {
-        custName: "Cameron",
-        dishName: "Squash Turkey Medley",
-        requiredIngredients: ["Squash", "Turkey", "Black Beans"]
-    },
-    {
-        custName: "Reese",
-        dishName: "Garlic Bean Wrap",
-        requiredIngredients: ["Tortilla", "Garlic", "Black Beans"]
-    },
-    {
-        custName: "Robin",
-        dishName: "Sage Squash Turkey Bowl",
-        requiredIngredients: ["Sage", "Squash", "Turkey"]
-    },
-    {
-        custName: "Devon",
-        dishName: "Black Bean Squash Taco",
-        requiredIngredients: ["Tortilla", "Black Beans", "Squash"]
-    },
-    {
-        custName: "Skyler",
-        dishName: "Sage Garlic Turkey Bowl",
-        requiredIngredients: ["Sage", "Garlic", "Turkey"]
-    }
+/* Every ingredient that can be picked for a day's menu */
+var ingredientDatabase = [
+    { id: "tortilla", name: "Tortilla", img: "🌮", category: "Grain", methods: { healthy: "Toast on a dry griddle", unhealthy: "Deep-fry until crisp" } },
+    { id: "rice", name: "Rice", img: "🍚", category: "Grain", methods: { healthy: "Steam until fluffy", unhealthy: "Fry in extra butter" } },
+    { id: "beans", name: "Black Beans", img: "🫘", category: "Protein", methods: { healthy: "Simmer with herbs", unhealthy: "Refry with extra oil" } },
+    { id: "turkey", name: "Turkey", img: "🍗", category: "Protein", methods: { healthy: "Grill until cooked", unhealthy: "Deep-fry until crisp" } },
+    { id: "salmon", name: "Salmon", img: "🐟", category: "Protein", methods: { healthy: "Bake with lemon", unhealthy: "Pan-fry in butter" } },
+    { id: "shrimp", name: "Shrimp", img: "🦐", category: "Protein", methods: { healthy: "Steam until pink", unhealthy: "Deep-fry in batter" } },
+    { id: "egg", name: "Egg", img: "🥚", category: "Protein", methods: { healthy: "Poach until set", unhealthy: "Fry in butter" } },
+    { id: "squash", name: "Squash", img: "🎃", category: "Vegetable", methods: { healthy: "Roast until tender", unhealthy: "Deep-fry until crisp" } },
+    { id: "garlic", name: "Garlic", img: "🧄", category: "Vegetable", methods: { healthy: "Roast until soft", unhealthy: "Fry in extra oil" } },
+    { id: "tomato", name: "Tomato", img: "🍅", category: "Vegetable", methods: { healthy: "Roast until blistered", unhealthy: "Fry in extra oil" } },
+    { id: "broccoli", name: "Broccoli", img: "🥦", category: "Vegetable", methods: { healthy: "Steam until bright green", unhealthy: "Deep-fry in batter" } },
+    { id: "carrot", name: "Carrot", img: "🥕", category: "Vegetable", methods: { healthy: "Roast until tender", unhealthy: "Glaze with butter and sugar" } },
+    { id: "pepper", name: "Bell Pepper", img: "🫑", category: "Vegetable", methods: { healthy: "Grill until charred", unhealthy: "Stuff and deep-fry" } },
+    { id: "corn", name: "Corn", img: "🌽", category: "Vegetable", methods: { healthy: "Roast on the cob", unhealthy: "Smother in butter" } },
+    { id: "spinach", name: "Spinach", img: "🥬", category: "Vegetable", methods: { healthy: "Wilt lightly", unhealthy: "Cream with heavy butter" } },
+    { id: "avocado", name: "Avocado", img: "🥑", category: "Fruit", methods: { healthy: "Slice fresh", unhealthy: "Deep-fry in batter" } },
+    { id: "pineapple", name: "Pineapple", img: "🍍", category: "Fruit", methods: { healthy: "Grill until caramelized", unhealthy: "Candy in syrup" } },
+    { id: "mango", name: "Mango", img: "🥭", category: "Fruit", methods: { healthy: "Serve fresh", unhealthy: "Candy in syrup" } },
+    { id: "sage", name: "Sage", img: "🌿", category: "Herb", methods: { healthy: "Use fresh leaves", unhealthy: "Fry until crisp" } },
+    { id: "cheese", name: "Cheese", img: "🧀", category: "Dairy", methods: { healthy: "Shave a light sprinkle", unhealthy: "Melt in a heavy layer" } }
 ];
+
+/* Customers who can place an order; each customer is used once per day */
+var customerNames = [
+    "Alice", "Jordan", "Sam", "Jesse", "Tyler", "Anna", "Rique", "Morgan",
+    "Casey", "Riley", "Avery", "Quinn", "Drew", "Jamie", "Parker", "Cameron",
+    "Reese", "Robin", "Devon", "Skyler"
+];
+
+/* Words used to name a generated dish */
+var dishTypes = ["Bowl", "Wrap", "Taco", "Stir Fry", "Medley", "Plate", "Skillet", "Salad"];
+
+/* The fixed tutorial order and the ingredient ids on the tutorial's menu */
+var tutorialOrder = {
+    custName: "Alice",
+    dishName: "Black Bean Taco",
+    requiredIngredients: ["Tortilla", "Black Beans", "Garlic"]
+};
+var tutorialMenuIds = ["tortilla", "beans", "squash", "turkey", "garlic", "sage"];
+
+var menuPickCount = 3;
+var menuRandomCount = 3;
+
+/* Returns a shuffled copy of an array */
+function shuffled(items) {
+    var copy = items.slice();
+
+    for (var i = copy.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = copy[i];
+
+        copy[i] = copy[j];
+        copy[j] = temp;
+    }
+    return copy;
+}
 
 var orderTimerInterval = null;
 var lastTickTime = 0;
@@ -107,6 +63,8 @@ var maxPrepTrayIngredients = 3;
 var maxTickets = 3;
 
 window.FoodTruck = {
+    ingredientDatabase: ingredientDatabase,
+
     /* Function Description: Returns the ticket the player is currently
        preparing, or null if none is selected */
     getActiveOrder: function() {
@@ -147,20 +105,133 @@ window.FoodTruck = {
             return ticket.custName;
         }));
 
-        if (state.availableOrders.length) {
-            var index = Math.floor(Math.random() * state.availableOrders.length);
+        var name;
 
-            return state.availableOrders.splice(index, 1)[0];
+        if (state.tutorialMode) {
+            return excluded.indexOf(tutorialOrder.custName) === -1
+                ? {
+                    custName: tutorialOrder.custName,
+                    dishName: tutorialOrder.dishName,
+                    requiredIngredients: tutorialOrder.requiredIngredients.slice()
+                }
+                : null;
         }
 
-        // every customer has been used today, so recycle ones not on a ticket
-        var recyclable = orderOptions.filter(function(order) {
-            return excluded.indexOf(order.custName) === -1;
-        });
+        if (state.availableCustomers.length) {
+            var index = Math.floor(Math.random() * state.availableCustomers.length);
 
-        return recyclable.length
-            ? recyclable[Math.floor(Math.random() * recyclable.length)]
-            : null;
+            name = state.availableCustomers.splice(index, 1)[0];
+        } else {
+            // every customer has been used today, so recycle ones not on a ticket
+            var recyclable = customerNames.filter(function(customer) {
+                return excluded.indexOf(customer) === -1;
+            });
+
+            if (!recyclable.length) {
+                return null;
+            }
+            name = recyclable[Math.floor(Math.random() * recyclable.length)];
+        }
+
+        return this.buildOrder(name);
+    },
+
+    /* Function Description: Builds a dish for a customer from three different
+       ingredients on today's menu */
+    buildOrder: function(customerName) {
+        var state = SugarCube.State.variables;
+        var chosen = shuffled(state.todaysMenu).slice(0, 3);
+        var type = dishTypes[Math.floor(Math.random() * dishTypes.length)];
+
+        return {
+            custName: customerName,
+            dishName: chosen[0].name + " & " + chosen[1].name + " " + type,
+            requiredIngredients: chosen.map(function(ingredient) {
+                return ingredient.name;
+            })
+        };
+    },
+
+    /* Function Description: Clears the menu picks before the player chooses
+       the ingredients for a new day */
+    beginMenuSelection: function() {
+        SugarCube.State.variables.menuPicks = [];
+    },
+
+    /* Function Description: Selects or deselects the ingredient at the given
+       database index as one of the player's menu picks (limit 3) */
+    toggleMenuPick: function(index) {
+        var state = SugarCube.State.variables;
+        var ingredient = ingredientDatabase[index];
+
+        if (!ingredient) {
+            return;
+        }
+        if (!Array.isArray(state.menuPicks)) {
+            state.menuPicks = [];
+        }
+
+        var pickIndex = state.menuPicks.indexOf(ingredient.id);
+
+        if (pickIndex !== -1) {
+            state.menuPicks.splice(pickIndex, 1);
+        } else if (state.menuPicks.length < menuPickCount) {
+            state.menuPicks.push(ingredient.id);
+        }
+        this.refreshMenuSelection();
+    },
+
+    /* Function Description: Updates the ChooseMenu screen to show which
+       ingredients are picked and enables Start Day once three are chosen */
+    refreshMenuSelection: function() {
+        var state = SugarCube.State.variables;
+        var buttons = document.querySelectorAll(".menu-pick-button");
+        var count = document.getElementById("menu-count");
+        var start = document.getElementById("menu-start");
+
+        if (!Array.isArray(state.menuPicks)) {
+            state.menuPicks = [];
+        }
+        buttons.forEach(function(button, index) {
+            var ingredient = ingredientDatabase[index];
+            var picked = state.menuPicks.indexOf(ingredient.id) !== -1;
+
+            button.classList.toggle("menu-picked", picked);
+            button.setAttribute("aria-pressed", picked ? "true" : "false");
+            button.disabled = !picked && state.menuPicks.length >= menuPickCount;
+        });
+        if (count) {
+            count.textContent = state.menuPicks.length;
+        }
+        if (start) {
+            start.disabled = state.menuPicks.length !== menuPickCount;
+        }
+    },
+
+    /* Function Description: Sets todaysMenu to the player's picks plus randomly
+       chosen ingredients from the rest of the database */
+    buildTodaysMenu: function() {
+        var state = SugarCube.State.variables;
+        var database = ingredientDatabase;
+
+        if (state.tutorialMode) {
+            state.todaysMenu = tutorialMenuIds.map(function(id) {
+                return database.find(function(ingredient) {
+                    return ingredient.id === id;
+                });
+            });
+            return;
+        }
+
+        var picks = database.filter(function(ingredient) {
+            return state.menuPicks.indexOf(ingredient.id) !== -1;
+        });
+        var others = shuffled(database.filter(function(ingredient) {
+            return state.menuPicks.indexOf(ingredient.id) === -1;
+        }));
+
+        // if fewer than 3 were picked, random ingredients make up the difference
+        state.todaysMenu = picks.concat(others.slice(0, menuPickCount + menuRandomCount - picks.length));
     },
 
     /* Function Description: Builds a new ticket with a full timer from an order */
@@ -222,7 +293,8 @@ window.FoodTruck = {
         var state = SugarCube.State.variables;
         this.stopOrderTimer();
         state.numOrders = this.ordersForDay();
-        state.availableOrders = orderOptions.slice();
+        state.availableCustomers = customerNames.slice();
+        this.buildTodaysMenu();
         state.dayScore = 0;
         state.ordersCompleted = 0;
         state.satisfactionScore = 0;
@@ -237,7 +309,6 @@ window.FoodTruck = {
         state.cookingResult = null;
         if (state.tutorialMode) {
             state.numOrders = 1;
-            state.availableOrders = [orderOptions[0]];
             state.tutorialStep = "take-order";
             state.tutorialIngredientIndex = 0;
         }
@@ -386,11 +457,11 @@ window.FoodTruck = {
         }
     },
 
-    /* Function Description: Starts the next day by incrementing the current
-       day and calling startDay */
+    /* Function Description: Advances to the next day and resets the menu picks.
+       The day itself begins from the ChooseMenu screen via startDay. */
     startNextDay: function() {
         SugarCube.State.variables.currentDay += 1;
-        this.startDay();
+        this.beginMenuSelection();
     },
 
     /* Function Description: Removes the cooking choices made for a ticket that
@@ -458,7 +529,7 @@ window.FoodTruck = {
     /* Function Description: Returns a string representation of the ingredient
        at the specified index, including its image and name */
     ingredientLabel: function(index) {
-        var ingredients = SugarCube.State.variables.menuIngredients;
+        var ingredients = SugarCube.State.variables.todaysMenu;
         var ingredient = ingredients[index];
 
         if (!ingredient) {
@@ -487,7 +558,7 @@ window.FoodTruck = {
        preparation method or cooking result */
     selectIngredient: function(index) {
         var state = SugarCube.State.variables;
-        var ingredient = state.menuIngredients[index];
+        var ingredient = state.todaysMenu[index];
 
         if (!this.getActiveOrder()) {
             throw new Error("Cannot add an ingredient without an active order.");
@@ -909,5 +980,23 @@ window.jQuery(document).on(":passagedisplay", function() {
             SugarCube.Engine.play("PrepareIngredient");
         });
     });
+    document.querySelectorAll(".menu-pick-button").forEach(function(button, index) {
+        button.addEventListener("click", function() {
+            window.FoodTruck.toggleMenuPick(index);
+        });
+    });
+    var menuStart = document.getElementById("menu-start");
+
+    if (menuStart) {
+        menuStart.addEventListener("click", function() {
+            if (SugarCube.State.variables.menuPicks.length === 3) {
+                window.FoodTruck.startDay();
+                SugarCube.Engine.play("TakeOrderScreen");
+            }
+        });
+    }
+    if (document.querySelector(".menu-pick-button")) {
+        window.FoodTruck.refreshMenuSelection();
+    }
     window.FoodTruck.updateTutorialHighlights();
 });

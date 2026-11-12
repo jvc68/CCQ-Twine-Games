@@ -900,108 +900,161 @@ body {
 
 .skill-legend span {
   flex: 1;
-}</style><script role="script" id="twine-user-script" type="text/twine-javascript">var orderOptions = [
-    {
-        custName: "Alice",
-        dishName: "Black Bean Taco",
-        requiredIngredients: ["Tortilla", "Black Beans", "Garlic"]
-    },
-    {
-        custName: "Jordan",
-        dishName: "Sage Turkey Taco",
-        requiredIngredients: ["Tortilla", "Turkey", "Sage"]
-    },
-    {
-        custName: "Sam",
-        dishName: "Squash and Black Bean Bowl",
-        requiredIngredients: ["Squash", "Black Beans", "Garlic"]
-    },
-    {
-        custName: "Jesse",
-        dishName: "Turkey and Squash Bowl",
-        requiredIngredients: ["Turkey", "Squash", "Sage"]
-    },
-    {
-        custName: "Tyler",
-        dishName: "Garlic and Sage Medley",
-        requiredIngredients: ["Garlic", "Sage", "Black Beans"]
-    },
-    {
-        custName: "Anna",
-        dishName: "Turkey and Garlic Delight",
-        requiredIngredients: ["Turkey", "Garlic", "Squash"]
-    },
-    {
-        custName: "Rique",
-        dishName: "Sage and Squash Stir Fry",
-        requiredIngredients: ["Sage", "Squash", "Garlic"]
-    },
-    {
-        custName: "Morgan",
-        dishName: "Turkey Bean Taco",
-        requiredIngredients: ["Tortilla", "Turkey", "Black Beans"]
-    },
-    {
-        custName: "Casey",
-        dishName: "Garlic Squash Bowl",
-        requiredIngredients: ["Squash", "Garlic", "Black Beans"]
-    },
-    {
-        custName: "Riley",
-        dishName: "Sage Bean Wrap",
-        requiredIngredients: ["Tortilla", "Black Beans", "Sage"]
-    },
-    {
-        custName: "Avery",
-        dishName: "Turkey Sage Bowl",
-        requiredIngredients: ["Turkey", "Sage", "Squash"]
-    },
-    {
-        custName: "Quinn",
-        dishName: "Garlic Turkey Taco",
-        requiredIngredients: ["Tortilla", "Turkey", "Garlic"]
-    },
-    {
-        custName: "Drew",
-        dishName: "Squash Sage Wrap",
-        requiredIngredients: ["Tortilla", "Squash", "Sage"]
-    },
-    {
-        custName: "Jamie",
-        dishName: "Black Bean Turkey Bowl",
-        requiredIngredients: ["Black Beans", "Turkey", "Garlic"]
-    },
-    {
-        custName: "Parker",
-        dishName: "Sage Garlic Taco",
-        requiredIngredients: ["Tortilla", "Sage", "Garlic"]
-    },
-    {
-        custName: "Cameron",
-        dishName: "Squash Turkey Medley",
-        requiredIngredients: ["Squash", "Turkey", "Black Beans"]
-    },
-    {
-        custName: "Reese",
-        dishName: "Garlic Bean Wrap",
-        requiredIngredients: ["Tortilla", "Garlic", "Black Beans"]
-    },
-    {
-        custName: "Robin",
-        dishName: "Sage Squash Turkey Bowl",
-        requiredIngredients: ["Sage", "Squash", "Turkey"]
-    },
-    {
-        custName: "Devon",
-        dishName: "Black Bean Squash Taco",
-        requiredIngredients: ["Tortilla", "Black Beans", "Squash"]
-    },
-    {
-        custName: "Skyler",
-        dishName: "Sage Garlic Turkey Bowl",
-        requiredIngredients: ["Sage", "Garlic", "Turkey"]
-    }
+}
+/* ChooseMenu screen */
+.menu-title {
+  margin: 4px 0 2px;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.menu-hint {
+  margin: 0 0 8px;
+  text-align: center;
+  font-size: 0.78rem;
+  line-height: 1.25;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: 56px;
+  gap: 6px;
+}
+
+.menu-grid > br {
+  display: none;
+}
+
+.menu-pick-button {
+  appearance: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  min-width: 0;
+  padding: 2px;
+  border: 2px solid rgba(255, 255, 255, 0.65);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #1a1a1a;
+  font: inherit;
+  line-height: 1.05;
+  text-align: center;
+  cursor: pointer;
+}
+
+.menu-pick-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.menu-pick-name {
+  font-size: 0.6rem;
+  font-weight: 700;
+}
+
+.menu-pick-button.menu-picked {
+  border-color: #0d1b2a;
+  background: #a8ffdb;
+  box-shadow: 0 0 0 3px rgba(168, 255, 219, 0.7);
+}
+
+.menu-pick-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.menu-pick-button:focus-visible,
+#menu-start:focus-visible {
+  outline: 3px solid #a8ffdb;
+  outline-offset: 2px;
+}
+
+#menu-start {
+  appearance: none;
+  min-width: 160px;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  background: #00f187;
+  color: #123;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#menu-start:disabled {
+  background: #c7cbd1;
+  color: #68717d;
+  cursor: not-allowed;
+}
+
+.menu-count {
+  margin: 0 0 8px;
+  text-align: center;
+  font-size: 0.85rem;
+}
+</style><script role="script" id="twine-user-script" type="text/twine-javascript">/* Every ingredient that can be picked for a day's menu */
+var ingredientDatabase = [
+    { id: "tortilla", name: "Tortilla", img: "🌮", category: "Grain", methods: { healthy: "Toast on a dry griddle", unhealthy: "Deep-fry until crisp" } },
+    { id: "rice", name: "Rice", img: "🍚", category: "Grain", methods: { healthy: "Steam until fluffy", unhealthy: "Fry in extra butter" } },
+    { id: "beans", name: "Black Beans", img: "🫘", category: "Protein", methods: { healthy: "Simmer with herbs", unhealthy: "Refry with extra oil" } },
+    { id: "turkey", name: "Turkey", img: "🍗", category: "Protein", methods: { healthy: "Grill until cooked", unhealthy: "Deep-fry until crisp" } },
+    { id: "salmon", name: "Salmon", img: "🐟", category: "Protein", methods: { healthy: "Bake with lemon", unhealthy: "Pan-fry in butter" } },
+    { id: "shrimp", name: "Shrimp", img: "🦐", category: "Protein", methods: { healthy: "Steam until pink", unhealthy: "Deep-fry in batter" } },
+    { id: "egg", name: "Egg", img: "🥚", category: "Protein", methods: { healthy: "Poach until set", unhealthy: "Fry in butter" } },
+    { id: "squash", name: "Squash", img: "🎃", category: "Vegetable", methods: { healthy: "Roast until tender", unhealthy: "Deep-fry until crisp" } },
+    { id: "garlic", name: "Garlic", img: "🧄", category: "Vegetable", methods: { healthy: "Roast until soft", unhealthy: "Fry in extra oil" } },
+    { id: "tomato", name: "Tomato", img: "🍅", category: "Vegetable", methods: { healthy: "Roast until blistered", unhealthy: "Fry in extra oil" } },
+    { id: "broccoli", name: "Broccoli", img: "🥦", category: "Vegetable", methods: { healthy: "Steam until bright green", unhealthy: "Deep-fry in batter" } },
+    { id: "carrot", name: "Carrot", img: "🥕", category: "Vegetable", methods: { healthy: "Roast until tender", unhealthy: "Glaze with butter and sugar" } },
+    { id: "pepper", name: "Bell Pepper", img: "🫑", category: "Vegetable", methods: { healthy: "Grill until charred", unhealthy: "Stuff and deep-fry" } },
+    { id: "corn", name: "Corn", img: "🌽", category: "Vegetable", methods: { healthy: "Roast on the cob", unhealthy: "Smother in butter" } },
+    { id: "spinach", name: "Spinach", img: "🥬", category: "Vegetable", methods: { healthy: "Wilt lightly", unhealthy: "Cream with heavy butter" } },
+    { id: "avocado", name: "Avocado", img: "🥑", category: "Fruit", methods: { healthy: "Slice fresh", unhealthy: "Deep-fry in batter" } },
+    { id: "pineapple", name: "Pineapple", img: "🍍", category: "Fruit", methods: { healthy: "Grill until caramelized", unhealthy: "Candy in syrup" } },
+    { id: "mango", name: "Mango", img: "🥭", category: "Fruit", methods: { healthy: "Serve fresh", unhealthy: "Candy in syrup" } },
+    { id: "sage", name: "Sage", img: "🌿", category: "Herb", methods: { healthy: "Use fresh leaves", unhealthy: "Fry until crisp" } },
+    { id: "cheese", name: "Cheese", img: "🧀", category: "Dairy", methods: { healthy: "Shave a light sprinkle", unhealthy: "Melt in a heavy layer" } }
 ];
+
+/* Customers who can place an order; each customer is used once per day */
+var customerNames = [
+    "Alice", "Jordan", "Sam", "Jesse", "Tyler", "Anna", "Rique", "Morgan",
+    "Casey", "Riley", "Avery", "Quinn", "Drew", "Jamie", "Parker", "Cameron",
+    "Reese", "Robin", "Devon", "Skyler"
+];
+
+/* Words used to name a generated dish */
+var dishTypes = ["Bowl", "Wrap", "Taco", "Stir Fry", "Medley", "Plate", "Skillet", "Salad"];
+
+/* The fixed tutorial order and the ingredient ids on the tutorial's menu */
+var tutorialOrder = {
+    custName: "Alice",
+    dishName: "Black Bean Taco",
+    requiredIngredients: ["Tortilla", "Black Beans", "Garlic"]
+};
+var tutorialMenuIds = ["tortilla", "beans", "squash", "turkey", "garlic", "sage"];
+
+var menuPickCount = 3;
+var menuRandomCount = 3;
+
+/* Returns a shuffled copy of an array */
+function shuffled(items) {
+    var copy = items.slice();
+
+    for (var i = copy.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = copy[i];
+
+        copy[i] = copy[j];
+        copy[j] = temp;
+    }
+    return copy;
+}
 
 var orderTimerInterval = null;
 var lastTickTime = 0;
@@ -1009,6 +1062,8 @@ var maxPrepTrayIngredients = 3;
 var maxTickets = 3;
 
 window.FoodTruck = {
+    ingredientDatabase: ingredientDatabase,
+
     /* Function Description: Returns the ticket the player is currently
        preparing, or null if none is selected */
     getActiveOrder: function() {
@@ -1049,20 +1104,133 @@ window.FoodTruck = {
             return ticket.custName;
         }));
 
-        if (state.availableOrders.length) {
-            var index = Math.floor(Math.random() * state.availableOrders.length);
+        var name;
 
-            return state.availableOrders.splice(index, 1)[0];
+        if (state.tutorialMode) {
+            return excluded.indexOf(tutorialOrder.custName) === -1
+                ? {
+                    custName: tutorialOrder.custName,
+                    dishName: tutorialOrder.dishName,
+                    requiredIngredients: tutorialOrder.requiredIngredients.slice()
+                }
+                : null;
         }
 
-        // every customer has been used today, so recycle ones not on a ticket
-        var recyclable = orderOptions.filter(function(order) {
-            return excluded.indexOf(order.custName) === -1;
-        });
+        if (state.availableCustomers.length) {
+            var index = Math.floor(Math.random() * state.availableCustomers.length);
 
-        return recyclable.length
-            ? recyclable[Math.floor(Math.random() * recyclable.length)]
-            : null;
+            name = state.availableCustomers.splice(index, 1)[0];
+        } else {
+            // every customer has been used today, so recycle ones not on a ticket
+            var recyclable = customerNames.filter(function(customer) {
+                return excluded.indexOf(customer) === -1;
+            });
+
+            if (!recyclable.length) {
+                return null;
+            }
+            name = recyclable[Math.floor(Math.random() * recyclable.length)];
+        }
+
+        return this.buildOrder(name);
+    },
+
+    /* Function Description: Builds a dish for a customer from three different
+       ingredients on today's menu */
+    buildOrder: function(customerName) {
+        var state = SugarCube.State.variables;
+        var chosen = shuffled(state.todaysMenu).slice(0, 3);
+        var type = dishTypes[Math.floor(Math.random() * dishTypes.length)];
+
+        return {
+            custName: customerName,
+            dishName: chosen[0].name + " & " + chosen[1].name + " " + type,
+            requiredIngredients: chosen.map(function(ingredient) {
+                return ingredient.name;
+            })
+        };
+    },
+
+    /* Function Description: Clears the menu picks before the player chooses
+       the ingredients for a new day */
+    beginMenuSelection: function() {
+        SugarCube.State.variables.menuPicks = [];
+    },
+
+    /* Function Description: Selects or deselects the ingredient at the given
+       database index as one of the player's menu picks (limit 3) */
+    toggleMenuPick: function(index) {
+        var state = SugarCube.State.variables;
+        var ingredient = ingredientDatabase[index];
+
+        if (!ingredient) {
+            return;
+        }
+        if (!Array.isArray(state.menuPicks)) {
+            state.menuPicks = [];
+        }
+
+        var pickIndex = state.menuPicks.indexOf(ingredient.id);
+
+        if (pickIndex !== -1) {
+            state.menuPicks.splice(pickIndex, 1);
+        } else if (state.menuPicks.length < menuPickCount) {
+            state.menuPicks.push(ingredient.id);
+        }
+        this.refreshMenuSelection();
+    },
+
+    /* Function Description: Updates the ChooseMenu screen to show which
+       ingredients are picked and enables Start Day once three are chosen */
+    refreshMenuSelection: function() {
+        var state = SugarCube.State.variables;
+        var buttons = document.querySelectorAll(".menu-pick-button");
+        var count = document.getElementById("menu-count");
+        var start = document.getElementById("menu-start");
+
+        if (!Array.isArray(state.menuPicks)) {
+            state.menuPicks = [];
+        }
+        buttons.forEach(function(button, index) {
+            var ingredient = ingredientDatabase[index];
+            var picked = state.menuPicks.indexOf(ingredient.id) !== -1;
+
+            button.classList.toggle("menu-picked", picked);
+            button.setAttribute("aria-pressed", picked ? "true" : "false");
+            button.disabled = !picked && state.menuPicks.length >= menuPickCount;
+        });
+        if (count) {
+            count.textContent = state.menuPicks.length;
+        }
+        if (start) {
+            start.disabled = state.menuPicks.length !== menuPickCount;
+        }
+    },
+
+    /* Function Description: Sets todaysMenu to the player's picks plus randomly
+       chosen ingredients from the rest of the database */
+    buildTodaysMenu: function() {
+        var state = SugarCube.State.variables;
+        var database = ingredientDatabase;
+
+        if (state.tutorialMode) {
+            state.todaysMenu = tutorialMenuIds.map(function(id) {
+                return database.find(function(ingredient) {
+                    return ingredient.id === id;
+                });
+            });
+            return;
+        }
+
+        var picks = database.filter(function(ingredient) {
+            return state.menuPicks.indexOf(ingredient.id) !== -1;
+        });
+        var others = shuffled(database.filter(function(ingredient) {
+            return state.menuPicks.indexOf(ingredient.id) === -1;
+        }));
+
+        // if fewer than 3 were picked, random ingredients make up the difference
+        state.todaysMenu = picks.concat(others.slice(0, menuPickCount + menuRandomCount - picks.length));
     },
 
     /* Function Description: Builds a new ticket with a full timer from an order */
@@ -1124,7 +1292,8 @@ window.FoodTruck = {
         var state = SugarCube.State.variables;
         this.stopOrderTimer();
         state.numOrders = this.ordersForDay();
-        state.availableOrders = orderOptions.slice();
+        state.availableCustomers = customerNames.slice();
+        this.buildTodaysMenu();
         state.dayScore = 0;
         state.ordersCompleted = 0;
         state.satisfactionScore = 0;
@@ -1139,7 +1308,6 @@ window.FoodTruck = {
         state.cookingResult = null;
         if (state.tutorialMode) {
             state.numOrders = 1;
-            state.availableOrders = [orderOptions[0]];
             state.tutorialStep = "take-order";
             state.tutorialIngredientIndex = 0;
         }
@@ -1288,11 +1456,11 @@ window.FoodTruck = {
         }
     },
 
-    /* Function Description: Starts the next day by incrementing the current
-       day and calling startDay */
+    /* Function Description: Advances to the next day and resets the menu picks.
+       The day itself begins from the ChooseMenu screen via startDay. */
     startNextDay: function() {
         SugarCube.State.variables.currentDay += 1;
-        this.startDay();
+        this.beginMenuSelection();
     },
 
     /* Function Description: Removes the cooking choices made for a ticket that
@@ -1360,7 +1528,7 @@ window.FoodTruck = {
     /* Function Description: Returns a string representation of the ingredient
        at the specified index, including its image and name */
     ingredientLabel: function(index) {
-        var ingredients = SugarCube.State.variables.menuIngredients;
+        var ingredients = SugarCube.State.variables.todaysMenu;
         var ingredient = ingredients[index];
 
         if (!ingredient) {
@@ -1389,7 +1557,7 @@ window.FoodTruck = {
        preparation method or cooking result */
     selectIngredient: function(index) {
         var state = SugarCube.State.variables;
-        var ingredient = state.menuIngredients[index];
+        var ingredient = state.todaysMenu[index];
 
         if (!this.getActiveOrder()) {
             throw new Error("Cannot add an ingredient without an active order.");
@@ -1811,6 +1979,24 @@ window.jQuery(document).on(":passagedisplay", function() {
             SugarCube.Engine.play("PrepareIngredient");
         });
     });
+    document.querySelectorAll(".menu-pick-button").forEach(function(button, index) {
+        button.addEventListener("click", function() {
+            window.FoodTruck.toggleMenuPick(index);
+        });
+    });
+    var menuStart = document.getElementById("menu-start");
+
+    if (menuStart) {
+        menuStart.addEventListener("click", function() {
+            if (SugarCube.State.variables.menuPicks.length === 3) {
+                window.FoodTruck.startDay();
+                SugarCube.Engine.play("TakeOrderScreen");
+            }
+        });
+    }
+    if (document.querySelector(".menu-pick-button")) {
+        window.FoodTruck.refreshMenuSelection();
+    }
     window.FoodTruck.updateTutorialHighlights();
 });</script><tw-passagedata pid="1" name="ActiveTicketWidget" tags="widget" position="100,100" size="100,100">&lt;&lt;widget &quot;activeTicket&quot;&gt;&gt;\
 &lt;&lt;set _wOrder = FoodTruck.getActiveOrder()&gt;&gt;\
@@ -1844,26 +2030,42 @@ window.jQuery(document).on(":passagedisplay", function() {
 &lt;&lt;set $satisfactionScore = 0&gt;&gt;
 &lt;&lt;set $healthinessScore = 0&gt;&gt;
 
-&lt;&lt;set $menuIngredients = [
-    { id: &quot;tortilla&quot;, name: &quot;Tortilla&quot;,    img: &quot;🌮&quot;, methods: { healthy: &quot;Toast on a dry griddle&quot;, unhealthy: &quot;Deep-fry until crisp&quot; } },
-    { id: &quot;beans&quot;,    name: &quot;Black Beans&quot;, img: &quot;🫘&quot;, methods: { healthy: &quot;Simmer with herbs&quot;, unhealthy: &quot;Refry with extra oil&quot; } },
-    { id: &quot;squash&quot;,   name: &quot;Squash&quot;,      img: &quot;🎃&quot;, methods: { healthy: &quot;Roast until tender&quot;, unhealthy: &quot;Deep-fry until crisp&quot; } },
-    { id: &quot;turkey&quot;,   name: &quot;Turkey&quot;,      img: &quot;🍗&quot;, methods: { healthy: &quot;Grill until cooked&quot;, unhealthy: &quot;Deep-fry until crisp&quot; } },
-    { id: &quot;garlic&quot;,   name: &quot;Garlic&quot;,      img: &quot;🧄&quot;, methods: { healthy: &quot;Roast until soft&quot;, unhealthy: &quot;Fry in extra oil&quot; } },
-    { id: &quot;sage&quot;,     name: &quot;Sage&quot;,        img: &quot;🌿&quot;, methods: { healthy: &quot;Use fresh leaves&quot;, unhealthy: &quot;Fry until crisp&quot; } }
-]&gt;&gt;
-
+&lt;&lt;set $todaysMenu = []&gt;&gt;
+&lt;&lt;set $menuPicks = []&gt;&gt;
+&lt;&lt;set $availableCustomers = []&gt;&gt;
 &lt;&lt;set $tickets = []&gt;&gt;
 &lt;&lt;set $activeTicketId = null&gt;&gt;
-&lt;&lt;set $nextTicketId = 1&gt;</tw-passagedata><tw-passagedata pid="3" name="Start" tags="" position="350,100" size="100,100">&lt;div class=&quot;phone start-screen&quot;&gt;\
+&lt;&lt;set $nextTicketId = 1&gt;&gt;</tw-passagedata><tw-passagedata pid="3" name="Start" tags="" position="350,100" size="100,100">&lt;div class=&quot;phone start-screen&quot;&gt;\
     &lt;h1&gt;Food Truck&lt;/h1&gt;\
     &lt;p&gt;Serve customers, prepare delicious meals, and grow your food truck.&lt;/p&gt;\
     &lt;div class=&quot;action-button start-actions&quot;&gt;\
-        &lt;&lt;button &quot;Start Day&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.endTutorial()&gt;&gt;&lt;&lt;run FoodTruck.startDay()&gt;&gt;&lt;&lt;/button&gt;&gt;\
+        &lt;&lt;button &quot;Start Day&quot; &quot;ChooseMenu&quot;&gt;&gt;&lt;&lt;run FoodTruck.endTutorial()&gt;&gt;&lt;&lt;run FoodTruck.beginMenuSelection()&gt;&gt;&lt;&lt;/button&gt;&gt;\
         &lt;&lt;button &quot;Play Tutorial&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.startTutorial()&gt;&gt;&lt;&lt;/button&gt;&gt;\
         &lt;&lt;button &quot;Toggle Debug Mode&quot; &quot;Start&quot;&gt;&gt;&lt;&lt;run FoodTruck.toggleDebugMode()&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
-&lt;/div&gt;\</tw-passagedata><tw-passagedata pid="4" name="TakeOrderScreen" tags="" position="475,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+&lt;/div&gt;\</tw-passagedata><tw-passagedata pid="4" name="ChooseMenu" tags="" position="475,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+    &lt;div class=&quot;HUD&quot;&gt;\
+        &lt;span&gt;&lt;strong&gt;Day:&lt;/strong&gt; $currentDay&lt;/span&gt;\
+    &lt;/div&gt;\
+    &lt;hr&gt;\
+    &lt;h3 class=&quot;menu-title&quot;&gt;Choose Today&#39;s Menu&lt;/h3&gt;\
+    &lt;p class=&quot;menu-hint&quot;&gt;Pick 3 ingredients. 3 more will be chosen at random, and customers will order from those 6.&lt;/p&gt;\
+    &lt;p class=&quot;menu-count&quot;&gt;&lt;strong&gt;Picked:&lt;/strong&gt; &lt;span id=&quot;menu-count&quot;&gt;0&lt;/span&gt; / 3&lt;/p&gt;\
+    &lt;div class=&quot;menu-grid&quot;&gt;\
+        &lt;&lt;for _i = 0; _i &lt; FoodTruck.ingredientDatabase.length; _i++&gt;&gt;\
+            &lt;button type=&quot;button&quot; class=&quot;menu-pick-button&quot; aria-pressed=&quot;false&quot;&gt;\
+                &lt;span class=&quot;menu-pick-icon&quot;&gt;&lt;&lt;print FoodTruck.ingredientDatabase[_i].img&gt;&gt;&lt;/span&gt;\
+                &lt;span class=&quot;menu-pick-name&quot;&gt;&lt;&lt;print FoodTruck.ingredientDatabase[_i].name&gt;&gt;&lt;/span&gt;\
+            &lt;/button&gt;\
+        &lt;&lt;/for&gt;&gt;\
+    &lt;/div&gt;\
+    &lt;div class=&quot;action-button&quot;&gt;\
+        &lt;button type=&quot;button&quot; id=&quot;menu-start&quot; disabled&gt;Start Day&lt;/button&gt;\
+    &lt;/div&gt;\
+    &lt;div class=&quot;passage-nav&quot;&gt;\
+        &lt;&lt;button &quot;Exit to Menu&quot; &quot;Start&quot;&gt;&gt;&lt;&lt;run FoodTruck.endTutorial()&gt;&gt;&lt;&lt;/button&gt;&gt;\
+    &lt;/div&gt;\
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="5" name="TakeOrderScreen" tags="" position="600,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
     &lt;div class=&quot;HUD&quot;&gt;\
         &lt;span&gt;&lt;strong&gt;Day:&lt;/strong&gt; $currentDay&lt;/span&gt; |\
         &lt;span&gt;&lt;strong&gt;Orders Left:&lt;/strong&gt; $numOrders&lt;/span&gt; |\
@@ -1918,7 +2120,7 @@ window.jQuery(document).on(":passagedisplay", function() {
         &lt;&lt;button &quot;Exit to Menu&quot; &quot;Start&quot;&gt;&gt;&lt;&lt;run FoodTruck.endTutorial()&gt;&gt;&lt;&lt;/button&gt;&gt;\
         &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;run FoodTruck.startTutorialIngredients()&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="5" name="DayTally" tags="" position="600,100" size="100,100">&lt;div class=&quot;phone day-tally-screen&quot;&gt;\
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="6" name="DayTally" tags="" position="725,100" size="100,100">&lt;div class=&quot;phone day-tally-screen&quot;&gt;\
     &lt;section class=&quot;day-tally-box&quot;&gt;\
         &lt;h2&gt;Customer Satisfaction&lt;/h2&gt;\
         &lt;p class=&quot;tally-stars&quot; aria-label=&quot;Customer satisfaction: $satisfactionScore out of 5 stars&quot;&gt;&lt;&lt;print FoodTruck.starRating($satisfactionScore)&gt;&gt;&lt;/p&gt;\
@@ -1929,11 +2131,11 @@ window.jQuery(document).on(":passagedisplay", function() {
             &lt;&lt;if $tutorialMode&gt;&gt;\
                 &lt;&lt;button &quot;Return to Menu&quot; &quot;Start&quot;&gt;&gt;&lt;&lt;run FoodTruck.endTutorial()&gt;&gt;&lt;&lt;/button&gt;&gt;\
             &lt;&lt;else&gt;&gt;\
-                &lt;&lt;button &quot;Start Next Day&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.startNextDay()&gt;&gt;&lt;&lt;/button&gt;&gt;\
+                &lt;&lt;button &quot;Choose Menu&quot; &quot;ChooseMenu&quot;&gt;&gt;&lt;&lt;run FoodTruck.startNextDay()&gt;&gt;&lt;&lt;/button&gt;&gt;\
             &lt;&lt;/if&gt;&gt;\
         &lt;/div&gt;\
     &lt;/section&gt;\
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="6" name="AssemblyStation" tags="" position="725,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="7" name="AssemblyStation" tags="" position="850,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
     &lt;div class=&quot;HUD&quot;&gt;\
         &lt;span&gt;&lt;strong&gt;Day:&lt;/strong&gt; $currentDay&lt;/span&gt; |\
         &lt;span&gt;&lt;strong&gt;Orders Left:&lt;/strong&gt; $numOrders&lt;/span&gt; |\
@@ -1961,11 +2163,11 @@ window.jQuery(document).on(":passagedisplay", function() {
     &lt;div class=&quot;ingredient-shelf&quot;&gt;\
         &lt;h4&gt;Ingredient Bins&lt;/h4&gt;\
         &lt;div class=&quot;ingredient-grid&quot;&gt;\
-            &lt;&lt;for _i = 0; _i &lt; $menuIngredients.length; _i++&gt;&gt;\
+            &lt;&lt;for _i = 0; _i &lt; $todaysMenu.length; _i++&gt;&gt;\
                 &lt;&lt;capture _i&gt;&gt;\
                 &lt;button type=&quot;button&quot; class=&quot;ingredient-button&quot;&gt;\
-                    &lt;span class=&quot;ingredient-icon&quot;&gt;&lt;&lt;print $menuIngredients[_i].img&gt;&gt;&lt;/span&gt;\
-                    &lt;span class=&quot;ingredient-name&quot;&gt;&lt;&lt;print $menuIngredients[_i].name&gt;&gt;&lt;/span&gt;\
+                    &lt;span class=&quot;ingredient-icon&quot;&gt;&lt;&lt;print $todaysMenu[_i].img&gt;&gt;&lt;/span&gt;\
+                    &lt;span class=&quot;ingredient-name&quot;&gt;&lt;&lt;print $todaysMenu[_i].name&gt;&gt;&lt;/span&gt;\
                 &lt;/button&gt;\
                 &lt;&lt;/capture&gt;&gt;\
             &lt;&lt;/for&gt;&gt;\
@@ -1976,7 +2178,7 @@ window.jQuery(document).on(":passagedisplay", function() {
         &lt;&lt;button &quot;Exit to Menu&quot; &quot;Start&quot;&gt;&gt;&lt;&lt;run FoodTruck.endTutorial()&gt;&gt;&lt;&lt;/button&gt;&gt;\
         &lt;&lt;button &quot;Order Window&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.finishTutorialPrep()&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="7" name="PrepareIngredient" tags="" position="850,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="8" name="PrepareIngredient" tags="" position="975,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
     &lt;div class=&quot;HUD&quot;&gt;\
         &lt;span&gt;&lt;strong&gt;Day:&lt;/strong&gt; $currentDay&lt;/span&gt; |\
         &lt;span&gt;&lt;strong&gt;Orders Left:&lt;/strong&gt; $numOrders&lt;/span&gt; |\
@@ -2005,7 +2207,7 @@ window.jQuery(document).on(":passagedisplay", function() {
     &lt;div class=&quot;passage-nav&quot;&gt;\
         &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;run FoodTruck.returnToAssembly()&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="8" name="CookingMinigame" tags="" position="975,100" size="100,100">&lt;&lt;run FoodTruck.updateCookingMarkerSpeed()&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="9" name="CookingMinigame" tags="" position="1100,100" size="100,100">&lt;&lt;run FoodTruck.updateCookingMarkerSpeed()&gt;&gt;
 &lt;div class=&quot;phone&quot;&gt;\
     &lt;div class=&quot;HUD&quot;&gt;\
         &lt;span&gt;&lt;strong&gt;Day:&lt;/strong&gt; $currentDay&lt;/span&gt; |\
@@ -2052,7 +2254,7 @@ window.jQuery(document).on(":passagedisplay", function() {
     &lt;div class=&quot;passage-nav&quot;&gt;\
         &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;run FoodTruck.returnToAssembly()&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="9" name="CookingResult" tags="" position="1100,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="10" name="CookingResult" tags="" position="1225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
     &lt;div class=&quot;HUD&quot;&gt;\
         &lt;span&gt;&lt;strong&gt;Day:&lt;/strong&gt; $currentDay&lt;/span&gt; |\
         &lt;span&gt;&lt;strong&gt;Orders Left:&lt;/strong&gt; $numOrders&lt;/span&gt; |\

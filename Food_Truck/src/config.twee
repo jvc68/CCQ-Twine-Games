@@ -45,15 +45,9 @@ Food Truck Game
 <<set $satisfactionScore = 0>>
 <<set $healthinessScore = 0>>
 
-<<set $menuIngredients = [
-    { id: "tortilla", name: "Tortilla",    img: "🌮", methods: { healthy: "Toast on a dry griddle", unhealthy: "Deep-fry until crisp" } },
-    { id: "beans",    name: "Black Beans", img: "🫘", methods: { healthy: "Simmer with herbs", unhealthy: "Refry with extra oil" } },
-    { id: "squash",   name: "Squash",      img: "🎃", methods: { healthy: "Roast until tender", unhealthy: "Deep-fry until crisp" } },
-    { id: "turkey",   name: "Turkey",      img: "🍗", methods: { healthy: "Grill until cooked", unhealthy: "Deep-fry until crisp" } },
-    { id: "garlic",   name: "Garlic",      img: "🧄", methods: { healthy: "Roast until soft", unhealthy: "Fry in extra oil" } },
-    { id: "sage",     name: "Sage",        img: "🌿", methods: { healthy: "Use fresh leaves", unhealthy: "Fry until crisp" } }
-]>>
-
+<<set $todaysMenu = []>>
+<<set $menuPicks = []>>
+<<set $availableCustomers = []>>
 <<set $tickets = []>>
 <<set $activeTicketId = null>>
-<<set $nextTicketId = 1>
+<<set $nextTicketId = 1>>

@@ -3,11 +3,36 @@
     <h1>Food Truck</h1>\
     <p>Serve customers, prepare delicious meals, and grow your food truck.</p>\
     <div class="action-button start-actions">\
-        <<button "Start Day" "TakeOrderScreen">><<run FoodTruck.endTutorial()>><<run FoodTruck.startDay()>><</button>>\
+        <<button "Start Day" "ChooseMenu">><<run FoodTruck.endTutorial()>><<run FoodTruck.beginMenuSelection()>><</button>>\
         <<button "Play Tutorial" "TakeOrderScreen">><<run FoodTruck.startTutorial()>><</button>>\
         <<button "Toggle Debug Mode" "Start">><<run FoodTruck.toggleDebugMode()>><</button>>\
     </div>\
 </div>\
+
+:: ChooseMenu
+<div class="phone">\
+    <div class="HUD">\
+        <span><strong>Day:</strong> $currentDay</span>\
+    </div>\
+    <hr>\
+    <h3 class="menu-title">Choose Today's Menu</h3>\
+    <p class="menu-hint">Pick 3 ingredients. 3 more will be chosen at random, and customers will order from those 6.</p>\
+    <p class="menu-count"><strong>Picked:</strong> <span id="menu-count">0</span> / 3</p>\
+    <div class="menu-grid">\
+        <<for _i = 0; _i < FoodTruck.ingredientDatabase.length; _i++>>\
+            <button type="button" class="menu-pick-button" aria-pressed="false">\
+                <span class="menu-pick-icon"><<print FoodTruck.ingredientDatabase[_i].img>></span>\
+                <span class="menu-pick-name"><<print FoodTruck.ingredientDatabase[_i].name>></span>\
+            </button>\
+        <</for>>\
+    </div>\
+    <div class="action-button">\
+        <button type="button" id="menu-start" disabled>Start Day</button>\
+    </div>\
+    <div class="passage-nav">\
+        <<button "Exit to Menu" "Start">><<run FoodTruck.endTutorial()>><</button>>\
+    </div>\
+</div>
 
 :: TakeOrderScreen
 <div class="phone">\
@@ -79,7 +104,7 @@
             <<if $tutorialMode>>\
                 <<button "Return to Menu" "Start">><<run FoodTruck.endTutorial()>><</button>>\
             <<else>>\
-                <<button "Start Next Day" "TakeOrderScreen">><<run FoodTruck.startNextDay()>><</button>>\
+                <<button "Choose Menu" "ChooseMenu">><<run FoodTruck.startNextDay()>><</button>>\
             <</if>>\
         </div>\
     </section>\
@@ -114,11 +139,11 @@
     <div class="ingredient-shelf">\
         <h4>Ingredient Bins</h4>\
         <div class="ingredient-grid">\
-            <<for _i = 0; _i < $menuIngredients.length; _i++>>\
+            <<for _i = 0; _i < $todaysMenu.length; _i++>>\
                 <<capture _i>>\
                 <button type="button" class="ingredient-button">\
-                    <span class="ingredient-icon"><<print $menuIngredients[_i].img>></span>\
-                    <span class="ingredient-name"><<print $menuIngredients[_i].name>></span>\
+                    <span class="ingredient-icon"><<print $todaysMenu[_i].img>></span>\
+                    <span class="ingredient-name"><<print $todaysMenu[_i].name>></span>\
                 </button>\
                 <</capture>>\
             <</for>>\
