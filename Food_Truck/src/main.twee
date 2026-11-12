@@ -175,12 +175,6 @@
             <</if>>\
         </div>\
         <<if !$pendingMethod>>\
-            <<if $tutorialMode>>\
-                <div class="tutorial-message" role="note">\
-                    <strong>TUTORIAL GOAL</strong>\
-                    <p>Choose the healthy preparation method to make a healthier meal and increase healthiness score!</p>\
-                </div>\
-            <</if>>\
             <div class="method-options">\
                 <<button `FoodTruck.methodLabel($methodOrder[0], 0)` "PrepareIngredient">><<run FoodTruck.chooseMethod($methodOrder[0])>><</button>>\
                 <<button `FoodTruck.methodLabel($methodOrder[1], 1)` "PrepareIngredient">><<run FoodTruck.chooseMethod($methodOrder[1])>><</button>>\
@@ -190,12 +184,6 @@
                 <strong><<if $pendingMethod.type === "healthy">>Healthy choice!<<else>>Unhealthy choice<</if>></strong>\
                 <p>$pendingMethod.reason</p>\
             </div>\
-            <<if $tutorialMode && $tutorialStep === "micro">>\
-                <div class="tutorial-message" role="note">\
-                    <strong>TUTORIAL GOAL</strong>\
-                    <p>Complete the preparation action to continue.</p>\
-                </div>\
-            <</if>>\
             <div id="prep-action" class="prep-action"></div>\
             <div class="action-button">\
                 <button type="button" id="prep-continue" disabled>Continue to Cooking</button>\
@@ -228,12 +216,6 @@
             <p>The ingredient has already been prepared.</p>\
             <<button "View Cooking Result" "CookingResult">><</button>>\
         <<else>>\
-            <<if $tutorialMode>>\
-                <div class="tutorial-message" role="note">\
-                    <strong>TUTORIAL GOAL</strong>\
-                    <p>Stop the marker while it is in the green section for a perfect cook and higher customer satisfaction!</p>\
-                </div>\
-            <</if>>\
             <p class="skill-instructions">Stop the marker in the green section for a perfect cook.</p>\
             <div class="skill-track" role="img" aria-label="Cooking skill check: blue is raw, green is perfect, and red is overcooked">\
                 <div class="skill-zone skill-zone-raw"></div>\

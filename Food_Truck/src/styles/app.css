@@ -391,12 +391,14 @@ body {
 
 @keyframes tutorial-pulse {
   from {
-    background: rgba(255, 255, 255, 0.25);
-    box-shadow: 0 0 0 0 rgba(168, 255, 219, 0.25);
+    background: #ffe14d;
+    border-color: #ff8a00;
+    box-shadow: 0 0 0 0 rgba(255, 138, 0, 0.6);
   }
   to {
-    background: #a8ffdb;
-    box-shadow: 0 0 0 7px rgba(168, 255, 219, 0.5);
+    background: #ff8a00;
+    border-color: #ffffff;
+    box-shadow: 0 0 0 5px rgba(255, 138, 0, 0.55), 0 0 18px 6px rgba(255, 200, 0, 0.8);
   }
 }
 

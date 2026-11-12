@@ -497,12 +497,14 @@ body {
 
 @keyframes tutorial-pulse {
   from {
-    background: rgba(255, 255, 255, 0.25);
-    box-shadow: 0 0 0 0 rgba(168, 255, 219, 0.25);
+    background: #ffe14d;
+    border-color: #ff8a00;
+    box-shadow: 0 0 0 0 rgba(255, 138, 0, 0.6);
   }
   to {
-    background: #a8ffdb;
-    box-shadow: 0 0 0 7px rgba(168, 255, 219, 0.5);
+    background: #ff8a00;
+    border-color: #ffffff;
+    box-shadow: 0 0 0 5px rgba(255, 138, 0, 0.55), 0 0 18px 6px rgba(255, 200, 0, 0.8);
   }
 }
 
@@ -2655,12 +2657,6 @@ window.jQuery(document).on(":passagedisplay", function() {
             &lt;&lt;/if&gt;&gt;\
         &lt;/div&gt;\
         &lt;&lt;if !$pendingMethod&gt;&gt;\
-            &lt;&lt;if $tutorialMode&gt;&gt;\
-                &lt;div class=&quot;tutorial-message&quot; role=&quot;note&quot;&gt;\
-                    &lt;strong&gt;TUTORIAL GOAL&lt;/strong&gt;\
-                    &lt;p&gt;Choose the healthy preparation method to make a healthier meal and increase healthiness score!&lt;/p&gt;\
-                &lt;/div&gt;\
-            &lt;&lt;/if&gt;&gt;\
             &lt;div class=&quot;method-options&quot;&gt;\
                 &lt;&lt;button `FoodTruck.methodLabel($methodOrder[0], 0)` &quot;PrepareIngredient&quot;&gt;&gt;&lt;&lt;run FoodTruck.chooseMethod($methodOrder[0])&gt;&gt;&lt;&lt;/button&gt;&gt;\
                 &lt;&lt;button `FoodTruck.methodLabel($methodOrder[1], 1)` &quot;PrepareIngredient&quot;&gt;&gt;&lt;&lt;run FoodTruck.chooseMethod($methodOrder[1])&gt;&gt;&lt;&lt;/button&gt;&gt;\
@@ -2670,12 +2666,6 @@ window.jQuery(document).on(":passagedisplay", function() {
                 &lt;strong&gt;&lt;&lt;if $pendingMethod.type === &quot;healthy&quot;&gt;&gt;Healthy choice!&lt;&lt;else&gt;&gt;Unhealthy choice&lt;&lt;/if&gt;&gt;&lt;/strong&gt;\
                 &lt;p&gt;$pendingMethod.reason&lt;/p&gt;\
             &lt;/div&gt;\
-            &lt;&lt;if $tutorialMode &amp;&amp; $tutorialStep === &quot;micro&quot;&gt;&gt;\
-                &lt;div class=&quot;tutorial-message&quot; role=&quot;note&quot;&gt;\
-                    &lt;strong&gt;TUTORIAL GOAL&lt;/strong&gt;\
-                    &lt;p&gt;Complete the preparation action to continue.&lt;/p&gt;\
-                &lt;/div&gt;\
-            &lt;&lt;/if&gt;&gt;\
             &lt;div id=&quot;prep-action&quot; class=&quot;prep-action&quot;&gt;&lt;/div&gt;\
             &lt;div class=&quot;action-button&quot;&gt;\
                 &lt;button type=&quot;button&quot; id=&quot;prep-continue&quot; disabled&gt;Continue to Cooking&lt;/button&gt;\
@@ -2705,12 +2695,6 @@ window.jQuery(document).on(":passagedisplay", function() {
             &lt;p&gt;The ingredient has already been prepared.&lt;/p&gt;\
             &lt;&lt;button &quot;View Cooking Result&quot; &quot;CookingResult&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;\
         &lt;&lt;else&gt;&gt;\
-            &lt;&lt;if $tutorialMode&gt;&gt;\
-                &lt;div class=&quot;tutorial-message&quot; role=&quot;note&quot;&gt;\
-                    &lt;strong&gt;TUTORIAL GOAL&lt;/strong&gt;\
-                    &lt;p&gt;Stop the marker while it is in the green section for a perfect cook and higher customer satisfaction!&lt;/p&gt;\
-                &lt;/div&gt;\
-            &lt;&lt;/if&gt;&gt;\
             &lt;p class=&quot;skill-instructions&quot;&gt;Stop the marker in the green section for a perfect cook.&lt;/p&gt;\
             &lt;div class=&quot;skill-track&quot; role=&quot;img&quot; aria-label=&quot;Cooking skill check: blue is raw, green is perfect, and red is overcooked&quot;&gt;\
                 &lt;div class=&quot;skill-zone skill-zone-raw&quot;&gt;&lt;/div&gt;\
