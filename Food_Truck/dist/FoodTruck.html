@@ -104,7 +104,7 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 		<div id="init-lacking"><p>Browser lacks capabilities required to play.</p><p>Upgrade or switch to another browser.</p></div>
 		<div id="init-loading"><div>Loading&hellip;</div></div>
 	</div>
-	<!-- UUID://EFD451B8-46CF-4200-86B0-31CAA585B034// --><tw-storydata name="Food Truck Game" startnode="2" creator="Tweego" creator-version="2.1.1+81d1d71" ifid="EFD451B8-46CF-4200-86B0-31CAA585B034" zoom="1" format="SugarCube" format-version="2.37.3" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">* { box-sizing: border-box; }
+	<!-- UUID://EFD451B8-46CF-4200-86B0-31CAA585B034// --><tw-storydata name="Food Truck Game" startnode="3" creator="Tweego" creator-version="2.1.1+81d1d71" ifid="EFD451B8-46CF-4200-86B0-31CAA585B034" zoom="1" format="SugarCube" format-version="2.37.3" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">* { box-sizing: border-box; }
 
 body {
   font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -144,9 +144,9 @@ body {
   text-align: center;
   font-size: 0.85rem;
   background: rgba(0, 0, 0, 0.39);
-  padding: 20px 12px;
+  padding: 12px;
   border-radius: 14px;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   border: 3px solid rgba(255, 255, 255, 0.2);
 }
 
@@ -158,9 +158,202 @@ body {
   margin: 14px 0 10px;
 }
 
+.ticket-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.ticket-row > br {
+  display: none;
+}
+
+.ticket-card {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-height: 190px;
+  padding: 8px 7px 0;
+  overflow: hidden;
+  border: 3px solid transparent;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1a1a1a;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+}
+
+.ticket-card {
+  position: relative;
+}
+
+.ticket-cancel {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+}
+
+.ticket-cancel button {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #8a2d2d;
+  border-radius: 50%;
+  background: #fff;
+  color: #8a2d2d;
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.ticket-cancel button:hover {
+  background: #ffd9d9;
+}
+
+.ticket-customer {
+  padding-right: 20px !important;
+}
+
+.ticket-card.ticket-active {
+  border-color: #a8ffdb;
+  box-shadow: 0 0 0 3px rgba(168, 255, 219, 0.6), 0 4px 10px rgba(0, 0, 0, 0.18);
+}
+
+.ticket-card h3,
+.ticket-card p {
+  margin: 0;
+  padding: 0;
+  line-height: 1.15;
+}
+
+.ticket-customer {
+  font-size: 0.9rem;
+  color: #0d1b2a;
+}
+
+.ticket-dish {
+  font-size: 0.72rem;
+  font-style: italic;
+}
+
+.ticket-ingredients {
+  margin: 2px 0 0;
+  padding-left: 14px;
+  font-size: 0.72rem;
+  line-height: 1.25;
+}
+
+.ticket-action {
+  display: flex;
+  flex: 1;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 6px;
+  text-align: center;
+}
+
+.ticket-action button {
+  appearance: none;
+  width: 100%;
+  min-height: 30px;
+  margin: 0;
+  padding: 3px 4px;
+  border: 2px solid #0d1b2a;
+  border-radius: 8px;
+  background: #fff;
+  color: #123;
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1.1;
+  cursor: pointer;
+}
+
+.ticket-action button:hover {
+  background: #a8ffdb;
+}
+
+.ticket-action button.tutorial-target {
+  animation: tutorial-pulse 900ms ease-in-out infinite alternate;
+}
+
+.ticket-status {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #1261a0;
+}
+
+/* Progress-bar timer, full and green at the start, fading to yellow then red */
+.ticket-timer {
+  height: 12px;
+  margin: 0 -7px;
+  background: transparent;
+}
+
+.ticket-box .ticket-timer {
+  margin: 4px 0 0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.ticket-timer-fill {
+  width: 100%;
+  height: 100%;
+  background-color: hsl(120, 80%, 42%);
+  /* short linear transition between 100ms updates keeps the bar gliding */
+  transition: width 0.1s linear;
+}
+
+.compact-ticket {
+  margin-bottom: 8px;
+  padding: 8px 12px;
+}
+
+.compact-ticket h3 {
+  font-size: 0.95rem;
+}
+
+.compact-ticket p {
+  font-size: 0.8rem;
+}
+
+.compact-ticket .timer-value {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.prep-area.compact {
+  margin-bottom: 8px;
+  padding: 6px 10px;
+  border-width: 3px;
+}
+
+.prep-area.compact h4 {
+  margin: 0 0 2px;
+}
+
+.prep-area.compact #tray {
+  min-height: 24px;
+}
+
+.prep-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.prep-header .tray-controls {
+  margin-top: 0;
+}
+
 .customer-window {
   width: 100%;
-  height: 170px;
+  height: 160px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -171,15 +364,15 @@ body {
 }
 
 .customer-face {
-  width: 98px;
-  height: 98px;
+  width: 90px;
+  height: 90px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
   background-color: transparent;
   color: #1a1a1a;
-  font-size: 6rem;
+  font-size: 5.5rem;
   line-height: 1;
 }
 
@@ -624,7 +817,7 @@ body {
 }
 
 .tutorial-message {
-  margin: 18px 0 12px;
+  margin: 8px 0;
   padding: 12px 16px;
   border: 2px solid #a8ffdb;
   border-radius: 12px;
@@ -643,7 +836,7 @@ body {
 }
 
 .skill-instructions {
-  margin: 20px 0 12px;
+  margin: 8px 0 12px;
   text-align: center;
 }
 
@@ -811,9 +1004,84 @@ body {
 ];
 
 var orderTimerInterval = null;
+var lastTickTime = 0;
 var maxPrepTrayIngredients = 3;
+var maxTickets = 3;
 
 window.FoodTruck = {
+    /* Function Description: Returns the ticket the player is currently
+       preparing, or null if none is selected */
+    getActiveOrder: function() {
+        var state = SugarCube.State.variables;
+
+        if (state.activeTicketId === null || !Array.isArray(state.tickets)) {
+            return null;
+        }
+
+        return state.tickets.find(function(ticket) {
+            return ticket.id === state.activeTicketId;
+        }) || null;
+    },
+
+    /* Function Description: Adds new tickets until the ticket limit is reached
+       or no more orders remain for the day (orders already on a ticket count
+       toward the day's remaining orders) */
+    fillTickets: function() {
+        var state = SugarCube.State.variables;
+
+        while (state.tickets.length < maxTickets &&
+            state.numOrders - state.tickets.length > 0) {
+            var order = this.pickOrder();
+
+            if (!order) {
+                break;
+            }
+            state.tickets.push(this.makeTicket(order));
+        }
+    },
+
+    /* Function Description: Randomly picks an order for a new ticket, preferring
+       customers not yet used today and never one already on a ticket (or in
+       the optional exclude list). Returns null if no customer is available. */
+    pickOrder: function(excludeNames) {
+        var state = SugarCube.State.variables;
+        var excluded = (excludeNames || []).concat(state.tickets.map(function(ticket) {
+            return ticket.custName;
+        }));
+
+        if (state.availableOrders.length) {
+            var index = Math.floor(Math.random() * state.availableOrders.length);
+
+            return state.availableOrders.splice(index, 1)[0];
+        }
+
+        // every customer has been used today, so recycle ones not on a ticket
+        var recyclable = orderOptions.filter(function(order) {
+            return excluded.indexOf(order.custName) === -1;
+        });
+
+        return recyclable.length
+            ? recyclable[Math.floor(Math.random() * recyclable.length)]
+            : null;
+    },
+
+    /* Function Description: Builds a new ticket with a full timer from an order */
+    makeTicket: function(order) {
+        var state = SugarCube.State.variables;
+        var time = this.orderTimeForDay();
+        var ticket = {
+            id: state.nextTicketId,
+            custName: order.custName,
+            dishName: order.dishName,
+            requiredIngredients: order.requiredIngredients.slice(),
+            timeLeft: time,
+            timeTotal: time
+        };
+
+        state.nextTicketId += 1;
+        return ticket;
+    },
+
     /* Function Description: Returns the number of orders for the cuurent day,
        calculated based on current day number */
     ordersForDay: function() {
@@ -862,18 +1130,21 @@ window.FoodTruck = {
         state.satisfactionScore = 0;
         state.healthinessScore = 0;
         state.prepTray = [];
-        state.activeOrder = null;
+        state.tickets = [];
+        state.activeTicketId = null;
+        state.nextTicketId = 1;
         state.dayPreparationChoices = [];
         state.pendingIngredient = null;
         state.pendingMethod = null;
         state.cookingResult = null;
-        state.orderTimer = this.orderTimeForDay();
         if (state.tutorialMode) {
             state.numOrders = 1;
             state.availableOrders = [orderOptions[0]];
             state.tutorialStep = "take-order";
             state.tutorialIngredientIndex = 0;
         }
+        this.fillTickets();
+        this.startOrderTimer();
     },
 
     startTutorial: function() {
@@ -887,6 +1158,11 @@ window.FoodTruck = {
         state.tutorialMode = false;
         state.tutorialStep = null;
         state.tutorialIngredientIndex = 0;
+        this.stopOrderTimer();
+        state.tickets = [];
+        state.activeTicketId = null;
+        // returning to the menu always restarts progress at day 1
+        state.currentDay = 1;
     },
 
     advanceTutorialIngredient: function() {
@@ -898,7 +1174,7 @@ window.FoodTruck = {
 
         state.tutorialIngredientIndex += 1;
         state.tutorialStep = state.tutorialIngredientIndex <
-            state.activeOrder.requiredIngredients.length
+            this.getActiveOrder().requiredIngredients.length
             ? "ingredient"
             : "return-to-order";
     },
@@ -913,7 +1189,8 @@ window.FoodTruck = {
 
     restoreTutorialIngredient: function() {
         var state = SugarCube.State.variables;
-        var required = state.activeOrder && state.activeOrder.requiredIngredients;
+        var activeOrder = this.getActiveOrder();
+        var required = activeOrder && activeOrder.requiredIngredients;
 
         if (!state.tutorialMode || !Array.isArray(required)) {
             return;
@@ -973,7 +1250,7 @@ window.FoodTruck = {
         } else if (state.tutorialStep === "assembly") {
             targetText = "Assembly Station";
         } else if (state.tutorialStep === "ingredient" && passage === "AssemblyStation") {
-            targetText = state.activeOrder.requiredIngredients[state.tutorialIngredientIndex];
+            targetText = this.getActiveOrder().requiredIngredients[state.tutorialIngredientIndex];
         } else if (state.tutorialStep === "method" && passage === "PrepareIngredient") {
             targetText = "(Healthy)";
         } else if (state.tutorialStep === "stop" && passage === "CookingMinigame") {
@@ -1018,25 +1295,66 @@ window.FoodTruck = {
         this.startDay();
     },
 
-    /* Function Description: Randomly selects an order from today's remaining
-       unique customers */
-    takeOrder: function() {
+    /* Function Description: Removes the cooking choices made for a ticket that
+       was cancelled or expired, so they no longer affect the day's scores */
+    discardTicketChoices: function(ticketId) {
         var state = SugarCube.State.variables;
 
-        if (state.numOrders < 1 || state.activeOrder) {
+        state.dayPreparationChoices = state.dayPreparationChoices.filter(function(choice) {
+            return choice.ticketId !== ticketId;
+        });
+    },
+
+    /* Function Description: Immediately discards a ticket and replaces it in
+       place with a different random ticket (fresh timer). The day's remaining
+       order count is unchanged. */
+    cancelTicket: function(ticketId) {
+        var state = SugarCube.State.variables;
+        var index = state.tickets.findIndex(function(t) {
+            return t.id === ticketId;
+        });
+
+        if (index === -1) {
             return;
         }
-        if (!state.availableOrders.length) {
-            throw new Error("No customers remain for today's orders (has to be a unique customer).");
+
+        var ticket = state.tickets[index];
+        var replacement = this.pickOrder([ticket.custName]) || ticket;
+
+        this.discardTicketChoices(ticket.id);
+        if (ticket.id === state.activeTicketId) {
+            state.activeTicketId = null;
+            state.prepTray = [];
+            state.pendingIngredient = null;
+            state.pendingMethod = null;
+            state.cookingResult = null;
+            if (state.tutorialMode) {
+                state.tutorialStep = "take-order";
+            }
+        }
+        state.tickets[index] = this.makeTicket(replacement);
+    },
+
+    /* Function Description: Takes the ticket with the given id as the order
+       being prepared. Switching tickets clears the prep tray. */
+    selectOrder: function(ticketId) {
+        var state = SugarCube.State.variables;
+        var ticket = state.tickets.find(function(t) {
+            return t.id === ticketId;
+        });
+
+        if (!ticket || state.activeTicketId === ticketId) {
+            return;
         }
 
-        var customerIndex = Math.floor(Math.random() * state.availableOrders.length);
-        state.activeOrder = state.availableOrders.splice(customerIndex, 1)[0];
-        state.orderTimer = this.orderTimeForDay();
+        state.activeTicketId = ticketId;
+        state.prepTray = [];
+        state.pendingIngredient = null;
+        state.pendingMethod = null;
+        state.cookingResult = null;
         if (state.tutorialMode) {
             state.tutorialStep = "assembly";
         }
-        this.startOrderTimer();
     },
 
     /* Function Description: Returns a string representation of the ingredient
@@ -1073,7 +1391,7 @@ window.FoodTruck = {
         var state = SugarCube.State.variables;
         var ingredient = state.menuIngredients[index];
 
-        if (!state.activeOrder) {
+        if (!this.getActiveOrder()) {
             throw new Error("Cannot add an ingredient without an active order.");
         }
         if (!ingredient) {
@@ -1143,6 +1461,7 @@ window.FoodTruck = {
         ));
         var doneness = position < 42 ? "Raw" : position <= 58 ? "Perfect" : "Overcooked";
         var choice = {
+            ticketId: state.activeTicketId,
             ingredient: state.pendingIngredient.name,
             method: state.pendingMethod.label,
             healthy: state.pendingMethod.type === "healthy",
@@ -1181,7 +1500,8 @@ window.FoodTruck = {
     canFulfillOrder: function() {
         var state = SugarCube.State.variables;
         var tray = state.prepTray;
-        var required = state.activeOrder && state.activeOrder.requiredIngredients;
+        var activeOrder = this.getActiveOrder();
+        var required = activeOrder && activeOrder.requiredIngredients;
 
         if (!Array.isArray(tray) || !Array.isArray(required) || tray.length !== required.length) {
             return false;
@@ -1291,9 +1611,11 @@ window.FoodTruck = {
         state.ordersCompleted += 1;
         state.dayScore += 1;
         state.numOrders -= 1;
-        state.activeOrder = null;
+        state.tickets = state.tickets.filter(function(ticket) {
+            return ticket.id !== state.activeTicketId;
+        });
+        state.activeTicketId = null;
         state.prepTray = [];
-        this.stopOrderTimer();
 
         if (state.tutorialMode) {
             state.tutorialStep = "tally";
@@ -1302,48 +1624,101 @@ window.FoodTruck = {
         if (state.numOrders === 0) {
             this.finishDay();
         } else {
+            this.fillTickets();
             SugarCube.Engine.play("TakeOrderScreen");
         }
     },
 
-    /* Function Description: Starts the order timer interval, which decrements
-       the order timer every second and handles order expiration */
+    /* Function Description: Starts the shared timer interval, which ticks every
+       ticket down several times a second so the progress bars animate smoothly */
     startOrderTimer: function() {
         var self = this;
 
         this.stopOrderTimer();
-        if (!SugarCube.State.variables.activeOrder) {
+        if (!SugarCube.State.variables.tickets.length) {
             return;
         }
 
+        lastTickTime = Date.now();
         orderTimerInterval = setInterval(function() {
-            var state = SugarCube.State.variables;
+            self.tickOrders();
+        }, 100);
+    },
 
-            if (!state.activeOrder) {
-                self.stopOrderTimer();
+    /* Function Description: Ticks every ticket's timer down by the real time
+       elapsed. A taken ticket that expires is cancelled (counting as a handled
+       order) and a new ticket fills its slot if orders remain. A ticket that
+       was never taken is instead swapped for a different random ticket with a
+       fresh timer. The day ends once no orders are left. */
+    tickOrders: function() {
+        var state = SugarCube.State.variables;
+
+        if (!state.tickets.length) {
+            this.stopOrderTimer();
+            return;
+        }
+
+        var now = Date.now();
+        var elapsed = Math.min(1, (now - lastTickTime) / 1000);
+        var self = this;
+        var changed = false;
+        var activeExpired = false;
+        var remaining = [];
+
+        lastTickTime = now;
+
+        state.tickets.forEach(function(ticket) {
+            ticket.timeLeft = Math.max(0, ticket.timeLeft - elapsed);
+        });
+
+        state.tickets.forEach(function(ticket) {
+            if (ticket.timeLeft > 0) {
+                remaining.push(ticket);
                 return;
             }
 
-            state.orderTimer = Math.max(0, state.orderTimer - 1);
-            self.updateOrderTimerDisplay();
-
-            // clear all order details after reaching 0 on the timer
-            if (state.orderTimer <= 0) {
-                self.stopOrderTimer();
-                state.activeOrder = null;
-                state.prepTray = [];
-                state.pendingIngredient = null;
-                state.pendingMethod = null;
-                state.cookingResult = null;
+            changed = true;
+            self.discardTicketChoices(ticket.id);
+            if (ticket.id === state.activeTicketId) {
+                activeExpired = true;
                 state.numOrders -= 1;
-
-                if (state.numOrders === 0) {
-                    self.finishDay();
-                } else {
-                    SugarCube.Engine.play("TakeOrderScreen");
-                }
+                return;
             }
-        }, 1000);
+
+            // untaken ticket: replace it with a different random customer
+            var replacement = self.pickOrder([ticket.custName]) || ticket;
+            remaining.push(self.makeTicket(replacement));
+        });
+
+        if (!changed) {
+            this.updateTicketDisplays();
+            return;
+        }
+
+        state.tickets = remaining;
+
+        if (activeExpired) {
+            state.activeTicketId = null;
+            state.prepTray = [];
+            state.pendingIngredient = null;
+            state.pendingMethod = null;
+            state.cookingResult = null;
+        }
+
+        if (state.numOrders <= 0) {
+            this.finishDay();
+            return;
+        }
+
+        this.fillTickets();
+
+        if (activeExpired) {
+            SugarCube.Engine.play("TakeOrderScreen");
+        } else if (SugarCube.State.passage === "TakeOrderScreen") {
+            SugarCube.Engine.show();
+        } else {
+            this.updateTicketDisplays();
+        }
     },
 
     /* Function Description: Stops the order timer interval if it's running */
@@ -1357,7 +1732,8 @@ window.FoodTruck = {
     /* Function Description: Returns a string representation of the order timer
        in the format "MM:SS" */
     orderTimerDisplay: function() {
-        var seconds = Math.max(0, SugarCube.State.variables.orderTimer || 0);
+        var activeOrder = this.getActiveOrder();
+        var seconds = Math.max(0, Math.ceil(activeOrder ? activeOrder.timeLeft : 0));
         var minutes = Math.floor(seconds / 60);
         var remainingSeconds = seconds % 60;
 
@@ -1365,17 +1741,67 @@ window.FoodTruck = {
             String(remainingSeconds).padStart(2, "0");
     },
 
-    /* Function Description: Updates the order timer display in the UI */
-    updateOrderTimerDisplay: function() {
+    /* Function Description: Returns a ticket's progress bar color, fading from
+       green (full) through yellow to red (empty) */
+    ticketColor: function(fraction) {
+        return "hsl(" + Math.round(120 * fraction) + ", 80%, 42%)";
+    },
+
+    /* Function Description: Applies a ticket's remaining time to a progress bar
+       fill element. When instant is true the width is set without animating. */
+    applyTimerFill: function(fill, ticket, instant) {
+        var fraction = Math.max(0, Math.min(1, ticket.timeLeft / ticket.timeTotal));
+
+        if (instant) {
+            fill.style.transition = "none";
+        }
+        fill.style.width = (fraction * 100) + "%";
+        fill.style.backgroundColor = this.ticketColor(fraction);
+        if (instant) {
+            void fill.offsetWidth;
+            fill.style.transition = "";
+        }
+    },
+
+    /* Function Description: Updates the ticket cards, their progress bars, and
+       the active ticket timer on the assembly station in the UI */
+    updateTicketDisplays: function(instant) {
+        var self = this;
+        var state = SugarCube.State.variables;
+        var cards = document.querySelectorAll(".ticket-card");
+
+        if (cards.length === state.tickets.length) {
+            state.tickets.forEach(function(ticket, index) {
+                var fill = cards[index].querySelector(".ticket-timer-fill");
+
+                cards[index].classList.toggle("ticket-active", ticket.id === state.activeTicketId);
+                if (fill) {
+                    self.applyTimerFill(fill, ticket, instant);
+                }
+            });
+        }
+
+        var activeOrder = this.getActiveOrder();
         var timerElement = document.getElementById("order-timer");
+        var barFill = document.getElementById("order-bar-fill");
 
         if (timerElement) {
             timerElement.textContent = this.orderTimerDisplay();
+        }
+        if (barFill && activeOrder) {
+            this.applyTimerFill(barFill, activeOrder, instant);
         }
     }
 };
 
 window.jQuery(document).on(":passagedisplay", function() {
+    var state = SugarCube.State.variables;
+
+    // resume ticking if tickets exist but the timer isn't running (e.g. after loading a save)
+    if (state.tickets && state.tickets.length && !orderTimerInterval) {
+        window.FoodTruck.startOrderTimer();
+    }
+    window.FoodTruck.updateTicketDisplays(true);
     document.querySelectorAll(".ingredient-button").forEach(function(button) {
         button.addEventListener("click", function() {
             var ingredientButtons = document.querySelectorAll(".ingredient-button");
@@ -1386,7 +1812,23 @@ window.jQuery(document).on(":passagedisplay", function() {
         });
     });
     window.FoodTruck.updateTutorialHighlights();
-});</script><tw-passagedata pid="1" name="StoryInit" tags="" position="100,100" size="100,100">&lt;&lt;set $numOrders = 0&gt;&gt;
+});</script><tw-passagedata pid="1" name="ActiveTicketWidget" tags="widget" position="100,100" size="100,100">&lt;&lt;widget &quot;activeTicket&quot;&gt;&gt;\
+&lt;&lt;set _wOrder = FoodTruck.getActiveOrder()&gt;&gt;\
+&lt;&lt;if _wOrder&gt;&gt;\
+&lt;div class=&quot;ticket-box compact-ticket&quot;&gt;\
+    &lt;div class=&quot;ticket-header&quot;&gt;\
+        &lt;h3&gt;&lt;&lt;print _wOrder.custName&gt;&gt;: &lt;&lt;print _wOrder.dishName&gt;&gt;&lt;/h3&gt;\
+        &lt;span id=&quot;order-timer&quot; class=&quot;timer-value&quot;&gt;&lt;&lt;print FoodTruck.orderTimerDisplay()&gt;&gt;&lt;/span&gt;\
+    &lt;/div&gt;\
+    &lt;p&gt;Needs: &lt;&lt;print _wOrder.requiredIngredients.join(&quot;, &quot;)&gt;&gt;&lt;/p&gt;\
+    &lt;div class=&quot;ticket-timer&quot;&gt;&lt;div id=&quot;order-bar-fill&quot; class=&quot;ticket-timer-fill&quot;&gt;&lt;/div&gt;&lt;/div&gt;\
+&lt;/div&gt;\
+&lt;&lt;else&gt;&gt;\
+&lt;div class=&quot;ticket-box compact-ticket&quot;&gt;\
+    &lt;p&gt;No active order. Return to the Order Window and take a ticket.&lt;/p&gt;\
+&lt;/div&gt;\
+&lt;&lt;/if&gt;&gt;\
+&lt;&lt;/widget&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="StoryInit" tags="" position="225,100" size="100,100">&lt;&lt;set $numOrders = 0&gt;&gt;
 &lt;&lt;set $currentDay = 1&gt;&gt;
 &lt;&lt;set $debugMode = false&gt;&gt;
 &lt;&lt;set $tutorialMode = false&gt;&gt;
@@ -1411,8 +1853,9 @@ window.jQuery(document).on(":passagedisplay", function() {
     { id: &quot;sage&quot;,     name: &quot;Sage&quot;,        img: &quot;🌿&quot;, methods: { healthy: &quot;Use fresh leaves&quot;, unhealthy: &quot;Fry until crisp&quot; } }
 ]&gt;&gt;
 
-&lt;&lt;set $activeOrder = null&gt;&gt;
-&lt;&lt;set $orderTimer = 120&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="Start" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone start-screen&quot;&gt;\
+&lt;&lt;set $tickets = []&gt;&gt;
+&lt;&lt;set $activeTicketId = null&gt;&gt;
+&lt;&lt;set $nextTicketId = 1&gt;</tw-passagedata><tw-passagedata pid="3" name="Start" tags="" position="350,100" size="100,100">&lt;div class=&quot;phone start-screen&quot;&gt;\
     &lt;h1&gt;Food Truck&lt;/h1&gt;\
     &lt;p&gt;Serve customers, prepare delicious meals, and grow your food truck.&lt;/p&gt;\
     &lt;div class=&quot;action-button start-actions&quot;&gt;\
@@ -1420,7 +1863,7 @@ window.jQuery(document).on(":passagedisplay", function() {
         &lt;&lt;button &quot;Play Tutorial&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.startTutorial()&gt;&gt;&lt;&lt;/button&gt;&gt;\
         &lt;&lt;button &quot;Toggle Debug Mode&quot; &quot;Start&quot;&gt;&gt;&lt;&lt;run FoodTruck.toggleDebugMode()&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
-&lt;/div&gt;\</tw-passagedata><tw-passagedata pid="3" name="TakeOrderScreen" tags="" position="350,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+&lt;/div&gt;\</tw-passagedata><tw-passagedata pid="4" name="TakeOrderScreen" tags="" position="475,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
     &lt;div class=&quot;HUD&quot;&gt;\
         &lt;span&gt;&lt;strong&gt;Day:&lt;/strong&gt; $currentDay&lt;/span&gt; |\
         &lt;span&gt;&lt;strong&gt;Orders Left:&lt;/strong&gt; $numOrders&lt;/span&gt; |\
@@ -1431,32 +1874,37 @@ window.jQuery(document).on(":passagedisplay", function() {
         &lt;div class=&quot;customer-window&quot;&gt;\
             &lt;div class=&quot;customer-face&quot; role=&quot;img&quot; aria-label=&quot;Placeholder customer face&quot;&gt;🙂&lt;/div&gt;\
         &lt;/div&gt;\
-        &lt;div class=&quot;customer-details&quot;&gt;\
-            &lt;&lt;if $activeOrder&gt;&gt;\
-                &lt;h3&gt;$activeOrder.custName&lt;/h3&gt;\
-                &lt;p&gt;&quot;I&#39;d like a $activeOrder.dishName, please!&quot;&lt;/p&gt;\
-            &lt;&lt;else&gt;&gt;\
-                &lt;&lt;if $numOrders &gt; 0&gt;&gt;\
-                    &lt;p&gt;A customer is waiting. Take their order to get started.&lt;/p&gt;\
-                &lt;&lt;else&gt;&gt;\
-                    &lt;p&gt;All orders have been served for today.&lt;/p&gt;\
-                &lt;&lt;/if&gt;&gt;\
-            &lt;&lt;/if&gt;&gt;\
-        &lt;/div&gt;\
     &lt;/section&gt;\
-    &lt;div class=&quot;action-button order-actions&quot;&gt;\
-        &lt;&lt;if !$activeOrder &amp;&amp; $numOrders &gt; 0&gt;&gt;\
-            &lt;&lt;button &quot;Take Order&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.takeOrder()&gt;&gt;&lt;&lt;/button&gt;&gt;\
-        &lt;&lt;elseif $activeOrder&gt;&gt;\
-            &lt;p class=&quot;order-status&quot;&gt;Order received. Head to the assembly station.&lt;/p&gt;\
-        &lt;&lt;/if&gt;&gt;\
-        &lt;&lt;if FoodTruck.canFulfillOrder()&gt;&gt;\
-            &lt;&lt;button &quot;Fulfill Order&quot;&gt;&gt;&lt;&lt;run FoodTruck.fulfillOrder()&gt;&gt;&lt;&lt;/button&gt;&gt;\
-        &lt;&lt;elseif $activeOrder&gt;&gt;\
-            &lt;span class=&quot;fulfill-hint&quot;&gt;Complete Order to Fulfill.&lt;/span&gt;\
-        &lt;&lt;/if&gt;&gt;\
+    &lt;div class=&quot;ticket-row&quot;&gt;\
+        &lt;&lt;for _t = 0; _t &lt; $tickets.length; _t++&gt;&gt;\
+            &lt;&lt;set _ticket = $tickets[_t]&gt;&gt;\
+            &lt;&lt;capture _ticket&gt;&gt;\
+            &lt;div class=&quot;ticket-card&quot;&gt;\
+                &lt;div class=&quot;ticket-cancel&quot;&gt;\
+                    &lt;&lt;button &quot;✕&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.cancelTicket(_ticket.id)&gt;&gt;&lt;&lt;/button&gt;&gt;\
+                &lt;/div&gt;\
+                &lt;h3 class=&quot;ticket-customer&quot;&gt;&lt;&lt;print _ticket.custName&gt;&gt;&lt;/h3&gt;\
+                &lt;p class=&quot;ticket-dish&quot;&gt;&lt;&lt;print _ticket.dishName&gt;&gt;&lt;/p&gt;\
+                &lt;ul class=&quot;ticket-ingredients&quot;&gt;\
+                    &lt;&lt;for _n range _ticket.requiredIngredients&gt;&gt;&lt;li&gt;&lt;&lt;print _n&gt;&gt;&lt;/li&gt;&lt;&lt;/for&gt;&gt;\
+                &lt;/ul&gt;\
+                &lt;div class=&quot;ticket-action&quot;&gt;\
+                    &lt;&lt;if $activeTicketId === _ticket.id&gt;&gt;\
+                        &lt;&lt;if FoodTruck.canFulfillOrder()&gt;&gt;\
+                            &lt;&lt;button &quot;Fulfill Order&quot;&gt;&gt;&lt;&lt;run FoodTruck.fulfillOrder()&gt;&gt;&lt;&lt;/button&gt;&gt;\
+                        &lt;&lt;else&gt;&gt;\
+                            &lt;span class=&quot;ticket-status&quot;&gt;In progress&lt;/span&gt;\
+                        &lt;&lt;/if&gt;&gt;\
+                    &lt;&lt;else&gt;&gt;\
+                        &lt;&lt;button &quot;Take Order&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.selectOrder(_ticket.id)&gt;&gt;&lt;&lt;/button&gt;&gt;\
+                    &lt;&lt;/if&gt;&gt;\
+                &lt;/div&gt;\
+                &lt;div class=&quot;ticket-timer&quot; role=&quot;img&quot; aria-label=&quot;Time remaining&quot;&gt;&lt;div class=&quot;ticket-timer-fill&quot;&gt;&lt;/div&gt;&lt;/div&gt;\
+            &lt;/div&gt;\
+            &lt;&lt;/capture&gt;&gt;\
+        &lt;&lt;/for&gt;&gt;\
     &lt;/div&gt;\
-    &lt;div class=&quot;prep-area&quot;&gt;\
+    &lt;div class=&quot;prep-area compact&quot;&gt;\
         &lt;h4&gt;Prep Tray&lt;/h4&gt;\
         &lt;div id=&quot;tray&quot;&gt;\
             &lt;&lt;if $prepTray.length === 0&gt;&gt;\
@@ -1470,7 +1918,7 @@ window.jQuery(document).on(":passagedisplay", function() {
         &lt;&lt;button &quot;Exit to Menu&quot; &quot;Start&quot;&gt;&gt;&lt;&lt;run FoodTruck.endTutorial()&gt;&gt;&lt;&lt;/button&gt;&gt;\
         &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;run FoodTruck.startTutorialIngredients()&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="4" name="DayTally" tags="" position="475,100" size="100,100">&lt;div class=&quot;phone day-tally-screen&quot;&gt;\
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="5" name="DayTally" tags="" position="600,100" size="100,100">&lt;div class=&quot;phone day-tally-screen&quot;&gt;\
     &lt;section class=&quot;day-tally-box&quot;&gt;\
         &lt;h2&gt;Customer Satisfaction&lt;/h2&gt;\
         &lt;p class=&quot;tally-stars&quot; aria-label=&quot;Customer satisfaction: $satisfactionScore out of 5 stars&quot;&gt;&lt;&lt;print FoodTruck.starRating($satisfactionScore)&gt;&gt;&lt;/p&gt;\
@@ -1485,33 +1933,22 @@ window.jQuery(document).on(":passagedisplay", function() {
             &lt;&lt;/if&gt;&gt;\
         &lt;/div&gt;\
     &lt;/section&gt;\
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="5" name="AssemblyStation" tags="" position="600,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="6" name="AssemblyStation" tags="" position="725,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
     &lt;div class=&quot;HUD&quot;&gt;\
         &lt;span&gt;&lt;strong&gt;Day:&lt;/strong&gt; $currentDay&lt;/span&gt; |\
         &lt;span&gt;&lt;strong&gt;Orders Left:&lt;/strong&gt; $numOrders&lt;/span&gt; |\
         &lt;span&gt;&lt;strong&gt;Completed:&lt;/strong&gt; $dayScore&lt;/span&gt;\
     &lt;/div&gt;\
     &lt;hr&gt;\
-    &lt;&lt;if $activeOrder&gt;&gt;\
-    &lt;div class=&quot;ticket-box&quot;&gt;\
-        &lt;div class=&quot;ticket-header&quot;&gt;\
-            &lt;h3&gt;Active Ticket&lt;/h3&gt;\
-            &lt;div class=&quot;timer-display&quot;&gt;\
-                &lt;span class=&quot;timer-label&quot;&gt;Time Left:&lt;/span&gt;\
-                &lt;span id=&quot;order-timer&quot; class=&quot;timer-value&quot;&gt;&lt;&lt;print FoodTruck.orderTimerDisplay()&gt;&gt;&lt;/span&gt;\
+    &lt;&lt;set _order = FoodTruck.getActiveOrder()&gt;&gt;\
+    &lt;&lt;activeTicket&gt;&gt;\
+    &lt;div class=&quot;prep-area compact&quot;&gt;\
+        &lt;div class=&quot;prep-header&quot;&gt;\
+            &lt;h4&gt;Prep Tray&lt;/h4&gt;\
+            &lt;div class=&quot;tray-controls&quot;&gt;\
+                &lt;&lt;button &quot;Clear Tray&quot;&gt;&gt;&lt;&lt;run FoodTruck.clearTray()&gt;&gt;&lt;&lt;/button&gt;&gt;\
             &lt;/div&gt;\
         &lt;/div&gt;\
-        &lt;h3&gt;Customer: $activeOrder.custName&lt;/h3&gt;\
-        &lt;p&gt;Order: $activeOrder.dishName&lt;/p&gt;\
-        &lt;p&gt;Needs: &lt;&lt;print $activeOrder.requiredIngredients.join(&quot;, &quot;)&gt;&gt;&lt;/p&gt;\
-    &lt;/div&gt;\
-    &lt;&lt;else&gt;&gt;\
-    &lt;div class=&quot;ticket-box&quot;&gt;\
-        &lt;p&gt;No active order. Return to the Order Window to take a customer&#39;s order.&lt;/p&gt;\
-    &lt;/div&gt;\
-    &lt;&lt;/if&gt;&gt;\
-    &lt;div class=&quot;prep-area&quot;&gt;\
-        &lt;h4&gt;Prep Tray&lt;/h4&gt;\
         &lt;div id=&quot;tray&quot;&gt;\
             &lt;&lt;if $prepTray.length === 0&gt;&gt;\
                 &lt;em&gt;Tap ingredients to add them to the tray.&lt;/em&gt;\
@@ -1519,11 +1956,8 @@ window.jQuery(document).on(":passagedisplay", function() {
                 &lt;&lt;print $prepTray.join(&quot;, &quot;)&gt;&gt;\
             &lt;&lt;/if&gt;&gt;\
         &lt;/div&gt;\
-        &lt;div class=&quot;tray-controls&quot;&gt;\
-            &lt;&lt;button &quot;Clear Tray&quot;&gt;&gt;&lt;&lt;run FoodTruck.clearTray()&gt;&gt;&lt;&lt;/button&gt;&gt;\
-        &lt;/div&gt;\
     &lt;/div&gt;\
-    &lt;&lt;if $activeOrder&gt;&gt;\
+    &lt;&lt;if _order&gt;&gt;\
     &lt;div class=&quot;ingredient-shelf&quot;&gt;\
         &lt;h4&gt;Ingredient Bins&lt;/h4&gt;\
         &lt;div class=&quot;ingredient-grid&quot;&gt;\
@@ -1542,13 +1976,14 @@ window.jQuery(document).on(":passagedisplay", function() {
         &lt;&lt;button &quot;Exit to Menu&quot; &quot;Start&quot;&gt;&gt;&lt;&lt;run FoodTruck.endTutorial()&gt;&gt;&lt;&lt;/button&gt;&gt;\
         &lt;&lt;button &quot;Order Window&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.finishTutorialPrep()&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="6" name="PrepareIngredient" tags="" position="725,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="7" name="PrepareIngredient" tags="" position="850,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
     &lt;div class=&quot;HUD&quot;&gt;\
         &lt;span&gt;&lt;strong&gt;Day:&lt;/strong&gt; $currentDay&lt;/span&gt; |\
         &lt;span&gt;&lt;strong&gt;Orders Left:&lt;/strong&gt; $numOrders&lt;/span&gt; |\
         &lt;span&gt;&lt;strong&gt;Completed:&lt;/strong&gt; $dayScore&lt;/span&gt;\
     &lt;/div&gt;\
     &lt;hr&gt;\
+    &lt;&lt;activeTicket&gt;&gt;\
     &lt;&lt;if $pendingIngredient&gt;&gt;\
         &lt;div class=&quot;ticket-box&quot;&gt;\
             &lt;h3&gt;Prepare $pendingIngredient.name&lt;/h3&gt;\
@@ -1570,7 +2005,7 @@ window.jQuery(document).on(":passagedisplay", function() {
     &lt;div class=&quot;passage-nav&quot;&gt;\
         &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;run FoodTruck.returnToAssembly()&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="7" name="CookingMinigame" tags="" position="850,100" size="100,100">&lt;&lt;run FoodTruck.updateCookingMarkerSpeed()&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="8" name="CookingMinigame" tags="" position="975,100" size="100,100">&lt;&lt;run FoodTruck.updateCookingMarkerSpeed()&gt;&gt;
 &lt;div class=&quot;phone&quot;&gt;\
     &lt;div class=&quot;HUD&quot;&gt;\
         &lt;span&gt;&lt;strong&gt;Day:&lt;/strong&gt; $currentDay&lt;/span&gt; |\
@@ -1578,6 +2013,7 @@ window.jQuery(document).on(":passagedisplay", function() {
         &lt;span&gt;&lt;strong&gt;Completed:&lt;/strong&gt; $dayScore&lt;/span&gt;\
     &lt;/div&gt;\
     &lt;hr&gt;\
+    &lt;&lt;activeTicket&gt;&gt;\
     &lt;&lt;if $pendingIngredient &amp;&amp; $pendingMethod&gt;&gt;\
         &lt;div class=&quot;ticket-box&quot;&gt;\
             &lt;h3&gt;Cooking $pendingIngredient.name&lt;/h3&gt;\
@@ -1616,7 +2052,7 @@ window.jQuery(document).on(":passagedisplay", function() {
     &lt;div class=&quot;passage-nav&quot;&gt;\
         &lt;&lt;button &quot;Assembly Station&quot; &quot;AssemblyStation&quot;&gt;&gt;&lt;&lt;run FoodTruck.returnToAssembly()&gt;&gt;&lt;&lt;/button&gt;&gt;\
     &lt;/div&gt;\
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="8" name="CookingResult" tags="" position="975,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="9" name="CookingResult" tags="" position="1100,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
     &lt;div class=&quot;HUD&quot;&gt;\
         &lt;span&gt;&lt;strong&gt;Day:&lt;/strong&gt; $currentDay&lt;/span&gt; |\
         &lt;span&gt;&lt;strong&gt;Orders Left:&lt;/strong&gt; $numOrders&lt;/span&gt; |\

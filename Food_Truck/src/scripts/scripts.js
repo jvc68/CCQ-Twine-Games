@@ -102,9 +102,84 @@ var orderOptions = [
 ];
 
 var orderTimerInterval = null;
+var lastTickTime = 0;
 var maxPrepTrayIngredients = 3;
+var maxTickets = 3;
 
 window.FoodTruck = {
+    /* Function Description: Returns the ticket the player is currently
+       preparing, or null if none is selected */
+    getActiveOrder: function() {
+        var state = SugarCube.State.variables;
+
+        if (state.activeTicketId === null || !Array.isArray(state.tickets)) {
+            return null;
+        }
+
+        return state.tickets.find(function(ticket) {
+            return ticket.id === state.activeTicketId;
+        }) || null;
+    },
+
+    /* Function Description: Adds new tickets until the ticket limit is reached
+       or no more orders remain for the day (orders already on a ticket count
+       toward the day's remaining orders) */
+    fillTickets: function() {
+        var state = SugarCube.State.variables;
+
+        while (state.tickets.length < maxTickets &&
+            state.numOrders - state.tickets.length > 0) {
+            var order = this.pickOrder();
+
+            if (!order) {
+                break;
+            }
+            state.tickets.push(this.makeTicket(order));
+        }
+    },
+
+    /* Function Description: Randomly picks an order for a new ticket, preferring
+       customers not yet used today and never one already on a ticket (or in
+       the optional exclude list). Returns null if no customer is available. */
+    pickOrder: function(excludeNames) {
+        var state = SugarCube.State.variables;
+        var excluded = (excludeNames || []).concat(state.tickets.map(function(ticket) {
+            return ticket.custName;
+        }));
+
+        if (state.availableOrders.length) {
+            var index = Math.floor(Math.random() * state.availableOrders.length);
+
+            return state.availableOrders.splice(index, 1)[0];
+        }
+
+        // every customer has been used today, so recycle ones not on a ticket
+        var recyclable = orderOptions.filter(function(order) {
+            return excluded.indexOf(order.custName) === -1;
+        });
+
+        return recyclable.length
+            ? recyclable[Math.floor(Math.random() * recyclable.length)]
+            : null;
+    },
+
+    /* Function Description: Builds a new ticket with a full timer from an order */
+    makeTicket: function(order) {
+        var state = SugarCube.State.variables;
+        var time = this.orderTimeForDay();
+        var ticket = {
+            id: state.nextTicketId,
+            custName: order.custName,
+            dishName: order.dishName,
+            requiredIngredients: order.requiredIngredients.slice(),
+            timeLeft: time,
+            timeTotal: time
+        };
+
+        state.nextTicketId += 1;
+        return ticket;
+    },
+
     /* Function Description: Returns the number of orders for the cuurent day,
        calculated based on current day number */
     ordersForDay: function() {
@@ -153,18 +228,21 @@ window.FoodTruck = {
         state.satisfactionScore = 0;
         state.healthinessScore = 0;
         state.prepTray = [];
-        state.activeOrder = null;
+        state.tickets = [];
+        state.activeTicketId = null;
+        state.nextTicketId = 1;
         state.dayPreparationChoices = [];
         state.pendingIngredient = null;
         state.pendingMethod = null;
         state.cookingResult = null;
-        state.orderTimer = this.orderTimeForDay();
         if (state.tutorialMode) {
             state.numOrders = 1;
             state.availableOrders = [orderOptions[0]];
             state.tutorialStep = "take-order";
             state.tutorialIngredientIndex = 0;
         }
+        this.fillTickets();
+        this.startOrderTimer();
     },
 
     startTutorial: function() {
@@ -178,6 +256,11 @@ window.FoodTruck = {
         state.tutorialMode = false;
         state.tutorialStep = null;
         state.tutorialIngredientIndex = 0;
+        this.stopOrderTimer();
+        state.tickets = [];
+        state.activeTicketId = null;
+        // returning to the menu always restarts progress at day 1
+        state.currentDay = 1;
     },
 
     advanceTutorialIngredient: function() {
@@ -189,7 +272,7 @@ window.FoodTruck = {
 
         state.tutorialIngredientIndex += 1;
         state.tutorialStep = state.tutorialIngredientIndex <
-            state.activeOrder.requiredIngredients.length
+            this.getActiveOrder().requiredIngredients.length
             ? "ingredient"
             : "return-to-order";
     },
@@ -204,7 +287,8 @@ window.FoodTruck = {
 
     restoreTutorialIngredient: function() {
         var state = SugarCube.State.variables;
-        var required = state.activeOrder && state.activeOrder.requiredIngredients;
+        var activeOrder = this.getActiveOrder();
+        var required = activeOrder && activeOrder.requiredIngredients;
 
         if (!state.tutorialMode || !Array.isArray(required)) {
             return;
@@ -264,7 +348,7 @@ window.FoodTruck = {
         } else if (state.tutorialStep === "assembly") {
             targetText = "Assembly Station";
         } else if (state.tutorialStep === "ingredient" && passage === "AssemblyStation") {
-            targetText = state.activeOrder.requiredIngredients[state.tutorialIngredientIndex];
+            targetText = this.getActiveOrder().requiredIngredients[state.tutorialIngredientIndex];
         } else if (state.tutorialStep === "method" && passage === "PrepareIngredient") {
             targetText = "(Healthy)";
         } else if (state.tutorialStep === "stop" && passage === "CookingMinigame") {
@@ -309,25 +393,66 @@ window.FoodTruck = {
         this.startDay();
     },
 
-    /* Function Description: Randomly selects an order from today's remaining
-       unique customers */
-    takeOrder: function() {
+    /* Function Description: Removes the cooking choices made for a ticket that
+       was cancelled or expired, so they no longer affect the day's scores */
+    discardTicketChoices: function(ticketId) {
         var state = SugarCube.State.variables;
 
-        if (state.numOrders < 1 || state.activeOrder) {
+        state.dayPreparationChoices = state.dayPreparationChoices.filter(function(choice) {
+            return choice.ticketId !== ticketId;
+        });
+    },
+
+    /* Function Description: Immediately discards a ticket and replaces it in
+       place with a different random ticket (fresh timer). The day's remaining
+       order count is unchanged. */
+    cancelTicket: function(ticketId) {
+        var state = SugarCube.State.variables;
+        var index = state.tickets.findIndex(function(t) {
+            return t.id === ticketId;
+        });
+
+        if (index === -1) {
             return;
         }
-        if (!state.availableOrders.length) {
-            throw new Error("No customers remain for today's orders (has to be a unique customer).");
+
+        var ticket = state.tickets[index];
+        var replacement = this.pickOrder([ticket.custName]) || ticket;
+
+        this.discardTicketChoices(ticket.id);
+        if (ticket.id === state.activeTicketId) {
+            state.activeTicketId = null;
+            state.prepTray = [];
+            state.pendingIngredient = null;
+            state.pendingMethod = null;
+            state.cookingResult = null;
+            if (state.tutorialMode) {
+                state.tutorialStep = "take-order";
+            }
+        }
+        state.tickets[index] = this.makeTicket(replacement);
+    },
+
+    /* Function Description: Takes the ticket with the given id as the order
+       being prepared. Switching tickets clears the prep tray. */
+    selectOrder: function(ticketId) {
+        var state = SugarCube.State.variables;
+        var ticket = state.tickets.find(function(t) {
+            return t.id === ticketId;
+        });
+
+        if (!ticket || state.activeTicketId === ticketId) {
+            return;
         }
 
-        var customerIndex = Math.floor(Math.random() * state.availableOrders.length);
-        state.activeOrder = state.availableOrders.splice(customerIndex, 1)[0];
-        state.orderTimer = this.orderTimeForDay();
+        state.activeTicketId = ticketId;
+        state.prepTray = [];
+        state.pendingIngredient = null;
+        state.pendingMethod = null;
+        state.cookingResult = null;
         if (state.tutorialMode) {
             state.tutorialStep = "assembly";
         }
-        this.startOrderTimer();
     },
 
     /* Function Description: Returns a string representation of the ingredient
@@ -364,7 +489,7 @@ window.FoodTruck = {
         var state = SugarCube.State.variables;
         var ingredient = state.menuIngredients[index];
 
-        if (!state.activeOrder) {
+        if (!this.getActiveOrder()) {
             throw new Error("Cannot add an ingredient without an active order.");
         }
         if (!ingredient) {
@@ -434,6 +559,7 @@ window.FoodTruck = {
         ));
         var doneness = position < 42 ? "Raw" : position <= 58 ? "Perfect" : "Overcooked";
         var choice = {
+            ticketId: state.activeTicketId,
             ingredient: state.pendingIngredient.name,
             method: state.pendingMethod.label,
             healthy: state.pendingMethod.type === "healthy",
@@ -472,7 +598,8 @@ window.FoodTruck = {
     canFulfillOrder: function() {
         var state = SugarCube.State.variables;
         var tray = state.prepTray;
-        var required = state.activeOrder && state.activeOrder.requiredIngredients;
+        var activeOrder = this.getActiveOrder();
+        var required = activeOrder && activeOrder.requiredIngredients;
 
         if (!Array.isArray(tray) || !Array.isArray(required) || tray.length !== required.length) {
             return false;
@@ -582,9 +709,11 @@ window.FoodTruck = {
         state.ordersCompleted += 1;
         state.dayScore += 1;
         state.numOrders -= 1;
-        state.activeOrder = null;
+        state.tickets = state.tickets.filter(function(ticket) {
+            return ticket.id !== state.activeTicketId;
+        });
+        state.activeTicketId = null;
         state.prepTray = [];
-        this.stopOrderTimer();
 
         if (state.tutorialMode) {
             state.tutorialStep = "tally";
@@ -593,48 +722,101 @@ window.FoodTruck = {
         if (state.numOrders === 0) {
             this.finishDay();
         } else {
+            this.fillTickets();
             SugarCube.Engine.play("TakeOrderScreen");
         }
     },
 
-    /* Function Description: Starts the order timer interval, which decrements
-       the order timer every second and handles order expiration */
+    /* Function Description: Starts the shared timer interval, which ticks every
+       ticket down several times a second so the progress bars animate smoothly */
     startOrderTimer: function() {
         var self = this;
 
         this.stopOrderTimer();
-        if (!SugarCube.State.variables.activeOrder) {
+        if (!SugarCube.State.variables.tickets.length) {
             return;
         }
 
+        lastTickTime = Date.now();
         orderTimerInterval = setInterval(function() {
-            var state = SugarCube.State.variables;
+            self.tickOrders();
+        }, 100);
+    },
 
-            if (!state.activeOrder) {
-                self.stopOrderTimer();
+    /* Function Description: Ticks every ticket's timer down by the real time
+       elapsed. A taken ticket that expires is cancelled (counting as a handled
+       order) and a new ticket fills its slot if orders remain. A ticket that
+       was never taken is instead swapped for a different random ticket with a
+       fresh timer. The day ends once no orders are left. */
+    tickOrders: function() {
+        var state = SugarCube.State.variables;
+
+        if (!state.tickets.length) {
+            this.stopOrderTimer();
+            return;
+        }
+
+        var now = Date.now();
+        var elapsed = Math.min(1, (now - lastTickTime) / 1000);
+        var self = this;
+        var changed = false;
+        var activeExpired = false;
+        var remaining = [];
+
+        lastTickTime = now;
+
+        state.tickets.forEach(function(ticket) {
+            ticket.timeLeft = Math.max(0, ticket.timeLeft - elapsed);
+        });
+
+        state.tickets.forEach(function(ticket) {
+            if (ticket.timeLeft > 0) {
+                remaining.push(ticket);
                 return;
             }
 
-            state.orderTimer = Math.max(0, state.orderTimer - 1);
-            self.updateOrderTimerDisplay();
-
-            // clear all order details after reaching 0 on the timer
-            if (state.orderTimer <= 0) {
-                self.stopOrderTimer();
-                state.activeOrder = null;
-                state.prepTray = [];
-                state.pendingIngredient = null;
-                state.pendingMethod = null;
-                state.cookingResult = null;
+            changed = true;
+            self.discardTicketChoices(ticket.id);
+            if (ticket.id === state.activeTicketId) {
+                activeExpired = true;
                 state.numOrders -= 1;
-
-                if (state.numOrders === 0) {
-                    self.finishDay();
-                } else {
-                    SugarCube.Engine.play("TakeOrderScreen");
-                }
+                return;
             }
-        }, 1000);
+
+            // untaken ticket: replace it with a different random customer
+            var replacement = self.pickOrder([ticket.custName]) || ticket;
+            remaining.push(self.makeTicket(replacement));
+        });
+
+        if (!changed) {
+            this.updateTicketDisplays();
+            return;
+        }
+
+        state.tickets = remaining;
+
+        if (activeExpired) {
+            state.activeTicketId = null;
+            state.prepTray = [];
+            state.pendingIngredient = null;
+            state.pendingMethod = null;
+            state.cookingResult = null;
+        }
+
+        if (state.numOrders <= 0) {
+            this.finishDay();
+            return;
+        }
+
+        this.fillTickets();
+
+        if (activeExpired) {
+            SugarCube.Engine.play("TakeOrderScreen");
+        } else if (SugarCube.State.passage === "TakeOrderScreen") {
+            SugarCube.Engine.show();
+        } else {
+            this.updateTicketDisplays();
+        }
     },
 
     /* Function Description: Stops the order timer interval if it's running */
@@ -648,7 +830,8 @@ window.FoodTruck = {
     /* Function Description: Returns a string representation of the order timer
        in the format "MM:SS" */
     orderTimerDisplay: function() {
-        var seconds = Math.max(0, SugarCube.State.variables.orderTimer || 0);
+        var activeOrder = this.getActiveOrder();
+        var seconds = Math.max(0, Math.ceil(activeOrder ? activeOrder.timeLeft : 0));
         var minutes = Math.floor(seconds / 60);
         var remainingSeconds = seconds % 60;
 
@@ -656,17 +839,67 @@ window.FoodTruck = {
             String(remainingSeconds).padStart(2, "0");
     },
 
-    /* Function Description: Updates the order timer display in the UI */
-    updateOrderTimerDisplay: function() {
+    /* Function Description: Returns a ticket's progress bar color, fading from
+       green (full) through yellow to red (empty) */
+    ticketColor: function(fraction) {
+        return "hsl(" + Math.round(120 * fraction) + ", 80%, 42%)";
+    },
+
+    /* Function Description: Applies a ticket's remaining time to a progress bar
+       fill element. When instant is true the width is set without animating. */
+    applyTimerFill: function(fill, ticket, instant) {
+        var fraction = Math.max(0, Math.min(1, ticket.timeLeft / ticket.timeTotal));
+
+        if (instant) {
+            fill.style.transition = "none";
+        }
+        fill.style.width = (fraction * 100) + "%";
+        fill.style.backgroundColor = this.ticketColor(fraction);
+        if (instant) {
+            void fill.offsetWidth;
+            fill.style.transition = "";
+        }
+    },
+
+    /* Function Description: Updates the ticket cards, their progress bars, and
+       the active ticket timer on the assembly station in the UI */
+    updateTicketDisplays: function(instant) {
+        var self = this;
+        var state = SugarCube.State.variables;
+        var cards = document.querySelectorAll(".ticket-card");
+
+        if (cards.length === state.tickets.length) {
+            state.tickets.forEach(function(ticket, index) {
+                var fill = cards[index].querySelector(".ticket-timer-fill");
+
+                cards[index].classList.toggle("ticket-active", ticket.id === state.activeTicketId);
+                if (fill) {
+                    self.applyTimerFill(fill, ticket, instant);
+                }
+            });
+        }
+
+        var activeOrder = this.getActiveOrder();
         var timerElement = document.getElementById("order-timer");
+        var barFill = document.getElementById("order-bar-fill");
 
         if (timerElement) {
             timerElement.textContent = this.orderTimerDisplay();
+        }
+        if (barFill && activeOrder) {
+            this.applyTimerFill(barFill, activeOrder, instant);
         }
     }
 };
 
 window.jQuery(document).on(":passagedisplay", function() {
+    var state = SugarCube.State.variables;
+
+    // resume ticking if tickets exist but the timer isn't running (e.g. after loading a save)
+    if (state.tickets && state.tickets.length && !orderTimerInterval) {
+        window.FoodTruck.startOrderTimer();
+    }
+    window.FoodTruck.updateTicketDisplays(true);
     document.querySelectorAll(".ingredient-button").forEach(function(button) {
         button.addEventListener("click", function() {
             var ingredientButtons = document.querySelectorAll(".ingredient-button");

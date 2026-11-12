@@ -38,9 +38,9 @@ body {
   text-align: center;
   font-size: 0.85rem;
   background: rgba(0, 0, 0, 0.39);
-  padding: 20px 12px;
+  padding: 12px;
   border-radius: 14px;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   border: 3px solid rgba(255, 255, 255, 0.2);
 }
 
@@ -52,9 +52,202 @@ body {
   margin: 14px 0 10px;
 }
 
+.ticket-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.ticket-row > br {
+  display: none;
+}
+
+.ticket-card {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-height: 190px;
+  padding: 8px 7px 0;
+  overflow: hidden;
+  border: 3px solid transparent;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1a1a1a;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+}
+
+.ticket-card {
+  position: relative;
+}
+
+.ticket-cancel {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+}
+
+.ticket-cancel button {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #8a2d2d;
+  border-radius: 50%;
+  background: #fff;
+  color: #8a2d2d;
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.ticket-cancel button:hover {
+  background: #ffd9d9;
+}
+
+.ticket-customer {
+  padding-right: 20px !important;
+}
+
+.ticket-card.ticket-active {
+  border-color: #a8ffdb;
+  box-shadow: 0 0 0 3px rgba(168, 255, 219, 0.6), 0 4px 10px rgba(0, 0, 0, 0.18);
+}
+
+.ticket-card h3,
+.ticket-card p {
+  margin: 0;
+  padding: 0;
+  line-height: 1.15;
+}
+
+.ticket-customer {
+  font-size: 0.9rem;
+  color: #0d1b2a;
+}
+
+.ticket-dish {
+  font-size: 0.72rem;
+  font-style: italic;
+}
+
+.ticket-ingredients {
+  margin: 2px 0 0;
+  padding-left: 14px;
+  font-size: 0.72rem;
+  line-height: 1.25;
+}
+
+.ticket-action {
+  display: flex;
+  flex: 1;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 6px;
+  text-align: center;
+}
+
+.ticket-action button {
+  appearance: none;
+  width: 100%;
+  min-height: 30px;
+  margin: 0;
+  padding: 3px 4px;
+  border: 2px solid #0d1b2a;
+  border-radius: 8px;
+  background: #fff;
+  color: #123;
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1.1;
+  cursor: pointer;
+}
+
+.ticket-action button:hover {
+  background: #a8ffdb;
+}
+
+.ticket-action button.tutorial-target {
+  animation: tutorial-pulse 900ms ease-in-out infinite alternate;
+}
+
+.ticket-status {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #1261a0;
+}
+
+/* Progress-bar timer, full and green at the start, fading to yellow then red */
+.ticket-timer {
+  height: 12px;
+  margin: 0 -7px;
+  background: transparent;
+}
+
+.ticket-box .ticket-timer {
+  margin: 4px 0 0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.ticket-timer-fill {
+  width: 100%;
+  height: 100%;
+  background-color: hsl(120, 80%, 42%);
+  /* short linear transition between 100ms updates keeps the bar gliding */
+  transition: width 0.1s linear;
+}
+
+.compact-ticket {
+  margin-bottom: 8px;
+  padding: 8px 12px;
+}
+
+.compact-ticket h3 {
+  font-size: 0.95rem;
+}
+
+.compact-ticket p {
+  font-size: 0.8rem;
+}
+
+.compact-ticket .timer-value {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.prep-area.compact {
+  margin-bottom: 8px;
+  padding: 6px 10px;
+  border-width: 3px;
+}
+
+.prep-area.compact h4 {
+  margin: 0 0 2px;
+}
+
+.prep-area.compact #tray {
+  min-height: 24px;
+}
+
+.prep-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.prep-header .tray-controls {
+  margin-top: 0;
+}
+
 .customer-window {
   width: 100%;
-  height: 170px;
+  height: 160px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -65,15 +258,15 @@ body {
 }
 
 .customer-face {
-  width: 98px;
-  height: 98px;
+  width: 90px;
+  height: 90px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
   background-color: transparent;
   color: #1a1a1a;
-  font-size: 6rem;
+  font-size: 5.5rem;
   line-height: 1;
 }
 
@@ -518,7 +711,7 @@ body {
 }
 
 .tutorial-message {
-  margin: 18px 0 12px;
+  margin: 8px 0;
   padding: 12px 16px;
   border: 2px solid #a8ffdb;
   border-radius: 12px;
@@ -537,7 +730,7 @@ body {
 }
 
 .skill-instructions {
-  margin: 20px 0 12px;
+  margin: 8px 0 12px;
   text-align: center;
 }
 
