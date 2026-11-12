@@ -11,15 +11,13 @@ Zombie Chase
 }
 
 :: StoryInit {"position": "100,100", "size": "100,100"}
-
 :: Home
 <div class="phone">Zombies are Stopped.
-  <img src="../../img/exercise/zombies.png">
+<img src="../../img/exercise/stillFrame.png">
   <div class="mainTab"> <div class="progress-container" id="bar"><div class="progress-fill totalBarFill"> </div></div>\
     <span id="zombieDist"></span>
-
       <div class="levelContainer">
-        <div class="levelList"> Begin the Chase:
+        <div class="levelList"> Begin the Chase:\
           <<button "Easy" "Chase">><<run setup.setMode('easy')>><</button>>
           <<button "Medium" "Chase">><<run setup.setMode('med')>><</button>>
           <<button "Hard" "Chase">><<run setup.setMode('hard')>><</button>>
@@ -36,11 +34,16 @@ Zombie Chase
 
 :: Chase
 <div class="phone">Step Power: <span id="multi"></span>
-  <img src="../../img/exercise/zombies.png" class="zombies">
+  <video autoplay loop muted playsinline class="video">\
+  /*IMPORTANT: This currently has not been tested on an Iphone, safari does not support webm.\
+  To fix, use an iMac to produce an HEVC (with alpha) file and add to the sources here.*/\
+    <source src="../../img/exercise/zombies.webm" type="video/mp4">\
+    Your browser does not support the video tag.\
+  </video>\
   <div class="progress-container totalBar" id="bar"><div class="progress-fill totalBarFill"> </div></div>\
   <span id="zombieDist"></span>
   <span id="yourDist">You've Walked <<=setup.totalWalked>> Steps!</span>
-  <span id="zombieCnt"></span><div class="mainTab"> /* <<button "Run!" >><<run setup.incZombieDist(1)>><</button>> */
+  <span id="zombieCnt"></span><div class="mainTab"> /* <<button "Run!" >> <<run setup.incZombieDist(1)>><</button>> */\
   <div class="extras" id="extras">Extras</div>
   <button data-passage="Home" class="return" onclick="SugarCube.setup.stopChase()">Return</button>
   <<done>><<run setup.startChase() >><</done>>
@@ -53,7 +56,7 @@ Zombie Chase
 
 :: You Win
 <div class="phone">Congratulations!
-<img src="" class="endImg">
+<img src="../../img/exercise/winZombie.webp" class="endImg">
 Feel free to play again at a different difficulty, and keep on going!
 You travelled: <<=setup.actualDistance>> steps
 <div id="blankSpace"></div>
@@ -62,7 +65,7 @@ You travelled: <<=setup.actualDistance>> steps
 </div>
 :: You Lose
 <div class="phone">The Zombies caught you...
-<img src="" class="endImg">
+<img src="../../img/exercise/DefeatZombie.webp" class="endImg">
 But don't worry! You can always try again.
 You travelled: <<=setup.actualDistance>> steps
 <div id="blankSpace"></div>

@@ -53,9 +53,32 @@ body {
 }
 
 img {
+  margin: 10px 0px 10px 0px;
+  padding: 55px 20px 20px 20px;
+  border: 2px solid gray;
+  background-color: lavender;
   max-width: 100%;
-  border-radius: 30px;
-  padding: 5px;
+  border-radius: 12px;
+}
+
+button {
+  position: relative;
+  left: 14%;
+  padding: 1px;
+  border-radius: 12px;
+  min-width: 80%;
+  background-color: cornsilk;
+  color: black;
+}
+
+.video {
+  height: 200px;
+  width: 500px;
+  object-fit: cover;
+  object-position: center; /* Adjusts the focal point */
+  border: 2px solid gray;
+  border-radius: 12px;
+  background-color: lavender;
 }
 
 .endImg {
@@ -90,7 +113,8 @@ img {
 .levelList button {
   position: relative;
   left: 14%;
-  padding: 1px;
+  padding: 10px;
+  margin: 1px;
   border-radius: 12px;
   min-width: 80%;
   background-color: cornsilk;

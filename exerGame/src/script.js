@@ -9,29 +9,6 @@ setup.currentFinalExtra = 0
 setup.mode = "easy"
 setup.totalWalked = 0
 
-// window.GameData = {
-// 	// "extras": {
-// 	// 	"Stretch Your Arms": { "reward": -10, "type": "killZombies" },
-// 	// 	"Stretch Your Legs": { "reward": 1, "type": "multi" },
-// 	// 	"Do 10 Jumping Jacks": { "reward": -100, "type": "killZombies" }
-// 	// }
-
-// }
-
-window.GameData = {
-	"extras": {
-		"Walk 100 Steps": { "reward": -1, "type": "killZombies", "requiredSteps": 100, "ogRequiredSteps": 100 },
-		"Walk 800 Steps": { "reward": 1, "type": "multi", "requiredSteps": 800, "ogRequiredSteps": 800 },
-		"Walk 3,000 Steps": { "reward": -10, "type": "killZombies", "requiredSteps": 3000, "ogRequiredSteps": 3000 },
-		"Walk 5,000 Steps": { "reward": -10, "type": "killZombies", "requiredSteps": 5000, "ogRequiredSteps": 5000 },
-		"Walk 8,000 Steps": { "reward": -20, "type": "killZombies", "requiredSteps": 8000, "ogRequiredSteps": 8000 },
-		"Walk 10,000 Steps": { "reward": 1, "type": "multi", "requiredSteps": 10000, "ogRequiredSteps": 10000 },
-		"Walk 12,000 Steps": { "reward": -30, "type": "killZombies", "requiredSteps": 12000, "ogRequiredSteps": 12000 },
-		"Walk 15,000 Steps": { "reward": -30, "type": "killZombies", "requiredSteps": 15000, "ogRequiredSteps": 15000 },
-	}
-
-}
-
 // Sends messages from Twine to Flutter.
 setup.sendFlutterMessage = function (type, extraData = {}) {
 	console.log("Twine is sending message to Flutter:", type);
@@ -237,23 +214,28 @@ setup.beginChase = function beginChase() {
 	switch (setup.mode) {
 		case "easy":
 			/*This sets zombie speed to 102 steps per minute */
+			setup.zombieAmount = 100
 			setup.intervalId = setInterval(setup.decZombieDist, 1000, -1.7);
 			break;
 		case "med":
 			/*This sets zombie speed to 150 steps per minute */
+			setup.zombieAmount = 140
 			setup.intervalId = setInterval(setup.decZombieDist, 1000, -2.5);
 			break;
 		case "hard":
+			setup.zombieAmount = 200
 			/*This sets zombie speed to 192 steps per minute */
 			setup.intervalId = setInterval(setup.decZombieDist, 1000, -3.2);
 			break;
 		case "impossible":
-			setup.intervalId = setInterval(setup.decZombieDist, 1000, -1000);
+			setup.zombieAmount = 200
+			setup.intervalId = setInterval(setup.decZombieDist, 500, -1000);
 			break;
 		default:
 			console.error(`${setup.mode} is not a mode`)
 	}
 
+	setup.zombieCntText.textContent = `There are ${setup.zombieAmount} left...`
 	let container = document.getElementById("extras");
 	container.replaceChildren();
 
