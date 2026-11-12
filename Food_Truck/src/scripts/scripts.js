@@ -1,32 +1,132 @@
 /* Every ingredient that can be picked for a day's menu */
 var ingredientDatabase = [
-    { id: "tortilla", name: "Tortilla", img: "🌮", category: "Grain", methods: { healthy: "Toast on a dry griddle", unhealthy: "Deep-fry until crisp" } },
-    { id: "rice", name: "Rice", img: "🍚", category: "Grain", methods: { healthy: "Steam until fluffy", unhealthy: "Fry in extra butter" } },
-    { id: "beans", name: "Black Beans", img: "🫘", category: "Protein", methods: { healthy: "Simmer with herbs", unhealthy: "Refry with extra oil" } },
-    { id: "turkey", name: "Turkey", img: "🍗", category: "Protein", methods: { healthy: "Grill until cooked", unhealthy: "Deep-fry until crisp" } },
-    { id: "salmon", name: "Salmon", img: "🐟", category: "Protein", methods: { healthy: "Bake with lemon", unhealthy: "Pan-fry in butter" } },
-    { id: "shrimp", name: "Shrimp", img: "🦐", category: "Protein", methods: { healthy: "Steam until pink", unhealthy: "Deep-fry in batter" } },
-    { id: "egg", name: "Egg", img: "🥚", category: "Protein", methods: { healthy: "Poach until set", unhealthy: "Fry in butter" } },
-    { id: "squash", name: "Squash", img: "🎃", category: "Vegetable", methods: { healthy: "Roast until tender", unhealthy: "Deep-fry until crisp" } },
-    { id: "garlic", name: "Garlic", img: "🧄", category: "Vegetable", methods: { healthy: "Roast until soft", unhealthy: "Fry in extra oil" } },
-    { id: "tomato", name: "Tomato", img: "🍅", category: "Vegetable", methods: { healthy: "Roast until blistered", unhealthy: "Fry in extra oil" } },
-    { id: "broccoli", name: "Broccoli", img: "🥦", category: "Vegetable", methods: { healthy: "Steam until bright green", unhealthy: "Deep-fry in batter" } },
-    { id: "carrot", name: "Carrot", img: "🥕", category: "Vegetable", methods: { healthy: "Roast until tender", unhealthy: "Glaze with butter and sugar" } },
-    { id: "pepper", name: "Bell Pepper", img: "🫑", category: "Vegetable", methods: { healthy: "Grill until charred", unhealthy: "Stuff and deep-fry" } },
-    { id: "corn", name: "Corn", img: "🌽", category: "Vegetable", methods: { healthy: "Roast on the cob", unhealthy: "Smother in butter" } },
-    { id: "spinach", name: "Spinach", img: "🥬", category: "Vegetable", methods: { healthy: "Wilt lightly", unhealthy: "Cream with heavy butter" } },
-    { id: "avocado", name: "Avocado", img: "🥑", category: "Fruit", methods: { healthy: "Slice fresh", unhealthy: "Deep-fry in batter" } },
-    { id: "pineapple", name: "Pineapple", img: "🍍", category: "Fruit", methods: { healthy: "Grill until caramelized", unhealthy: "Candy in syrup" } },
-    { id: "mango", name: "Mango", img: "🥭", category: "Fruit", methods: { healthy: "Serve fresh", unhealthy: "Candy in syrup" } },
-    { id: "sage", name: "Sage", img: "🌿", category: "Herb", methods: { healthy: "Use fresh leaves", unhealthy: "Fry until crisp" } },
-    { id: "cheese", name: "Cheese", img: "🧀", category: "Dairy", methods: { healthy: "Shave a light sprinkle", unhealthy: "Melt in a heavy layer" } }
+    {
+        id: "tortilla", name: "Tortilla", img: "🌮", category: "Grain",
+        methods: { healthy: "Toast a whole-grain tortilla", unhealthy: "Deep-fry a flour tortilla" },
+        reasons: { healthy: "Whole grains add fiber, a DASH staple.", unhealthy: "Frying a refined tortilla adds saturated fat and cuts the fiber." },
+        action: { type: "hold", ms: 1000, icon: "🫓", label: "Press and hold to flatten the tortilla" }
+    },
+    {
+        id: "rice", name: "Rice", img: "🍚", category: "Grain",
+        methods: { healthy: "Steam brown rice", unhealthy: "Fry white rice in butter and soy sauce" },
+        reasons: { healthy: "Brown rice is a whole grain with fiber and no added salt.", unhealthy: "Refined rice with butter and soy sauce adds saturated fat and lots of sodium." },
+        action: { type: "scrub", count: 6, icon: "🍚", label: "Shake the strainer to rinse the rice" }
+    },
+    {
+        id: "beans", name: "Black Beans", img: "🫘", category: "Protein",
+        methods: { healthy: "Rinse canned beans, simmer with herbs", unhealthy: "Refry in lard with the canning liquid" },
+        reasons: { healthy: "Rinsing cuts sodium, and beans give fiber, potassium and magnesium.", unhealthy: "The canning liquid is salty and lard is high in saturated fat." },
+        action: { type: "scrub", count: 6, icon: "🫘", label: "Shake the colander to drain and rinse" }
+    },
+    {
+        id: "turkey", name: "Turkey", img: "🍗", category: "Protein",
+        methods: { healthy: "Grill skinless turkey breast", unhealthy: "Deep-fry turkey with the skin on" },
+        reasons: { healthy: "Lean, skinless poultry keeps saturated fat low.", unhealthy: "The skin and frying oil pile on saturated fat." },
+        action: { type: "tap", count: 4, icon: "🔪", label: "Tap to trim the fat" }
+    },
+    {
+        id: "salmon", name: "Salmon", img: "🐟", category: "Protein",
+        methods: { healthy: "Bake with lemon and dill", unhealthy: "Pan-fry in butter with a soy glaze" },
+        reasons: { healthy: "Baked fish with herbs gives omega-3 fats without extra salt.", unhealthy: "Butter adds saturated fat and the glaze adds sodium." },
+        action: { type: "swipe", count: 2, icon: "🔪", label: "Swipe across to slice the fillet" }
+    },
+    {
+        id: "shrimp", name: "Shrimp", img: "🦐", category: "Protein",
+        methods: { healthy: "Steam with lemon and garlic", unhealthy: "Batter and deep-fry" },
+        reasons: { healthy: "Steaming adds flavor without salt or oil.", unhealthy: "Batter and fryer oil add refined carbs and saturated fat." },
+        action: { type: "tap", count: 3, icon: "🦐", label: "Tap to peel the shell" }
+    },
+    {
+        id: "egg", name: "Egg", img: "🥚", category: "Protein",
+        methods: { healthy: "Poach in simmering water", unhealthy: "Fry in butter with bacon" },
+        reasons: { healthy: "Poaching adds no extra fat.", unhealthy: "Butter and bacon add saturated fat and sodium." },
+        action: { type: "tap", count: 2, icon: "🥚", label: "Tap to crack the egg" }
+    },
+    {
+        id: "squash", name: "Squash", img: "🎃", category: "Vegetable",
+        methods: { healthy: "Roast with a drizzle of olive oil", unhealthy: "Deep-fry in batter" },
+        reasons: { healthy: "A little unsaturated olive oil keeps squash heart-friendly and rich in potassium.", unhealthy: "Frying adds saturated fat and extra calories." },
+        action: { type: "tap", count: 3, icon: "🔪", label: "Tap to cut the squash" }
+    },
+    {
+        id: "garlic", name: "Garlic", img: "🧄", category: "Vegetable",
+        methods: { healthy: "Roast until soft", unhealthy: "Fry in butter and salt" },
+        reasons: { healthy: "Garlic adds big flavor so you can skip the salt.", unhealthy: "Buttery, salted garlic adds saturated fat and sodium." },
+        action: { type: "hold", ms: 1000, icon: "🧄", label: "Press and hold to crush the garlic" }
+    },
+    {
+        id: "tomato", name: "Tomato", img: "🍅", category: "Vegetable",
+        methods: { healthy: "Roast fresh tomatoes", unhealthy: "Simmer in salty jarred sauce" },
+        reasons: { healthy: "Fresh tomatoes are high in potassium, which helps lower blood pressure.", unhealthy: "Jarred sauce is often loaded with sodium and added sugar." },
+        action: { type: "swipe", count: 2, icon: "🔪", label: "Swipe across to slice the tomato" }
+    },
+    {
+        id: "broccoli", name: "Broccoli", img: "🥦", category: "Vegetable",
+        methods: { healthy: "Steam until bright green", unhealthy: "Smother in cheese sauce" },
+        reasons: { healthy: "Steaming keeps the potassium, magnesium and fiber.", unhealthy: "Cheese sauce adds saturated fat and sodium." },
+        action: { type: "tap", count: 3, icon: "🔪", label: "Tap to chop the florets" }
+    },
+    {
+        id: "carrot", name: "Carrot", img: "🥕", category: "Vegetable",
+        methods: { healthy: "Roast with herbs", unhealthy: "Glaze with butter and brown sugar" },
+        reasons: { healthy: "Roasting brings out natural sweetness with no added sugar.", unhealthy: "Added sugar and butter work against DASH." },
+        action: { type: "swipe", count: 3, icon: "🥕", label: "Swipe to peel the carrot" }
+    },
+    {
+        id: "pepper", name: "Bell Pepper", img: "🫑", category: "Vegetable",
+        methods: { healthy: "Grill until charred", unhealthy: "Stuff with sausage and fry" },
+        reasons: { healthy: "Peppers are full of vitamin C and flavor with no salt.", unhealthy: "Processed sausage is high in sodium and saturated fat." },
+        action: { type: "tap", count: 3, icon: "🔪", label: "Tap to seed and slice" }
+    },
+    {
+        id: "corn", name: "Corn", img: "🌽", category: "Vegetable",
+        methods: { healthy: "Roast on the cob with lime", unhealthy: "Slather in butter, mayo and salt" },
+        reasons: { healthy: "Lime adds zing so you don't need salt or butter.", unhealthy: "Heavy butter, mayo and salt add saturated fat and sodium." },
+        action: { type: "swipe", count: 2, icon: "🌽", label: "Swipe to strip the husk" }
+    },
+    {
+        id: "spinach", name: "Spinach", img: "🥬", category: "Vegetable",
+        methods: { healthy: "Wilt in a dry pan", unhealthy: "Cream with butter and cheese" },
+        reasons: { healthy: "Spinach is rich in potassium and magnesium, and wilting adds no fat.", unhealthy: "Cream and cheese add saturated fat and sodium." },
+        action: { type: "scrub", count: 6, icon: "🥬", label: "Shake the colander to rinse the leaves" }
+    },
+    {
+        id: "avocado", name: "Avocado", img: "🥑", category: "Fruit",
+        methods: { healthy: "Serve sliced fresh", unhealthy: "Deep-fry in batter" },
+        reasons: { healthy: "Avocado's unsaturated fat is heart-friendly in small portions.", unhealthy: "Frying adds saturated fat and extra calories." },
+        action: { type: "swipe", count: 2, icon: "🔪", label: "Swipe to slice around the pit" }
+    },
+    {
+        id: "pineapple", name: "Pineapple", img: "🍍", category: "Fruit",
+        methods: { healthy: "Grill fresh pineapple", unhealthy: "Candy in syrup" },
+        reasons: { healthy: "Fresh fruit has natural sugar plus potassium and fiber.", unhealthy: "Syrup adds a lot of added sugar." },
+        action: { type: "tap", count: 4, icon: "🔪", label: "Tap to cut off the skin" }
+    },
+    {
+        id: "mango", name: "Mango", img: "🥭", category: "Fruit",
+        methods: { healthy: "Serve fresh", unhealthy: "Dip in sweetened syrup" },
+        reasons: { healthy: "Fresh mango brings fiber and vitamins with no added sugar.", unhealthy: "The sweet coating is added sugar." },
+        action: { type: "swipe", count: 2, icon: "🔪", label: "Swipe to slice off the cheeks" }
+    },
+    {
+        id: "sage", name: "Sage", img: "🌿", category: "Herb",
+        methods: { healthy: "Use fresh leaves", unhealthy: "Fry in butter with salt" },
+        reasons: { healthy: "Fresh herbs add flavor in place of salt.", unhealthy: "Frying in salted butter adds saturated fat and sodium." },
+        action: { type: "tap", count: 3, icon: "🌿", label: "Tap to pluck the leaves" }
+    },
+    {
+        id: "cheese", name: "Cheese", img: "🧀", category: "Dairy",
+        methods: { healthy: "Grate a light sprinkle of low-fat cheese", unhealthy: "Melt a thick layer of full-fat cheese" },
+        reasons: { healthy: "Low-fat dairy gives calcium with less saturated fat.", unhealthy: "Full-fat cheese is high in saturated fat and sodium." },
+        action: { type: "scrub", count: 5, icon: "🧀", label: "Rub the cheese back and forth on the grater" }
+    }
 ];
 
 /* Customers who can place an order; each customer is used once per day */
 var customerNames = [
     "Alice", "Jordan", "Sam", "Jesse", "Tyler", "Anna", "Rique", "Morgan",
     "Casey", "Riley", "Avery", "Quinn", "Drew", "Jamie", "Parker", "Cameron",
-    "Reese", "Robin", "Devon", "Skyler"
+    "Reese", "Robin", "Devon", "Pavan"
 ];
 
 /* Words used to name a generated dish */
@@ -421,7 +521,16 @@ window.FoodTruck = {
         } else if (state.tutorialStep === "ingredient" && passage === "AssemblyStation") {
             targetText = this.getActiveOrder().requiredIngredients[state.tutorialIngredientIndex];
         } else if (state.tutorialStep === "method" && passage === "PrepareIngredient") {
-            targetText = "(Healthy)";
+            // the healthy method's button moves around, so find it by position
+            var optionButtons = document.querySelectorAll(".method-options button");
+            var healthyButton = optionButtons[(state.methodOrder || []).indexOf("healthy")];
+
+            if (healthyButton) {
+                healthyButton.classList.add("tutorial-target");
+            }
+            return;
+        } else if (state.tutorialStep === "stop" && passage === "PrepareIngredient") {
+            targetText = "Continue to Cooking";
         } else if (state.tutorialStep === "stop" && passage === "CookingMinigame") {
             targetText = "Stop Cooking";
         } else if (state.tutorialStep === "result" && passage === "CookingResult") {
@@ -539,18 +648,17 @@ window.FoodTruck = {
         return ingredient.img + "\n" + ingredient.name;
     },
 
-    /* Function Description: Returns a string representation of the preparation
-       method for the pending ingredient, including its label and whether it's
-       healthy or unhealthy */
-    methodLabel: function(type) {
+    /* Function Description: Returns the button label for a preparation method of
+       the pending ingredient. The label deliberately doesn't say whether the
+       method is healthy; position is the button's slot (0 = A, 1 = B). */
+    methodLabel: function(type, position) {
         var ingredient = SugarCube.State.variables.pendingIngredient;
 
         if (!ingredient || !ingredient.methods || !ingredient.methods[type]) {
             throw new Error("Cannot display a preparation method without a valid ingredient and method.");
         }
 
-        return (type === "healthy" ? "A. " : "B. ") + ingredient.methods[type] +
-            (type === "healthy" ? " (Healthy)" : " (Unhealthy)");
+        return (position === 1 ? "B. " : "A. ") + ingredient.methods[type];
     },
 
     /* Function Description: Selects an ingredient from the menu by its index,
@@ -576,6 +684,9 @@ window.FoodTruck = {
         state.pendingIngredient = ingredient;
         state.pendingMethod = null;
         state.cookingResult = null;
+        state.prepActionDone = false;
+        // shuffle which button holds the healthy method so position gives nothing away
+        state.methodOrder = shuffled(["healthy", "unhealthy"]);
         if (state.tutorialMode) {
             state.tutorialStep = "method";
         }
@@ -593,11 +704,230 @@ window.FoodTruck = {
 
         state.pendingMethod = {
             type: type,
-            label: ingredient.methods[type]
+            label: ingredient.methods[type],
+            reason: ingredient.reasons[type]
         };
         state.cookingResult = null;
+        state.prepActionDone = false;
+        if (state.tutorialMode) {
+            state.tutorialStep = "micro";
+        }
+    },
+
+    /* Function Description: Marks the ingredient's preparation action as done,
+       which unlocks the cooking minigame */
+    completePrepAction: function() {
+        var state = SugarCube.State.variables;
+
+        state.prepActionDone = true;
         if (state.tutorialMode) {
             state.tutorialStep = "stop";
+        }
+        this.updateTutorialHighlights();
+    },
+
+    /* Function Description: Builds the preparation micro-action for the pending
+       ingredient (tap, hold, scrub or swipe) on the PrepareIngredient screen */
+    initPrepAction: function() {
+        var self = this;
+        var host = document.getElementById("prep-action");
+        var next = document.getElementById("prep-continue");
+        var state = SugarCube.State.variables;
+
+        if (!host || !next) {
+            return;
+        }
+        next.addEventListener("click", function() {
+            if (SugarCube.State.variables.prepActionDone) {
+                SugarCube.Engine.play("CookingMinigame");
+            }
+        });
+
+        var action = state.pendingIngredient && state.pendingIngredient.action;
+
+        if (!action) {
+            return;
+        }
+        if (state.prepActionDone) {
+            host.textContent = "\u2713 Prepared!";
+            next.disabled = false;
+            return;
+        }
+
+        var label = document.createElement("p");
+        var pad = document.createElement("button");
+        var icon = document.createElement("span");
+        var track = document.createElement("div");
+        var fill = document.createElement("div");
+        var finished = false;
+
+        label.className = "prep-action-label";
+        label.textContent = action.label;
+        pad.type = "button";
+        pad.className = "prep-action-pad";
+        icon.textContent = action.icon;
+        pad.appendChild(icon);
+        track.className = "prep-action-progress";
+        fill.className = "prep-action-fill";
+        track.appendChild(fill);
+        host.appendChild(label);
+        host.appendChild(pad);
+        host.appendChild(track);
+
+        function setProgress(fraction) {
+            fill.style.width = Math.min(100, fraction * 100) + "%";
+        }
+
+        function bump() {
+            pad.classList.remove("prep-action-bump");
+            void pad.offsetWidth;
+            pad.classList.add("prep-action-bump");
+        }
+
+        function finish() {
+            if (finished) {
+                return;
+            }
+            finished = true;
+            setProgress(1);
+            label.textContent = "\u2713 Prepared!";
+            pad.disabled = true;
+            next.disabled = false;
+            self.completePrepAction();
+        }
+
+        // count-based actions: each completed tap/swipe/scrub reversal calls step()
+        var steps = 0;
+
+        function step() {
+            if (finished) {
+                return;
+            }
+            steps += 1;
+            bump();
+            setProgress(steps / action.count);
+            if (steps >= action.count) {
+                finish();
+            }
+        }
+
+        if (action.type === "tap") {
+            pad.addEventListener("click", step);
+        } else if (action.type === "hold") {
+            var timer = null;
+            var startTime = 0;
+
+            var stopHold = function() {
+                if (timer !== null) {
+                    clearInterval(timer);
+                    timer = null;
+                }
+                if (!finished) {
+                    setProgress(0);
+                }
+            };
+            var startHold = function() {
+                if (timer !== null || finished) {
+                    return;
+                }
+                startTime = performance.now();
+                timer = setInterval(function() {
+                    var fraction = (performance.now() - startTime) / action.ms;
+
+                    setProgress(fraction);
+                    if (fraction >= 1) {
+                        stopHold();
+                        finish();
+                    }
+                }, 30);
+            };
+
+            pad.addEventListener("pointerdown", startHold);
+            ["pointerup", "pointerleave", "pointercancel"].forEach(function(name) {
+                pad.addEventListener(name, stopHold);
+            });
+            pad.addEventListener("keydown", function(event) {
+                if ((event.key === " " || event.key === "Enter") && !event.repeat) {
+                    event.preventDefault();
+                    startHold();
+                }
+            });
+            pad.addEventListener("keyup", stopHold);
+        } else if (action.type === "scrub") {
+            var dragging = false;
+            var direction = 0;
+            var extreme = 0;
+            var lastKey = null;
+            var minTravel = 25;
+
+            pad.addEventListener("pointerdown", function(event) {
+                dragging = true;
+                direction = 0;
+                extreme = event.clientX;
+                pad.setPointerCapture(event.pointerId);
+            });
+            pad.addEventListener("pointermove", function(event) {
+                if (!dragging) {
+                    return;
+                }
+                var x = event.clientX;
+
+                if (direction === 0) {
+                    if (Math.abs(x - extreme) >= minTravel) {
+                        direction = x > extreme ? 1 : -1;
+                        extreme = x;
+                    }
+                } else if (direction > 0) {
+                    if (x > extreme) {
+                        extreme = x;
+                    } else if (extreme - x >= minTravel) {
+                        direction = -1;
+                        extreme = x;
+                        step();
+                    }
+                } else if (x < extreme) {
+                    extreme = x;
+                } else if (x - extreme >= minTravel) {
+                    direction = 1;
+                    extreme = x;
+                    step();
+                }
+            });
+            ["pointerup", "pointercancel"].forEach(function(name) {
+                pad.addEventListener(name, function() {
+                    dragging = false;
+                });
+            });
+            // keyboard fallback: alternate the left and right arrow keys
+            pad.addEventListener("keydown", function(event) {
+                if ((event.key === "ArrowLeft" || event.key === "ArrowRight") &&
+                    event.key !== lastKey) {
+                    lastKey = event.key;
+                    step();
+                }
+            });
+        } else if (action.type === "swipe") {
+            var startX = null;
+
+            pad.addEventListener("pointerdown", function(event) {
+                startX = event.clientX;
+                pad.setPointerCapture(event.pointerId);
+            });
+            pad.addEventListener("pointerup", function(event) {
+                if (startX !== null && Math.abs(event.clientX - startX) >= 50) {
+                    step();
+                }
+                startX = null;
+            });
+            pad.addEventListener("pointercancel", function() {
+                startX = null;
+            });
+            // keyboard fallback: Enter or Space counts as a swipe
+            pad.addEventListener("click", function(event) {
+                if (event.detail === 0) {
+                    step();
+                }
+            });
         }
     },
 
@@ -998,5 +1328,6 @@ window.jQuery(document).on(":passagedisplay", function() {
     if (document.querySelector(".menu-pick-button")) {
         window.FoodTruck.refreshMenuSelection();
     }
+    window.FoodTruck.initPrepAction();
     window.FoodTruck.updateTutorialHighlights();
 });

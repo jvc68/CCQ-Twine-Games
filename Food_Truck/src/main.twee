@@ -168,18 +168,39 @@
     <<if $pendingIngredient>>\
         <div class="ticket-box">\
             <h3>Prepare $pendingIngredient.name</h3>\
-            <p>Choose a preparation method:</p>\
+            <<if $pendingMethod>>\
+                <p>Method: $pendingMethod.label</p>\
+            <<else>>\
+                <p>Choose a preparation method:</p>\
+            <</if>>\
         </div>\
-        <<if $tutorialMode>>\
-            <div class="tutorial-message" role="note">\
-                <strong>TUTORIAL GOAL</strong>\
-                <p>Choose the healthy preparation method to make a healthier meal and increase healthiness score!</p>\
+        <<if !$pendingMethod>>\
+            <<if $tutorialMode>>\
+                <div class="tutorial-message" role="note">\
+                    <strong>TUTORIAL GOAL</strong>\
+                    <p>Choose the healthy preparation method to make a healthier meal and increase healthiness score!</p>\
+                </div>\
+            <</if>>\
+            <div class="method-options">\
+                <<button `FoodTruck.methodLabel($methodOrder[0], 0)` "PrepareIngredient">><<run FoodTruck.chooseMethod($methodOrder[0])>><</button>>\
+                <<button `FoodTruck.methodLabel($methodOrder[1], 1)` "PrepareIngredient">><<run FoodTruck.chooseMethod($methodOrder[1])>><</button>>\
+            </div>\
+        <<else>>\
+            <div class="prep-feedback <<if $pendingMethod.type === 'healthy'>>healthy<<else>>unhealthy<</if>>" role="note">\
+                <strong><<if $pendingMethod.type === "healthy">>Healthy choice!<<else>>Unhealthy choice<</if>></strong>\
+                <p>$pendingMethod.reason</p>\
+            </div>\
+            <<if $tutorialMode && $tutorialStep === "micro">>\
+                <div class="tutorial-message" role="note">\
+                    <strong>TUTORIAL GOAL</strong>\
+                    <p>Complete the preparation action to continue.</p>\
+                </div>\
+            <</if>>\
+            <div id="prep-action" class="prep-action"></div>\
+            <div class="action-button">\
+                <button type="button" id="prep-continue" disabled>Continue to Cooking</button>\
             </div>\
         <</if>>\
-        <div class="method-options">\
-            <<button `FoodTruck.methodLabel("healthy")` "CookingMinigame">><<run FoodTruck.chooseMethod("healthy")>><</button>>\
-            <<button `FoodTruck.methodLabel("unhealthy")` "CookingMinigame">><<run FoodTruck.chooseMethod("unhealthy")>><</button>>\
-        </div>\
     <<else>>\
         <p>Select an ingredient from the assembly station to prepare it.</p>\
     <</if>>\
@@ -198,7 +219,7 @@
     </div>\
     <hr>\
     <<activeTicket>>\
-    <<if $pendingIngredient && $pendingMethod>>\
+    <<if $pendingIngredient && $pendingMethod && $prepActionDone>>\
         <div class="ticket-box">\
             <h3>Cooking $pendingIngredient.name</h3>\
             <p>Method: $pendingMethod.label</p>\

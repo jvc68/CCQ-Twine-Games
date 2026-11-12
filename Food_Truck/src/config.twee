@@ -42,6 +42,8 @@ Food Truck Game
 <<set $pendingIngredient = null>>
 <<set $pendingMethod = null>>
 <<set $cookingResult = null>>
+<<set $methodOrder = ["healthy", "unhealthy"]>>
+<<set $prepActionDone = false>>
 <<set $satisfactionScore = 0>>
 <<set $healthinessScore = 0>>
 
