@@ -207,9 +207,16 @@ body {
   image-rendering: pixelated;
 }
 
-.drums {
-  background:transparent;
-  border: none;
+
+.drums,
+.drums:hover,
+.drums:active,
+.drums:focus,
+.drums:focus-visible {
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
 }
 
 .drums:active {
@@ -221,7 +228,7 @@ body {
   position: absolute;
   border-radius: 50%;
   width: 136px;
-  height: 65px;
+  height: 135px;
   top: 47%;
   left: 30%;
 }
@@ -422,7 +429,7 @@ body {
 
 }</style><script role="script" id="twine-user-script" type="text/twine-javascript">/* twine-user-script #1: "script.js" */
 setup.prevRand = -1
-setup.currentFidget = "switch"
+setup.currentFidget = "bubbleWrap"
 
 setup.isMouseDown = false;
 setup.light = [0, 0, 0, 0]
@@ -704,7 +711,7 @@ setup.populateFidget = function populateFidget() {
 				let newButton = document.createElement('button');
 				newButton.classList.add(setup.instruments[drum], "drums");
 				let newImg = document.createElement('img');
-				newImg.src = "../../img/measurement/drumSnareNoTag.png"
+				newImg.src = "../../img/measurement/snareDrum.png"
 				newButton.appendChild(newImg)
 
 				newButton.addEventListener('click', () => {
@@ -729,7 +736,7 @@ setup.createUniqueDrums = function createUniqueDrums(container, which) {
 
 	switch (which) {
 		case "bass":
-			drumImg.src = `../../img/measurement/bassDrum.png`
+			drumImg.src = `../../img/measurement/bassDrum2.png`
 			drum.appendChild(drumImg)
 			break;
 		case "crash":
@@ -741,7 +748,7 @@ setup.createUniqueDrums = function createUniqueDrums(container, which) {
 			drum.appendChild(drumImg)
 			break;
 		case "lowTom":
-			drumImg.src = `../../img/measurement/drumSnare.png`
+			drumImg.src = `../../img/measurement/snareDrum.png`
 			drum.appendChild(drumImg)
 			break;
 

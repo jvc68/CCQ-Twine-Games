@@ -1,5 +1,5 @@
 setup.prevRand = -1
-setup.currentFidget = "switch"
+setup.currentFidget = "bubbleWrap"
 
 setup.isMouseDown = false;
 setup.light = [0, 0, 0, 0]
@@ -281,7 +281,7 @@ setup.populateFidget = function populateFidget() {
 				let newButton = document.createElement('button');
 				newButton.classList.add(setup.instruments[drum], "drums");
 				let newImg = document.createElement('img');
-				newImg.src = "../../img/measurement/drumSnareNoTag.png"
+				newImg.src = "../../img/measurement/snareDrum.png"
 				newButton.appendChild(newImg)
 
 				newButton.addEventListener('click', () => {
@@ -306,7 +306,7 @@ setup.createUniqueDrums = function createUniqueDrums(container, which) {
 
 	switch (which) {
 		case "bass":
-			drumImg.src = `../../img/measurement/bassDrum.png`
+			drumImg.src = `../../img/measurement/bassDrum2.png`
 			drum.appendChild(drumImg)
 			break;
 		case "crash":
@@ -318,7 +318,7 @@ setup.createUniqueDrums = function createUniqueDrums(container, which) {
 			drum.appendChild(drumImg)
 			break;
 		case "lowTom":
-			drumImg.src = `../../img/measurement/drumSnare.png`
+			drumImg.src = `../../img/measurement/snareDrum.png`
 			drum.appendChild(drumImg)
 			break;
 

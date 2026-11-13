@@ -117,7 +117,7 @@ body {
 
 #story {
   margin: 0 auto;
-  max-width: 380px;
+  max-width: 340px;
   padding: 0;
 }
 
@@ -383,7 +383,7 @@ button {
 }</style><script role="script" id="twine-user-script" type="text/twine-javascript">/* twine-user-script #1: "script.js" */
 setup.zombieDist = 20000
 setup.zombieAmount = 100
-setup.multi = 800
+setup.multi = 1
 setup.gameOver = false
 setup.currentStepGoal = 10
 setup.actualDistance = 0
@@ -441,7 +441,7 @@ setup.getZombieDistance = function (distance) {
 
 setup.setMode = function setMode(mode) {
 	setup.mode = mode
-	setup.multi = 800
+	setup.multi = 1
 	setup.currentFinalExtra = 0;
 	setup.exposedExtras = []
 	setup.actualDistance = 0
@@ -471,7 +471,7 @@ setup.reset = function reset() {
 	setup.gameOver = false;
 	setup.actualDistance = 0
 
-	setup.multi = 800;
+	setup.multi = 1;
 	setup.currentFinalExtra = 0;
 	setup.totalWalked = 0
 	setup.exposedExtras = []
