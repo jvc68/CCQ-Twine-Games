@@ -1,5 +1,6 @@
 {
 	"twee3LanguageTools.storyformat.current": "sugarcube-2",
 	"twineTweeLanguage.project.downloadStoryFormat": false,
-	"twineTweeLanguage.project.create": false
+	"twineTweeLanguage.project.create": false,
+	"liveServer.settings.port": 5501
 }
