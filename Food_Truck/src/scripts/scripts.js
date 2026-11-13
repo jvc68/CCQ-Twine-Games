@@ -770,6 +770,10 @@ window.FoodTruck = {
         track.className = "prep-action-progress";
         fill.className = "prep-action-fill";
         track.appendChild(fill);
+        // long-press (hold) and drag (scrub) must not open the mobile context menu
+        pad.addEventListener("contextmenu", function(event) {
+            event.preventDefault();
+        });
         host.appendChild(label);
         host.appendChild(pad);
         host.appendChild(track);
@@ -782,6 +786,18 @@ window.FoodTruck = {
             pad.classList.remove("prep-action-bump");
             void pad.offsetWidth;
             pad.classList.add("prep-action-bump");
+        }
+
+        // capture can throw if the pointer is already gone (fast taps on touch)
+        function capture(event) {
+            try {
+                pad.setPointerCapture(event.pointerId);
+            } catch (e) { /* ignore */ }
+        }
+
+        // gesture distances scale with the pad so narrow phones stay easy
+        function padWidth() {
+            return pad.getBoundingClientRect().width || 300;
         }
 
         function finish() {
@@ -842,9 +858,23 @@ window.FoodTruck = {
                 }, 30);
             };
 
-            pad.addEventListener("pointerdown", startHold);
-            ["pointerup", "pointerleave", "pointercancel"].forEach(function(name) {
-                pad.addEventListener(name, stopHold);
+            pad.addEventListener("pointerdown", function(event) {
+                capture(event);
+                startHold();
+                pad.classList.add("prep-action-held");
+            });
+            ["pointerup", "pointercancel", "lostpointercapture"].forEach(function(name) {
+                pad.addEventListener(name, function() {
+                    stopHold();
+                    pad.classList.remove("prep-action-held");
+                });
+            });
+            pad.addEventListener("pointerleave", function(event) {
+                // a finger slipping a few px off the edge must not cancel a hold
+                if (event.pointerType === "mouse") {
+                    stopHold();
+                    pad.classList.remove("prep-action-held");
+                }
             });
             pad.addEventListener("keydown", function(event) {
                 if ((event.key === " " || event.key === "Enter") && !event.repeat) {
@@ -858,13 +888,13 @@ window.FoodTruck = {
             var direction = 0;
             var extreme = 0;
             var lastKey = null;
-            var minTravel = 25;
+            var minTravel = Math.max(14, Math.min(25, padWidth() * 0.08));
 
             pad.addEventListener("pointerdown", function(event) {
                 dragging = true;
                 direction = 0;
                 extreme = event.clientX;
-                pad.setPointerCapture(event.pointerId);
+                capture(event);
             });
             pad.addEventListener("pointermove", function(event) {
                 if (!dragging) {
@@ -911,10 +941,10 @@ window.FoodTruck = {
 
             pad.addEventListener("pointerdown", function(event) {
                 startX = event.clientX;
-                pad.setPointerCapture(event.pointerId);
+                capture(event);
             });
             pad.addEventListener("pointerup", function(event) {
-                if (startX !== null && Math.abs(event.clientX - startX) >= 50) {
+                if (startX !== null && Math.abs(event.clientX - startX) >= Math.min(50, padWidth() * 0.15)) {
                     step();
                 }
                 startX = null;

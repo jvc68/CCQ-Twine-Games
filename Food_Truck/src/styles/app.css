@@ -1019,3 +1019,246 @@ body {
 #prep-continue.tutorial-target {
   animation: tutorial-pulse 900ms ease-in-out infinite alternate;
 }
+
+/* ==========================================================================
+   Mobile / touch support
+   ========================================================================== */
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Game controls: no double-tap zoom, no grey tap flash, no text selection */
+button,
+.prep-action-pad {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+.phone {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Expand tiny controls to a 44x44px hit area without changing their look */
+.ticket-cancel button {
+  position: relative;
+}
+
+.ticket-cancel button::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%);
+}
+
+/* Names must never spill out of their buttons */
+.ingredient-grid .ingredient-name,
+.menu-pick-name {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Sticky :hover on touch screens leaves buttons highlighted; undo it there */
+@media (hover: none) {
+  .action-button button:hover,
+  .passage-nav button:hover,
+  .tray-controls button:hover,
+  .method-options button:hover,
+  #prep-continue:hover:not(:disabled) {
+    background: #fff;
+  }
+
+  .ticket-action button:hover,
+  .ticket-cancel button:hover {
+    background: #fff;
+  }
+
+  .ingredient-grid button:hover {
+    background: rgba(255, 255, 255, 0.94);
+    transform: none;
+  }
+
+  .ingredient-grid button:active,
+  .action-button button:active,
+  .passage-nav button:active,
+  .method-options button:active,
+  .ticket-action button:active,
+  .menu-pick-button:active {
+    background: #a8ffdb;
+  }
+
+  .day-tally-box .action-button button:hover {
+    background-color: #00f187;
+  }
+}
+
+/* Phone-sized screens: use the whole viewport, scale the frame to fit */
+@media (max-width: 480px) {
+  body {
+    padding: 0;
+    background: linear-gradient(to top, #00f187, #0004fd) fixed;
+  }
+
+  #story {
+    max-width: none;
+  }
+
+  .phone {
+    border-radius: 0;
+    padding: 16px;
+    height: 100vh;
+    height: 100dvh;
+    min-height: 600px;
+    box-shadow: none;
+  }
+
+  .HUD {
+    flex-wrap: wrap;
+    gap: 2px 8px;
+    padding: 8px;
+    font-size: 0.8rem;
+  }
+
+  .passage-nav {
+    right: 16px;
+    left: 16px;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .ingredient-shelf {
+    right: 16px;
+    left: 16px;
+    bottom: calc(66px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .cooking-result-box {
+    right: 16px;
+    left: 16px;
+  }
+}
+
+/* Touch devices: raise every control to at least 44px and every label to 12px */
+@media (pointer: coarse) {
+  .passage-nav button {
+    white-space: normal;
+    font-size: 0.9rem;
+    min-height: 48px;
+  }
+
+  .action-button button,
+  .tray-controls button,
+  .method-options button,
+  #prep-continue,
+  #menu-start {
+    min-height: 44px;
+  }
+
+  .tray-controls button {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+
+  .ticket-action button {
+    min-height: 44px;
+    font-size: 0.78rem;
+  }
+
+  .ticket-customer { font-size: 0.95rem; }
+  .ticket-dish,
+  .ticket-ingredients,
+  .ticket-status { font-size: 0.78rem; }
+
+  .menu-grid {
+    grid-auto-rows: 62px;
+  }
+
+  .menu-pick-name {
+    font-size: 0.72rem;
+  }
+
+  .menu-pick-icon {
+    font-size: 1.6rem;
+  }
+
+  .menu-hint,
+  .skill-legend {
+    font-size: 0.8rem;
+  }
+
+  .fulfill-hint {
+    font-size: 0.8rem;
+  }
+
+  .prep-action-pad {
+    height: 96px;
+  }
+
+  .skill-track {
+    height: 52px;
+  }
+}
+
+/* Very narrow phones (<= 360px) and short landscape screens */
+@media (max-width: 360px) {
+  .phone {
+    padding: 12px;
+  }
+
+  .passage-nav {
+    right: 12px;
+    left: 12px;
+  }
+
+  .ingredient-shelf {
+    right: 12px;
+    left: 12px;
+  }
+
+  .start-screen h1 {
+    font-size: 1.7rem;
+  }
+
+  .ticket-row {
+    gap: 4px;
+  }
+
+  .ticket-card {
+    padding: 8px 5px 0;
+  }
+
+  .ingredient-grid .ingredient-icon {
+    font-size: 2rem;
+  }
+
+  .cooking-ingredient {
+    font-size: 4rem;
+  }
+}
+
+@media (max-height: 600px) and (orientation: landscape) {
+  .phone {
+    height: auto;
+    min-height: 100vh;
+    padding-bottom: 90px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticket-action button.tutorial-target,
+  .tutorial-target,
+  .prep-action-bump {
+    animation-duration: 1800ms;
+  }
+}
+
+.prep-action-pad.prep-action-held {
+  background: rgba(168, 255, 219, 0.35);
+  transform: scale(0.97);
+}
