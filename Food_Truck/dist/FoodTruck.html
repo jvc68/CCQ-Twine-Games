@@ -200,19 +200,23 @@ body {
   min-height: 0;
   margin: 0;
   padding: 0;
-  border: 1px solid #8a2d2d;
-  border-radius: 50%;
-  background: #fff;
-  color: #8a2d2d;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #d62020;
   font: inherit;
-  font-size: 0.7rem;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 900;
   line-height: 1;
+  -webkit-text-stroke: 1.5px #d62020;
   cursor: pointer;
 }
 
-.ticket-cancel button:hover {
-  background: #ffd9d9;
+.ticket-cancel button:hover,
+.ticket-cancel button:active {
+  background: transparent;
+  color: #8a0f0f;
+  -webkit-text-stroke-color: #8a0f0f;
 }
 
 .ticket-customer {
@@ -251,16 +255,21 @@ body {
 .ticket-action {
   display: flex;
   flex: 1;
-  align-items: flex-end;
+  align-items: stretch;
   justify-content: center;
-  padding-bottom: 6px;
+  padding: 4px 0 6px;
   text-align: center;
+}
+
+.ticket-action .ticket-status {
+  align-self: center;
 }
 
 .ticket-action button {
   appearance: none;
+  flex: 1;
   width: 100%;
-  min-height: 30px;
+  min-height: 44px;
   margin: 0;
   padding: 3px 4px;
   border: 2px solid #0d1b2a;
@@ -268,7 +277,7 @@ body {
   background: #fff;
   color: #123;
   font: inherit;
-  font-size: 0.7rem;
+  font-size: 0.85rem;
   font-weight: 700;
   line-height: 1.1;
   cursor: pointer;
@@ -338,7 +347,7 @@ body {
 }
 
 .prep-area.compact #tray {
-  min-height: 24px;
+  min-height: 50px;
 }
 
 .prep-header {
@@ -1181,8 +1190,7 @@ button,
     background: #fff;
   }
 
-  .ticket-action button:hover,
-  .ticket-cancel button:hover {
+  .ticket-action button:hover {
     background: #fff;
   }
 
@@ -1273,7 +1281,7 @@ button,
 
   .ticket-action button {
     min-height: 44px;
-    font-size: 0.78rem;
+    font-size: 0.85rem;
   }
 
   .ticket-customer { font-size: 0.95rem; }
