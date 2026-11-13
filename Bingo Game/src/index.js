@@ -235,9 +235,9 @@ window.BingoGame = {
     // Reset daily game progress.
     resetBoard: function () {
         // Reset all daily game progress.
-        gameState = createDefaultState(
-            gameState.customTasks
-        );
+        gameState = createDefaultState([]);
+
+        gameState.customTasks = [];
 
         gameWon = false;
 
@@ -246,6 +246,8 @@ window.BingoGame = {
 
         // Update SugarCube variables.
         this.syncToStory();
+
+        State.variables.customTasks = [];
 
         // Clear the selected position.
         State.variables.selectedPosition = -1;
@@ -261,14 +263,6 @@ window.BingoGame = {
                 }
             });
         }
-
-        // Reset the status message.
-        const status = document.querySelector(".bingo-status");
-
-        if (status) {
-            status.textContent = "Good Luck!";
-        }
-
         // Return to the board so SugarCube renders fresh state.
         Engine.play("BingoBoard");
     },
