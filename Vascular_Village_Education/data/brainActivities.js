@@ -49,16 +49,11 @@ setup.activityLibraries.brain = {
                 completed: false
             },
             {
-                title: "🏆 More Achievements",
-                description: "Your future completed brain activities will appear here.",
-                locked: true,
-                completed: true
-            },
-            {
-                title: "✨ Mind Explorers",
-                description: "More brain discoveries are on their way.",
-                locked: true,
-                completed: true
+                title: "🛡️ Brain Defenders",
+                description: "Discover how the brain helps the body respond to information.",
+                activityId: "brainDefenders",
+                passage: "BrainActivity",
+                completed: false
             }
         ]
     },
@@ -388,6 +383,60 @@ setup.activityLibraries.brain = {
             characterName: "Ruby",
             characterLine: "Making safe choices is one way I can help protect my brain!",
             remember: "Use appropriate protective equipment, follow safety rules, and tell a trusted adult if you have a head injury."
+        },
+
+        nextPassage: "LessonLearned"
+    },
+
+    brainDefenders: {
+        title: "Brain Defenders",
+        introduction: "Ruby wants to understand how her brain helps her notice danger and respond when germs make her feel unwell!",
+        characterName: "Ruby",
+        characterLine: "My brain helps me understand what's happening inside my body!",
+        mission: "Help Ruby discover how the brain helps control the body!",
+        instructions: "Choose TWO correct answers.",
+        requiredCorrect: 2,
+
+        choices: [
+            {
+                id: "brainSignals",
+                label: "🧠 The brain sends messages through the nervous system",
+                correct: true,
+                feedbackTitle: "Great choice!",
+                feedback: "The brain communicates with the body through the nervous system using signals."
+            },
+            {
+                id: "brainResponds",
+                label: "⚡ The brain helps the body respond to changes around us",
+                correct: true,
+                feedbackTitle: "Correct!",
+                feedback: "The brain processes information and helps coordinate how the body responds."
+            },
+            {
+                id: "brainPumps",
+                label: "❤️ The brain pumps blood around the body",
+                correct: false,
+                feedbackTitle: "Try again!",
+                feedback: "The heart pumps blood around the body. The brain controls and coordinates many body activities."
+            },
+            {
+                id: "brainDigests",
+                label: "🍎 The brain digests the food we eat",
+                correct: false,
+                feedbackTitle: "Not quite!",
+                feedback: "The digestive system breaks down food. The brain helps control and coordinate body functions."
+            }
+        ],
+
+        completionHeading: "Brain Defenders!",
+        completionMessage: "Ruby has discovered how her brain helps her body respond to information.",
+        continueLabel: "Continue to the lesson",
+
+        lesson: {
+            introduction: "Ruby discovers how her brain helps her understand information and coordinate her body's responses.",
+            characterName: "Ruby",
+            characterLine: "I learned that my brain sends messages and helps my body respond to what's happening!",
+            remember: "The brain is the control centre of the nervous system. It receives information, processes it and sends signals that help coordinate movement, senses and other body functions."
         },
 
         nextPassage: "LessonLearned"

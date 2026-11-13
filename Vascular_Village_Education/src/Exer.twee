@@ -165,81 +165,41 @@ $(document).one(":passagedisplay", function () {
 
 /* TUTORIAL */
 
-:: TutorialStart
-<div class="tutorial-panel"><div class="tutorial-icon">🎓</div>
-    <h2>Welcome to the Tutorial!</h2><p>Hi, explorer! Ruby here! 👋</p><p>I'll show you how to explore Vascular Village and complete activities about the human body.</p><p>You'll learn how to choose an activity, understand answer choices, read feedback, and discover what you've learned.</p><p><strong>Don't worry! You won't need to answer any questions during this tutorial.</strong></p><p>Ready? Let's get started!</p><div class="tutorial-navigation"><<button "Continue →">><<goto "TutorialMission">><</button>></div>
+
+:: TutorialRuby
+<div class="tutorial-panel"><h2>Meet Ruby, Your Little Guide!</h2><p>Hi there! I'm Ruby! 👋</p><p>I'm a red blood cell, and I'm part of your body's amazing circulatory system.</p><p>My job is to travel around your body, carrying oxygen to the places that need it. I travel through blood vessels, pass by the heart, and visit different parts of the body every day!</p><p>During your adventure, I'll travel alongside you as we explore different body systems and discover how they work together to keep us healthy.</p><p><strong>Are you ready to explore the body with me?</strong></p><div class="tutorial-navigation"><<button "Let's Go! →">><<goto "TutorialScenario">><</button>></div>
 </div>
 
 
-/* should show the populated menu page, maybe just a popup window at the bottom of the screen to explain how the game works */
-:: TutorialMission
-<div class="tutorial-panel"><h3>Step 1: Choose Your Adventure</h3><p>On the home screen, you'll find five areas to explore:</p><ul>
-        <li>🧠 Brain</li>
-        <li>🩸 Blood Cells</li>
-        <li>❤️ Heart</li>
-        <li>🩸 Blood Vessels</li>
-        <li>🫁 Lungs</li></ul><p>Each area teaches you something different about the human body and how to keep it healthy.</p><p>When you choose an area, you'll enter its activity menu. This is where you can explore the available activities.</p><div class="tutorial-navigation"><<button "Continue →">><<goto "TutorialChoices">><</button>></div>
-</div>
-
-/* again, should show a popup window at the bottom of the screen to explain the choices */
-:: TutorialChoices
-<div class="tutorial-panel"><h3>Step 2: Explore an Activity</h3><p>Each body system has activities designed to help you learn through questions.</p><p>When you select an activity, it opens on its own screen.</p><p>Depending on the activity, you might need to:</p><ul>
-        <li>🔎 Read a question or scenario.</li>
-        <li>💭 Think about what you already know.</li>
-        <li>👆 Select an answer or make a choice.</li>
-    </ul><p>Some activities may work differently from others, so always read the instructions shown on the screen.</p><div class="tutorial-navigation"><<button "Continue →">><<goto "TutorialFeedback">><</button>></div>
+:: TutorialScenario
+<div class="tutorial-panel"><h2>Step 1: Choose a Scenario</h2><p>Before we begin, let's talk about scenarios!</p><p>A scenario is a real situation that helps us understand how the human body works and how our everyday choices can affect our health.</p><p>For example, we might explore what happens inside the body when someone exercises, rests, or makes healthy lifestyle choices.</p><p>Each scenario contains several activities. By completing these activities, you'll discover how different parts of the body work together in that situation.</p><p><strong>Your mission is to explore the scenario and help me discover what is happening inside the body!</strong></p><div class="tutorial-navigation"><<button "Continue →">><<goto "TutorialBodyMap">><</button>></div>
 </div>
 
 
-/* popup window at the bottom of screen to explain feedback */
-/* should have button with "Return Home" to finish tutorial */
-:: TutorialFeedback
-<div class="tutorial-panel"><h3>Step 3: Learn from Feedback</h3><p>After making a choice in an activity, you may receive feedback explaining the result.</p><p>Feedback helps you understand:</p><ul>
-        <li>✅ What you got right.</li>
-        <li>💡 Why an answer makes sense.</li>
-        <li>🧠 Important facts about the human body.</li>
-        <li>🌱 What you can learn from a mistake.</li></ul>
-    <p>Don't be discouraged if you get something wrong! The goal is to learn, improve your understanding, and discover something new.</p><p><strong>Take your time and read the feedback before moving on.</strong></p><div class="tutorial-navigation"><<button "Continue →">><<goto "TutorialLesson">><</button>></div>
-</div>
-
-:: TutorialLesson
-<div class="tutorial-panel"><h3>Step 4: Discover What You've Learned</h3><p>Completed activities include a lesson to help you understand the information you've discovered.</p><p>These lessons can help you connect what you've learned to everyday health.</p><p>For example, you might discover how exercise supports your heart or why your lungs need clean air.</p><p>Take a moment to think about what you've learned and how you could use that knowledge in your daily life.</p><p><strong>Every discovery brings you one step closer to becoming a health explorer!</strong></p><div class="tutorial-navigation"><<button "Continue →">><<goto "TutorialComplete">><</button>></div>
+:: TutorialBodyMap
+<div class="tutorial-panel"><h2>Step 2: Explore Body Map</h2><p>Once you choose a scenario, you'll see a map of the human body.</p><p>Look for the highlighted circles! Each circle represents a body system involved in your chosen scenario and becomes dimmed when you complete an activity.</p><ul><li>🧠 Brain</li><li>🩸 Blood Cells</li><li>❤️ Heart</li><li>🩸 Blood Vessels</li><li>🫁 Lungs</li></ul><p><strong>Explore each highlighted area to uncover everything happening inside the body!</strong></p><div class="tutorial-navigation"><<button "Continue →">><<goto "TutorialActivity">><</button>></div>
 </div>
 
 
-:: TutorialComplete
-<div class="tutorial-panel"><h2>You're Ready to Explore!</h2><p>Great job, explorer! 🎉</p><p>You now know how to navigate Vascular Village, open activities, understand answer choices, and learn from feedback.</p><p>Now it's time to put your knowledge into action!</p><p>Choose your favourite body system and begin your adventure with Ruby.</p><p><strong>Your journey to better health starts here!</strong></p><div class="tutorial-navigation"><<button "🏠 Return Home">><<goto "HomeScreen">><</button>></div>
+:: TutorialActivity
+<div class="tutorial-panel"><h2>Step 3: Complete an Activity</h2><p>When you select a body system, you'll open an activity that helps you learn more about what's happening inside the body.</p><p>Read the instructions carefully and choose the correct healthy actions or answers.</p><p>After making a choice, Ruby will give you feedback to explain why your answer is correct and what it means for the body.</p><p>Keep choosing the correct answers until you've completed all the required choices for that activity.</p><p><strong>Remember, every correct choice brings you one step closer to completing your mission!</strong></p><div class="tutorial-navigation"><<button "Continue →">><<goto "TutorialLessons">><</button>></div>
+</div>
+
+
+:: TutorialLessons
+<div class="tutorial-panel"><h2>Step 4: Discover What You've Learned!</h2><p>Every completed activity unlocks a special lesson that explains the important information you've discovered.</p><p>When every activity is completed, you unlock the scenario lesson, which brings everything together for a completed scenario.</p><p>Remember, you can return to unfinished scenarios and continue where you left off.</p><p><strong>Every activity is a new discovery, and every completed scenario brings you closer to understanding the amazing human body!</strong></p><div class="tutorial-navigation"><<button "🏠 Start Exploring!">><<goto "ScenarioMenu">><</button>></div>
 </div>
 
 
 /* NEW SCENARIO MENU */
 :: ScenarioMenu
+<div class="home-screen"><h1>Choose Your Scenario</h1><p>Select a situation to begin your adventure!</p><div id="scenario-menu"></div></div><<script>>$(document).one(":passagedisplay", function () {setup.renderScenarioMenu("scenario-menu");});<</script>><div class="tutorial-home-button"><<button "🎓 Take the Tutorial">><<goto "TutorialRuby">><</button>></div>
 
-<div class="home-screen"><h1>Choose Your Scenario</h1><p>Select a situation to begin your adventure!</p>
-
-    <div id="scenario-menu"></div>
-
-    <div class="back-link">
-        <<button "← Return Home">>
-            <<goto "HomeScreen">>
-        <</button>>
-    </div>
-</div>
-
-<<script>>
-$(document).one(":passagedisplay", function () {
-    setup.renderScenarioMenu("scenario-menu");
-});
-<</script>>
 
 :: ScenarioBodyMap
 
 <div class="home-screen">
-    <div id="scenario-body-map"></div>
-
-    <p class="home-hint">
-        The highlighted body systems are involved in your selected scenario!
-    </p>
+    <div id="scenario-body-map"></div><p class="home-hint">The highlighted body systems are involved in your selected scenario!</p>
 </div>
 
 <<script>>

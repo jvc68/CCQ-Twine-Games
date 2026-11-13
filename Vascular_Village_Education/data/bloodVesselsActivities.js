@@ -49,16 +49,11 @@ setup.activityLibraries.bloodVessels = {
                 completed: false
             },
             {
-                title: "🏆 More Achievements",
-                description: "Your future completed activities will appear here.",
-                locked: true,
-                completed: true
-            },
-            {
-                title: "✨ Hidden Discoveries",
-                description: "More achievements are on their way.",
-                locked: true,
-                completed: true
+                title: "🩸 Blood Flow Mission",
+                description: "Discover how blood vessels transport blood around the body.",
+                activityId: "bloodFlowMission",
+                passage: "BloodVesselsActivity",
+                completed: false
             }
         ]
     },
@@ -377,6 +372,58 @@ setup.activityLibraries.bloodVessels = {
 
         completionHeading: "Fuel Your Flow completed!",
         completionMessage: "Ruby has discovered some healthy food choices.",
+        continueLabel: "Continue to the lesson",
+        nextPassage: "LessonLearned"
+    },
+    bloodFlowMission: {
+        title: "Blood Flow Mission",
+        introduction: "Ruby wants to discover how blood travels around her body and delivers important supplies!",
+        characterName: "Ruby",
+        characterLine: "How does blood reach every part of my body?",
+        mission: "Help Ruby understand how blood vessels work!",
+        instructions: "Choose TWO correct answers.",
+        requiredCorrect: 2,
+
+        choices: [
+            {
+                id: "arteries",
+                label: "🩸 Arteries carry blood away from the heart",
+                correct: true,
+                feedbackTitle: "Great choice!",
+                feedback: "Arteries carry blood away from the heart to different parts of the body."
+            },
+            {
+                id: "veins",
+                label: "❤️ Veins carry blood back towards the heart",
+                correct: true,
+                feedbackTitle: "Correct!",
+                feedback: "Veins return blood towards the heart so it can continue circulating around the body."
+            },
+            {
+                id: "vesselsDigest",
+                label: "🍎 Blood vessels digest the food we eat",
+                correct: false,
+                feedbackTitle: "Try again!",
+                feedback: "Blood vessels transport blood. Digestion happens in the digestive system."
+            },
+            {
+                id: "vesselsThink",
+                label: "🧠 Blood vessels control our thoughts",
+                correct: false,
+                feedbackTitle: "Not quite!",
+                feedback: "The brain controls thoughts. Blood vessels help transport blood around the body."
+            }
+        ],
+
+        lesson: {
+            introduction: "Ruby discovers how blood vessels create pathways for blood to travel around her body.",
+            characterName: "Ruby",
+            characterLine: "I learned that arteries and veins have different jobs, but both help keep my blood moving!",
+            remember: "Blood vessels form a network throughout the body. Arteries carry blood away from the heart, veins return blood towards the heart, and tiny capillaries allow substances to be exchanged with body tissues."
+        },
+
+        completionHeading: "Blood Flow Mission Complete!",
+        completionMessage: "Ruby has learned how arteries and veins help blood travel around her body.",
         continueLabel: "Continue to the lesson",
         nextPassage: "LessonLearned"
     }

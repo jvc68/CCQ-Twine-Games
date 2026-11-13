@@ -49,16 +49,17 @@ setup.activityLibraries.bloodCells = {
                 completed: false
             },
             {
-                title: "🏆 More Achievements",
-                description: "Your future completed blood cell activities will appear here.",
-                locked: true,
-                completed: true
-            },
-            {
                 title: "✨ Tiny Heroes",
                 description: "More blood cell discoveries are on their way.",
                 locked: true,
                 completed: true
+            },
+            {
+                title: "🛡️ White Cell Warriors",
+                description: "Learn how white blood cells help protect the body against germs.",
+                activityId: "whiteCellWarriors",
+                passage: "BloodCellsActivity",
+                completed: false
             }
         ]
     },
@@ -377,6 +378,58 @@ setup.activityLibraries.bloodCells = {
 
         completionHeading: "Germ Fighters Complete!",
         completionMessage: "Ruby has learned how the body helps defend itself against germs.",
+        continueLabel: "Continue to the lesson",
+        nextPassage: "LessonLearned"
+    },
+    whiteCellWarriors: {
+        title: "White Cell Warriors",
+        introduction: "Ruby has encountered some germs! Help her understand how white blood cells protect her body.",
+        characterName: "Ruby",
+        characterLine: "I didn't know my blood had tiny defenders!",
+        mission: "Help Ruby understand how her body fights germs!",
+        instructions: "Choose TWO correct answers.",
+        requiredCorrect: 2,
+
+        choices: [
+            {
+                id: "fightGerms",
+                label: "🛡️ White blood cells help fight infections",
+                correct: true,
+                feedbackTitle: "Great choice!",
+                feedback: "White blood cells are part of the immune system and help defend the body against germs."
+            },
+            {
+                id: "immuneSystem",
+                label: "🦠 White blood cells help protect the body from harmful germs",
+                correct: true,
+                feedbackTitle: "Correct!",
+                feedback: "White blood cells recognise and help fight harmful microorganisms that can cause illness."
+            },
+            {
+                id: "carryOxygen",
+                label: "🫁 White blood cells carry oxygen around the body",
+                correct: false,
+                feedbackTitle: "Try again!",
+                feedback: "Red blood cells carry oxygen around the body. White blood cells help defend against infection."
+            },
+            {
+                id: "pumpBlood",
+                label: "❤️ White blood cells pump blood around the body",
+                correct: false,
+                feedbackTitle: "Not quite!",
+                feedback: "The heart pumps blood around the body. White blood cells help protect us from germs."
+            }
+        ],
+
+        lesson: {
+            introduction: "Ruby discovers that white blood cells are important defenders of her body.",
+            characterName: "Ruby",
+            characterLine: "I learned that white blood cells help my body fight germs and infections!",
+            remember: "White blood cells are part of the immune system. They help recognise and fight harmful germs, protecting the body from infections."
+        },
+
+        completionHeading: "White Cell Warriors!",
+        completionMessage: "Ruby has discovered how white blood cells help protect her body.",
         continueLabel: "Continue to the lesson",
         nextPassage: "LessonLearned"
     }

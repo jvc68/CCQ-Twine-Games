@@ -47,18 +47,6 @@ setup.activityLibraries.lungs = {
                 activityId: "breathingBasics",
                 passage: "LungsActivity",
                 completed: false
-            },
-            {
-                title: "🏆 More Achievements",
-                description: "Your future completed lung activities will appear here.",
-                locked: true,
-                completed: true
-            },
-            {
-                title: "✨ Hidden Discoveries",
-                description: "More lung health achievements are on their way.",
-                locked: true,
-                completed: true
             }
         ]
     },

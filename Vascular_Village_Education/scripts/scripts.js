@@ -744,6 +744,44 @@
         // Access SugarCube variables
         var variables = State.variables;
 
+        // Set the default selected tab
+        if (variables.scenarioTab === undefined) {
+            variables.scenarioTab = "new";
+        }
+
+        var tab = variables.scenarioTab;
+
+        // Separate scenarios into New and Completed lists
+        var newScenarios = [];
+        var completedScenarios = [];
+
+        Object.keys(scenarios).forEach(function (scenarioId) {
+
+            var scenario = scenarios[scenarioId];
+
+            // Check whether all activities in this scenario are completed
+            var isCompleted =
+                setup.checkScenarioCompletion(scenarioId) ||
+                variables.replayingScenarioId === scenarioId;
+
+            if (isCompleted) {
+                completedScenarios.push({
+                    id: scenarioId,
+                    data: scenario
+                });
+            }
+            else {
+                newScenarios.push({
+                    id: scenarioId,
+                    data: scenario
+                });
+            }
+        });
+
+        // Choose the list for the selected tab
+        var visibleScenarios =
+            tab === "completed" ? completedScenarios : newScenarios;
+
         // Clear the existing menu
         container.replaceChildren();
 
@@ -751,18 +789,59 @@
         var wrapper = container;
         wrapper.className = "activity-page scenario-menu";
 
+        // Create New and Completed tabs
+        var tabs = document.createElement("div");
+        tabs.className = "activity-tabs";
+
+        ["completed", "new"].forEach(function (tabName) {
+
+            var link = document.createElement("a");
+            link.href = "#";
+
+            link.textContent =
+                tabName === "completed" ? "Completed" : "New";
+
+            // Highlight the currently selected tab
+            if (tabName === tab) {
+                link.classList.add("active");
+            }
+
+            link.addEventListener("click", function (event) {
+                event.preventDefault();
+
+                variables.scenarioTab = tabName;
+
+                // Return to the scenario menu to refresh the cards
+                Engine.play("ScenarioMenu");
+            });
+
+            tabs.appendChild(link);
+        });
+
+        wrapper.appendChild(tabs);
+
         // Create the scenario card list
         var list = document.createElement("div");
         list.className = "activity-list";
 
-        // Create a card for each scenario
-        Object.keys(scenarios).forEach(function (scenarioId) {
+        // Create a card for each scenario in the selected tab
+        visibleScenarios.forEach(function (item) {
 
-            var scenario = scenarios[scenarioId];
+            var scenarioId = item.id;
+            var scenario = item.data;
 
             // Create the scenario card
             var card = document.createElement("div");
             card.className = "activity-card";
+
+            var isCompleted =
+                setup.checkScenarioCompletion(scenarioId) ||
+                variables.replayingScenarioId === scenarioId;
+
+            // Style completed scenario cards
+            if (isCompleted) {
+                card.classList.add("completed");
+            }
 
             // Add the scenario title
             var title = document.createElement("h3");
@@ -774,16 +853,58 @@
             description.textContent = scenario.description;
             card.appendChild(description);
 
-            // Create the Choose Scenario link
+            // Display completion status
+            if (isCompleted) {
+                var completedLabel = document.createElement("span");
+                completedLabel.className = "completed-label";
+                completedLabel.textContent = "✓ Completed  ";
+                card.appendChild(completedLabel);
+            }
+
+            // Create the Choose or Replay Scenario link
             var choose = document.createElement("a");
             choose.href = "#";
-            choose.textContent = "Choose Scenario →";
+
+            choose.textContent = isCompleted
+                ? "↻ Replay Scenario"
+                : "Choose Scenario →";
 
             choose.addEventListener("click", function (event) {
                 event.preventDefault();
 
                 // Remember which scenario the player selected
                 variables.selectedScenarioId = scenarioId;
+
+                // Check whether this scenario is already being replayed
+                var replayAlreadyInProgress =
+                    variables.replayingScenarioId === scenarioId;
+
+                // Only reset progress when STARTING a new replay
+                if (isCompleted && !replayAlreadyInProgress) {
+
+                    // Remember that this scenario is being replayed
+                    variables.replayingScenarioId = scenarioId;
+
+                    // Reset all activities belonging to this scenario
+                    scenario.activities.forEach(function (activityId) {
+
+                        var result = setup.getScenarioActivity(activityId);
+
+                        if (!result) {
+                            return;
+                        }
+
+                        var activityKey =
+                            result.category + "." + activityId;
+
+                        if (variables.activityProgress &&
+                            variables.activityProgress[activityKey]) {
+
+                            variables.activityProgress[activityKey].completed = false;
+                            variables.activityProgress[activityKey].correctChoices = [];
+                        }
+                    });
+                }
 
                 // Go to the scenario body map passage
                 Engine.play("ScenarioBodyMap");
@@ -796,7 +917,7 @@
         });
 
         wrapper.appendChild(list);
-    };
+    };       
 
     
     // Generates the body map for the selected scenario
@@ -871,13 +992,27 @@
 
         scenario.activities.forEach(function (activityId) {
 
-            var result = setup.getScenarioActivity(activityId);
+             var result = setup.getScenarioActivity(activityId);
 
             if (!result) {
                 console.error("Could not find scenario activity:", activityId);
                 return;
             }
 
+            // Build the global activity progress key
+            var activityKey = result.category + "." + activityId;
+
+            // Retrieve the global activity progress
+            var activityProgress =
+                State.variables.activityProgress &&
+                State.variables.activityProgress[activityKey];
+
+            // Skip activities that have already been completed
+            if (activityProgress && activityProgress.completed === true) {
+                return;
+            }
+
+            // Highlight only activities that are not yet completed
             if (bodySystems[result.category] &&
                 highlightedSystems.indexOf(result.category) === -1) {
 
@@ -955,6 +1090,13 @@
         // Check whether all scenario activities are completed
         var scenarioCompleted = setup.checkScenarioCompletion(scenarioId);
 
+        // Clear replay status once the scenario is completed again
+        if (scenarioCompleted &&
+            State.variables.replayingScenarioId === scenarioId) {
+
+            State.variables.replayingScenarioId = null;
+        }
+
         // Display the scenario lesson button only when all activities are completed
         if (scenarioCompleted) {
 
@@ -1009,55 +1151,6 @@
         // Activity could not be found
         console.error("Scenario activity not found:", activityId);
         return null;
-    };
-
-    // Retrieves or creates progress for a scenario
-    setup.getScenarioProgress = function (scenarioId) {
-
-        // Create scenario progress storage if it does not exist
-        if (!State.variables.scenarioProgress) {
-            State.variables.scenarioProgress = {};
-        }
-
-        // Create progress for this scenario if it does not exist
-        if (!State.variables.scenarioProgress[scenarioId]) {
-            State.variables.scenarioProgress[scenarioId] = {
-                activitiesCompleted: []
-            };
-        }
-
-        return State.variables.scenarioProgress[scenarioId];
-    };
-
-
-    // Checks whether all activities in a scenario have been completed
-    setup.checkScenarioCompletion = function (scenarioId) {
-
-        var scenario = setup.scenarios.bodyScenarios[scenarioId];
-
-        if (!scenario) {
-            return false;
-        }
-
-        var progress = setup.getScenarioProgress(scenarioId);
-
-        return scenario.activities.every(function (activityId) {
-            var result = setup.getScenarioActivity(activityId);
-
-            if (!result) {
-                return false;
-            }
-
-            var activityKey = result.category + "." + activityId;
-            var activityProgress =
-                State.variables.activityProgress &&
-                State.variables.activityProgress[activityKey];
-
-            return !!(
-                activityProgress &&
-                activityProgress.completed === true
-            );
-        });
     };
 
     

@@ -100,33 +100,44 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
 		<div id="init-lacking">Your browser lacks required capabilities. Please upgrade it or switch to another to continue.</div>
 		<div id="init-loading"><div>Loading&hellip;</div></div>
 	</div>
-	<!-- UUID://BAE48670-5730-4DC7-B1BA-608EFEDA5280// --><tw-storydata name="Education Game" startnode="1" creator="Tweego" creator-version="2.1.1+81d1d71" ifid="BAE48670-5730-4DC7-B1BA-608EFEDA5280" zoom="1" format="SugarCube" format-version="2.30.0" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">body {
-    margin: 0;
-    background: lightgray;
+	<!-- UUID://BAE48670-5730-4DC7-B1BA-608EFEDA5280// --><tw-storydata name="Education Game" startnode="1" creator="Tweego" creator-version="2.1.1+81d1d71" ifid="BAE48670-5730-4DC7-B1BA-608EFEDA5280" zoom="1" format="SugarCube" format-version="2.30.0" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">/* ============================================================
+   CardioCareQuest — Daily Archer visual theme
+   Viridis colour palette
+   ============================================================ */
+
+* {
+    box-sizing: border-box;
 }
 
-
-#story {
-    background: linear-gradient(180deg, #440154 0%, #3b528b 50%, #21918c 100%);
-    border-radius: 32px;
-    padding: 4px 8px 6px;
-    overflow: hidden;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
-    color: white;
-    position: relative;
-    height: 660px;
-    min-height: 660px;
-    width: 100%;
-    max-width: 390px;
-    box-sizing: border-box;
-    margin: 0 auto;
+body {
     font-family: 'Atkinson Hyperlegible', system-ui, -apple-system,
                  "Segoe UI", sans-serif;
+    background-color: #d1e8e8;
+    margin: 0;
+    padding: 1.5em 0;
 }
 
+/* Hide SugarCube's sidebar */
+#ui-bar {
+    display: none;
+}
 
-
-
+/* Phone frame — compact, soft dark viridis teal */
+#story {
+  background: linear-gradient(180deg, #440154 0%, #3b528b 50%, #21918c 100%);
+  border-radius: 32px;
+  padding: 25px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+  color: white;
+  position: relative;
+  min-height: 660px;
+  max-height: 100px;
+  width: 100%;
+  max-width: 340px;
+  margin: 0 auto;
+  font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, "Segoe UI", sans-serif;
+}
 
 .activity-message {
     background: rgba(255, 255, 255, 0.15);
@@ -259,15 +270,15 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
 /* Five topic circles */
 .body-circle {
     position: absolute;
-    width: 100px;
-    height: 100px;
+    width: 85px;
+    height: 85px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
     padding: 8px;
-    font-size: 15px;
+    font-size: 12px;
     font-weight: bold;
     text-align: center;
     border: 3px solid white;
@@ -275,6 +286,7 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
 }
 
 /* Arrange the circles like a human body */
+/* Brain — top centre */
 .body-circle.head {
     top: 0;
     left: 50%;
@@ -282,32 +294,35 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
     background: #f5c2e7;
 }
 
+/* Lungs — middle left */
 .body-circle.left {
-    top: 125px;
-    left: 0;
+    top: 100px;
+    left: 15%;
     background: #89c2d9;
 }
 
+/* Heart — middle right */
 .body-circle.center {
-    top: 125px;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 100px;
+    left: 85%;
+    transform: translateX(-100%);
     background: #f08080;
 }
 
+/* Blood vessels — bottom left */
 .body-circle.right {
-    top: 125px;
-    right: 0;
+    top: 200px;
+    left: 15%;
     background: #8bd3a8;
 }
 
+/* Blood cells — bottom right */
 .body-circle.legs {
-    top: 265px;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 200px;
+    left: 85%;
+    transform: translateX(-100%);
     background: #f4c95d;
 }
-
 /* Make the links fill each circle */
 .body-circle a {
     color: #172033;
@@ -326,10 +341,13 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
     transform: scale(1.05);
 }
 
-.body-circle.head:hover,
+.body-circle.head:hover {
+    transform: translateX(-50%) scale(1.05);
+}
+
 .body-circle.center:hover,
 .body-circle.legs:hover {
-    transform: translateX(-50%) scale(1.05);
+    transform: translateX(-100%) scale(1.05);
 }
 
 .home-hint {
@@ -1376,6 +1394,44 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
         // Access SugarCube variables
         var variables = State.variables;
 
+        // Set the default selected tab
+        if (variables.scenarioTab === undefined) {
+            variables.scenarioTab = "new";
+        }
+
+        var tab = variables.scenarioTab;
+
+        // Separate scenarios into New and Completed lists
+        var newScenarios = [];
+        var completedScenarios = [];
+
+        Object.keys(scenarios).forEach(function (scenarioId) {
+
+            var scenario = scenarios[scenarioId];
+
+            // Check whether all activities in this scenario are completed
+            var isCompleted =
+                setup.checkScenarioCompletion(scenarioId) ||
+                variables.replayingScenarioId === scenarioId;
+
+            if (isCompleted) {
+                completedScenarios.push({
+                    id: scenarioId,
+                    data: scenario
+                });
+            }
+            else {
+                newScenarios.push({
+                    id: scenarioId,
+                    data: scenario
+                });
+            }
+        });
+
+        // Choose the list for the selected tab
+        var visibleScenarios =
+            tab === "completed" ? completedScenarios : newScenarios;
+
         // Clear the existing menu
         container.replaceChildren();
 
@@ -1383,18 +1439,59 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
         var wrapper = container;
         wrapper.className = "activity-page scenario-menu";
 
+        // Create New and Completed tabs
+        var tabs = document.createElement("div");
+        tabs.className = "activity-tabs";
+
+        ["completed", "new"].forEach(function (tabName) {
+
+            var link = document.createElement("a");
+            link.href = "#";
+
+            link.textContent =
+                tabName === "completed" ? "Completed" : "New";
+
+            // Highlight the currently selected tab
+            if (tabName === tab) {
+                link.classList.add("active");
+            }
+
+            link.addEventListener("click", function (event) {
+                event.preventDefault();
+
+                variables.scenarioTab = tabName;
+
+                // Return to the scenario menu to refresh the cards
+                Engine.play("ScenarioMenu");
+            });
+
+            tabs.appendChild(link);
+        });
+
+        wrapper.appendChild(tabs);
+
         // Create the scenario card list
         var list = document.createElement("div");
         list.className = "activity-list";
 
-        // Create a card for each scenario
-        Object.keys(scenarios).forEach(function (scenarioId) {
+        // Create a card for each scenario in the selected tab
+        visibleScenarios.forEach(function (item) {
 
-            var scenario = scenarios[scenarioId];
+            var scenarioId = item.id;
+            var scenario = item.data;
 
             // Create the scenario card
             var card = document.createElement("div");
             card.className = "activity-card";
+
+            var isCompleted =
+                setup.checkScenarioCompletion(scenarioId) ||
+                variables.replayingScenarioId === scenarioId;
+
+            // Style completed scenario cards
+            if (isCompleted) {
+                card.classList.add("completed");
+            }
 
             // Add the scenario title
             var title = document.createElement("h3");
@@ -1406,16 +1503,58 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
             description.textContent = scenario.description;
             card.appendChild(description);
 
-            // Create the Choose Scenario link
+            // Display completion status
+            if (isCompleted) {
+                var completedLabel = document.createElement("span");
+                completedLabel.className = "completed-label";
+                completedLabel.textContent = "✓ Completed  ";
+                card.appendChild(completedLabel);
+            }
+
+            // Create the Choose or Replay Scenario link
             var choose = document.createElement("a");
             choose.href = "#";
-            choose.textContent = "Choose Scenario →";
+
+            choose.textContent = isCompleted
+                ? "↻ Replay Scenario"
+                : "Choose Scenario →";
 
             choose.addEventListener("click", function (event) {
                 event.preventDefault();
 
                 // Remember which scenario the player selected
                 variables.selectedScenarioId = scenarioId;
+
+                // Check whether this scenario is already being replayed
+                var replayAlreadyInProgress =
+                    variables.replayingScenarioId === scenarioId;
+
+                // Only reset progress when STARTING a new replay
+                if (isCompleted && !replayAlreadyInProgress) {
+
+                    // Remember that this scenario is being replayed
+                    variables.replayingScenarioId = scenarioId;
+
+                    // Reset all activities belonging to this scenario
+                    scenario.activities.forEach(function (activityId) {
+
+                        var result = setup.getScenarioActivity(activityId);
+
+                        if (!result) {
+                            return;
+                        }
+
+                        var activityKey =
+                            result.category + "." + activityId;
+
+                        if (variables.activityProgress &&
+                            variables.activityProgress[activityKey]) {
+
+                            variables.activityProgress[activityKey].completed = false;
+                            variables.activityProgress[activityKey].correctChoices = [];
+                        }
+                    });
+                }
 
                 // Go to the scenario body map passage
                 Engine.play("ScenarioBodyMap");
@@ -1428,7 +1567,7 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
         });
 
         wrapper.appendChild(list);
-    };
+    };       
 
     
     // Generates the body map for the selected scenario
@@ -1503,13 +1642,27 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
 
         scenario.activities.forEach(function (activityId) {
 
-            var result = setup.getScenarioActivity(activityId);
+             var result = setup.getScenarioActivity(activityId);
 
             if (!result) {
                 console.error("Could not find scenario activity:", activityId);
                 return;
             }
 
+            // Build the global activity progress key
+            var activityKey = result.category + "." + activityId;
+
+            // Retrieve the global activity progress
+            var activityProgress =
+                State.variables.activityProgress &&
+                State.variables.activityProgress[activityKey];
+
+            // Skip activities that have already been completed
+            if (activityProgress && activityProgress.completed === true) {
+                return;
+            }
+
+            // Highlight only activities that are not yet completed
             if (bodySystems[result.category] &&
                 highlightedSystems.indexOf(result.category) === -1) {
 
@@ -1587,6 +1740,13 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
         // Check whether all scenario activities are completed
         var scenarioCompleted = setup.checkScenarioCompletion(scenarioId);
 
+        // Clear replay status once the scenario is completed again
+        if (scenarioCompleted &&
+            State.variables.replayingScenarioId === scenarioId) {
+
+            State.variables.replayingScenarioId = null;
+        }
+
         // Display the scenario lesson button only when all activities are completed
         if (scenarioCompleted) {
 
@@ -1641,55 +1801,6 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
         // Activity could not be found
         console.error("Scenario activity not found:", activityId);
         return null;
-    };
-
-    // Retrieves or creates progress for a scenario
-    setup.getScenarioProgress = function (scenarioId) {
-
-        // Create scenario progress storage if it does not exist
-        if (!State.variables.scenarioProgress) {
-            State.variables.scenarioProgress = {};
-        }
-
-        // Create progress for this scenario if it does not exist
-        if (!State.variables.scenarioProgress[scenarioId]) {
-            State.variables.scenarioProgress[scenarioId] = {
-                activitiesCompleted: []
-            };
-        }
-
-        return State.variables.scenarioProgress[scenarioId];
-    };
-
-
-    // Checks whether all activities in a scenario have been completed
-    setup.checkScenarioCompletion = function (scenarioId) {
-
-        var scenario = setup.scenarios.bodyScenarios[scenarioId];
-
-        if (!scenario) {
-            return false;
-        }
-
-        var progress = setup.getScenarioProgress(scenarioId);
-
-        return scenario.activities.every(function (activityId) {
-            var result = setup.getScenarioActivity(activityId);
-
-            if (!result) {
-                return false;
-            }
-
-            var activityKey = result.category + "." + activityId;
-            var activityProgress =
-                State.variables.activityProgress &&
-                State.variables.activityProgress[activityKey];
-
-            return !!(
-                activityProgress &&
-                activityProgress.completed === true
-            );
-        });
     };
 
     
@@ -1877,16 +1988,17 @@ setup.activityLibraries.bloodCells = {
                 completed: false
             },
             {
-                title: "🏆 More Achievements",
-                description: "Your future completed blood cell activities will appear here.",
-                locked: true,
-                completed: true
-            },
-            {
                 title: "✨ Tiny Heroes",
                 description: "More blood cell discoveries are on their way.",
                 locked: true,
                 completed: true
+            },
+            {
+                title: "🛡️ White Cell Warriors",
+                description: "Learn how white blood cells help protect the body against germs.",
+                activityId: "whiteCellWarriors",
+                passage: "BloodCellsActivity",
+                completed: false
             }
         ]
     },
@@ -2207,6 +2319,58 @@ setup.activityLibraries.bloodCells = {
         completionMessage: "Ruby has learned how the body helps defend itself against germs.",
         continueLabel: "Continue to the lesson",
         nextPassage: "LessonLearned"
+    },
+    whiteCellWarriors: {
+        title: "White Cell Warriors",
+        introduction: "Ruby has encountered some germs! Help her understand how white blood cells protect her body.",
+        characterName: "Ruby",
+        characterLine: "I didn't know my blood had tiny defenders!",
+        mission: "Help Ruby understand how her body fights germs!",
+        instructions: "Choose TWO correct answers.",
+        requiredCorrect: 2,
+
+        choices: [
+            {
+                id: "fightGerms",
+                label: "🛡️ White blood cells help fight infections",
+                correct: true,
+                feedbackTitle: "Great choice!",
+                feedback: "White blood cells are part of the immune system and help defend the body against germs."
+            },
+            {
+                id: "immuneSystem",
+                label: "🦠 White blood cells help protect the body from harmful germs",
+                correct: true,
+                feedbackTitle: "Correct!",
+                feedback: "White blood cells recognise and help fight harmful microorganisms that can cause illness."
+            },
+            {
+                id: "carryOxygen",
+                label: "🫁 White blood cells carry oxygen around the body",
+                correct: false,
+                feedbackTitle: "Try again!",
+                feedback: "Red blood cells carry oxygen around the body. White blood cells help defend against infection."
+            },
+            {
+                id: "pumpBlood",
+                label: "❤️ White blood cells pump blood around the body",
+                correct: false,
+                feedbackTitle: "Not quite!",
+                feedback: "The heart pumps blood around the body. White blood cells help protect us from germs."
+            }
+        ],
+
+        lesson: {
+            introduction: "Ruby discovers that white blood cells are important defenders of her body.",
+            characterName: "Ruby",
+            characterLine: "I learned that white blood cells help my body fight germs and infections!",
+            remember: "White blood cells are part of the immune system. They help recognise and fight harmful germs, protecting the body from infections."
+        },
+
+        completionHeading: "White Cell Warriors!",
+        completionMessage: "Ruby has discovered how white blood cells help protect her body.",
+        continueLabel: "Continue to the lesson",
+        nextPassage: "LessonLearned"
     }
 };
 /* twine-user-script #3: "bloodVesselsActivities.js" */
@@ -2261,16 +2425,11 @@ setup.activityLibraries.bloodVessels = {
                 completed: false
             },
             {
-                title: "🏆 More Achievements",
-                description: "Your future completed activities will appear here.",
-                locked: true,
-                completed: true
-            },
-            {
-                title: "✨ Hidden Discoveries",
-                description: "More achievements are on their way.",
-                locked: true,
-                completed: true
+                title: "🩸 Blood Flow Mission",
+                description: "Discover how blood vessels transport blood around the body.",
+                activityId: "bloodFlowMission",
+                passage: "BloodVesselsActivity",
+                completed: false
             }
         ]
     },
@@ -2591,6 +2750,58 @@ setup.activityLibraries.bloodVessels = {
         completionMessage: "Ruby has discovered some healthy food choices.",
         continueLabel: "Continue to the lesson",
         nextPassage: "LessonLearned"
+    },
+    bloodFlowMission: {
+        title: "Blood Flow Mission",
+        introduction: "Ruby wants to discover how blood travels around her body and delivers important supplies!",
+        characterName: "Ruby",
+        characterLine: "How does blood reach every part of my body?",
+        mission: "Help Ruby understand how blood vessels work!",
+        instructions: "Choose TWO correct answers.",
+        requiredCorrect: 2,
+
+        choices: [
+            {
+                id: "arteries",
+                label: "🩸 Arteries carry blood away from the heart",
+                correct: true,
+                feedbackTitle: "Great choice!",
+                feedback: "Arteries carry blood away from the heart to different parts of the body."
+            },
+            {
+                id: "veins",
+                label: "❤️ Veins carry blood back towards the heart",
+                correct: true,
+                feedbackTitle: "Correct!",
+                feedback: "Veins return blood towards the heart so it can continue circulating around the body."
+            },
+            {
+                id: "vesselsDigest",
+                label: "🍎 Blood vessels digest the food we eat",
+                correct: false,
+                feedbackTitle: "Try again!",
+                feedback: "Blood vessels transport blood. Digestion happens in the digestive system."
+            },
+            {
+                id: "vesselsThink",
+                label: "🧠 Blood vessels control our thoughts",
+                correct: false,
+                feedbackTitle: "Not quite!",
+                feedback: "The brain controls thoughts. Blood vessels help transport blood around the body."
+            }
+        ],
+
+        lesson: {
+            introduction: "Ruby discovers how blood vessels create pathways for blood to travel around her body.",
+            characterName: "Ruby",
+            characterLine: "I learned that arteries and veins have different jobs, but both help keep my blood moving!",
+            remember: "Blood vessels form a network throughout the body. Arteries carry blood away from the heart, veins return blood towards the heart, and tiny capillaries allow substances to be exchanged with body tissues."
+        },
+
+        completionHeading: "Blood Flow Mission Complete!",
+        completionMessage: "Ruby has learned how arteries and veins help blood travel around her body.",
+        continueLabel: "Continue to the lesson",
+        nextPassage: "LessonLearned"
     }
 };
 /* twine-user-script #4: "brainActivities.js" */
@@ -2645,16 +2856,11 @@ setup.activityLibraries.brain = {
                 completed: false
             },
             {
-                title: "🏆 More Achievements",
-                description: "Your future completed brain activities will appear here.",
-                locked: true,
-                completed: true
-            },
-            {
-                title: "✨ Mind Explorers",
-                description: "More brain discoveries are on their way.",
-                locked: true,
-                completed: true
+                title: "🛡️ Brain Defenders",
+                description: "Discover how the brain helps the body respond to information.",
+                activityId: "brainDefenders",
+                passage: "BrainActivity",
+                completed: false
             }
         ]
     },
@@ -2987,6 +3193,60 @@ setup.activityLibraries.brain = {
         },
 
         nextPassage: "LessonLearned"
+    },
+
+    brainDefenders: {
+        title: "Brain Defenders",
+        introduction: "Ruby wants to understand how her brain helps her notice danger and respond when germs make her feel unwell!",
+        characterName: "Ruby",
+        characterLine: "My brain helps me understand what's happening inside my body!",
+        mission: "Help Ruby discover how the brain helps control the body!",
+        instructions: "Choose TWO correct answers.",
+        requiredCorrect: 2,
+
+        choices: [
+            {
+                id: "brainSignals",
+                label: "🧠 The brain sends messages through the nervous system",
+                correct: true,
+                feedbackTitle: "Great choice!",
+                feedback: "The brain communicates with the body through the nervous system using signals."
+            },
+            {
+                id: "brainResponds",
+                label: "⚡ The brain helps the body respond to changes around us",
+                correct: true,
+                feedbackTitle: "Correct!",
+                feedback: "The brain processes information and helps coordinate how the body responds."
+            },
+            {
+                id: "brainPumps",
+                label: "❤️ The brain pumps blood around the body",
+                correct: false,
+                feedbackTitle: "Try again!",
+                feedback: "The heart pumps blood around the body. The brain controls and coordinates many body activities."
+            },
+            {
+                id: "brainDigests",
+                label: "🍎 The brain digests the food we eat",
+                correct: false,
+                feedbackTitle: "Not quite!",
+                feedback: "The digestive system breaks down food. The brain helps control and coordinate body functions."
+            }
+        ],
+
+        completionHeading: "Brain Defenders!",
+        completionMessage: "Ruby has discovered how her brain helps her body respond to information.",
+        continueLabel: "Continue to the lesson",
+
+        lesson: {
+            introduction: "Ruby discovers how her brain helps her understand information and coordinate her body's responses.",
+            characterName: "Ruby",
+            characterLine: "I learned that my brain sends messages and helps my body respond to what's happening!",
+            remember: "The brain is the control centre of the nervous system. It receives information, processes it and sends signals that help coordinate movement, senses and other body functions."
+        },
+
+        nextPassage: "LessonLearned"
     }
 };
 /* twine-user-script #5: "heartActivities.js" */
@@ -3039,18 +3299,6 @@ setup.activityLibraries.heart = {
                 activityId: "heartCareBasics",
                 passage: "HeartActivity",
                 completed: false
-            },
-            {
-                title: "🏆 More Achievements",
-                description: "Your future completed heart activities will appear here.",
-                locked: true,
-                completed: true
-            },
-            {
-                title: "✨ Heart Explorers",
-                description: "More heart discoveries are on their way.",
-                locked: true,
-                completed: true
             }
         ]
     },
@@ -3423,18 +3671,6 @@ setup.activityLibraries.lungs = {
                 activityId: "breathingBasics",
                 passage: "LungsActivity",
                 completed: false
-            },
-            {
-                title: "🏆 More Achievements",
-                description: "Your future completed lung activities will appear here.",
-                locked: true,
-                completed: true
-            },
-            {
-                title: "✨ Hidden Discoveries",
-                description: "More lung health achievements are on their way.",
-                locked: true,
-                completed: true
             }
         ]
     },
@@ -3767,7 +4003,7 @@ setup.scenarios.bodyScenarios = {
     // Scenario 1: Sitting around all day
     sittingAllDay: {
         title: "We've Been Sitting Around All Day",
-        description: "Ruby has spent most of the day sitting down. Let's discover how moving our bodies can help us stay healthy!",
+        description: "Our body has spent most of the day sitting down. Let's discover how moving our bodies can help us stay healthy!",
 
         // Activities connected to this scenario
         activities: [
@@ -3788,12 +4024,12 @@ setup.scenarios.bodyScenarios = {
     // Scenario 2: Eating chips all day
     eatingChipsAllDay: {
         title: "We've Been Eating Chips All Day",
-        description: "Ruby has spent most of the day eating chips. Let's discover how eating healthy foods can help us stay healthy!",
+        description: "Our body has spent most of the day eating chips. Let's discover how eating healthy foods can help us stay healthy!",
 
         activities: [
             "heartbeatHeroes",
             "breatheAndMove",
-            "brainControlCenter"
+            "messageMission"
         ],
 
         lesson: {
@@ -3802,7 +4038,27 @@ setup.scenarios.bodyScenarios = {
             characterLine: "",
             remember: ""
         }
-    }
+    },
+    // Scenario 3: The Germs Are Coming
+    germsAreComing: {
+        title: "The Germs Are Coming!",
+        description: "Ruby has been around lots of germs and wants to learn how her body protects itself. Let's discover how different body systems help keep us healthy!",
+
+        // Activities connected to this scenario
+        activities: [
+            "whiteCellWarriors",
+            "bloodFlowMission",
+            "brainDefenders"
+        ],
+
+        // Lesson displayed after all three activities are completed
+        lesson: {
+            introduction: "Ruby has completed all three activities! Let's see how her body works to protect her and keep her healthy.",
+            characterName: "Ruby",
+            characterLine: "I learned that my body has amazing ways to protect me and keep everything working together!",
+            remember: "White blood cells help protect the body against germs and infections. Blood vessels transport blood around the body, while the brain controls and coordinates important body functions. These systems all help keep us healthy."
+        }
+    },
 
 };</script><tw-passagedata pid="1" name="Start" tags="" position="625,275" size="100,100">&lt;h1&gt;Welcome to Vascular Village!&lt;/h1&gt;&lt;p&gt;Meet Ruby, your guide on an amazing adventure inside the human body! 🔬&lt;/p&gt;&lt;p&gt;Follow Ruby as she explores the body&#39;s incredible systems, discovers how they work together, and learns the little things we can do every day to stay healthy.&lt;/p&gt;&lt;p&gt;From the heart pumping blood to the lungs bringing in oxygen, every discovery brings Ruby one step closer to understanding how our bodies keep us going!&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Are you ready to join Ruby and explore the wonders of Vascular Village?&lt;/strong&gt;&lt;/p&gt;
 &lt;p class=&quot;back-link &quot;&gt; &lt;&lt;button &quot;Let&#39;s Explore! →&quot;&gt;&gt;&lt;&lt;goto &quot;ScenarioMenu&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/p&gt;
@@ -3918,60 +4174,16 @@ $(document).one(&quot;:passagedisplay&quot;, function () {
 });
 &lt;&lt;/script&gt;&gt;
 
-/* TUTORIAL */</tw-passagedata><tw-passagedata pid="15" name="TutorialStart" tags="" position="600,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;div class=&quot;tutorial-icon&quot;&gt;🎓&lt;/div&gt;
-    &lt;h2&gt;Welcome to the Tutorial!&lt;/h2&gt;&lt;p&gt;Hi, explorer! Ruby here! 👋&lt;/p&gt;&lt;p&gt;I&#39;ll show you how to explore Vascular Village and complete activities about the human body.&lt;/p&gt;&lt;p&gt;You&#39;ll learn how to choose an activity, understand answer choices, read feedback, and discover what you&#39;ve learned.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Don&#39;t worry! You won&#39;t need to answer any questions during this tutorial.&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Ready? Let&#39;s get started!&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialMission&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+/* TUTORIAL */</tw-passagedata><tw-passagedata pid="15" name="TutorialRuby" tags="" position="600,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;Meet Ruby, Your Little Guide!&lt;/h2&gt;&lt;p&gt;Hi there! I&#39;m Ruby! 👋&lt;/p&gt;&lt;p&gt;I&#39;m a red blood cell, and I&#39;m part of your body&#39;s amazing circulatory system.&lt;/p&gt;&lt;p&gt;My job is to travel around your body, carrying oxygen to the places that need it. I travel through blood vessels, pass by the heart, and visit different parts of the body every day!&lt;/p&gt;&lt;p&gt;During your adventure, I&#39;ll travel alongside you as we explore different body systems and discover how they work together to keep us healthy.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Are you ready to explore the body with me?&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Let&#39;s Go! →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialScenario&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="16" name="TutorialScenario" tags="" position="725,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;Step 1: Choose a Scenario&lt;/h2&gt;&lt;p&gt;Before we begin, let&#39;s talk about scenarios!&lt;/p&gt;&lt;p&gt;A scenario is a real situation that helps us understand how the human body works and how our everyday choices can affect our health.&lt;/p&gt;&lt;p&gt;For example, we might explore what happens inside the body when someone exercises, rests, or makes healthy lifestyle choices.&lt;/p&gt;&lt;p&gt;Each scenario contains several activities. By completing these activities, you&#39;ll discover how different parts of the body work together in that situation.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Your mission is to explore the scenario and help me discover what is happening inside the body!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialBodyMap&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="17" name="TutorialBodyMap" tags="" position="850,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;Step 2: Explore Body Map&lt;/h2&gt;&lt;p&gt;Once you choose a scenario, you&#39;ll see a map of the human body.&lt;/p&gt;&lt;p&gt;Look for the highlighted circles! Each circle represents a body system involved in your chosen scenario and becomes dimmed when you complete an activity.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;🧠 Brain&lt;/li&gt;&lt;li&gt;🩸 Blood Cells&lt;/li&gt;&lt;li&gt;❤️ Heart&lt;/li&gt;&lt;li&gt;🩸 Blood Vessels&lt;/li&gt;&lt;li&gt;🫁 Lungs&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;&lt;strong&gt;Explore each highlighted area to uncover everything happening inside the body!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialActivity&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="18" name="TutorialActivity" tags="" position="975,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;Step 3: Complete an Activity&lt;/h2&gt;&lt;p&gt;When you select a body system, you&#39;ll open an activity that helps you learn more about what&#39;s happening inside the body.&lt;/p&gt;&lt;p&gt;Read the instructions carefully and choose the correct healthy actions or answers.&lt;/p&gt;&lt;p&gt;After making a choice, Ruby will give you feedback to explain why your answer is correct and what it means for the body.&lt;/p&gt;&lt;p&gt;Keep choosing the correct answers until you&#39;ve completed all the required choices for that activity.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Remember, every correct choice brings you one step closer to completing your mission!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialLessons&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="19" name="TutorialLessons" tags="" position="1100,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;Step 4: Discover What You&#39;ve Learned!&lt;/h2&gt;&lt;p&gt;Every completed activity unlocks a special lesson that explains the important information you&#39;ve discovered.&lt;/p&gt;&lt;p&gt;When every activity is completed, you unlock the scenario lesson, which brings everything together for a completed scenario.&lt;/p&gt;&lt;p&gt;Remember, you can return to unfinished scenarios and continue where you left off.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Every activity is a new discovery, and every completed scenario brings you closer to understanding the amazing human body!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;🏠 Start Exploring!&quot;&gt;&gt;&lt;&lt;goto &quot;ScenarioMenu&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
 &lt;/div&gt;
 
 
-/* should show the populated menu page, maybe just a popup window at the bottom of the screen to explain how the game works */</tw-passagedata><tw-passagedata pid="16" name="TutorialMission" tags="" position="725,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h3&gt;Step 1: Choose Your Adventure&lt;/h3&gt;&lt;p&gt;On the home screen, you&#39;ll find five areas to explore:&lt;/p&gt;&lt;ul&gt;
-        &lt;li&gt;🧠 Brain&lt;/li&gt;
-        &lt;li&gt;🩸 Blood Cells&lt;/li&gt;
-        &lt;li&gt;❤️ Heart&lt;/li&gt;
-        &lt;li&gt;🩸 Blood Vessels&lt;/li&gt;
-        &lt;li&gt;🫁 Lungs&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Each area teaches you something different about the human body and how to keep it healthy.&lt;/p&gt;&lt;p&gt;When you choose an area, you&#39;ll enter its activity menu. This is where you can explore the available activities.&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialChoices&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
-&lt;/div&gt;
-
-/* again, should show a popup window at the bottom of the screen to explain the choices */</tw-passagedata><tw-passagedata pid="17" name="TutorialChoices" tags="" position="850,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h3&gt;Step 2: Explore an Activity&lt;/h3&gt;&lt;p&gt;Each body system has activities designed to help you learn through questions.&lt;/p&gt;&lt;p&gt;When you select an activity, it opens on its own screen.&lt;/p&gt;&lt;p&gt;Depending on the activity, you might need to:&lt;/p&gt;&lt;ul&gt;
-        &lt;li&gt;🔎 Read a question or scenario.&lt;/li&gt;
-        &lt;li&gt;💭 Think about what you already know.&lt;/li&gt;
-        &lt;li&gt;👆 Select an answer or make a choice.&lt;/li&gt;
-    &lt;/ul&gt;&lt;p&gt;Some activities may work differently from others, so always read the instructions shown on the screen.&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialFeedback&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
-&lt;/div&gt;
-
-
-/* popup window at the bottom of screen to explain feedback */
-/* should have button with &quot;Return Home&quot; to finish tutorial */</tw-passagedata><tw-passagedata pid="18" name="TutorialFeedback" tags="" position="975,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h3&gt;Step 3: Learn from Feedback&lt;/h3&gt;&lt;p&gt;After making a choice in an activity, you may receive feedback explaining the result.&lt;/p&gt;&lt;p&gt;Feedback helps you understand:&lt;/p&gt;&lt;ul&gt;
-        &lt;li&gt;✅ What you got right.&lt;/li&gt;
-        &lt;li&gt;💡 Why an answer makes sense.&lt;/li&gt;
-        &lt;li&gt;🧠 Important facts about the human body.&lt;/li&gt;
-        &lt;li&gt;🌱 What you can learn from a mistake.&lt;/li&gt;&lt;/ul&gt;
-    &lt;p&gt;Don&#39;t be discouraged if you get something wrong! The goal is to learn, improve your understanding, and discover something new.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Take your time and read the feedback before moving on.&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialLesson&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="19" name="TutorialLesson" tags="" position="1100,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h3&gt;Step 4: Discover What You&#39;ve Learned&lt;/h3&gt;&lt;p&gt;Completed activities include a lesson to help you understand the information you&#39;ve discovered.&lt;/p&gt;&lt;p&gt;These lessons can help you connect what you&#39;ve learned to everyday health.&lt;/p&gt;&lt;p&gt;For example, you might discover how exercise supports your heart or why your lungs need clean air.&lt;/p&gt;&lt;p&gt;Take a moment to think about what you&#39;ve learned and how you could use that knowledge in your daily life.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Every discovery brings you one step closer to becoming a health explorer!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialComplete&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="20" name="TutorialComplete" tags="" position="1225,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;You&#39;re Ready to Explore!&lt;/h2&gt;&lt;p&gt;Great job, explorer! 🎉&lt;/p&gt;&lt;p&gt;You now know how to navigate Vascular Village, open activities, understand answer choices, and learn from feedback.&lt;/p&gt;&lt;p&gt;Now it&#39;s time to put your knowledge into action!&lt;/p&gt;&lt;p&gt;Choose your favourite body system and begin your adventure with Ruby.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Your journey to better health starts here!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;🏠 Return Home&quot;&gt;&gt;&lt;&lt;goto &quot;HomeScreen&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
-&lt;/div&gt;
-
-
-/* NEW SCENARIO MENU */</tw-passagedata><tw-passagedata pid="21" name="ScenarioMenu" tags="" position="100,350" size="100,100">&lt;div class=&quot;home-screen&quot;&gt;&lt;h1&gt;Choose Your Scenario&lt;/h1&gt;&lt;p&gt;Select a situation to begin your adventure!&lt;/p&gt;
-
-    &lt;div id=&quot;scenario-menu&quot;&gt;&lt;/div&gt;
-
-    &lt;div class=&quot;back-link&quot;&gt;
-        &lt;&lt;button &quot;← Return Home&quot;&gt;&gt;
-            &lt;&lt;goto &quot;HomeScreen&quot;&gt;&gt;
-        &lt;&lt;/button&gt;&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;&lt;script&gt;&gt;
-$(document).one(&quot;:passagedisplay&quot;, function () {
-    setup.renderScenarioMenu(&quot;scenario-menu&quot;);
-});
-&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="22" name="ScenarioBodyMap" tags="" position="225,350" size="100,100">&lt;div class=&quot;home-screen&quot;&gt;
-    &lt;div id=&quot;scenario-body-map&quot;&gt;&lt;/div&gt;
-
-    &lt;p class=&quot;home-hint&quot;&gt;
-        The highlighted body systems are involved in your selected scenario!
-    &lt;/p&gt;
+/* NEW SCENARIO MENU */</tw-passagedata><tw-passagedata pid="20" name="ScenarioMenu" tags="" position="1225,225" size="100,100">&lt;div class=&quot;home-screen&quot;&gt;&lt;h1&gt;Choose Your Scenario&lt;/h1&gt;&lt;p&gt;Select a situation to begin your adventure!&lt;/p&gt;&lt;div id=&quot;scenario-menu&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;&lt;script&gt;&gt;$(document).one(&quot;:passagedisplay&quot;, function () {setup.renderScenarioMenu(&quot;scenario-menu&quot;);});&lt;&lt;/script&gt;&gt;&lt;div class=&quot;tutorial-home-button&quot;&gt;&lt;&lt;button &quot;🎓 Take the Tutorial&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialRuby&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;</tw-passagedata><tw-passagedata pid="21" name="ScenarioBodyMap" tags="" position="100,350" size="100,100">&lt;div class=&quot;home-screen&quot;&gt;
+    &lt;div id=&quot;scenario-body-map&quot;&gt;&lt;/div&gt;&lt;p class=&quot;home-hint&quot;&gt;The highlighted body systems are involved in your selected scenario!&lt;/p&gt;
 &lt;/div&gt;
 
 &lt;&lt;script&gt;&gt;

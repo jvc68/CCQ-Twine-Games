@@ -47,18 +47,6 @@ setup.activityLibraries.heart = {
                 activityId: "heartCareBasics",
                 passage: "HeartActivity",
                 completed: false
-            },
-            {
-                title: "🏆 More Achievements",
-                description: "Your future completed heart activities will appear here.",
-                locked: true,
-                completed: true
-            },
-            {
-                title: "✨ Heart Explorers",
-                description: "More heart discoveries are on their way.",
-                locked: true,
-                completed: true
             }
         ]
     },
