@@ -11,17 +11,12 @@ Medical Bingo
 }
 
 :: StoryInit
-<<set $markedPositions = []>>
-<<set $unmarkedPositions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]>>
+<<set $customTasks = []>>
 
-<<set $bingoNumbers = [
-    "B 35", "I 49", "N 16", "G 98", "O 51",
-    "B 36", "I 54", "N 72", "G 39", "O 48",
-    "B 18", "I 22", null, "G 93", "O 14",
-    "B 44", "I 68", "N 9", "G 64", "O 86",
-    "B 52", "I 37", "N 50", "G 58", "O 91"
-]>>
+<<set $selectedPosition = -1>>
+<<set $randomQuestion = null>>
 
+<<run BingoGame.syncToStory()>>
 <<set $tasks = [
     { task: "I went for a walk today!", status: "incomplete" },
     { task: "I ate a healthy meal today!", status: "incomplete" },
@@ -29,119 +24,168 @@ Medical Bingo
     { task: "I tracked my blood pressure!", status: "incomplete" },
     { task: "I learned something today!", status: "incomplete" }
 ]>>
-
+<<set $bingoNumbers = [
+    "B 35", "I 49", "N 16", "G 98", "O 51",
+    "B 36", "I 54", "N 72", "G 39", "O 48",
+    "B 18", "I 22", null, "G 93", "O 14",
+    "B 44", "I 68", "N 9", "G 64", "O 86",
+    "B 52", "I 37", "N 50", "G 58", "O 91"
+]>>
 <<set $questions = [
     { question: "Diuretics, aka water pills, help the body eliminate excess salt and water.",
         explanation: "Diuretics do help the body eliminate excess salt and water. This in turn means they are effective at reducing blood pressure and some (such as thiazides and loop diuretics) are used for the treatment of high blood pressure (hypertension).",
         status: "unused" },
     { question: "Isometric exercises are the most effective workouts for managing hypertension.",
         explanation: "Isometric exercises are the most effective workout for manaing hypertension. Researchers found that isometric exercise was 98% effective in reducing high blood pressure.",
+        status: "unused" },
+    { question: "test",
+        explanation: "tes",
+        status: "unused" },
+    { question: "test",
+        explanation: "test",
+        status: "unused" },
+    { question: "test",
+        explanation: "test",
         status: "unused" }
 ]>>
-
 :: Home
-<div class="phone">
-    <div class="screen">
-        <h1>Welcome to Blood Pressure Bingo</h1>
-        <<button [["See Bingo Board" | BingoBoard]]>><</button>>
-        <<button [["See Tasks" | Tasks]]>><</button>>
-    </div>
-</div>
-<<set $incompleteTasks = $tasks.filter(task => task.status === "incomplete")>>
-
-<<if $incompleteTasks.length > 0>>
-    <<set $randomTask1 = BingoGame.getRandomElement($incompleteTasks)>>
-    <<run $incompleteTasks.splice($incompleteTasks.indexOf($randomTask1), 1)>>
-    <<set $randomTask2 = BingoGame.getRandomElement($incompleteTasks)>>
-    <<run $incompleteTasks.splice($incompleteTasks.indexOf($randomTask2), 1)>>
-    <<set $randomTask3 = BingoGame.getRandomElement($incompleteTasks)>>
-    <<run $incompleteTasks.splice($incompleteTasks.indexOf($randomTask3), 1)>>
-<</if>>
+<div class="phone">\
+    <div class="screen">\
+        <h1>Welcome to Blood Pressure Bingo</h1>\
+        <<button [["See Bingo Board" | BingoBoard]]>><</button>>\
+    </div>\
+</div>\
 
 :: Tasks
-<div class="phone">
-    <div class="screen">
-        <h1>Tasks List</h1>
-            <<if $incompleteTasks.length > 0>>
-                <div class="task-content">
-                    <h4><<print $randomTask1.task>></h4>
-                    <<button "Complete">>
-                        <<set $randomTask1.status = "complete">>
-                        <<goto "BingoNumber">>
-                    <</button>>
-                </div>
-                <div class="task-content">
-                    <h4><<print $randomTask2.task>></h4>
-                    <<button "Complete">>
-                        <<set $randomTask2.status = "complete">>
-                        <<goto "BingoNumber">>
-                    <</button>>
-                </div>
-                <div class="task-content">
-                    <h4><<print $randomTask3.task>></h4>
-                    <<button "Complete">>
-                        <<set $randomTask3.status = "complete">>
-                        <<goto "BingoNumber">>
-                    <</button>>
-                </div>
-            <<else>>
-                <h4 class="task-title">You've completed all your tasks!</h4>
-            <</if>>
+<<set $availableTasks = BingoGame.getAvailableTasks($tasks)>>\
+<<set $randomTask1 = null>>\
+<<set $randomTask2 = null>>\
+<<set $randomTask3 = null>>\
+<<if $availableTasks.length > 0>>\
+    <<set $randomTask1 = BingoGame.getRandomElement($availableTasks)>>\
+    <<run $availableTasks.splice($availableTasks.indexOf($randomTask1), 1)>>\
+<</if>>\
+<<if $availableTasks.length > 0>>\
+    <<set $randomTask2 = BingoGame.getRandomElement($availableTasks)>>\
+    <<run $availableTasks.splice($availableTasks.indexOf($randomTask2), 1)>>\
+<</if>>\
+<<if $availableTasks.length > 0>>\
+    <<set $randomTask3 = BingoGame.getRandomElement($availableTasks)>>\
+<</if>>\
+<div class="phone">\
+    <div class="screen">\
+        <h1>Tasks List</h1>\
+            <<if $randomTask1>>\
+                <div class="task-content">\
+                    <h4><<print $randomTask1.task>></h4>\
+                    <<button "Complete">>\
+                        <<run BingoGame.completeTask($randomTask1.id)>>\
+                        <<goto "BingoNumber">>\
+                    <</button>>\
+                </div>\
+            <</if>>\
+            <<if $randomTask2>>\
+                <div class="task-content">\
+                    <h4><<print $randomTask2.task>></h4>\
+                    <<button "Complete">>\
+                        <<run BingoGame.completeTask($randomTask2.id)>>\
+                        <<goto "BingoNumber">>\
+                    <</button>>\
+                </div>\
+            <</if>>\
+            <<if $randomTask3>>\
+                <div class="task-content">\
+                    <h4><<print $randomTask3.task>></h4>\
+                    <<button "Complete">>\
+                        <<run BingoGame.completeTask($randomTask3.id)>>\
+                        <<goto "BingoNumber">>\
+                    <</button>>\
+                </div>\
+            <</if>>\
+            <div class="task-content">\
+                <h4>Create Your Own Task</h4>\
+                <input
+                    type="text"
+                    id="customTaskInput"
+                    placeholder="Enter your task..."
+                >\
+                <<button "Add Task">>\
+                    <<set $newTask = document.getElementById("customTaskInput").value>>\
+                    <<if $newTask.trim() !== "">>\
+                        <<run BingoGame.addCustomTask($newTask)>>\
+                        <<goto "Tasks">>\
+                    <<else>>\
+                        <<run alert("Please enter a task.")>>\
+                    <</if>>\
+                <</button>>\
+            </div>\
         <<button [["Exit to Home" | Home]]>><</button>>
     </div>
 </div>
-<<if $unmarkedPositions.length > 0>>
-    <<set $randomBingoPosition = BingoGame.getRandomElement($unmarkedPositions)>>
-    <<set $randomBingoNumber = $bingoNumbers[$randomBingoPosition]>>
-<</if>>
 
 :: BingoNumber
-<div class="phone">
-    <div class="screen">
-        <h1>Congratulations!</h1>
-        <div class="bingo-position">
-            <h4><<print $randomBingoNumber>></h4>
-        </div>
-        <<button "Lock it in">>
-            <<run BingoGame.markPosition($randomBingoPosition)>>
-            <<goto "LockIn">>
-        <</button>>
-        <<button [["Exit to Home" | Home]]>><</button>>
-    </div>
-</div>
-<<set $unusedQuestions = $questions.filter(question => question.status === "unused")>>
-
-<<if $unusedQuestions.length > 0>>
-    <<set $randomQuestion = BingoGame.getRandomElement($unusedQuestions)>>
-<</if>>
+<div class="phone">\
+    <div class="screen">\
+        <h1>Congratulations!</h1>\
+        <div class="bingo-position">\
+            <h4>\
+                <<print $bingoNumbers[$selectedPosition]>>\
+            </h4>\
+        </div>\
+        <p>You've earned this bingo number!</p>\
+        <<button "Lock it in">>\
+            <<goto "LockIn">>\
+        <</button>>\
+        <<button "Exit to Home">>\
+            <<goto "Home">>\
+        <</button>>\
+    </div>\
+</div>\
 
 :: LockIn
-<div class="phone">
-    <div class="screen">
-        <h1>True or False?</h1>
-        <div class="task-box">
-            <h4><<print $randomQuestion.question>></h4>
-            <<button "True">>
-                <<set $randomQuestion.status = "used">>
-                <<goto "Explanation Positive">>
-            <</button>>
-            <<button "False">>
-                <<set $randomQuestion.status = "used">>
-                <<goto "Explanation Negative">>
-            <</button>>
-        </div>
-        <<button [["Exit to Home" | Home]]>><</button>>
-    </div>
-</div>
+<<set $randomQuestion = BingoGame.getRandomQuestion($questions)>>\
+<div class="phone">\
+    <div class="screen">\
+        <h1>True or False?</h1>\
+        <<if $randomQuestion>>\
+            <div class="task-box">\
+                <h4>\
+                    <<print $randomQuestion.question>>\
+                </h4>\
+                <<button "True">>\
+                    <<goto "Explanation Positive">>\
+                <</button>>\
+                <<button "False">>\
+                    <<goto "Explanation Negative">>\
+                <</button>>\
+            </div>\
+        <<else>>\
+            <h4>You've answered all available questions!</h4>\
+            <<button "View Board">>\
+                <<goto "BingoBoard">>\
+            <</button>>\
+        <</if>>\
+        <<button "Exit to Home">>\
+            <<goto "Home">>\
+        <</button>>\
+    </div>\
+</div>\
 
 :: Explanation Positive
-<div class="phone">
-    <div class="screen">
-        <h1>Good Job!</h1>
-        <div class="task-box">
-            <h4><<print $randomQuestion.explanation>></h4>
-            <<button [["View Board" | BingoBoard]]>><</button>>
-        </div>
+<div class="phone">\
+    <div class="screen">\
+        <h1>Good Job!</h1>\
+        <div class="task-box">\
+            <h4><<print $randomQuestion.explanation>></h4>\
+            <<button "View Board">>\
+                <<run BingoGame.markPosition($selectedPosition)>>\
+                <<if BingoGame.checkBingo()>>\
+                    <<goto "Congratulations">>\
+                <<else>>\
+                    <<goto "BingoBoard">>\
+                <</if>>\
+            <</button>>\
+        </div>\
         <<button [["Exit to Home" | Home]]>><</button>>
     </div>
 </div>
@@ -152,9 +196,40 @@ Medical Bingo
         <h1>Not Quite</h1>
         <div class="task-box">
             <h4><<print $randomQuestion.explanation>></h4>
-            <<button [["View Board" | BingoBoard]]>><</button>>
+            <<button "View Board">>\
+                <<run BingoGame.markPosition($selectedPosition)>>\
+                <<if BingoGame.checkBingo()>>\
+                    <<goto "Congratulations">>\
+                <<else>>\
+                    <<goto "BingoBoard">>\
+                <</if>>\
+            <</button>>\
         </div>
         <<button [["Exit to Home" | Home]]>><</button>>
+    </div>
+</div>
+
+:: Congratulations
+<div class="phone">\
+    <div class="screen">\
+        <h1>Congratulations!</h1>\
+        <div class="task-box">\
+            <h2>YOU GOT BINGO!</h2>\
+            <p>
+                You successfully completed a winning
+                combination on your bingo board!
+            </p>\
+            <p>
+                Great job taking steps toward a
+                healthier lifestyle!
+            </p>\
+        </div>
+        <<button "View My Board">>\
+            <<goto "BingoBoard">>\
+        <</button>>\
+        <<button "Exit to Home">>\
+            <<goto "Home">>\
+        <</button>>\
     </div>
 </div>
 
@@ -170,133 +245,136 @@ Medical Bingo
                 <div class="bingo-header">O</div>
 
                 <<if $markedPositions.includes(0)>>
-                    <div class="bingo-cell marked" data-index="0"><p>35</p></div>
+                    <button class="bingo-cell marked" data-index="0"><p>35</p></button>
                 <<else>>
-                    <div class="bingo-cell" data-index="0"><p>35</p></div>
+                    <button class="bingo-cell" data-index="0"><p>35</p></button>
                 <</if>>
                 <<if $markedPositions.includes(1)>>
-                    <div class="bingo-cell marked" data-index="1"><p>49</p></div>
+                    <button class="bingo-cell marked" data-index="1"><p>49</p></button>
                 <<else>>
-                    <div class="bingo-cell" data-index="1"><p>49</p></div>
+                    <button class="bingo-cell" data-index="1"><p>49</p></button>
                 <</if>>
                 <<if $markedPositions.includes(2)>>
-                    <div class="bingo-cell marked" data-index="2"><p>16</p></div>
+                    <button class="bingo-cell marked" data-index="2"><p>16</p></button>
                 <<else>>
-                    <div class="bingo-cell" data-index="2"><p>16</p></div>
+                    <button class="bingo-cell" data-index="2"><p>16</p></button>
                 <</if>>
                 <<if $markedPositions.includes(3)>>
-                    <div class="bingo-cell marked" data-index="3"><p>98</p></div>
+                    <button class="bingo-cell marked" data-index="3"><p>98</p></button>
                 <<else>>
-                    <div class="bingo-cell" data-index="3"><p>98</p></div>
+                    <button class="bingo-cell" data-index="3"><p>98</p></button>
                 <</if>>
                 <<if $markedPositions.includes(4)>>
-                    <div class="bingo-cell marked" data-index="4"><p>51</p></div>
+                    <button class="bingo-cell marked" data-index="4"><p>51</p></button>
                 <<else>>
-                    <div class="bingo-cell" data-index="4"><p>51</p></div>
+                    <button class="bingo-cell" data-index="4"><p>51</p></button>
                 <</if>>
 
                 <<if $markedPositions.includes(5)>>
-                    <div class="bingo-cell marked" data-index="5"><p>36</p></div>
+                    <button class="bingo-cell marked" data-index="5"><p>36</p></button>
                 <<else>>
-                    <div class="bingo-cell" data-index="5"><p>36</p></div>
+                    <button class="bingo-cell" data-index="5"><p>36</p></button>
                 <</if>>
                 <<if $markedPositions.includes(6)>>
-                    <div class="bingo-cell marked" data-index="6"><p>54</p></div>
+                    <button class="bingo-cell marked" data-index="6"><p>54</p></button>
                 <<else>>
-                    <div class="bingo-cell" data-index="6"><p>54</p></div>
+                    <button class="bingo-cell" data-index="6"><p>54</p></button>
                 <</if>>
                 <<if $markedPositions.includes(7)>>
-                    <div class="bingo-cell marked" data-index="7"><p>72</p></div>
+                    <button class="bingo-cell marked" data-index="7"><p>72</p></button>
                 <<else>>
-                    <div class="bingo-cell" data-index="7"><p>72</p></div>
+                    <button class="bingo-cell" data-index="7"><p>72</p></button>
                 <</if>>
                 <<if $markedPositions.includes(8)>>
-                    <div class="bingo-cell marked" data-index="8"><p>39</p></div>
+                    <button class="bingo-cell marked" data-index="8"><p>39</p></button>
                 <<else>>
-                    <div class="bingo-cell" data-index="8"><p>39</p></div>
+                    <button class="bingo-cell" data-index="8"><p>39</p></button>
                 <</if>>
                 <<if $markedPositions.includes(9)>>
-                    <div class="bingo-cell marked" data-index="9"><p>48</p></div>
+                    <button class="bingo-cell marked" data-index="9"><p>48</p></button>
                 <<else>>
-                    <div class="bingo-cell" data-index="9"><p>48</p></div>
+                    <button class="bingo-cell" data-index="9"><p>48</p></button>
                 <</if>>
 
                 <<if $markedPositions.includes(10)>>
-                    <div class="bingo-cell marked" data-index="10"><p>18</p></div>
+                    <button class="bingo-cell marked" data-index="10"><p>18</p></button>
                 <<else>>
-                    <div class="bingo-cell" data-index="10"><p>18</p></div>
+                    <button class="bingo-cell" data-index="10"><p>18</p></button>
                 <</if>>
                 <<if $markedPositions.includes(11)>>
-                    <div class="bingo-cell marked" data-index="11"><p>22</p></div>
+                    <button class="bingo-cell marked" data-index="11"><p>22</p></button>
                 <<else>>
-                    <div class="bingo-cell" data-index="11"><p>22</p></div>
+                    <button class="bingo-cell" data-index="11"><p>22</p></button>
                 <</if>>
-                <div class="bingo-cell free marked" data-index="12" disabled><p>FREE</p></div>
+                <button class="bingo-cell free marked" data-index="12" disabled><p>FREE</p></button>
                 <<if $markedPositions.includes(13)>>
-                    <div class="bingo-cell marked" data-index="13"><p>93</p></div>
+                    <button class="bingo-cell marked" data-index="13"><p>93</p></button>
                 <<else>>
-                    <div class="bingo-cell" data-index="13"><p>93</p></div>
+                    <button class="bingo-cell" data-index="13"><p>93</p></button>
                 <</if>>
                 <<if $markedPositions.includes(14)>>
-                    <div class="bingo-cell marked" data-index="14"><p>14</p></div>
+                    <button class="bingo-cell marked" data-index="14"><p>14</p></button>
                 <<else>>
-                    <div class="bingo-cell" data-index="14"><p>14</p></div>
+                    <button class="bingo-cell" data-index="14"><p>14</p></button>
                 <</if>>
 
                 <<if $markedPositions.includes(15)>>
-                    <div class="bingo-cell marked" data-index="15"><p>44</p></div>
+                    <button class="bingo-cell marked" data-index="15"><p>44</p></button>
                 <<else>>
-                    <div class="bingo-cell" data-index="15"><p>44</p></div>
+                    <button class="bingo-cell" data-index="15"><p>44</p></button>
                 <</if>>
                 <<if $markedPositions.includes(16)>>
-                    <div class="bingo-cell marked" data-index="16"><p>68</p></div>
+                    <button class="bingo-cell marked" data-index="16"><p>68</p></button>
                 <<else>>
-                    <div class="bingo-cell" data-index="16"><p>68</p></div>
+                    <button class="bingo-cell" data-index="16"><p>68</p></button>
                 <</if>>
                 <<if $markedPositions.includes(17)>>
-                    <div class="bingo-cell marked" data-index="17"><p>9</p></div>
+                    <button class="bingo-cell marked" data-index="17"><p>9</p></button>
                 <<else>>
-                    <div class="bingo-cell" data-index="17"><p>9</p></div>
+                    <button class="bingo-cell" data-index="17"><p>9</p></button>
                 <</if>>
                 <<if $markedPositions.includes(18)>>
-                    <div class="bingo-cell marked" data-index="18"><p>64</p></div>
+                    <button class="bingo-cell marked" data-index="18"><p>64</p></button>
                 <<else>>
-                    <div class="bingo-cell" data-index="18"><p>64</p></div>
+                    <button class="bingo-cell" data-index="18"><p>64</p></button>
                 <</if>>
                 <<if $markedPositions.includes(19)>>
-                    <div class="bingo-cell marked" data-index="19"><p>86</p></div>
+                    <button class="bingo-cell marked" data-index="19"><p>86</p></button>
                 <<else>>
-                    <div class="bingo-cell" data-index="19"><p>86</p></div>
+                    <button class="bingo-cell" data-index="19"><p>86</p></button>
                 <</if>>
 
                 <<if $markedPositions.includes(20)>>
-                    <div class="bingo-cell marked" data-index="20"><p>52</p></div>
+                    <button class="bingo-cell marked" data-index="20"><p>52</p></button>
                 <<else>>
-                    <div class="bingo-cell" data-index="20"><p>52</p></div>
+                    <button class="bingo-cell" data-index="20"><p>52</p></button>
                 <</if>>
                 <<if $markedPositions.includes(21)>>
-                    <div class="bingo-cell marked" data-index="21"><p>37</p></div>
+                    <button class="bingo-cell marked" data-index="21"><p>37</p></button>
                 <<else>>
-                    <div class="bingo-cell" data-index="21"><p>37</p></div>
+                    <button class="bingo-cell" data-index="21"><p>37</p></button>
                 <</if>>
                 <<if $markedPositions.includes(22)>>
-                    <div class="bingo-cell marked" data-index="22"><p>50</p></div>
+                    <button class="bingo-cell marked" data-index="22"><p>50</p></button>
                 <<else>>
-                    <div class="bingo-cell" data-index="22"><p>50</p></div>
+                    <button class="bingo-cell" data-index="22"><p>50</p></button>
                 <</if>>
                 <<if $markedPositions.includes(23)>>
-                    <div class="bingo-cell marked" data-index="23"><p>58</p></div>
+                    <button class="bingo-cell marked" data-index="23"><p>58</p></button>
                 <<else>>
-                    <div class="bingo-cell" data-index="23"><p>58</p></div>
+                    <button class="bingo-cell" data-index="23"><p>58</p></button>
                 <</if>>
                 <<if $markedPositions.includes(24)>>
-                    <div class="bingo-cell marked" data-index="24"><p>91</p></div>
+                    <button class="bingo-cell marked" data-index="24"><p>91</p></button>
                 <<else>>
-                    <div class="bingo-cell" data-index="24"><p>91</p></div>
+                    <button class="bingo-cell" data-index="24"><p>91</p></button>
                 <</if>>
             </div>
             <p class="bingo-status"> Good Luck!</p>
-            <button class="bingo-reset" onclick="BingoGame.resetBoard()">Reset Board</button>
+            <button class="bingo-reset"
+                onclick="BingoGame.resetBoard()">
+                Reset Board
+            </button>
             <<button [["Exit to Home" | Home]]>><</button>>
         </div>
     </div>

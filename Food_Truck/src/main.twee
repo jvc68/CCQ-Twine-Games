@@ -3,11 +3,36 @@
     <h1>Food Truck</h1>\
     <p>Serve customers, prepare delicious meals, and grow your food truck.</p>\
     <div class="action-button start-actions">\
-        <<button "Start Day" "TakeOrderScreen">><<run FoodTruck.endTutorial()>><<run FoodTruck.startDay()>><</button>>\
+        <<button "Start Day" "ChooseMenu">><<run FoodTruck.endTutorial()>><<run FoodTruck.beginMenuSelection()>><</button>>\
         <<button "Play Tutorial" "TakeOrderScreen">><<run FoodTruck.startTutorial()>><</button>>\
         <<button "Toggle Debug Mode" "Start">><<run FoodTruck.toggleDebugMode()>><</button>>\
     </div>\
 </div>\
+
+:: ChooseMenu
+<div class="phone">\
+    <div class="HUD">\
+        <span><strong>Day:</strong> $currentDay</span>\
+    </div>\
+    <hr>\
+    <h3 class="menu-title">Choose Today's Menu</h3>\
+    <p class="menu-hint">Pick 3 ingredients. 3 more will be chosen at random, and customers will order from those 6.</p>\
+    <p class="menu-count"><strong>Picked:</strong> <span id="menu-count">0</span> / 3</p>\
+    <div class="menu-grid">\
+        <<for _i = 0; _i < FoodTruck.ingredientDatabase.length; _i++>>\
+            <button type="button" class="menu-pick-button" aria-pressed="false">\
+                <span class="menu-pick-icon"><<print FoodTruck.ingredientDatabase[_i].img>></span>\
+                <span class="menu-pick-name"><<print FoodTruck.ingredientDatabase[_i].name>></span>\
+            </button>\
+        <</for>>\
+    </div>\
+    <div class="action-button">\
+        <button type="button" id="menu-start" disabled>Start Day</button>\
+    </div>\
+    <div class="passage-nav">\
+        <<button "Exit to Menu" "Start">><<run FoodTruck.endTutorial()>><</button>>\
+    </div>\
+</div>
 
 :: TakeOrderScreen
 <div class="phone">\
@@ -21,32 +46,37 @@
         <div class="customer-window">\
             <div class="customer-face" role="img" aria-label="Placeholder customer face">🙂</div>\
         </div>\
-        <div class="customer-details">\
-            <<if $activeOrder>>\
-                <h3>$activeOrder.custName</h3>\
-                <p>"I'd like a $activeOrder.dishName, please!"</p>\
-            <<else>>\
-                <<if $numOrders > 0>>\
-                    <p>A customer is waiting. Take their order to get started.</p>\
-                <<else>>\
-                    <p>All orders have been served for today.</p>\
-                <</if>>\
-            <</if>>\
-        </div>\
     </section>\
-    <div class="action-button order-actions">\
-        <<if !$activeOrder && $numOrders > 0>>\
-            <<button "Take Order" "TakeOrderScreen">><<run FoodTruck.takeOrder()>><</button>>\
-        <<elseif $activeOrder>>\
-            <p class="order-status">Order received. Head to the assembly station.</p>\
-        <</if>>\
-        <<if FoodTruck.canFulfillOrder()>>\
-            <<button "Fulfill Order">><<run FoodTruck.fulfillOrder()>><</button>>\
-        <<elseif $activeOrder>>\
-            <span class="fulfill-hint">Complete Order to Fulfill.</span>\
-        <</if>>\
+    <div class="ticket-row">\
+        <<for _t = 0; _t < $tickets.length; _t++>>\
+            <<set _ticket = $tickets[_t]>>\
+            <<capture _ticket>>\
+            <div class="ticket-card">\
+                <div class="ticket-cancel">\
+                    <<button "✕" "TakeOrderScreen">><<run FoodTruck.cancelTicket(_ticket.id)>><</button>>\
+                </div>\
+                <h3 class="ticket-customer"><<print _ticket.custName>></h3>\
+                <p class="ticket-dish"><<print _ticket.dishName>></p>\
+                <ul class="ticket-ingredients">\
+                    <<for _n range _ticket.requiredIngredients>><li><<print _n>></li><</for>>\
+                </ul>\
+                <div class="ticket-action">\
+                    <<if $activeTicketId === _ticket.id>>\
+                        <<if FoodTruck.canFulfillOrder()>>\
+                            <<button "Fulfill Order">><<run FoodTruck.fulfillOrder()>><</button>>\
+                        <<else>>\
+                            <span class="ticket-status">In progress</span>\
+                        <</if>>\
+                    <<else>>\
+                        <<button "Take Order" "TakeOrderScreen">><<run FoodTruck.selectOrder(_ticket.id)>><</button>>\
+                    <</if>>\
+                </div>\
+                <div class="ticket-timer" role="img" aria-label="Time remaining"><div class="ticket-timer-fill"></div></div>\
+            </div>\
+            <</capture>>\
+        <</for>>\
     </div>\
-    <div class="prep-area">\
+    <div class="prep-area compact">\
         <h4>Prep Tray</h4>\
         <div id="tray">\
             <<if $prepTray.length === 0>>\
@@ -74,7 +104,7 @@
             <<if $tutorialMode>>\
                 <<button "Return to Menu" "Start">><<run FoodTruck.endTutorial()>><</button>>\
             <<else>>\
-                <<button "Start Next Day" "TakeOrderScreen">><<run FoodTruck.startNextDay()>><</button>>\
+                <<button "Choose Menu" "ChooseMenu">><<run FoodTruck.startNextDay()>><</button>>\
             <</if>>\
         </div>\
     </section>\
@@ -88,26 +118,15 @@
         <span><strong>Completed:</strong> $dayScore</span>\
     </div>\
     <hr>\
-    <<if $activeOrder>>\
-    <div class="ticket-box">\
-        <div class="ticket-header">\
-            <h3>Active Ticket</h3>\
-            <div class="timer-display">\
-                <span class="timer-label">Time Left:</span>\
-                <span id="order-timer" class="timer-value"><<print FoodTruck.orderTimerDisplay()>></span>\
+    <<set _order = FoodTruck.getActiveOrder()>>\
+    <<activeTicket>>\
+    <div class="prep-area compact">\
+        <div class="prep-header">\
+            <h4>Prep Tray</h4>\
+            <div class="tray-controls">\
+                <<button "Clear Tray">><<run FoodTruck.clearTray()>><</button>>\
             </div>\
         </div>\
-        <h3>Customer: $activeOrder.custName</h3>\
-        <p>Order: $activeOrder.dishName</p>\
-        <p>Needs: <<print $activeOrder.requiredIngredients.join(", ")>></p>\
-    </div>\
-    <<else>>\
-    <div class="ticket-box">\
-        <p>No active order. Return to the Order Window to take a customer's order.</p>\
-    </div>\
-    <</if>>\
-    <div class="prep-area">\
-        <h4>Prep Tray</h4>\
         <div id="tray">\
             <<if $prepTray.length === 0>>\
                 <em>Tap ingredients to add them to the tray.</em>\
@@ -115,19 +134,16 @@
                 <<print $prepTray.join(", ")>>\
             <</if>>\
         </div>\
-        <div class="tray-controls">\
-            <<button "Clear Tray">><<run FoodTruck.clearTray()>><</button>>\
-        </div>\
     </div>\
-    <<if $activeOrder>>\
+    <<if _order>>\
     <div class="ingredient-shelf">\
         <h4>Ingredient Bins</h4>\
         <div class="ingredient-grid">\
-            <<for _i = 0; _i < $menuIngredients.length; _i++>>\
+            <<for _i = 0; _i < $todaysMenu.length; _i++>>\
                 <<capture _i>>\
                 <button type="button" class="ingredient-button">\
-                    <span class="ingredient-icon"><<print $menuIngredients[_i].img>></span>\
-                    <span class="ingredient-name"><<print $menuIngredients[_i].name>></span>\
+                    <span class="ingredient-icon"><<print $todaysMenu[_i].img>></span>\
+                    <span class="ingredient-name"><<print $todaysMenu[_i].name>></span>\
                 </button>\
                 <</capture>>\
             <</for>>\
@@ -148,21 +164,31 @@
         <span><strong>Completed:</strong> $dayScore</span>\
     </div>\
     <hr>\
+    <<activeTicket>>\
     <<if $pendingIngredient>>\
         <div class="ticket-box">\
             <h3>Prepare $pendingIngredient.name</h3>\
-            <p>Choose a preparation method:</p>\
+            <<if $pendingMethod>>\
+                <p>Method: $pendingMethod.label</p>\
+            <<else>>\
+                <p>Choose a preparation method:</p>\
+            <</if>>\
         </div>\
-        <<if $tutorialMode>>\
-            <div class="tutorial-message" role="note">\
-                <strong>TUTORIAL GOAL</strong>\
-                <p>Choose the healthy preparation method to make a healthier meal and increase healthiness score!</p>\
+        <<if !$pendingMethod>>\
+            <div class="method-options">\
+                <<button `FoodTruck.methodLabel($methodOrder[0], 0)` "PrepareIngredient">><<run FoodTruck.chooseMethod($methodOrder[0])>><</button>>\
+                <<button `FoodTruck.methodLabel($methodOrder[1], 1)` "PrepareIngredient">><<run FoodTruck.chooseMethod($methodOrder[1])>><</button>>\
+            </div>\
+        <<else>>\
+            <div class="prep-feedback <<if $pendingMethod.type === 'healthy'>>healthy<<else>>unhealthy<</if>>" role="note">\
+                <strong><<if $pendingMethod.type === "healthy">>Healthy choice!<<else>>Unhealthy choice<</if>></strong>\
+                <p>$pendingMethod.reason</p>\
+            </div>\
+            <div id="prep-action" class="prep-action"></div>\
+            <div class="action-button">\
+                <button type="button" id="prep-continue" disabled>Continue to Cooking</button>\
             </div>\
         <</if>>\
-        <div class="method-options">\
-            <<button `FoodTruck.methodLabel("healthy")` "CookingMinigame">><<run FoodTruck.chooseMethod("healthy")>><</button>>\
-            <<button `FoodTruck.methodLabel("unhealthy")` "CookingMinigame">><<run FoodTruck.chooseMethod("unhealthy")>><</button>>\
-        </div>\
     <<else>>\
         <p>Select an ingredient from the assembly station to prepare it.</p>\
     <</if>>\
@@ -180,7 +206,8 @@
         <span><strong>Completed:</strong> $dayScore</span>\
     </div>\
     <hr>\
-    <<if $pendingIngredient && $pendingMethod>>\
+    <<activeTicket>>\
+    <<if $pendingIngredient && $pendingMethod && $prepActionDone>>\
         <div class="ticket-box">\
             <h3>Cooking $pendingIngredient.name</h3>\
             <p>Method: $pendingMethod.label</p>\
@@ -189,12 +216,6 @@
             <p>The ingredient has already been prepared.</p>\
             <<button "View Cooking Result" "CookingResult">><</button>>\
         <<else>>\
-            <<if $tutorialMode>>\
-                <div class="tutorial-message" role="note">\
-                    <strong>TUTORIAL GOAL</strong>\
-                    <p>Stop the marker while it is in the green section for a perfect cook and higher customer satisfaction!</p>\
-                </div>\
-            <</if>>\
             <p class="skill-instructions">Stop the marker in the green section for a perfect cook.</p>\
             <div class="skill-track" role="img" aria-label="Cooking skill check: blue is raw, green is perfect, and red is overcooked">\
                 <div class="skill-zone skill-zone-raw"></div>\

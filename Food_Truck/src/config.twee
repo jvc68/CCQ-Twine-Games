@@ -9,6 +9,25 @@ Food Truck Game
     "start":"Start"
 }
 
+:: ActiveTicketWidget [widget]
+<<widget "activeTicket">>\
+<<set _wOrder = FoodTruck.getActiveOrder()>>\
+<<if _wOrder>>\
+<div class="ticket-box compact-ticket">\
+    <div class="ticket-header">\
+        <h3><<print _wOrder.custName>>: <<print _wOrder.dishName>></h3>\
+        <span id="order-timer" class="timer-value"><<print FoodTruck.orderTimerDisplay()>></span>\
+    </div>\
+    <p>Needs: <<print _wOrder.requiredIngredients.join(", ")>></p>\
+    <div class="ticket-timer"><div id="order-bar-fill" class="ticket-timer-fill"></div></div>\
+</div>\
+<<else>>\
+<div class="ticket-box compact-ticket">\
+    <p>No active order. Return to the Order Window and take a ticket.</p>\
+</div>\
+<</if>>\
+<</widget>>
+
 :: StoryInit
 <<set $numOrders = 0>>
 <<set $currentDay = 1>>
@@ -23,17 +42,14 @@ Food Truck Game
 <<set $pendingIngredient = null>>
 <<set $pendingMethod = null>>
 <<set $cookingResult = null>>
+<<set $methodOrder = ["healthy", "unhealthy"]>>
+<<set $prepActionDone = false>>
 <<set $satisfactionScore = 0>>
 <<set $healthinessScore = 0>>
 
-<<set $menuIngredients = [
-    { id: "tortilla", name: "Tortilla",    img: "🌮", methods: { healthy: "Toast on a dry griddle", unhealthy: "Deep-fry until crisp" } },
-    { id: "beans",    name: "Black Beans", img: "🫘", methods: { healthy: "Simmer with herbs", unhealthy: "Refry with extra oil" } },
-    { id: "squash",   name: "Squash",      img: "🎃", methods: { healthy: "Roast until tender", unhealthy: "Deep-fry until crisp" } },
-    { id: "turkey",   name: "Turkey",      img: "🍗", methods: { healthy: "Grill until cooked", unhealthy: "Deep-fry until crisp" } },
-    { id: "garlic",   name: "Garlic",      img: "🧄", methods: { healthy: "Roast until soft", unhealthy: "Fry in extra oil" } },
-    { id: "sage",     name: "Sage",        img: "🌿", methods: { healthy: "Use fresh leaves", unhealthy: "Fry until crisp" } }
-]>>
-
-<<set $activeOrder = null>>
-<<set $orderTimer = 120>>
+<<set $todaysMenu = []>>
+<<set $menuPicks = []>>
+<<set $availableCustomers = []>>
+<<set $tickets = []>>
+<<set $activeTicketId = null>>
+<<set $nextTicketId = 1>>

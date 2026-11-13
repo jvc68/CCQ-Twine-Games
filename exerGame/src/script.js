@@ -1,45 +1,24 @@
 setup.zombieDist = 20000
 setup.zombieAmount = 100
-setup.multi = 100
+setup.multi = 1
 setup.gameOver = false
 setup.currentStepGoal = 10
 setup.actualDistance = 0
 setup.exposedExtras = []
 setup.currentFinalExtra = 0
 setup.mode = "easy"
-
-// window.GameData = {
-// 	// "extras": {
-// 	// 	"Stretch Your Arms": { "reward": -10, "type": "killZombies" },
-// 	// 	"Stretch Your Legs": { "reward": 1, "type": "multi" },
-// 	// 	"Do 10 Jumping Jacks": { "reward": -100, "type": "killZombies" }
-// 	// }
-
-// }
-
-window.GameData = {
-	"extras": {
-		"Walk 100 Steps": { "reward": -1, "type": "killZombies", "requiredSteps": 100, "ogRequiredSteps": 100 },
-		"Walk 800 Steps": { "reward": 1, "type": "multi", "requiredSteps": 800, "ogRequiredSteps": 800 },
-		"Walk 3,000 Steps": { "reward": -10, "type": "killZombies", "requiredSteps": 3000, "ogRequiredSteps": 3000 },
-		"Walk 5,000 Steps": { "reward": -10, "type": "killZombies", "requiredSteps": 5000, "ogRequiredSteps": 5000 },
-		"Walk 8,000 Steps": { "reward": -20, "type": "killZombies", "requiredSteps": 8000, "ogRequiredSteps": 8000 },
-		"Walk 10,000 Steps": { "reward": 1, "type": "multi", "requiredSteps": 10000, "ogRequiredSteps": 10000 },
-		"Walk 12,000 Steps": { "reward": -30, "type": "killZombies", "requiredSteps": 12000, "ogRequiredSteps": 12000 },
-		"Walk 15,000 Steps": { "reward": -30, "type": "killZombies", "requiredSteps": 15000, "ogRequiredSteps": 15000 },
-	}
-
-}
+setup.totalWalked = 0
 
 // Sends messages from Twine to Flutter.
-setup.sendFlutterMessage = function (type) {
+setup.sendFlutterMessage = function (type, extraData = {}) {
 	console.log("Twine is sending message to Flutter:", type);
 
 	if (window.FlutterBridge &&
 		typeof window.FlutterBridge.postMessage === "function") {
 
 		window.FlutterBridge.postMessage(JSON.stringify({
-			type: type
+			type: type,
+			...extraData
 		}));
 
 		console.log("FlutterBridge message sent successfully.");
@@ -49,14 +28,55 @@ setup.sendFlutterMessage = function (type) {
 	}
 }
 
+// Sends the current zombie distance to Flutter for storage.
+setup.saveZombieDistance = function () {
+	setup.sendFlutterMessage("SAVE_ZOMBIE_DISTANCE", {
+		distance: Math.trunc(setup.zombieDist)
+	});
+}
+
+// Receives the saved distance from Flutter.
+setup.setZombieDistance = function (distance) {
+	setup.zombieDist = distance;
+
+	console.log("Zombie Chase: Restored distance =", distance);
+
+	console.log("Zombie Chase: Starting Game")
+
+	setup.beginChase();
+}
+
+setup.getZombieDistance = function (distance) {
+	setup.zombieDist = distance;
+	setup.zombieDistText = document.getElementById("zombieDist");
+	setup.zombieDistText.textContent = `The zombies are ${Math.trunc(setup.zombieDist)} steps away!`
+	setup.updateTotalDistance()
+	console.log("FROM GET ZOMBIE Zombie Chase: Restored distance =", distance);
+
+	console.log("Zombie Chase: Starting Game")
+}
+
 setup.setMode = function setMode(mode) {
 	setup.mode = mode
-	setup.multi = 100
+	setup.multi = 1
 	setup.currentFinalExtra = 0;
 	setup.exposedExtras = []
 	setup.actualDistance = 0
+	setup.totalWalked = 0
 	for (let [key, value] of Object.entries(window.GameData.extras)) {
 		value.requiredSteps = value.ogRequiredSteps
+	}
+}
+
+/*This is exclusively a dev function for enabling the game to still be tested on a computer */
+setup.DEVplayInComputer = function DEVplayInComputer() {
+	if (window.FlutterBridge &&
+		typeof window.FlutterBridge.postMessage === "function") {
+
+		return;
+
+	} else {
+		setup.beginChase();
 	}
 }
 
@@ -65,12 +85,12 @@ setup.reset = function reset() {
 	setup.stopChase();
 
 	setup.zombieAmount = 100;
-	setup.zombieDist = 20000;
 	setup.gameOver = false;
 	setup.actualDistance = 0
 
 	setup.multi = 1;
 	setup.currentFinalExtra = 0;
+	setup.totalWalked = 0
 	setup.exposedExtras = []
 
 	for (let [key, value] of Object.entries(window.GameData.extras)) {
@@ -87,20 +107,28 @@ setup.decZombieDist = function decZombieDist(amount) {
 	}
 	setup.checkWinLoss()
 	setup.updateTotalDistance()
+	setup.saveZombieDistance();
 
 }
 
 setup.incZombieDist = function incZombieDist(amount) {
+	let inGameSteps = amount * setup.multi
+
 	setup.actualDistance += amount
-	setup.zombieDist += amount * setup.multi;
+	setup.zombieDist += inGameSteps;
+	setup.totalWalked += inGameSteps;
+
+	setup.yourDistText.textContent = `You've Walked ${Math.trunc(setup.totalWalked)} steps!`
 	if (setup.zombieAmount > 0 && setup.zombieDist > 0) {
 		setup.zombieDistText.textContent = `The zombies are ${Math.trunc(setup.zombieDist)} steps away!`
 	} else {
 		setup.stopChase()
 	}
-	setup.redeem(amount * setup.multi)
+
+	setup.redeem(inGameSteps)
 	setup.checkWinLoss()
 	setup.updateTotalDistance()
+	setup.saveZombieDistance();
 }
 
 // Stops the zombie timer and Flutter step tracking.
@@ -119,7 +147,8 @@ setup.checkWinLoss = function checkWinLoss() {
 
 	// Player wins when all zombies are eliminated.
 	if (setup.zombieAmount <= 0) {
-
+		setup.zombieDist = 20000
+		setup.saveZombieDistance();
 		setup.zombieDistText.textContent = "All the zombies are Gone!";
 		setup.zombieCntText.textContent = "There are 0 left...";
 
@@ -135,7 +164,8 @@ setup.checkWinLoss = function checkWinLoss() {
 
 	// Player loses when the zombies catch them.
 	else if (setup.zombieDist <= 0) {
-
+		setup.zombieDist = 20000
+		setup.saveZombieDistance();
 		setup.zombieDistText.textContent = "The zombies caught you...";
 		setup.zombieCntText.textContent = "";
 
@@ -150,7 +180,19 @@ setup.checkWinLoss = function checkWinLoss() {
 	}
 }
 
+// Requests the saved distance before starting the game.
 setup.startChase = function startChase() {
+	console.log("Zombie Chase: Requesting saved distance from Flutter.");
+
+	setup.zombieDistText = document.getElementById("zombieDist");
+	setup.yourDistText = document.getElementById("yourDist");
+	setup.zombieCntText = document.getElementById("zombieCnt");
+	setup.multiText = document.getElementById("multi");
+
+	setup.sendFlutterMessage("LOAD_ZOMBIE_DISTANCE");
+}
+
+setup.beginChase = function beginChase() {
 	setup.zombieDistText = document.getElementById("zombieDist")
 	setup.zombieCntText = document.getElementById("zombieCnt")
 	setup.multiText = document.getElementById("multi")
@@ -172,23 +214,28 @@ setup.startChase = function startChase() {
 	switch (setup.mode) {
 		case "easy":
 			/*This sets zombie speed to 102 steps per minute */
+			setup.zombieAmount = 100
 			setup.intervalId = setInterval(setup.decZombieDist, 1000, -1.7);
 			break;
 		case "med":
 			/*This sets zombie speed to 150 steps per minute */
+			setup.zombieAmount = 140
 			setup.intervalId = setInterval(setup.decZombieDist, 1000, -2.5);
 			break;
 		case "hard":
+			setup.zombieAmount = 200
 			/*This sets zombie speed to 192 steps per minute */
 			setup.intervalId = setInterval(setup.decZombieDist, 1000, -3.2);
 			break;
 		case "impossible":
-			setup.intervalId = setInterval(setup.decZombieDist, 1000, -1000);
+			setup.zombieAmount = 200
+			setup.intervalId = setInterval(setup.decZombieDist, 500, -1000);
 			break;
 		default:
 			console.error(`${setup.mode} is not a mode`)
 	}
 
+	setup.zombieCntText.textContent = `There are ${setup.zombieAmount} left...`
 	let container = document.getElementById("extras");
 	container.replaceChildren();
 
@@ -256,34 +303,6 @@ setup.createExtra = function createExtra(container) {
 	setup.updateExtraProgress();
 };
 
-
-setup.updateExtraProgress = function updateExtraProgress() {
-
-	if (setup.gameOver) {
-		return;
-	}
-
-	for (let item of setup.exposedExtras) {
-		let extraElement = document.getElementById(item[0])
-		let fill = extraElement.querySelector('.progress-fill');
-		if (!fill) return;
-		let stepsCompleted = item[1].ogRequiredSteps - item[1].requiredSteps;
-		let percent = Math.min(Math.max((stepsCompleted / item[1].ogRequiredSteps) * 100, 0));
-		fill.style.width = percent + '%';
-	}
-
-};
-
-setup.updateTotalDistance = function updateTotalDistance() {
-	let bar = document.getElementById("bar")
-	let fill = bar.querySelector('.progress-fill');
-	if (!fill) return;
-	let stepsCompleted = 20000 - setup.zombieDist;
-	let percent = Math.min(Math.max((stepsCompleted / 20000) * 100, 0));
-	fill.style.width = percent + '%';
-
-}
-
 setup.redeem = function redeem(stepsWalked) {
 
 	if (setup.gameOver) {
@@ -316,6 +335,7 @@ setup.redeem = function redeem(stepsWalked) {
 			}
 
 			let theExtra = document.getElementById(item[0])
+			if (theExtra == null) { return; }
 			theExtra.classList.add('fade-out');
 
 			setTimeout(() => {
@@ -328,14 +348,50 @@ setup.redeem = function redeem(stepsWalked) {
 		}
 	}
 
-	for (let spot in spotsToDelete) {
-		console.log(spot)
-		setup.exposedExtras.splice(spot, 1)
+	spotsToDelete.sort((a, b) => b - a);
+
+	for (let spot of spotsToDelete) {
+		setup.exposedExtras.splice(spot, 1);
 	}
 
 	setup.checkWinLoss()
 	setup.updateExtraProgress();
 }
+
+setup.updateExtraProgress = function updateExtraProgress() {
+
+	if (setup.gameOver) {
+		return;
+	}
+
+	for (let item of setup.exposedExtras) {
+		let extraElement = document.getElementById(item[0])
+		if (extraElement == null) { return; }
+		let fill = extraElement.querySelector('.progress-fill');
+		if (!fill) return;
+		let stepsCompleted = item[1].ogRequiredSteps - item[1].requiredSteps;
+		let percent = Math.min(
+			Math.max(
+				(stepsCompleted / item[1].ogRequiredSteps) * 100,
+				0
+			),
+			100
+		);
+		fill.style.width = percent + '%';
+	}
+
+};
+
+setup.updateTotalDistance = function updateTotalDistance() {
+	let bar = document.getElementById("bar")
+	let fill = bar.querySelector('.progress-fill');
+	if (!fill) return;
+	let stepsCompleted = 20000 - setup.zombieDist;
+	let percent = Math.min(Math.max((stepsCompleted / 20000) * 100, 0));
+	fill.style.width = percent + '%';
+
+}
+
 
 /*
 Useful later:

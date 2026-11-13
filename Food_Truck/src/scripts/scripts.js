@@ -1,110 +1,356 @@
-var orderOptions = [
+/* Every ingredient that can be picked for a day's menu */
+var ingredientDatabase = [
     {
-        custName: "Alice",
-        dishName: "Black Bean Taco",
-        requiredIngredients: ["Tortilla", "Black Beans", "Garlic"]
+        id: "tortilla", name: "Tortilla", img: "🌮", category: "Grain",
+        methods: { healthy: "Toast a whole-grain tortilla", unhealthy: "Deep-fry a flour tortilla" },
+        reasons: { healthy: "Whole grains add fiber, a DASH staple.", unhealthy: "Frying a refined tortilla adds saturated fat and cuts the fiber." },
+        action: { type: "hold", ms: 1000, icon: "🫓", label: "Press and hold to flatten the tortilla" }
     },
     {
-        custName: "Jordan",
-        dishName: "Sage Turkey Taco",
-        requiredIngredients: ["Tortilla", "Turkey", "Sage"]
+        id: "rice", name: "Rice", img: "🍚", category: "Grain",
+        methods: { healthy: "Steam brown rice", unhealthy: "Fry white rice in butter and soy sauce" },
+        reasons: { healthy: "Brown rice is a whole grain with fiber and no added salt.", unhealthy: "Refined rice with butter and soy sauce adds saturated fat and lots of sodium." },
+        action: { type: "scrub", count: 6, icon: "🍚", label: "Shake the strainer to rinse the rice" }
     },
     {
-        custName: "Sam",
-        dishName: "Squash and Black Bean Bowl",
-        requiredIngredients: ["Squash", "Black Beans", "Garlic"]
+        id: "beans", name: "Black Beans", img: "🫘", category: "Protein",
+        methods: { healthy: "Rinse canned beans, simmer with herbs", unhealthy: "Refry in lard with the canning liquid" },
+        reasons: { healthy: "Rinsing cuts sodium, and beans give fiber, potassium and magnesium.", unhealthy: "The canning liquid is salty and lard is high in saturated fat." },
+        action: { type: "scrub", count: 6, icon: "🫘", label: "Shake the colander to drain and rinse" }
     },
     {
-        custName: "Jesse",
-        dishName: "Turkey and Squash Bowl",
-        requiredIngredients: ["Turkey", "Squash", "Sage"]
+        id: "turkey", name: "Turkey", img: "🍗", category: "Protein",
+        methods: { healthy: "Grill skinless turkey breast", unhealthy: "Deep-fry turkey with the skin on" },
+        reasons: { healthy: "Lean, skinless poultry keeps saturated fat low.", unhealthy: "The skin and frying oil pile on saturated fat." },
+        action: { type: "tap", count: 4, icon: "🔪", label: "Tap to trim the fat" }
     },
     {
-        custName: "Tyler",
-        dishName: "Garlic and Sage Medley",
-        requiredIngredients: ["Garlic", "Sage", "Black Beans"]
+        id: "salmon", name: "Salmon", img: "🐟", category: "Protein",
+        methods: { healthy: "Bake with lemon and dill", unhealthy: "Pan-fry in butter with a soy glaze" },
+        reasons: { healthy: "Baked fish with herbs gives omega-3 fats without extra salt.", unhealthy: "Butter adds saturated fat and the glaze adds sodium." },
+        action: { type: "swipe", count: 2, icon: "🔪", label: "Swipe across to slice the fillet" }
     },
     {
-        custName: "Anna",
-        dishName: "Turkey and Garlic Delight",
-        requiredIngredients: ["Turkey", "Garlic", "Squash"]
+        id: "shrimp", name: "Shrimp", img: "🦐", category: "Protein",
+        methods: { healthy: "Steam with lemon and garlic", unhealthy: "Batter and deep-fry" },
+        reasons: { healthy: "Steaming adds flavor without salt or oil.", unhealthy: "Batter and fryer oil add refined carbs and saturated fat." },
+        action: { type: "tap", count: 3, icon: "🦐", label: "Tap to peel the shell" }
     },
     {
-        custName: "Rique",
-        dishName: "Sage and Squash Stir Fry",
-        requiredIngredients: ["Sage", "Squash", "Garlic"]
+        id: "egg", name: "Egg", img: "🥚", category: "Protein",
+        methods: { healthy: "Poach in simmering water", unhealthy: "Fry in butter with bacon" },
+        reasons: { healthy: "Poaching adds no extra fat.", unhealthy: "Butter and bacon add saturated fat and sodium." },
+        action: { type: "tap", count: 2, icon: "🥚", label: "Tap to crack the egg" }
     },
     {
-        custName: "Morgan",
-        dishName: "Turkey Bean Taco",
-        requiredIngredients: ["Tortilla", "Turkey", "Black Beans"]
+        id: "squash", name: "Squash", img: "🎃", category: "Vegetable",
+        methods: { healthy: "Roast with a drizzle of olive oil", unhealthy: "Deep-fry in batter" },
+        reasons: { healthy: "A little unsaturated olive oil keeps squash heart-friendly and rich in potassium.", unhealthy: "Frying adds saturated fat and extra calories." },
+        action: { type: "tap", count: 3, icon: "🔪", label: "Tap to cut the squash" }
     },
     {
-        custName: "Casey",
-        dishName: "Garlic Squash Bowl",
-        requiredIngredients: ["Squash", "Garlic", "Black Beans"]
+        id: "garlic", name: "Garlic", img: "🧄", category: "Vegetable",
+        methods: { healthy: "Roast until soft", unhealthy: "Fry in butter and salt" },
+        reasons: { healthy: "Garlic adds big flavor so you can skip the salt.", unhealthy: "Buttery, salted garlic adds saturated fat and sodium." },
+        action: { type: "hold", ms: 1000, icon: "🧄", label: "Press and hold to crush the garlic" }
     },
     {
-        custName: "Riley",
-        dishName: "Sage Bean Wrap",
-        requiredIngredients: ["Tortilla", "Black Beans", "Sage"]
+        id: "tomato", name: "Tomato", img: "🍅", category: "Vegetable",
+        methods: { healthy: "Roast fresh tomatoes", unhealthy: "Simmer in salty jarred sauce" },
+        reasons: { healthy: "Fresh tomatoes are high in potassium, which helps lower blood pressure.", unhealthy: "Jarred sauce is often loaded with sodium and added sugar." },
+        action: { type: "swipe", count: 2, icon: "🔪", label: "Swipe across to slice the tomato" }
     },
     {
-        custName: "Avery",
-        dishName: "Turkey Sage Bowl",
-        requiredIngredients: ["Turkey", "Sage", "Squash"]
+        id: "broccoli", name: "Broccoli", img: "🥦", category: "Vegetable",
+        methods: { healthy: "Steam until bright green", unhealthy: "Smother in cheese sauce" },
+        reasons: { healthy: "Steaming keeps the potassium, magnesium and fiber.", unhealthy: "Cheese sauce adds saturated fat and sodium." },
+        action: { type: "tap", count: 3, icon: "🔪", label: "Tap to chop the florets" }
     },
     {
-        custName: "Quinn",
-        dishName: "Garlic Turkey Taco",
-        requiredIngredients: ["Tortilla", "Turkey", "Garlic"]
+        id: "carrot", name: "Carrot", img: "🥕", category: "Vegetable",
+        methods: { healthy: "Roast with herbs", unhealthy: "Glaze with butter and brown sugar" },
+        reasons: { healthy: "Roasting brings out natural sweetness with no added sugar.", unhealthy: "Added sugar and butter work against DASH." },
+        action: { type: "swipe", count: 3, icon: "🥕", label: "Swipe to peel the carrot" }
     },
     {
-        custName: "Drew",
-        dishName: "Squash Sage Wrap",
-        requiredIngredients: ["Tortilla", "Squash", "Sage"]
+        id: "pepper", name: "Bell Pepper", img: "🫑", category: "Vegetable",
+        methods: { healthy: "Grill until charred", unhealthy: "Stuff with sausage and fry" },
+        reasons: { healthy: "Peppers are full of vitamin C and flavor with no salt.", unhealthy: "Processed sausage is high in sodium and saturated fat." },
+        action: { type: "tap", count: 3, icon: "🔪", label: "Tap to seed and slice" }
     },
     {
-        custName: "Jamie",
-        dishName: "Black Bean Turkey Bowl",
-        requiredIngredients: ["Black Beans", "Turkey", "Garlic"]
+        id: "corn", name: "Corn", img: "🌽", category: "Vegetable",
+        methods: { healthy: "Roast on the cob with lime", unhealthy: "Slather in butter, mayo and salt" },
+        reasons: { healthy: "Lime adds zing so you don't need salt or butter.", unhealthy: "Heavy butter, mayo and salt add saturated fat and sodium." },
+        action: { type: "swipe", count: 2, icon: "🌽", label: "Swipe to strip the husk" }
     },
     {
-        custName: "Parker",
-        dishName: "Sage Garlic Taco",
-        requiredIngredients: ["Tortilla", "Sage", "Garlic"]
+        id: "spinach", name: "Spinach", img: "🥬", category: "Vegetable",
+        methods: { healthy: "Wilt in a dry pan", unhealthy: "Cream with butter and cheese" },
+        reasons: { healthy: "Spinach is rich in potassium and magnesium, and wilting adds no fat.", unhealthy: "Cream and cheese add saturated fat and sodium." },
+        action: { type: "scrub", count: 6, icon: "🥬", label: "Shake the colander to rinse the leaves" }
     },
     {
-        custName: "Cameron",
-        dishName: "Squash Turkey Medley",
-        requiredIngredients: ["Squash", "Turkey", "Black Beans"]
+        id: "avocado", name: "Avocado", img: "🥑", category: "Fruit",
+        methods: { healthy: "Serve sliced fresh", unhealthy: "Deep-fry in batter" },
+        reasons: { healthy: "Avocado's unsaturated fat is heart-friendly in small portions.", unhealthy: "Frying adds saturated fat and extra calories." },
+        action: { type: "swipe", count: 2, icon: "🔪", label: "Swipe to slice around the pit" }
     },
     {
-        custName: "Reese",
-        dishName: "Garlic Bean Wrap",
-        requiredIngredients: ["Tortilla", "Garlic", "Black Beans"]
+        id: "pineapple", name: "Pineapple", img: "🍍", category: "Fruit",
+        methods: { healthy: "Grill fresh pineapple", unhealthy: "Candy in syrup" },
+        reasons: { healthy: "Fresh fruit has natural sugar plus potassium and fiber.", unhealthy: "Syrup adds a lot of added sugar." },
+        action: { type: "tap", count: 4, icon: "🔪", label: "Tap to cut off the skin" }
     },
     {
-        custName: "Robin",
-        dishName: "Sage Squash Turkey Bowl",
-        requiredIngredients: ["Sage", "Squash", "Turkey"]
+        id: "mango", name: "Mango", img: "🥭", category: "Fruit",
+        methods: { healthy: "Serve fresh", unhealthy: "Dip in sweetened syrup" },
+        reasons: { healthy: "Fresh mango brings fiber and vitamins with no added sugar.", unhealthy: "The sweet coating is added sugar." },
+        action: { type: "swipe", count: 2, icon: "🔪", label: "Swipe to slice off the cheeks" }
     },
     {
-        custName: "Devon",
-        dishName: "Black Bean Squash Taco",
-        requiredIngredients: ["Tortilla", "Black Beans", "Squash"]
+        id: "sage", name: "Sage", img: "🌿", category: "Herb",
+        methods: { healthy: "Use fresh leaves", unhealthy: "Fry in butter with salt" },
+        reasons: { healthy: "Fresh herbs add flavor in place of salt.", unhealthy: "Frying in salted butter adds saturated fat and sodium." },
+        action: { type: "tap", count: 3, icon: "🌿", label: "Tap to pluck the leaves" }
     },
     {
-        custName: "Skyler",
-        dishName: "Sage Garlic Turkey Bowl",
-        requiredIngredients: ["Sage", "Garlic", "Turkey"]
+        id: "cheese", name: "Cheese", img: "🧀", category: "Dairy",
+        methods: { healthy: "Grate a light sprinkle of low-fat cheese", unhealthy: "Melt a thick layer of full-fat cheese" },
+        reasons: { healthy: "Low-fat dairy gives calcium with less saturated fat.", unhealthy: "Full-fat cheese is high in saturated fat and sodium." },
+        action: { type: "scrub", count: 5, icon: "🧀", label: "Rub the cheese back and forth on the grater" }
     }
 ];
 
+/* Customers who can place an order; each customer is used once per day */
+var customerNames = [
+    "Alice", "Jordan", "Sam", "Jesse", "Tyler", "Anna", "Rique", "Morgan",
+    "Casey", "Riley", "Avery", "Quinn", "Drew", "Jamie", "Parker", "Cameron",
+    "Reese", "Robin", "Devon", "Pavan"
+];
+
+/* Words used to name a generated dish */
+var dishTypes = ["Bowl", "Wrap", "Taco", "Stir Fry", "Medley", "Plate", "Skillet", "Salad"];
+
+/* The fixed tutorial order and the ingredient ids on the tutorial's menu */
+var tutorialOrder = {
+    custName: "Alice",
+    dishName: "Black Bean Taco",
+    requiredIngredients: ["Tortilla", "Black Beans", "Garlic"]
+};
+var tutorialMenuIds = ["tortilla", "beans", "squash", "turkey", "garlic", "sage"];
+
+var menuPickCount = 3;
+var menuRandomCount = 3;
+
+/* Returns a shuffled copy of an array */
+function shuffled(items) {
+    var copy = items.slice();
+
+    for (var i = copy.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = copy[i];
+
+        copy[i] = copy[j];
+        copy[j] = temp;
+    }
+    return copy;
+}
+
 var orderTimerInterval = null;
+var lastTickTime = 0;
 var maxPrepTrayIngredients = 3;
+var maxTickets = 3;
 
 window.FoodTruck = {
+    ingredientDatabase: ingredientDatabase,
+
+    /* Function Description: Returns the ticket the player is currently
+       preparing, or null if none is selected */
+    getActiveOrder: function() {
+        var state = SugarCube.State.variables;
+
+        if (state.activeTicketId === null || !Array.isArray(state.tickets)) {
+            return null;
+        }
+
+        return state.tickets.find(function(ticket) {
+            return ticket.id === state.activeTicketId;
+        }) || null;
+    },
+
+    /* Function Description: Adds new tickets until the ticket limit is reached
+       or no more orders remain for the day (orders already on a ticket count
+       toward the day's remaining orders) */
+    fillTickets: function() {
+        var state = SugarCube.State.variables;
+
+        while (state.tickets.length < maxTickets &&
+            state.numOrders - state.tickets.length > 0) {
+            var order = this.pickOrder();
+
+            if (!order) {
+                break;
+            }
+            state.tickets.push(this.makeTicket(order));
+        }
+    },
+
+    /* Function Description: Randomly picks an order for a new ticket, preferring
+       customers not yet used today and never one already on a ticket (or in
+       the optional exclude list). Returns null if no customer is available. */
+    pickOrder: function(excludeNames) {
+        var state = SugarCube.State.variables;
+        var excluded = (excludeNames || []).concat(state.tickets.map(function(ticket) {
+            return ticket.custName;
+        }));
+
+        var name;
+
+        if (state.tutorialMode) {
+            return excluded.indexOf(tutorialOrder.custName) === -1
+                ? {
+                    custName: tutorialOrder.custName,
+                    dishName: tutorialOrder.dishName,
+                    requiredIngredients: tutorialOrder.requiredIngredients.slice()
+                }
+                : null;
+        }
+
+        if (state.availableCustomers.length) {
+            var index = Math.floor(Math.random() * state.availableCustomers.length);
+
+            name = state.availableCustomers.splice(index, 1)[0];
+        } else {
+            // every customer has been used today, so recycle ones not on a ticket
+            var recyclable = customerNames.filter(function(customer) {
+                return excluded.indexOf(customer) === -1;
+            });
+
+            if (!recyclable.length) {
+                return null;
+            }
+            name = recyclable[Math.floor(Math.random() * recyclable.length)];
+        }
+
+        return this.buildOrder(name);
+    },
+
+    /* Function Description: Builds a dish for a customer from three different
+       ingredients on today's menu */
+    buildOrder: function(customerName) {
+        var state = SugarCube.State.variables;
+        var chosen = shuffled(state.todaysMenu).slice(0, 3);
+        var type = dishTypes[Math.floor(Math.random() * dishTypes.length)];
+
+        return {
+            custName: customerName,
+            dishName: chosen[0].name + " & " + chosen[1].name + " " + type,
+            requiredIngredients: chosen.map(function(ingredient) {
+                return ingredient.name;
+            })
+        };
+    },
+
+    /* Function Description: Clears the menu picks before the player chooses
+       the ingredients for a new day */
+    beginMenuSelection: function() {
+        SugarCube.State.variables.menuPicks = [];
+    },
+
+    /* Function Description: Selects or deselects the ingredient at the given
+       database index as one of the player's menu picks (limit 3) */
+    toggleMenuPick: function(index) {
+        var state = SugarCube.State.variables;
+        var ingredient = ingredientDatabase[index];
+
+        if (!ingredient) {
+            return;
+        }
+        if (!Array.isArray(state.menuPicks)) {
+            state.menuPicks = [];
+        }
+
+        var pickIndex = state.menuPicks.indexOf(ingredient.id);
+
+        if (pickIndex !== -1) {
+            state.menuPicks.splice(pickIndex, 1);
+        } else if (state.menuPicks.length < menuPickCount) {
+            state.menuPicks.push(ingredient.id);
+        }
+        this.refreshMenuSelection();
+    },
+
+    /* Function Description: Updates the ChooseMenu screen to show which
+       ingredients are picked and enables Start Day once three are chosen */
+    refreshMenuSelection: function() {
+        var state = SugarCube.State.variables;
+        var buttons = document.querySelectorAll(".menu-pick-button");
+        var count = document.getElementById("menu-count");
+        var start = document.getElementById("menu-start");
+
+        if (!Array.isArray(state.menuPicks)) {
+            state.menuPicks = [];
+        }
+        buttons.forEach(function(button, index) {
+            var ingredient = ingredientDatabase[index];
+            var picked = state.menuPicks.indexOf(ingredient.id) !== -1;
+
+            button.classList.toggle("menu-picked", picked);
+            button.setAttribute("aria-pressed", picked ? "true" : "false");
+            button.disabled = !picked && state.menuPicks.length >= menuPickCount;
+        });
+        if (count) {
+            count.textContent = state.menuPicks.length;
+        }
+        if (start) {
+            start.disabled = state.menuPicks.length !== menuPickCount;
+        }
+    },
+
+    /* Function Description: Sets todaysMenu to the player's picks plus randomly
+       chosen ingredients from the rest of the database */
+    buildTodaysMenu: function() {
+        var state = SugarCube.State.variables;
+        var database = ingredientDatabase;
+
+        if (state.tutorialMode) {
+            state.todaysMenu = tutorialMenuIds.map(function(id) {
+                return database.find(function(ingredient) {
+                    return ingredient.id === id;
+                });
+            });
+            return;
+        }
+
+        var picks = database.filter(function(ingredient) {
+            return state.menuPicks.indexOf(ingredient.id) !== -1;
+        });
+        var others = shuffled(database.filter(function(ingredient) {
+            return state.menuPicks.indexOf(ingredient.id) === -1;
+        }));
+
+        // if fewer than 3 were picked, random ingredients make up the difference
+        state.todaysMenu = picks.concat(others.slice(0, menuPickCount + menuRandomCount - picks.length));
+    },
+
+    /* Function Description: Builds a new ticket with a full timer from an order */
+    makeTicket: function(order) {
+        var state = SugarCube.State.variables;
+        var time = this.orderTimeForDay();
+        var ticket = {
+            id: state.nextTicketId,
+            custName: order.custName,
+            dishName: order.dishName,
+            requiredIngredients: order.requiredIngredients.slice(),
+            timeLeft: time,
+            timeTotal: time
+        };
+
+        state.nextTicketId += 1;
+        return ticket;
+    },
+
     /* Function Description: Returns the number of orders for the cuurent day,
        calculated based on current day number */
     ordersForDay: function() {
@@ -147,24 +393,27 @@ window.FoodTruck = {
         var state = SugarCube.State.variables;
         this.stopOrderTimer();
         state.numOrders = this.ordersForDay();
-        state.availableOrders = orderOptions.slice();
+        state.availableCustomers = customerNames.slice();
+        this.buildTodaysMenu();
         state.dayScore = 0;
         state.ordersCompleted = 0;
         state.satisfactionScore = 0;
         state.healthinessScore = 0;
         state.prepTray = [];
-        state.activeOrder = null;
+        state.tickets = [];
+        state.activeTicketId = null;
+        state.nextTicketId = 1;
         state.dayPreparationChoices = [];
         state.pendingIngredient = null;
         state.pendingMethod = null;
         state.cookingResult = null;
-        state.orderTimer = this.orderTimeForDay();
         if (state.tutorialMode) {
             state.numOrders = 1;
-            state.availableOrders = [orderOptions[0]];
             state.tutorialStep = "take-order";
             state.tutorialIngredientIndex = 0;
         }
+        this.fillTickets();
+        this.startOrderTimer();
     },
 
     startTutorial: function() {
@@ -178,6 +427,11 @@ window.FoodTruck = {
         state.tutorialMode = false;
         state.tutorialStep = null;
         state.tutorialIngredientIndex = 0;
+        this.stopOrderTimer();
+        state.tickets = [];
+        state.activeTicketId = null;
+        // returning to the menu always restarts progress at day 1
+        state.currentDay = 1;
     },
 
     advanceTutorialIngredient: function() {
@@ -189,7 +443,7 @@ window.FoodTruck = {
 
         state.tutorialIngredientIndex += 1;
         state.tutorialStep = state.tutorialIngredientIndex <
-            state.activeOrder.requiredIngredients.length
+            this.getActiveOrder().requiredIngredients.length
             ? "ingredient"
             : "return-to-order";
     },
@@ -204,7 +458,8 @@ window.FoodTruck = {
 
     restoreTutorialIngredient: function() {
         var state = SugarCube.State.variables;
-        var required = state.activeOrder && state.activeOrder.requiredIngredients;
+        var activeOrder = this.getActiveOrder();
+        var required = activeOrder && activeOrder.requiredIngredients;
 
         if (!state.tutorialMode || !Array.isArray(required)) {
             return;
@@ -264,9 +519,18 @@ window.FoodTruck = {
         } else if (state.tutorialStep === "assembly") {
             targetText = "Assembly Station";
         } else if (state.tutorialStep === "ingredient" && passage === "AssemblyStation") {
-            targetText = state.activeOrder.requiredIngredients[state.tutorialIngredientIndex];
+            targetText = this.getActiveOrder().requiredIngredients[state.tutorialIngredientIndex];
         } else if (state.tutorialStep === "method" && passage === "PrepareIngredient") {
-            targetText = "(Healthy)";
+            // the healthy method's button moves around, so find it by position
+            var optionButtons = document.querySelectorAll(".method-options button");
+            var healthyButton = optionButtons[(state.methodOrder || []).indexOf("healthy")];
+
+            if (healthyButton) {
+                healthyButton.classList.add("tutorial-target");
+            }
+            return;
+        } else if (state.tutorialStep === "stop" && passage === "PrepareIngredient") {
+            targetText = "Continue to Cooking";
         } else if (state.tutorialStep === "stop" && passage === "CookingMinigame") {
             targetText = "Stop Cooking";
         } else if (state.tutorialStep === "result" && passage === "CookingResult") {
@@ -302,38 +566,79 @@ window.FoodTruck = {
         }
     },
 
-    /* Function Description: Starts the next day by incrementing the current
-       day and calling startDay */
+    /* Function Description: Advances to the next day and resets the menu picks.
+       The day itself begins from the ChooseMenu screen via startDay. */
     startNextDay: function() {
         SugarCube.State.variables.currentDay += 1;
-        this.startDay();
+        this.beginMenuSelection();
     },
 
-    /* Function Description: Randomly selects an order from today's remaining
-       unique customers */
-    takeOrder: function() {
+    /* Function Description: Removes the cooking choices made for a ticket that
+       was cancelled or expired, so they no longer affect the day's scores */
+    discardTicketChoices: function(ticketId) {
         var state = SugarCube.State.variables;
 
-        if (state.numOrders < 1 || state.activeOrder) {
+        state.dayPreparationChoices = state.dayPreparationChoices.filter(function(choice) {
+            return choice.ticketId !== ticketId;
+        });
+    },
+
+    /* Function Description: Immediately discards a ticket and replaces it in
+       place with a different random ticket (fresh timer). The day's remaining
+       order count is unchanged. */
+    cancelTicket: function(ticketId) {
+        var state = SugarCube.State.variables;
+        var index = state.tickets.findIndex(function(t) {
+            return t.id === ticketId;
+        });
+
+        if (index === -1) {
             return;
         }
-        if (!state.availableOrders.length) {
-            throw new Error("No customers remain for today's orders (has to be a unique customer).");
+
+        var ticket = state.tickets[index];
+        var replacement = this.pickOrder([ticket.custName]) || ticket;
+
+        this.discardTicketChoices(ticket.id);
+        if (ticket.id === state.activeTicketId) {
+            state.activeTicketId = null;
+            state.prepTray = [];
+            state.pendingIngredient = null;
+            state.pendingMethod = null;
+            state.cookingResult = null;
+            if (state.tutorialMode) {
+                state.tutorialStep = "take-order";
+            }
+        }
+        state.tickets[index] = this.makeTicket(replacement);
+    },
+
+    /* Function Description: Takes the ticket with the given id as the order
+       being prepared. Switching tickets clears the prep tray. */
+    selectOrder: function(ticketId) {
+        var state = SugarCube.State.variables;
+        var ticket = state.tickets.find(function(t) {
+            return t.id === ticketId;
+        });
+
+        if (!ticket || state.activeTicketId === ticketId) {
+            return;
         }
 
-        var customerIndex = Math.floor(Math.random() * state.availableOrders.length);
-        state.activeOrder = state.availableOrders.splice(customerIndex, 1)[0];
-        state.orderTimer = this.orderTimeForDay();
+        state.activeTicketId = ticketId;
+        state.prepTray = [];
+        state.pendingIngredient = null;
+        state.pendingMethod = null;
+        state.cookingResult = null;
         if (state.tutorialMode) {
             state.tutorialStep = "assembly";
         }
-        this.startOrderTimer();
     },
 
     /* Function Description: Returns a string representation of the ingredient
        at the specified index, including its image and name */
     ingredientLabel: function(index) {
-        var ingredients = SugarCube.State.variables.menuIngredients;
+        var ingredients = SugarCube.State.variables.todaysMenu;
         var ingredient = ingredients[index];
 
         if (!ingredient) {
@@ -343,18 +648,17 @@ window.FoodTruck = {
         return ingredient.img + "\n" + ingredient.name;
     },
 
-    /* Function Description: Returns a string representation of the preparation
-       method for the pending ingredient, including its label and whether it's
-       healthy or unhealthy */
-    methodLabel: function(type) {
+    /* Function Description: Returns the button label for a preparation method of
+       the pending ingredient. The label deliberately doesn't say whether the
+       method is healthy; position is the button's slot (0 = A, 1 = B). */
+    methodLabel: function(type, position) {
         var ingredient = SugarCube.State.variables.pendingIngredient;
 
         if (!ingredient || !ingredient.methods || !ingredient.methods[type]) {
             throw new Error("Cannot display a preparation method without a valid ingredient and method.");
         }
 
-        return (type === "healthy" ? "A. " : "B. ") + ingredient.methods[type] +
-            (type === "healthy" ? " (Healthy)" : " (Unhealthy)");
+        return (position === 1 ? "B. " : "A. ") + ingredient.methods[type];
     },
 
     /* Function Description: Selects an ingredient from the menu by its index,
@@ -362,9 +666,9 @@ window.FoodTruck = {
        preparation method or cooking result */
     selectIngredient: function(index) {
         var state = SugarCube.State.variables;
-        var ingredient = state.menuIngredients[index];
+        var ingredient = state.todaysMenu[index];
 
-        if (!state.activeOrder) {
+        if (!this.getActiveOrder()) {
             throw new Error("Cannot add an ingredient without an active order.");
         }
         if (!ingredient) {
@@ -380,6 +684,9 @@ window.FoodTruck = {
         state.pendingIngredient = ingredient;
         state.pendingMethod = null;
         state.cookingResult = null;
+        state.prepActionDone = false;
+        // shuffle which button holds the healthy method so position gives nothing away
+        state.methodOrder = shuffled(["healthy", "unhealthy"]);
         if (state.tutorialMode) {
             state.tutorialStep = "method";
         }
@@ -397,11 +704,230 @@ window.FoodTruck = {
 
         state.pendingMethod = {
             type: type,
-            label: ingredient.methods[type]
+            label: ingredient.methods[type],
+            reason: ingredient.reasons[type]
         };
         state.cookingResult = null;
+        state.prepActionDone = false;
+        if (state.tutorialMode) {
+            state.tutorialStep = "micro";
+        }
+    },
+
+    /* Function Description: Marks the ingredient's preparation action as done,
+       which unlocks the cooking minigame */
+    completePrepAction: function() {
+        var state = SugarCube.State.variables;
+
+        state.prepActionDone = true;
         if (state.tutorialMode) {
             state.tutorialStep = "stop";
+        }
+        this.updateTutorialHighlights();
+    },
+
+    /* Function Description: Builds the preparation micro-action for the pending
+       ingredient (tap, hold, scrub or swipe) on the PrepareIngredient screen */
+    initPrepAction: function() {
+        var self = this;
+        var host = document.getElementById("prep-action");
+        var next = document.getElementById("prep-continue");
+        var state = SugarCube.State.variables;
+
+        if (!host || !next) {
+            return;
+        }
+        next.addEventListener("click", function() {
+            if (SugarCube.State.variables.prepActionDone) {
+                SugarCube.Engine.play("CookingMinigame");
+            }
+        });
+
+        var action = state.pendingIngredient && state.pendingIngredient.action;
+
+        if (!action) {
+            return;
+        }
+        if (state.prepActionDone) {
+            host.textContent = "\u2713 Prepared!";
+            next.disabled = false;
+            return;
+        }
+
+        var label = document.createElement("p");
+        var pad = document.createElement("button");
+        var icon = document.createElement("span");
+        var track = document.createElement("div");
+        var fill = document.createElement("div");
+        var finished = false;
+
+        label.className = "prep-action-label";
+        label.textContent = action.label;
+        pad.type = "button";
+        pad.className = "prep-action-pad";
+        icon.textContent = action.icon;
+        pad.appendChild(icon);
+        track.className = "prep-action-progress";
+        fill.className = "prep-action-fill";
+        track.appendChild(fill);
+        host.appendChild(label);
+        host.appendChild(pad);
+        host.appendChild(track);
+
+        function setProgress(fraction) {
+            fill.style.width = Math.min(100, fraction * 100) + "%";
+        }
+
+        function bump() {
+            pad.classList.remove("prep-action-bump");
+            void pad.offsetWidth;
+            pad.classList.add("prep-action-bump");
+        }
+
+        function finish() {
+            if (finished) {
+                return;
+            }
+            finished = true;
+            setProgress(1);
+            label.textContent = "\u2713 Prepared!";
+            pad.disabled = true;
+            next.disabled = false;
+            self.completePrepAction();
+        }
+
+        // count-based actions: each completed tap/swipe/scrub reversal calls step()
+        var steps = 0;
+
+        function step() {
+            if (finished) {
+                return;
+            }
+            steps += 1;
+            bump();
+            setProgress(steps / action.count);
+            if (steps >= action.count) {
+                finish();
+            }
+        }
+
+        if (action.type === "tap") {
+            pad.addEventListener("click", step);
+        } else if (action.type === "hold") {
+            var timer = null;
+            var startTime = 0;
+
+            var stopHold = function() {
+                if (timer !== null) {
+                    clearInterval(timer);
+                    timer = null;
+                }
+                if (!finished) {
+                    setProgress(0);
+                }
+            };
+            var startHold = function() {
+                if (timer !== null || finished) {
+                    return;
+                }
+                startTime = performance.now();
+                timer = setInterval(function() {
+                    var fraction = (performance.now() - startTime) / action.ms;
+
+                    setProgress(fraction);
+                    if (fraction >= 1) {
+                        stopHold();
+                        finish();
+                    }
+                }, 30);
+            };
+
+            pad.addEventListener("pointerdown", startHold);
+            ["pointerup", "pointerleave", "pointercancel"].forEach(function(name) {
+                pad.addEventListener(name, stopHold);
+            });
+            pad.addEventListener("keydown", function(event) {
+                if ((event.key === " " || event.key === "Enter") && !event.repeat) {
+                    event.preventDefault();
+                    startHold();
+                }
+            });
+            pad.addEventListener("keyup", stopHold);
+        } else if (action.type === "scrub") {
+            var dragging = false;
+            var direction = 0;
+            var extreme = 0;
+            var lastKey = null;
+            var minTravel = 25;
+
+            pad.addEventListener("pointerdown", function(event) {
+                dragging = true;
+                direction = 0;
+                extreme = event.clientX;
+                pad.setPointerCapture(event.pointerId);
+            });
+            pad.addEventListener("pointermove", function(event) {
+                if (!dragging) {
+                    return;
+                }
+                var x = event.clientX;
+
+                if (direction === 0) {
+                    if (Math.abs(x - extreme) >= minTravel) {
+                        direction = x > extreme ? 1 : -1;
+                        extreme = x;
+                    }
+                } else if (direction > 0) {
+                    if (x > extreme) {
+                        extreme = x;
+                    } else if (extreme - x >= minTravel) {
+                        direction = -1;
+                        extreme = x;
+                        step();
+                    }
+                } else if (x < extreme) {
+                    extreme = x;
+                } else if (x - extreme >= minTravel) {
+                    direction = 1;
+                    extreme = x;
+                    step();
+                }
+            });
+            ["pointerup", "pointercancel"].forEach(function(name) {
+                pad.addEventListener(name, function() {
+                    dragging = false;
+                });
+            });
+            // keyboard fallback: alternate the left and right arrow keys
+            pad.addEventListener("keydown", function(event) {
+                if ((event.key === "ArrowLeft" || event.key === "ArrowRight") &&
+                    event.key !== lastKey) {
+                    lastKey = event.key;
+                    step();
+                }
+            });
+        } else if (action.type === "swipe") {
+            var startX = null;
+
+            pad.addEventListener("pointerdown", function(event) {
+                startX = event.clientX;
+                pad.setPointerCapture(event.pointerId);
+            });
+            pad.addEventListener("pointerup", function(event) {
+                if (startX !== null && Math.abs(event.clientX - startX) >= 50) {
+                    step();
+                }
+                startX = null;
+            });
+            pad.addEventListener("pointercancel", function() {
+                startX = null;
+            });
+            // keyboard fallback: Enter or Space counts as a swipe
+            pad.addEventListener("click", function(event) {
+                if (event.detail === 0) {
+                    step();
+                }
+            });
         }
     },
 
@@ -434,6 +960,7 @@ window.FoodTruck = {
         ));
         var doneness = position < 42 ? "Raw" : position <= 58 ? "Perfect" : "Overcooked";
         var choice = {
+            ticketId: state.activeTicketId,
             ingredient: state.pendingIngredient.name,
             method: state.pendingMethod.label,
             healthy: state.pendingMethod.type === "healthy",
@@ -472,7 +999,8 @@ window.FoodTruck = {
     canFulfillOrder: function() {
         var state = SugarCube.State.variables;
         var tray = state.prepTray;
-        var required = state.activeOrder && state.activeOrder.requiredIngredients;
+        var activeOrder = this.getActiveOrder();
+        var required = activeOrder && activeOrder.requiredIngredients;
 
         if (!Array.isArray(tray) || !Array.isArray(required) || tray.length !== required.length) {
             return false;
@@ -582,9 +1110,11 @@ window.FoodTruck = {
         state.ordersCompleted += 1;
         state.dayScore += 1;
         state.numOrders -= 1;
-        state.activeOrder = null;
+        state.tickets = state.tickets.filter(function(ticket) {
+            return ticket.id !== state.activeTicketId;
+        });
+        state.activeTicketId = null;
         state.prepTray = [];
-        this.stopOrderTimer();
 
         if (state.tutorialMode) {
             state.tutorialStep = "tally";
@@ -593,48 +1123,101 @@ window.FoodTruck = {
         if (state.numOrders === 0) {
             this.finishDay();
         } else {
+            this.fillTickets();
             SugarCube.Engine.play("TakeOrderScreen");
         }
     },
 
-    /* Function Description: Starts the order timer interval, which decrements
-       the order timer every second and handles order expiration */
+    /* Function Description: Starts the shared timer interval, which ticks every
+       ticket down several times a second so the progress bars animate smoothly */
     startOrderTimer: function() {
         var self = this;
 
         this.stopOrderTimer();
-        if (!SugarCube.State.variables.activeOrder) {
+        if (!SugarCube.State.variables.tickets.length) {
             return;
         }
 
+        lastTickTime = Date.now();
         orderTimerInterval = setInterval(function() {
-            var state = SugarCube.State.variables;
+            self.tickOrders();
+        }, 100);
+    },
 
-            if (!state.activeOrder) {
-                self.stopOrderTimer();
+    /* Function Description: Ticks every ticket's timer down by the real time
+       elapsed. A taken ticket that expires is cancelled (counting as a handled
+       order) and a new ticket fills its slot if orders remain. A ticket that
+       was never taken is instead swapped for a different random ticket with a
+       fresh timer. The day ends once no orders are left. */
+    tickOrders: function() {
+        var state = SugarCube.State.variables;
+
+        if (!state.tickets.length) {
+            this.stopOrderTimer();
+            return;
+        }
+
+        var now = Date.now();
+        var elapsed = Math.min(1, (now - lastTickTime) / 1000);
+        var self = this;
+        var changed = false;
+        var activeExpired = false;
+        var remaining = [];
+
+        lastTickTime = now;
+
+        state.tickets.forEach(function(ticket) {
+            ticket.timeLeft = Math.max(0, ticket.timeLeft - elapsed);
+        });
+
+        state.tickets.forEach(function(ticket) {
+            if (ticket.timeLeft > 0) {
+                remaining.push(ticket);
                 return;
             }
 
-            state.orderTimer = Math.max(0, state.orderTimer - 1);
-            self.updateOrderTimerDisplay();
-
-            // clear all order details after reaching 0 on the timer
-            if (state.orderTimer <= 0) {
-                self.stopOrderTimer();
-                state.activeOrder = null;
-                state.prepTray = [];
-                state.pendingIngredient = null;
-                state.pendingMethod = null;
-                state.cookingResult = null;
+            changed = true;
+            self.discardTicketChoices(ticket.id);
+            if (ticket.id === state.activeTicketId) {
+                activeExpired = true;
                 state.numOrders -= 1;
-
-                if (state.numOrders === 0) {
-                    self.finishDay();
-                } else {
-                    SugarCube.Engine.play("TakeOrderScreen");
-                }
+                return;
             }
-        }, 1000);
+
+            // untaken ticket: replace it with a different random customer
+            var replacement = self.pickOrder([ticket.custName]) || ticket;
+            remaining.push(self.makeTicket(replacement));
+        });
+
+        if (!changed) {
+            this.updateTicketDisplays();
+            return;
+        }
+
+        state.tickets = remaining;
+
+        if (activeExpired) {
+            state.activeTicketId = null;
+            state.prepTray = [];
+            state.pendingIngredient = null;
+            state.pendingMethod = null;
+            state.cookingResult = null;
+        }
+
+        if (state.numOrders <= 0) {
+            this.finishDay();
+            return;
+        }
+
+        this.fillTickets();
+
+        if (activeExpired) {
+            SugarCube.Engine.play("TakeOrderScreen");
+        } else if (SugarCube.State.passage === "TakeOrderScreen") {
+            SugarCube.Engine.show();
+        } else {
+            this.updateTicketDisplays();
+        }
     },
 
     /* Function Description: Stops the order timer interval if it's running */
@@ -648,7 +1231,8 @@ window.FoodTruck = {
     /* Function Description: Returns a string representation of the order timer
        in the format "MM:SS" */
     orderTimerDisplay: function() {
-        var seconds = Math.max(0, SugarCube.State.variables.orderTimer || 0);
+        var activeOrder = this.getActiveOrder();
+        var seconds = Math.max(0, Math.ceil(activeOrder ? activeOrder.timeLeft : 0));
         var minutes = Math.floor(seconds / 60);
         var remainingSeconds = seconds % 60;
 
@@ -656,17 +1240,67 @@ window.FoodTruck = {
             String(remainingSeconds).padStart(2, "0");
     },
 
-    /* Function Description: Updates the order timer display in the UI */
-    updateOrderTimerDisplay: function() {
+    /* Function Description: Returns a ticket's progress bar color, fading from
+       green (full) through yellow to red (empty) */
+    ticketColor: function(fraction) {
+        return "hsl(" + Math.round(120 * fraction) + ", 80%, 42%)";
+    },
+
+    /* Function Description: Applies a ticket's remaining time to a progress bar
+       fill element. When instant is true the width is set without animating. */
+    applyTimerFill: function(fill, ticket, instant) {
+        var fraction = Math.max(0, Math.min(1, ticket.timeLeft / ticket.timeTotal));
+
+        if (instant) {
+            fill.style.transition = "none";
+        }
+        fill.style.width = (fraction * 100) + "%";
+        fill.style.backgroundColor = this.ticketColor(fraction);
+        if (instant) {
+            void fill.offsetWidth;
+            fill.style.transition = "";
+        }
+    },
+
+    /* Function Description: Updates the ticket cards, their progress bars, and
+       the active ticket timer on the assembly station in the UI */
+    updateTicketDisplays: function(instant) {
+        var self = this;
+        var state = SugarCube.State.variables;
+        var cards = document.querySelectorAll(".ticket-card");
+
+        if (cards.length === state.tickets.length) {
+            state.tickets.forEach(function(ticket, index) {
+                var fill = cards[index].querySelector(".ticket-timer-fill");
+
+                cards[index].classList.toggle("ticket-active", ticket.id === state.activeTicketId);
+                if (fill) {
+                    self.applyTimerFill(fill, ticket, instant);
+                }
+            });
+        }
+
+        var activeOrder = this.getActiveOrder();
         var timerElement = document.getElementById("order-timer");
+        var barFill = document.getElementById("order-bar-fill");
 
         if (timerElement) {
             timerElement.textContent = this.orderTimerDisplay();
+        }
+        if (barFill && activeOrder) {
+            this.applyTimerFill(barFill, activeOrder, instant);
         }
     }
 };
 
 window.jQuery(document).on(":passagedisplay", function() {
+    var state = SugarCube.State.variables;
+
+    // resume ticking if tickets exist but the timer isn't running (e.g. after loading a save)
+    if (state.tickets && state.tickets.length && !orderTimerInterval) {
+        window.FoodTruck.startOrderTimer();
+    }
+    window.FoodTruck.updateTicketDisplays(true);
     document.querySelectorAll(".ingredient-button").forEach(function(button) {
         button.addEventListener("click", function() {
             var ingredientButtons = document.querySelectorAll(".ingredient-button");
@@ -676,5 +1310,24 @@ window.jQuery(document).on(":passagedisplay", function() {
             SugarCube.Engine.play("PrepareIngredient");
         });
     });
+    document.querySelectorAll(".menu-pick-button").forEach(function(button, index) {
+        button.addEventListener("click", function() {
+            window.FoodTruck.toggleMenuPick(index);
+        });
+    });
+    var menuStart = document.getElementById("menu-start");
+
+    if (menuStart) {
+        menuStart.addEventListener("click", function() {
+            if (SugarCube.State.variables.menuPicks.length === 3) {
+                window.FoodTruck.startDay();
+                SugarCube.Engine.play("TakeOrderScreen");
+            }
+        });
+    }
+    if (document.querySelector(".menu-pick-button")) {
+        window.FoodTruck.refreshMenuSelection();
+    }
+    window.FoodTruck.initPrepAction();
     window.FoodTruck.updateTutorialHighlights();
 });
