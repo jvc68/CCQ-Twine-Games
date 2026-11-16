@@ -952,11 +952,12 @@ body {
 
 .prep-action-pad {
   appearance: none;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 76px;
+  height: 95px;
   border: 3px dashed rgba(255, 255, 255, 0.9);
   border-radius: 14px;
   background: rgba(0, 0, 0, 0.3);
@@ -966,6 +967,35 @@ body {
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
+}
+
+.prep-action-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%) translate(var(--icon-x, 0px), var(--icon-y, 0px))
+    scale(var(--icon-scale-x, 1), var(--icon-scale-y, 1));
+  transition: transform 50ms linear;
+}
+
+.prep-action-knife .prep-action-icon {
+  animation: prep-knife 360ms ease-in-out;
+}
+
+@keyframes prep-knife {
+  0%, 100% {
+    transform: translate(-50%, -50%) translate(var(--icon-x, 0px), var(--icon-y, 0px))
+      rotate(0deg);
+  }
+  50% {
+    transform: translate(-50%, -50%) translate(var(--icon-x, 0px), var(--icon-y, 0px))
+      rotate(-24deg);
+  }
+}
+
+.prep-action-pad.prep-action-held .prep-action-icon {
+  transition-duration: 80ms;
 }
 
 .prep-action-pad:disabled {
@@ -1263,6 +1293,11 @@ button,
   .tutorial-target,
   .prep-action-bump {
     animation-duration: 1800ms;
+  }
+
+  .prep-action-icon {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms;
   }
 }
 

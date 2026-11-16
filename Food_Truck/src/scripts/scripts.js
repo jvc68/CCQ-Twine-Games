@@ -765,6 +765,7 @@ window.FoodTruck = {
         label.textContent = action.label;
         pad.type = "button";
         pad.className = "prep-action-pad";
+        icon.className = "prep-action-icon";
         icon.textContent = action.icon;
         pad.appendChild(icon);
         track.className = "prep-action-progress";
@@ -782,10 +783,27 @@ window.FoodTruck = {
             fill.style.width = Math.min(100, fraction * 100) + "%";
         }
 
+        function moveIcon(event) {
+            var bounds = pad.getBoundingClientRect();
+            icon.style.setProperty("--icon-x", (event.clientX - bounds.left - bounds.width / 2) + "px");
+            icon.style.setProperty("--icon-y", (event.clientY - bounds.top - bounds.height / 2) + "px");
+        }
+
+        function resetIconPosition() {
+            icon.style.removeProperty("--icon-x");
+            icon.style.removeProperty("--icon-y");
+        }
+
         function bump() {
             pad.classList.remove("prep-action-bump");
             void pad.offsetWidth;
             pad.classList.add("prep-action-bump");
+        }
+
+        function animateKnife() {
+            pad.classList.remove("prep-action-knife");
+            void icon.offsetWidth;
+            pad.classList.add("prep-action-knife");
         }
 
         // capture can throw if the pointer is already gone (fast taps on touch)
@@ -821,6 +839,9 @@ window.FoodTruck = {
             }
             steps += 1;
             bump();
+            if (action.icon === "\uD83D\uDD2A" && action.type === "tap") {
+                animateKnife();
+            }
             setProgress(steps / action.count);
             if (steps >= action.count) {
                 finish();
@@ -840,20 +861,31 @@ window.FoodTruck = {
                 }
                 if (!finished) {
                     setProgress(0);
+                    icon.style.removeProperty("--icon-scale-x");
+                    icon.style.removeProperty("--icon-scale-y");
                 }
+                pad.classList.remove("prep-action-held");
             };
             var startHold = function() {
                 if (timer !== null || finished) {
                     return;
                 }
+                pad.classList.add("prep-action-held");
                 startTime = performance.now();
                 timer = setInterval(function() {
                     var fraction = (performance.now() - startTime) / action.ms;
 
                     setProgress(fraction);
                     if (fraction >= 1) {
-                        stopHold();
+                        icon.style.setProperty("--icon-scale-x", 1.3);
+                        icon.style.setProperty("--icon-scale-y", 0.6);
+                        clearInterval(timer);
+                        timer = null;
+                        pad.classList.remove("prep-action-held");
                         finish();
+                    } else {
+                        icon.style.setProperty("--icon-scale-x", 1 + fraction * 0.3);
+                        icon.style.setProperty("--icon-scale-y", 1 - fraction * 0.4);
                     }
                 }, 30);
             };
@@ -861,19 +893,14 @@ window.FoodTruck = {
             pad.addEventListener("pointerdown", function(event) {
                 capture(event);
                 startHold();
-                pad.classList.add("prep-action-held");
             });
             ["pointerup", "pointercancel", "lostpointercapture"].forEach(function(name) {
-                pad.addEventListener(name, function() {
-                    stopHold();
-                    pad.classList.remove("prep-action-held");
-                });
+                pad.addEventListener(name, stopHold);
             });
             pad.addEventListener("pointerleave", function(event) {
                 // a finger slipping a few px off the edge must not cancel a hold
                 if (event.pointerType === "mouse") {
                     stopHold();
-                    pad.classList.remove("prep-action-held");
                 }
             });
             pad.addEventListener("keydown", function(event) {
@@ -895,11 +922,13 @@ window.FoodTruck = {
                 direction = 0;
                 extreme = event.clientX;
                 capture(event);
+                moveIcon(event);
             });
             pad.addEventListener("pointermove", function(event) {
                 if (!dragging) {
                     return;
                 }
+                moveIcon(event);
                 var x = event.clientX;
 
                 if (direction === 0) {
@@ -926,6 +955,7 @@ window.FoodTruck = {
             ["pointerup", "pointercancel"].forEach(function(name) {
                 pad.addEventListener(name, function() {
                     dragging = false;
+                    resetIconPosition();
                 });
             });
             // keyboard fallback: alternate the left and right arrow keys
@@ -942,15 +972,23 @@ window.FoodTruck = {
             pad.addEventListener("pointerdown", function(event) {
                 startX = event.clientX;
                 capture(event);
+                moveIcon(event);
+            });
+            pad.addEventListener("pointermove", function(event) {
+                if (startX !== null) {
+                    moveIcon(event);
+                }
             });
             pad.addEventListener("pointerup", function(event) {
                 if (startX !== null && Math.abs(event.clientX - startX) >= Math.min(50, padWidth() * 0.15)) {
                     step();
                 }
                 startX = null;
+                resetIconPosition();
             });
             pad.addEventListener("pointercancel", function() {
                 startX = null;
+                resetIconPosition();
             });
             // keyboard fallback: Enter or Space counts as a swipe
             pad.addEventListener("click", function(event) {
