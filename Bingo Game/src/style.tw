@@ -70,8 +70,8 @@ body {
 }
 
 .bingo-game {
-    max-width: 650px;
-    margin: 20px auto;
+    max-width: none;
+    margin: 0;
     font-family: Arial, sans-serif;
     text-align: center;
 }
@@ -93,18 +93,22 @@ body {
 }
 
 .bingo-cell {
-    display: flex
+    display: flex;
     min-width: 0;
     aspect-ratio: 1 / 1;
     border: 2px solid #315c49;
-    border-radius: 5px;
+    border-radius: 8px;
     background: #f4f1d8;
     color: #222222;
     font-size: 1.1rem;
     font-weight: bold;
-    align-items: center
-    justify-content: center
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    cursor: pointer;
+    transition: transform .12s, background .12s;
 }
+.bingo-cell:hover:not(.free):not(.marked) { transform: scale(1.06); background: #fff; }
 
 .bingo-cell.marked {
     background: #fde725;
@@ -123,20 +127,6 @@ body {
     font-size: 1.1rem;
     font-weight: bold;
     color: #315c49;
-}
-
-#bingo-reset {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background: #315c49;
-    color: white;
-    font-size: 1rem;
-    cursor: pointer;
-}
-
-#bingo-reset:hover {
-    background: #244435;
 }
 
 @media (max-width: 450px) {
@@ -225,6 +215,13 @@ body {
     margin: 0;
 }
 
+.bingo-num-message{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .bingo-position {
     background-color: #f4f1d8;
     color: black;
@@ -237,30 +234,12 @@ body {
     align-items: center;
 }
 
-.non-bingo-btn {
-    background-color: #f4f1d8;
-    border-radius: 10%;
-    color: black;
-    font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, "Segoe UI", sans-serif;
-    font-weight: bold;
-}
-
 .start-cont {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     padding: 25%;
-}
-
-.start-btn {
-    background-color: #f4f1d8;
-    border-radius: 10%;
-    color: black;
-    font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, "Segoe UI", sans-serif;
-    font-weight: bold;
-    font-size: 1.5rem;
-    width: 150%;
 }
 
 .welcome-msg {
@@ -276,4 +255,251 @@ body {
     padding: 10%;
     background-color: #f4f1d8;
     border-radius: 10%;
+}
+
+/* ---------- Layout: pin Exit to the bottom of the phone ---------- */
+.phone {
+  display: flex;
+  flex-direction: column;
+}
+.screen,
+.bingo-game {
+  flex: 1 1 auto;          /* fill the phone's height */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+}
+.phone button.exit-btn {
+  margin-top: auto;        /* pushes it to the bottom */
+}
+
+/* ---------- Buttons ---------- */
+:where(.phone) button:not(.bingo-cell) {
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: .7em 1.4em;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: #fde725;
+  color: #1d1d1d;
+  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(0,0,0,.3);
+  transition: transform .12s, box-shadow .12s, filter .12s;
+}
+:where(.phone) button:not(.bingo-cell):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 rgba(0,0,0,.3);
+  filter: brightness(1.05);
+}
+:where(.phone) button:not(.bingo-cell):active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(0,0,0,.3);
+}
+.phone button:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+
+/* Secondary (Reset Board, etc.) */
+.phone button.non-bingo-btn {
+  background: #f4f1d8;
+  color: #1d1d1d;
+  border-radius: 999px;
+}
+
+/* Exit to Home: outlined, quieter than the main actions */
+.phone button.exit-btn {
+  width: 100%;
+  background: rgba(255,255,255,.15);
+  color: #fff;
+  border-color: rgba(255,255,255,.6);
+  box-shadow: none;
+}
+.phone button.exit-btn:hover {
+  background: rgba(255,255,255,.28);
+  box-shadow: none;
+}
+
+/* Start button */
+.phone button.start-btn {
+  font-size: 1.4rem;
+  width: 150%;
+  background: #fde725;
+}
+
+/* Small buttons inside task cards */
+.phone .task-content button {
+  background: #21918c;
+  color: #fff;
+  font-size: .75rem;
+  padding: .45em .9em;
+  box-shadow: 0 3px 0 rgba(0,0,0,.3);
+}
+
+/* Custom task input */
+.add-task { width: 100%; }
+.add-task input {
+  width: 100%;
+  padding: .6em .9em;
+  margin-bottom: 8px;
+  border: 2px solid rgba(255,255,255,.6);
+  border-radius: 999px;
+  font-family: inherit;
+}
+
+/* ---------- Bingo board: fill the phone width ---------- */
+.bingo-game {
+  width: 100%;
+  align-items: stretch;   /* let children fill the width instead of shrinking */
+}
+
+.bingo-board {
+  width: 100%;
+  margin: 12px 0;
+  gap: 6px;
+}
+
+.bingo-header {
+  padding: 10px 0;
+  font-size: 1.3rem;
+}
+
+.bingo-cell {
+  font-size: 1.2rem;
+}
+
+/* ---------- Add Task panel ---------- */
+.add-task {
+  width: 100%;
+  margin-top: 12px;
+  padding: 14px;
+  background: #f4f1d8;          /* cream panel, matches the task list */
+  border-radius: 16px;
+  color: #1d1d1d;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.add-task h4 {
+  margin: 0 0 10px;
+  color: #1d1d1d;               /* the phone's default text is white, so darken it on the cream */
+}
+
+.add-task input {
+  width: 100%;
+  padding: .7em 1em;
+  margin-bottom: 10px;
+  background: #fff;             /* white field stands out against the cream panel */
+  color: #1d1d1d;
+  border: 2px solid #3b528b;    /* blue border from your palette */
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.add-task input::placeholder {
+  color: #6b6b6b;
+}
+
+.add-task input:focus {
+  outline: none;
+  border-color: #21918c;
+  box-shadow: 0 0 0 3px rgba(33, 145, 140, .35);
+}
+
+/* Yellow on cream is low contrast, so use teal for this button */
+.phone .add-task button {
+  background: #21918c;
+  color: #fff;
+  align-self: center;
+}
+
+/* ---------- Recently Completed Tasks dropdown ---------- */
+.recent-tasks-dropdown {
+  width: 100%;
+  background: #f4f1d8;            /* cream, matches the task list and Add Task panel */
+  color: #1d1d1d;
+  border: 2px solid rgba(0, 0, 0, .25);
+  border-radius: 16px;
+  overflow: hidden;               /* keeps the corners rounded when it opens */
+  text-align: left;
+}
+
+.recent-tasks-dropdown summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .7em 1em;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;               /* hides the default triangle (Firefox/Chrome) */
+  user-select: none;
+  transition: background .12s;
+}
+.recent-tasks-dropdown summary::-webkit-details-marker {
+  display: none;                  /* hides the default triangle (Safari) */
+}
+.recent-tasks-dropdown summary:hover {
+  background: rgba(33, 145, 140, .15);
+}
+.recent-tasks-dropdown summary:focus-visible {
+  outline: 3px solid #21918c;
+  outline-offset: -3px;
+}
+
+/* Custom arrow that rotates when opened */
+.recent-tasks-dropdown summary::after {
+  content: "▾";
+  font-size: 1.1rem;
+  transition: transform .2s;
+}
+.recent-tasks-dropdown[open] summary::after {
+  transform: rotate(180deg);
+}
+.recent-tasks-dropdown[open] summary {
+  border-bottom: 2px solid rgba(0, 0, 0, .15);
+}
+
+/* The list itself */
+.recent-tasks-list {
+  max-height: 180px;              /* scrolls instead of stretching the phone */
+  overflow-y: auto;
+  padding: 8px 12px;
+}
+.recent-tasks-list p {
+  margin: 6px 0;
+  font-size: .9rem;
+  font-style: italic;
+  color: #555;
+}
+
+.recent-task-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 0;
+  font-size: .9rem;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+.recent-task-item + .recent-task-item {
+  border-top: 1px solid rgba(0, 0, 0, .12);
+}
+.recent-task-item span {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.4em;
+  height: 1.4em;
+  border-radius: 50%;
+  background: #5ec962;            /* green check badge */
+  color: #153b27;
+  font-weight: 700;
+  font-size: .8rem;
 }

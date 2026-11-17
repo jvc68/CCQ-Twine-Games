@@ -171,8 +171,8 @@ body {
 }
 
 .bingo-game {
-    max-width: 650px;
-    margin: 20px auto;
+    max-width: none;
+    margin: 0;
     font-family: Arial, sans-serif;
     text-align: center;
 }
@@ -194,18 +194,22 @@ body {
 }
 
 .bingo-cell {
-    display: flex
+    display: flex;
     min-width: 0;
     aspect-ratio: 1 / 1;
     border: 2px solid #315c49;
-    border-radius: 5px;
+    border-radius: 8px;
     background: #f4f1d8;
     color: #222222;
     font-size: 1.1rem;
     font-weight: bold;
-    align-items: center
-    justify-content: center
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    cursor: pointer;
+    transition: transform .12s, background .12s;
 }
+.bingo-cell:hover:not(.free):not(.marked) { transform: scale(1.06); background: #fff; }
 
 .bingo-cell.marked {
     background: #fde725;
@@ -224,20 +228,6 @@ body {
     font-size: 1.1rem;
     font-weight: bold;
     color: #315c49;
-}
-
-#bingo-reset {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background: #315c49;
-    color: white;
-    font-size: 1rem;
-    cursor: pointer;
-}
-
-#bingo-reset:hover {
-    background: #244435;
 }
 
 @media (max-width: 450px) {
@@ -326,6 +316,13 @@ body {
     margin: 0;
 }
 
+.bingo-num-message{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .bingo-position {
     background-color: #f4f1d8;
     color: black;
@@ -338,30 +335,12 @@ body {
     align-items: center;
 }
 
-.non-bingo-btn {
-    background-color: #f4f1d8;
-    border-radius: 10%;
-    color: black;
-    font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, "Segoe UI", sans-serif;
-    font-weight: bold;
-}
-
 .start-cont {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     padding: 25%;
-}
-
-.start-btn {
-    background-color: #f4f1d8;
-    border-radius: 10%;
-    color: black;
-    font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, "Segoe UI", sans-serif;
-    font-weight: bold;
-    font-size: 1.5rem;
-    width: 150%;
 }
 
 .welcome-msg {
@@ -377,7 +356,255 @@ body {
     padding: 10%;
     background-color: #f4f1d8;
     border-radius: 10%;
-}</style><script role="script" id="twine-user-script" type="text/twine-javascript">
+}
+
+/* ---------- Layout: pin Exit to the bottom of the phone ---------- */
+.phone {
+  display: flex;
+  flex-direction: column;
+}
+.screen,
+.bingo-game {
+  flex: 1 1 auto;          /* fill the phone's height */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+}
+.phone button.exit-btn {
+  margin-top: auto;        /* pushes it to the bottom */
+}
+
+/* ---------- Buttons ---------- */
+:where(.phone) button:not(.bingo-cell) {
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: .7em 1.4em;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: #fde725;
+  color: #1d1d1d;
+  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(0,0,0,.3);
+  transition: transform .12s, box-shadow .12s, filter .12s;
+}
+:where(.phone) button:not(.bingo-cell):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 rgba(0,0,0,.3);
+  filter: brightness(1.05);
+}
+:where(.phone) button:not(.bingo-cell):active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(0,0,0,.3);
+}
+.phone button:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+
+/* Secondary (Reset Board, etc.) */
+.phone button.non-bingo-btn {
+  background: #f4f1d8;
+  color: #1d1d1d;
+  border-radius: 999px;
+}
+
+/* Exit to Home: outlined, quieter than the main actions */
+.phone button.exit-btn {
+  width: 100%;
+  background: rgba(255,255,255,.15);
+  color: #fff;
+  border-color: rgba(255,255,255,.6);
+  box-shadow: none;
+}
+.phone button.exit-btn:hover {
+  background: rgba(255,255,255,.28);
+  box-shadow: none;
+}
+
+/* Start button */
+.phone button.start-btn {
+  font-size: 1.4rem;
+  width: 150%;
+  background: #fde725;
+}
+
+/* Small buttons inside task cards */
+.phone .task-content button {
+  background: #21918c;
+  color: #fff;
+  font-size: .75rem;
+  padding: .45em .9em;
+  box-shadow: 0 3px 0 rgba(0,0,0,.3);
+}
+
+/* Custom task input */
+.add-task { width: 100%; }
+.add-task input {
+  width: 100%;
+  padding: .6em .9em;
+  margin-bottom: 8px;
+  border: 2px solid rgba(255,255,255,.6);
+  border-radius: 999px;
+  font-family: inherit;
+}
+
+/* ---------- Bingo board: fill the phone width ---------- */
+.bingo-game {
+  width: 100%;
+  align-items: stretch;   /* let children fill the width instead of shrinking */
+}
+
+.bingo-board {
+  width: 100%;
+  margin: 12px 0;
+  gap: 6px;
+}
+
+.bingo-header {
+  padding: 10px 0;
+  font-size: 1.3rem;
+}
+
+.bingo-cell {
+  font-size: 1.2rem;
+}
+
+/* ---------- Add Task panel ---------- */
+.add-task {
+  width: 100%;
+  margin-top: 12px;
+  padding: 14px;
+  background: #f4f1d8;          /* cream panel, matches the task list */
+  border-radius: 16px;
+  color: #1d1d1d;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.add-task h4 {
+  margin: 0 0 10px;
+  color: #1d1d1d;               /* the phone's default text is white, so darken it on the cream */
+}
+
+.add-task input {
+  width: 100%;
+  padding: .7em 1em;
+  margin-bottom: 10px;
+  background: #fff;             /* white field stands out against the cream panel */
+  color: #1d1d1d;
+  border: 2px solid #3b528b;    /* blue border from your palette */
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.add-task input::placeholder {
+  color: #6b6b6b;
+}
+
+.add-task input:focus {
+  outline: none;
+  border-color: #21918c;
+  box-shadow: 0 0 0 3px rgba(33, 145, 140, .35);
+}
+
+/* Yellow on cream is low contrast, so use teal for this button */
+.phone .add-task button {
+  background: #21918c;
+  color: #fff;
+  align-self: center;
+}
+
+/* ---------- Recently Completed Tasks dropdown ---------- */
+.recent-tasks-dropdown {
+  width: 100%;
+  background: #f4f1d8;            /* cream, matches the task list and Add Task panel */
+  color: #1d1d1d;
+  border: 2px solid rgba(0, 0, 0, .25);
+  border-radius: 16px;
+  overflow: hidden;               /* keeps the corners rounded when it opens */
+  text-align: left;
+}
+
+.recent-tasks-dropdown summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .7em 1em;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;               /* hides the default triangle (Firefox/Chrome) */
+  user-select: none;
+  transition: background .12s;
+}
+.recent-tasks-dropdown summary::-webkit-details-marker {
+  display: none;                  /* hides the default triangle (Safari) */
+}
+.recent-tasks-dropdown summary:hover {
+  background: rgba(33, 145, 140, .15);
+}
+.recent-tasks-dropdown summary:focus-visible {
+  outline: 3px solid #21918c;
+  outline-offset: -3px;
+}
+
+/* Custom arrow that rotates when opened */
+.recent-tasks-dropdown summary::after {
+  content: "▾";
+  font-size: 1.1rem;
+  transition: transform .2s;
+}
+.recent-tasks-dropdown[open] summary::after {
+  transform: rotate(180deg);
+}
+.recent-tasks-dropdown[open] summary {
+  border-bottom: 2px solid rgba(0, 0, 0, .15);
+}
+
+/* The list itself */
+.recent-tasks-list {
+  max-height: 180px;              /* scrolls instead of stretching the phone */
+  overflow-y: auto;
+  padding: 8px 12px;
+}
+.recent-tasks-list p {
+  margin: 6px 0;
+  font-size: .9rem;
+  font-style: italic;
+  color: #555;
+}
+
+.recent-task-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 0;
+  font-size: .9rem;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+.recent-task-item + .recent-task-item {
+  border-top: 1px solid rgba(0, 0, 0, .12);
+}
+.recent-task-item span {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.4em;
+  height: 1.4em;
+  border-radius: 50%;
+  background: #5ec962;            /* green check badge */
+  color: #153b27;
+  font-weight: 700;
+  font-size: .8rem;
+}</style><script role="script" id="twine-user-script" type="text/twine-javascript">/* twine-user-script #1: "index.js" */
+
 let gameWon = false;
 
 const STORAGE_KEY = "medicalBingoSave";
@@ -402,6 +629,37 @@ const winningLines = [
     [4, 8, 12, 16, 20]
 ];
 
+function shuffleArray(array) {
+    const shuffled = [...array];
+
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    return shuffled;
+}
+
+function generateBoardNumbers() {
+    const numbers = [];
+
+    while (numbers.length < 24) {
+        const number = Math.floor(
+            Math.random() * 99
+        ) + 1;
+
+        if (!numbers.includes(number)) {
+            numbers.push(number);
+        }
+    }
+
+    const shuffled = shuffleArray(numbers);
+
+    shuffled.splice(12, 0, null);
+
+    return shuffled;
+}
 // Find the current game day.
 // A new game day begins at 5 AM local time.
 function getGameDay() {
@@ -416,13 +674,23 @@ function getGameDay() {
         now.getDate();
 }
 
+// Keep only custom tasks that haven't been completed yet.
+function getUncompletedCustomTasks(customTasks, completedTasks) {
+    const done = Array.isArray(completedTasks) ? completedTasks : [];
+
+    return (Array.isArray(customTasks) ? customTasks : [])
+        .filter(task => !done.includes(task.id));
+}
+
 function createDefaultState(customTasks = []) {
     return {
         gameDay: getGameDay(),
         markedPositions: [],
         usedQuestions: [],
         completedTasks: [],
+        recentCompletedTasks: [],
         customTasks: customTasks,
+        boardNumbers: generateBoardNumbers(),
         bingoMessageShown: false
     };
 }
@@ -451,12 +719,19 @@ function loadState() {
                     ...createDefaultState(customTasks),
                     ...data
                 };
+
+                if (!Array.isArray(gameState.boardNumbers) ||
+                    gameState.boardNumbers.length !== 25) {
+                    gameState.boardNumbers = generateBoardNumbers();
+                }
             } else {
                 gameState = createDefaultState(customTasks);
                 saveState();
             }
         } catch (error) {
-            gameState = createDefaultState();
+            gameState = createDefaultState(
+                getUncompletedCustomTasks(customTasks, data.completedTasks)
+            );
             saveState();
         }
     } else {
@@ -478,12 +753,21 @@ window.BingoGame = {
 
         State.variables.unmarkedPositions =
             Array.from({ length: 25 }, (_, i) => i)
-                .filter(i => i !== 12 &&
-                    !gameState.markedPositions.includes(i));
+                .filter(i =>
+                    i !== 12 &&
+                    !gameState.markedPositions.includes(i)
+                );
 
         State.variables.customTasks =
             gameState.customTasks;
+
+        State.variables.bingoNumbers =
+            [...gameState.boardNumbers];
+
+        State.variables.recentCompletedTasks =
+            [...gameState.recentCompletedTasks];
     },
+
 
     // Mark a bingo position.
     markPosition: function (position) {
@@ -501,6 +785,70 @@ window.BingoGame = {
         saveState();
         this.syncToStory();
     },
+
+    
+    // Move the selected bingo number to a random
+    // unmarked position on the board.
+    movePosition: function (position) {
+
+        if (
+            position === 12 ||
+            position < 0 ||
+            position > 24 ||
+            gameState.markedPositions.includes(position)
+        ) {
+            return position;
+        }
+
+        // Find all available destination positions.
+        const availablePositions = Array.from(
+            { length: 25 },
+            (_, i) => i
+        ).filter(i =>
+            i !== 12 &&
+            i !== position &&
+            !gameState.markedPositions.includes(i)
+        );
+
+        if (availablePositions.length === 0) {
+            return position;
+        }
+
+        // Choose a random destination.
+        const newPosition = this.getRandomElement(
+            availablePositions
+        );
+
+        // Swap the numbers.
+        // This preserves all numbers on the board.
+        const temp = gameState.boardNumbers[position];
+
+        gameState.boardNumbers[position] =
+            gameState.boardNumbers[newPosition];
+
+        gameState.boardNumbers[newPosition] = temp;
+
+        saveState();
+        this.syncToStory();
+
+        return newPosition;
+    },
+
+    // Get the bingo letter and number for a position.
+    getPositionLabel: function (position) {
+
+        const columns = ["B", "I", "N", "G", "O"];
+
+        if (position < 0 || position > 24 || position === 12) {
+            return "FREE";
+        }
+
+        const column = columns[position % 5];
+        const number = gameState.boardNumbers[position];
+
+        return column + " " + number;
+    },
+
 
     // Check for a winning combination.
     checkBingoBoard: function () {
@@ -574,10 +922,19 @@ window.BingoGame = {
     },
 
     // Complete a task.
-    completeTask: function (taskId) {
+    completeTask: function (taskId, taskText) {
         if (!gameState.completedTasks.includes(taskId)) {
             gameState.completedTasks.push(taskId);
+
+            // Add the completed task to the beginning of the history.
+            gameState.recentCompletedTasks.unshift(taskText);
+
+            // Keep only the three most recent tasks.
+            gameState.recentCompletedTasks =
+                gameState.recentCompletedTasks.slice(0, 3);
+
             saveState();
+            this.syncToStory();
         }
     },
 
@@ -613,38 +970,32 @@ window.BingoGame = {
 
     // Reset daily game progress.
     resetBoard: function () {
-        // Reset all daily game progress.
-        gameState = createDefaultState([]);
 
-        gameState.customTasks = [];
+        // Keep only custom tasks that were never completed.
+        const customTasks = getUncompletedCustomTasks(
+            gameState.customTasks,
+            gameState.completedTasks
+        );
+
+        // Generate a completely new game state and board.
+        gameState = createDefaultState(customTasks);
+        // ...rest unchanged
 
         gameWon = false;
 
-        // Save the fresh game state.
         saveState();
 
         // Update SugarCube variables.
         this.syncToStory();
 
-        State.variables.customTasks = [];
-
-        // Clear the selected position.
         State.variables.selectedPosition = -1;
         State.variables.randomQuestion = null;
+        State.variables.userAnswer = null;
 
-        // Reset the visible board.
-        const board = document.querySelector(".bingo-board");
-
-        if (board) {
-            board.querySelectorAll(".bingo-cell").forEach(cell => {
-                if (!cell.classList.contains("free")) {
-                    cell.classList.remove("marked");
-                }
-            });
-        }
-        // Return to the board so SugarCube renders fresh state.
+        // Return to the board.
         Engine.play("BingoBoard");
     },
+
 
     // Schedule the next 5 AM reset.
     scheduleDailyReset: function () {
@@ -679,6 +1030,7 @@ BingoGame.scheduleDailyReset();
 
 // Clicking an unmarked bingo cell opens the Tasks passage.
 document.addEventListener("click", function (event) {
+
     const cell = event.target.closest(".bingo-cell");
 
     if (!cell || cell.classList.contains("free")) {
@@ -688,51 +1040,274 @@ document.addEventListener("click", function (event) {
     const position = Number(cell.dataset.index);
 
     if (
-        gameState.markedPositions.includes(position)) {
+        gameState.markedPositions.includes(position)
+    ) {
         return;
     }
 
-    State.variables.selectedPosition = position;
+    // Move the clicked number to a random position.
+    const newPosition = BingoGame.movePosition(position);
 
+    // Store its new location.
+    State.variables.selectedPosition = newPosition;
+
+    // Open the tasks passage.
     Engine.play("Tasks");
 });
-</script><tw-passagedata pid="1" name="StoryInit" tags="" position="100,100" size="100,100">&lt;&lt;set $customTasks = []&gt;&gt;
+
+/* twine-user-script #2: "tasks_questions.js" */
+
+window.BingoData = {
+
+    // =========================
+    // TASKS
+    // =========================
+
+    tasks: [
+        {
+            task: "I went for a walk today!",
+            status: "incomplete"
+        },
+        {
+            task: "I ate a healthy meal today!",
+            status: "incomplete"
+        },
+        {
+            task: "I took my medication!",
+            status: "incomplete"
+        },
+        {
+            task: "I tracked my blood pressure!",
+            status: "incomplete"
+        },
+        {
+            task: "I learned something today!",
+            status: "incomplete"
+        }
+    ],
+
+    // =========================
+    // QUESTIONS
+    // =========================
+
+    questions: [
+
+        {
+            type: "tf",
+            question: "Diuretics help the body eliminate excess salt and water.",
+            answer: true,
+            explanation: "Diuretics help the body eliminate excess salt and water, which can help reduce blood pressure."
+        },
+
+        {
+            type: "tf",
+            question: "Dehydration can affect blood pressure.",
+            answer: true,
+            explanation: "Dehydration can affect blood volume and circulation, potentially contributing to changes in blood pressure."
+        },
+
+        {
+            type: "mc",
+            question: "Which of the following is a common risk factor for hypertension?",
+
+            options: [
+                "Regular physical activity",
+                "High sodium intake",
+                "Drinking enough water",
+                "Getting adequate sleep"
+            ],
+
+            answer: "High sodium intake",
+
+            explanation: "Consuming too much sodium can contribute to increased blood pressure."
+        },
+
+        {
+            type: "mc",
+            question: "Which two numbers make up a blood pressure reading?",
+
+            options: [
+                "Heart rate and pulse",
+                "Systolic and diastolic pressure",
+                "Temperature and heart rate",
+                "Oxygen and glucose"
+            ],
+
+            answer: "Systolic and diastolic pressure",
+
+            explanation: "Blood pressure readings consist of systolic pressure and diastolic pressure."
+        },
+
+        {
+            type: "mc",
+            question: "Hypertension is...",
+
+            options: [
+                "Heart Failure",
+                "Chronic High Blood Pressure",
+                "A Virus",
+                "Bacteria"
+            ],
+
+            answer: "Chronic High Blood Pressure",
+
+            explanation: "Hypertension is a chronic medical condition characterized by high blood pressure."
+        },
+
+        {
+            type: "mc",
+            question: "How can you prevent High Blood Pressure?",
+
+            options: [
+                "Drink water and eat a lot of salty things.",
+                "Drink water, eat healthy, and laze on the couch.",
+                "Exercise, eat less salty things, and drink a lot of water.",
+                "Exercise somteims, and eat out."
+            ],
+
+            answer: "Exercise, eat less salty things, and drink a lot of water.",
+
+            explanation: "Keeping a healthy lifestyle of exercising at least once a day, drinking a lot of water, and eating healthier -- less sodium dense foods -- are just some things that can help prevent hypertension."
+        },
+
+        {
+            type: "tf",
+            question: "Sodium intake is good to prevent high blood pressure.",
+            answer: false,
+            explanation: "High sodium intake can actually contribute to high blood pressure. It's best to avoid sodium dense foods."
+        },
+
+        {
+            type: "tf",
+            question: "You may not have any symptoms if you have high blood pressure.",
+            answer: true,
+            explanation: "Hypertension has the nickname \'silent killer\' becoause people may not even know they have it because symptoms are not guarenteed."
+        },
+
+        {
+            type: "tf",
+            question: "test",
+            answer: true,
+            explanation: "test"
+        },
+
+        {
+            type: "tf",
+            question: "test",
+            answer: true,
+            explanation: "test"
+        },
+
+        {
+            type: "tf",
+            question: "test",
+            answer: true,
+            explanation: "test"
+        },
+
+        {
+            type: "tf",
+            question: "test",
+            answer: true,
+            explanation: "test"
+        },
+
+        {
+            type: "tf",
+            question: "test",
+            answer: true,
+            explanation: "test"
+        },
+
+        {
+            type: "tf",
+            question: "test",
+            answer: true,
+            explanation: "test"
+        },
+
+        {
+            type: "tf",
+            question: "test",
+            answer: true,
+            explanation: "test"
+        },
+
+        {
+            type: "tf",
+            question: "test",
+            answer: true,
+            explanation: "test"
+        },
+
+        {
+            type: "tf",
+            question: "test",
+            answer: true,
+            explanation: "test"
+        },
+
+        {
+            type: "tf",
+            question: "test",
+            answer: true,
+            explanation: "test"
+        },
+
+        {
+            type: "tf",
+            question: "test",
+            answer: true,
+            explanation: "test"
+        },
+
+        {
+            type: "tf",
+            question: "test",
+            answer: true,
+            explanation: "test"
+        },
+
+        {
+            type: "tf",
+            question: "test",
+            answer: true,
+            explanation: "test"
+        },
+
+        {
+            type: "tf",
+            question: "test",
+            answer: true,
+            explanation: "test"
+        },
+
+        {
+            type: "tf",
+            question: "test",
+            answer: true,
+            explanation: "test"
+        },
+
+        {
+            type: "tf",
+            question: "test",
+            answer: true,
+            explanation: "test"
+        },
+    ]
+
+};
+</script><tw-passagedata pid="1" name="StoryInit" tags="" position="100,100" size="100,100">&lt;&lt;set $tasks = BingoData.tasks&gt;&gt;
+&lt;&lt;set $customTasks = []&gt;&gt;
+&lt;&lt;set $questions = BingoData.questions&gt;&gt;
+
+&lt;&lt;set $bingoNumbers = []&gt;&gt;
 
 &lt;&lt;set $selectedPosition = -1&gt;&gt;
 &lt;&lt;set $randomQuestion = null&gt;&gt;
 
-&lt;&lt;run BingoGame.syncToStory()&gt;&gt;
-&lt;&lt;set $tasks = [
-    { task: &quot;I went for a walk today!&quot;, status: &quot;incomplete&quot; },
-    { task: &quot;I ate a healthy meal today!&quot;, status: &quot;incomplete&quot; },
-    { task: &quot;I took my medication!&quot;, status: &quot;incomplete&quot; },
-    { task: &quot;I tracked my blood pressure!&quot;, status: &quot;incomplete&quot; },
-    { task: &quot;I learned something today!&quot;, status: &quot;incomplete&quot; }
-]&gt;&gt;
-&lt;&lt;set $bingoNumbers = [
-    &quot;B 35&quot;, &quot;I 49&quot;, &quot;N 16&quot;, &quot;G 98&quot;, &quot;O 51&quot;,
-    &quot;B 36&quot;, &quot;I 54&quot;, &quot;N 72&quot;, &quot;G 39&quot;, &quot;O 48&quot;,
-    &quot;B 18&quot;, &quot;I 22&quot;, null, &quot;G 93&quot;, &quot;O 14&quot;,
-    &quot;B 44&quot;, &quot;I 68&quot;, &quot;N 9&quot;, &quot;G 64&quot;, &quot;O 86&quot;,
-    &quot;B 52&quot;, &quot;I 37&quot;, &quot;N 50&quot;, &quot;G 58&quot;, &quot;O 91&quot;
-]&gt;&gt;
-&lt;&lt;set $questions = [
-    { question: &quot;Diuretics, aka water pills, help the body eliminate excess salt and water.&quot;,
-        explanation: &quot;Diuretics do help the body eliminate excess salt and water. This in turn means they are effective at reducing blood pressure and some (such as thiazides and loop diuretics) are used for the treatment of high blood pressure (hypertension).&quot;,
-        status: &quot;unused&quot; },
-    { question: &quot;Isometric exercises are the most effective workouts for managing hypertension.&quot;,
-        explanation: &quot;Isometric exercises are the most effective workout for manaing hypertension. Researchers found that isometric exercise was 98% effective in reducing high blood pressure.&quot;,
-        status: &quot;unused&quot; },
-    { question: &quot;Dehydration can cause hypertension.&quot;,
-        explanation: &quot;Dehydration can cause blood to get thicker and reduces blood volume which in turn can increase blood pressure.&quot;,
-        status: &quot;unused&quot; },
-    { question: &quot;You can still have hypertension, even if you don&#39;t experience symptoms.&quot;,
-        explanation: &quot;This is often why it is called the \&#39;silent killer\&#39; because many people can have hypertension without knowing. This is why it is important to do often screenings.&quot;,
-        status: &quot;unused&quot; },
-    { question: &quot;Just because your blood pressure is back to normal, you should continue taking your hypertension medication.&quot;,
-        explanation: &quot;When you blood pressure returns to normal, it just means that the medications are working, not that your hypertension is cured. Stopping medication can cause blood pressure to rise again.&quot;,
-        status: &quot;unused&quot; }
-]&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="Home" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+&lt;&lt;run BingoGame.syncToStory()&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="Home" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
     &lt;div class=&quot;screen&quot;&gt;\
         &lt;h1 class=&quot;welcome-msg&quot;&gt;Welcome to Blood Pressure Bingo&lt;/h1&gt;\
         &lt;div class=&quot;start-cont&quot;&gt;\
@@ -757,14 +1332,27 @@ document.addEventListener("click", function (event) {
 &lt;div class=&quot;phone&quot;&gt;\
     &lt;div class=&quot;screen&quot;&gt;\
         &lt;h1&gt;Tasks List&lt;/h1&gt;\
-
-
+        &lt;details class=&quot;recent-tasks-dropdown&quot;&gt;\
+            &lt;summary&gt;Recently Completed Tasks&lt;/summary&gt;\
+            &lt;div class=&quot;recent-tasks-list&quot;&gt;\
+                &lt;&lt;if $recentCompletedTasks.length &gt; 0&gt;&gt;\
+                    &lt;&lt;for _i = 0; _i &lt; $recentCompletedTasks.length; _i++&gt;&gt;\
+                        &lt;div class=&quot;recent-task-item&quot;&gt;\
+                            &lt;span&gt;✓&lt;/span&gt;\
+                            &lt;&lt;print $recentCompletedTasks[_i]&gt;&gt;\
+                        &lt;/div&gt;\
+                    &lt;&lt;/for&gt;&gt;\
+                &lt;&lt;else&gt;&gt;\
+                    &lt;p&gt;No completed tasks yet!&lt;/p&gt;\
+                &lt;&lt;/if&gt;&gt;\
+            &lt;/div&gt;\
+        &lt;/details&gt;\
             &lt;div class=&quot;task-list&quot;&gt;\
                 &lt;&lt;if $randomTask1&gt;&gt;\
                     &lt;div class=&quot;task-content&quot;&gt;\
                         &lt;h4&gt;&lt;&lt;print $randomTask1.task&gt;&gt;&lt;/h4&gt;\
-                        &lt;&lt;button &quot;Complete&quot;&gt;&gt;\
-                            &lt;&lt;run BingoGame.completeTask($randomTask1.id)&gt;&gt;\
+                        &lt;&lt;button &quot;Mark Complete&quot;&gt;&gt;\
+                            &lt;&lt;run BingoGame.completeTask($randomTask1.id, $randomTask1.task)&gt;&gt;\
                             &lt;&lt;goto &quot;BingoNumber&quot;&gt;&gt;\
                         &lt;&lt;/button&gt;&gt;\
                     &lt;/div&gt;\
@@ -772,8 +1360,8 @@ document.addEventListener("click", function (event) {
                 &lt;&lt;if $randomTask2&gt;&gt;\
                     &lt;div class=&quot;task-content&quot;&gt;\
                         &lt;h4&gt;&lt;&lt;print $randomTask2.task&gt;&gt;&lt;/h4&gt;\
-                        &lt;&lt;button &quot;Complete&quot;&gt;&gt;\
-                            &lt;&lt;run BingoGame.completeTask($randomTask2.id)&gt;&gt;\
+                        &lt;&lt;button &quot;Mark Complete&quot;&gt;&gt;\
+                            &lt;&lt;run BingoGame.completeTask($randomTask2.id, $randomTask2.task)&gt;&gt;\
                             &lt;&lt;goto &quot;BingoNumber&quot;&gt;&gt;\
                         &lt;&lt;/button&gt;&gt;\
                     &lt;/div&gt;\
@@ -781,8 +1369,8 @@ document.addEventListener("click", function (event) {
                 &lt;&lt;if $randomTask3&gt;&gt;\
                     &lt;div class=&quot;task-content&quot;&gt;\
                         &lt;h4&gt;&lt;&lt;print $randomTask3.task&gt;&gt;&lt;/h4&gt;\
-                        &lt;&lt;button &quot;Complete&quot;&gt;&gt;\
-                            &lt;&lt;run BingoGame.completeTask($randomTask3.id)&gt;&gt;\
+                        &lt;&lt;button &quot;Mark Complete&quot;&gt;&gt;\
+                            &lt;&lt;run BingoGame.completeTask($randomTask3.id, $randomTask3.task)&gt;&gt;\
                             &lt;&lt;goto &quot;BingoNumber&quot;&gt;&gt;\
                         &lt;&lt;/button&gt;&gt;\
                     &lt;/div&gt;\
@@ -804,40 +1392,54 @@ document.addEventListener("click", function (event) {
                         &lt;&lt;run alert(&quot;Please enter a task.&quot;)&gt;&gt;\
                     &lt;&lt;/if&gt;&gt;\
                 &lt;&lt;/button&gt;&gt;\
-            &lt;/div&gt;
-        &lt;&lt;button [[&quot;Exit to Home&quot; | Home]]&gt;&gt;&lt;&lt;/button&gt;&gt;
-    &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="4" name="BingoNumber" tags="" position="475,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+            &lt;/div&gt;\
+        &lt;button data-passage=&quot;Home&quot; class=&quot;exit-btn&quot;&gt;Exit to Home&lt;/button&gt;\
+    &lt;/div&gt;\
+&lt;/div&gt;\</tw-passagedata><tw-passagedata pid="4" name="BingoNumber" tags="" position="475,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
     &lt;div class=&quot;screen&quot;&gt;\
         &lt;h1&gt;Congratulations!&lt;/h1&gt;\
-        &lt;div class=&quot;bingo-position&quot;&gt;\
-            &lt;h4&gt;\
-                &lt;&lt;print $bingoNumbers[$selectedPosition]&gt;&gt;\
-            &lt;/h4&gt;\
+        &lt;div class=&quot;task-box&quot;&gt;\
+            &lt;h4&gt;You&#39;ve completed your task!&lt;/h4&gt;\
+            &lt;p&gt;Answer the following question to reveal your bingo number.&lt;/p&gt;\
         &lt;/div&gt;\
-        &lt;p&gt;You&#39;ve earned this bingo number!&lt;/p&gt;\
-        &lt;&lt;button &quot;Lock it in&quot;&gt;&gt;\
-            &lt;&lt;goto &quot;LockIn&quot;&gt;&gt;\
-        &lt;&lt;/button&gt;&gt;\
-        &lt;&lt;button &quot;Exit to Home&quot;&gt;&gt;\
-            &lt;&lt;goto &quot;Home&quot;&gt;&gt;\
-        &lt;&lt;/button&gt;&gt;\
+        &lt;button data-passage=&quot;LockIn&quot;&gt;Continue&lt;/button&gt;\
+        &lt;button data-passage=&quot;Home&quot; class=&quot;exit-btn&quot;&gt;Exit to Home&lt;/button&gt;\
     &lt;/div&gt;\
 &lt;/div&gt;\</tw-passagedata><tw-passagedata pid="5" name="LockIn" tags="" position="600,100" size="100,100">&lt;&lt;set $randomQuestion = BingoGame.getRandomQuestion($questions)&gt;&gt;\
+&lt;&lt;set $userAnswer = null&gt;&gt;\
 &lt;div class=&quot;phone&quot;&gt;\
     &lt;div class=&quot;screen&quot;&gt;\
-        &lt;h1&gt;True or False?&lt;/h1&gt;\
         &lt;&lt;if $randomQuestion&gt;&gt;\
+            &lt;&lt;if $randomQuestion.type === &quot;tf&quot;&gt;&gt;\
+                &lt;h1&gt;True or False?&lt;/h1&gt;\
+            &lt;&lt;else&gt;&gt;\
+                &lt;h1&gt;Multiple Choice&lt;/h1&gt;\
+            &lt;&lt;/if&gt;&gt;\
             &lt;div class=&quot;task-box&quot;&gt;\
                 &lt;h4&gt;\
                     &lt;&lt;print $randomQuestion.question&gt;&gt;\
                 &lt;/h4&gt;\
-                &lt;&lt;button &quot;True&quot;&gt;&gt;\
-                    &lt;&lt;goto &quot;Explanation Positive&quot;&gt;&gt;\
-                &lt;&lt;/button&gt;&gt;\
-                &lt;&lt;button &quot;False&quot;&gt;&gt;\
-                    &lt;&lt;goto &quot;Explanation Negative&quot;&gt;&gt;\
-                &lt;&lt;/button&gt;&gt;\
+                &lt;&lt;if $randomQuestion.type === &quot;tf&quot;&gt;&gt;\
+                    &lt;&lt;button &quot;True&quot;&gt;&gt;\
+                        &lt;&lt;set $userAnswer = true&gt;&gt;\
+                        &lt;&lt;goto &quot;AnswerQuestion&quot;&gt;&gt;\
+                    &lt;&lt;/button&gt;&gt;\
+                    &lt;&lt;button &quot;False&quot;&gt;&gt;\
+                        &lt;&lt;set $userAnswer = false&gt;&gt;\
+                        &lt;&lt;goto &quot;AnswerQuestion&quot;&gt;&gt;\
+                    &lt;&lt;/button&gt;&gt;\
+                &lt;&lt;elseif $randomQuestion.type === &quot;mc&quot;&gt;&gt;\
+                    &lt;div class=&quot;answer-options&quot;&gt;\
+                        &lt;&lt;for _i = 0; _i &lt; $randomQuestion.options.length; _i++&gt;&gt;\
+                            &lt;&lt;capture _i&gt;&gt;\
+                                &lt;&lt;button $randomQuestion.options[_i]&gt;&gt;\
+                                    &lt;&lt;set $userAnswer = $randomQuestion.options[_i]&gt;&gt;\
+                                    &lt;&lt;goto &quot;AnswerQuestion&quot;&gt;&gt;\
+                                &lt;&lt;/button&gt;&gt;\
+                            &lt;&lt;/capture&gt;&gt;\
+                        &lt;&lt;/for&gt;&gt;\
+                    &lt;/div&gt;\
+                &lt;&lt;/if&gt;&gt;\
             &lt;/div&gt;\
         &lt;&lt;else&gt;&gt;\
             &lt;h4&gt;You&#39;ve answered all available questions!&lt;/h4&gt;\
@@ -845,15 +1447,26 @@ document.addEventListener("click", function (event) {
                 &lt;&lt;goto &quot;BingoBoard&quot;&gt;&gt;\
             &lt;&lt;/button&gt;&gt;\
         &lt;&lt;/if&gt;&gt;\
-        &lt;&lt;button &quot;Exit to Home&quot;&gt;&gt;\
-            &lt;&lt;goto &quot;Home&quot;&gt;&gt;\
-        &lt;&lt;/button&gt;&gt;\
+        &lt;button data-passage=&quot;Home&quot; class=&quot;exit-btn&quot;&gt;Exit to Home&lt;/button&gt;\
     &lt;/div&gt;\
-&lt;/div&gt;\</tw-passagedata><tw-passagedata pid="6" name="Explanation Positive" tags="" position="725,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+&lt;/div&gt;\</tw-passagedata><tw-passagedata pid="6" name="AnswerQuestion" tags="" position="725,100" size="100,100">&lt;&lt;set $isCorrect = ($userAnswer === $randomQuestion.answer)&gt;&gt;\
+&lt;&lt;if $isCorrect&gt;&gt;\
+    &lt;&lt;goto &quot;Explanation Positive&quot;&gt;&gt;\
+&lt;&lt;else&gt;&gt;\
+    &lt;&lt;goto &quot;Explanation Negative&quot;&gt;&gt;\
+&lt;&lt;/if&gt;&gt;\</tw-passagedata><tw-passagedata pid="7" name="Explanation Positive" tags="" position="850,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
     &lt;div class=&quot;screen&quot;&gt;\
         &lt;h1&gt;Good Job!&lt;/h1&gt;\
-        &lt;div class=&quot;task-box&quot;&gt;\
-            &lt;h4&gt;&lt;&lt;print $randomQuestion.explanation&gt;&gt;&lt;/h4&gt;\
+        &lt;div&gt;\
+            &lt;h4&gt;\
+                &lt;&lt;print $randomQuestion.explanation&gt;&gt;\
+            &lt;/h4&gt;\
+            &lt;div class=&quot;bingo-num-message&quot;&gt;\
+                &lt;p&gt;You&#39;ve earned this bingo number!&lt;/p&gt;\
+                &lt;h2 class=&quot;bingo-position&quot;&gt;\
+                    &lt;&lt;print BingoGame.getPositionLabel($selectedPosition)&gt;&gt;\
+                &lt;/h2&gt;\
+            &lt;/div&gt;\
             &lt;&lt;button &quot;View Board&quot;&gt;&gt;\
                 &lt;&lt;run BingoGame.markPosition($selectedPosition)&gt;&gt;\
                 &lt;&lt;if BingoGame.checkBingo()&gt;&gt;\
@@ -863,13 +1476,21 @@ document.addEventListener("click", function (event) {
                 &lt;&lt;/if&gt;&gt;\
             &lt;&lt;/button&gt;&gt;\
         &lt;/div&gt;\
-        &lt;&lt;button [[&quot;Exit to Home&quot; | Home]]&gt;&gt;&lt;&lt;/button&gt;&gt;
-    &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="7" name="Explanation Negative" tags="" position="850,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;
-    &lt;div class=&quot;screen&quot;&gt;
-        &lt;h1&gt;Not Quite&lt;/h1&gt;
-        &lt;div class=&quot;task-box&quot;&gt;
-            &lt;h4&gt;&lt;&lt;print $randomQuestion.explanation&gt;&gt;&lt;/h4&gt;
+        &lt;button data-passage=&quot;Home&quot; class=&quot;exit-btn&quot;&gt;Exit to Home&lt;/button&gt;\
+    &lt;/div&gt;\
+&lt;/div&gt;\</tw-passagedata><tw-passagedata pid="8" name="Explanation Negative" tags="" position="975,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+    &lt;div class=&quot;screen&quot;&gt;\
+        &lt;h1&gt;Not Quite!&lt;/h1&gt;\
+        &lt;div class=&quot;task-box&quot;&gt;\
+            &lt;h4&gt;\
+                &lt;&lt;print $randomQuestion.explanation&gt;&gt;\
+            &lt;/h4&gt;\
+            &lt;div class=&quot;bingo-num-message&quot;&gt;\
+                &lt;p&gt;You&#39;ve earned this bingo number!&lt;/p&gt;\
+                &lt;h2 class=&quot;bingo-position&quot;&gt;\
+                    &lt;&lt;print BingoGame.getPositionLabel($selectedPosition)&gt;&gt;\
+                &lt;/h2&gt;\
+            &lt;/div&gt;\
             &lt;&lt;button &quot;View Board&quot;&gt;&gt;\
                 &lt;&lt;run BingoGame.markPosition($selectedPosition)&gt;&gt;\
                 &lt;&lt;if BingoGame.checkBingo()&gt;&gt;\
@@ -878,10 +1499,10 @@ document.addEventListener("click", function (event) {
                     &lt;&lt;goto &quot;BingoBoard&quot;&gt;&gt;\
                 &lt;&lt;/if&gt;&gt;\
             &lt;&lt;/button&gt;&gt;\
-        &lt;/div&gt;
-        &lt;&lt;button [[&quot;Exit to Home&quot; | Home]]&gt;&gt;&lt;&lt;/button&gt;&gt;
-    &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="8" name="Congratulations" tags="" position="975,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+        &lt;/div&gt;\
+        &lt;button data-passage=&quot;Home&quot; class=&quot;exit-btn&quot;&gt;Exit to Home&lt;/button&gt;\
+    &lt;/div&gt;\
+&lt;/div&gt;\</tw-passagedata><tw-passagedata pid="9" name="Congratulations" tags="" position="1100,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
     &lt;div class=&quot;screen&quot;&gt;\
         &lt;h1&gt;Congratulations!&lt;/h1&gt;\
         &lt;div class=&quot;task-box&quot;&gt;\
@@ -898,154 +1519,41 @@ document.addEventListener("click", function (event) {
         &lt;&lt;button &quot;View My Board&quot;&gt;&gt;\
             &lt;&lt;goto &quot;BingoBoard&quot;&gt;&gt;\
         &lt;&lt;/button&gt;&gt;\
-        &lt;&lt;button &quot;Exit to Home&quot;&gt;&gt;\
-            &lt;&lt;goto &quot;Home&quot;&gt;&gt;\
-        &lt;&lt;/button&gt;&gt;\
+        &lt;button data-passage=&quot;Home&quot; class=&quot;exit-btn&quot;&gt;Exit to Home&lt;/button&gt;\
     &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="9" name="BingoBoard" tags="" position="1100,100" size="100,100">&lt;&lt;nobr&gt;&gt;
-    &lt;div class=&quot;phone&quot;&gt;
-        &lt;div class=&quot;bingo-game&quot;&gt;
-            &lt;h1&gt;Good Luck!&lt;/h1&gt;
-            &lt;div class=&quot;bingo-board&quot;&gt;
-                &lt;div class=&quot;bingo-header&quot;&gt;B&lt;/div&gt;
-                &lt;div class=&quot;bingo-header&quot;&gt;I&lt;/div&gt;
-                &lt;div class=&quot;bingo-header&quot;&gt;N&lt;/div&gt;
-                &lt;div class=&quot;bingo-header&quot;&gt;G&lt;/div&gt;
-                &lt;div class=&quot;bingo-header&quot;&gt;O&lt;/div&gt;
-
-                &lt;&lt;if $markedPositions.includes(0)&gt;&gt;
-                    &lt;button class=&quot;bingo-cell marked&quot; data-index=&quot;0&quot;&gt;35&lt;/button&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="10" name="BingoBoard" tags="" position="1225,100" size="100,100">&lt;&lt;nobr&gt;&gt;
+&lt;div class=&quot;phone&quot;&gt;
+    &lt;div class=&quot;bingo-game&quot;&gt;
+        &lt;h1&gt;Good Luck!&lt;/h1&gt;
+        &lt;div class=&quot;bingo-board&quot;&gt;
+            &lt;!-- Column headers --&gt;
+            &lt;div class=&quot;bingo-header&quot;&gt;B&lt;/div&gt;
+            &lt;div class=&quot;bingo-header&quot;&gt;I&lt;/div&gt;
+            &lt;div class=&quot;bingo-header&quot;&gt;N&lt;/div&gt;
+            &lt;div class=&quot;bingo-header&quot;&gt;G&lt;/div&gt;
+            &lt;div class=&quot;bingo-header&quot;&gt;O&lt;/div&gt;
+            &lt;!-- Generate all 25 bingo positions --&gt;
+            &lt;&lt;for _i = 0; _i &lt; 25; _i++&gt;&gt;
+                &lt;&lt;if _i === 12&gt;&gt;
+                    &lt;button class=&quot;bingo-cell free marked&quot;
+                        data-index=&quot;12&quot;
+                        disabled&gt;
+                        FREE
+                    &lt;/button&gt;
+                &lt;&lt;elseif $markedPositions.includes(_i)&gt;&gt;
+                    &lt;&lt;print &#39;&lt;button class=&quot;bingo-cell marked&quot; data-index=&quot;&#39; + _i + &#39;&quot;&gt;&#39; + $bingoNumbers[_i] + &#39;&lt;/button&gt;&#39;&gt;&gt;
                 &lt;&lt;else&gt;&gt;
-                    &lt;button class=&quot;bingo-cell&quot; data-index=&quot;0&quot;&gt;35&lt;/button&gt;
+                    &lt;&lt;print &#39;&lt;button class=&quot;bingo-cell&quot; data-index=&quot;&#39; + _i + &#39;&quot;&gt;&#39; + $bingoNumbers[_i] + &#39;&lt;/button&gt;&#39;&gt;&gt;
                 &lt;&lt;/if&gt;&gt;
-                &lt;&lt;if $markedPositions.includes(1)&gt;&gt;
-                    &lt;button class=&quot;bingo-cell marked&quot; data-index=&quot;1&quot;&gt;49&lt;/button&gt;
-                &lt;&lt;else&gt;&gt;
-                    &lt;button class=&quot;bingo-cell&quot; data-index=&quot;1&quot;&gt;49&lt;/button&gt;
-                &lt;&lt;/if&gt;&gt;
-                &lt;&lt;if $markedPositions.includes(2)&gt;&gt;
-                    &lt;button class=&quot;bingo-cell marked&quot; data-index=&quot;2&quot;&gt;16&lt;/button&gt;
-                &lt;&lt;else&gt;&gt;
-                    &lt;button class=&quot;bingo-cell&quot; data-index=&quot;2&quot;&gt;16&lt;/button&gt;
-                &lt;&lt;/if&gt;&gt;
-                &lt;&lt;if $markedPositions.includes(3)&gt;&gt;
-                    &lt;button class=&quot;bingo-cell marked&quot; data-index=&quot;3&quot;&gt;98&lt;/button&gt;
-                &lt;&lt;else&gt;&gt;
-                    &lt;button class=&quot;bingo-cell&quot; data-index=&quot;3&quot;&gt;98&lt;/button&gt;
-                &lt;&lt;/if&gt;&gt;
-                &lt;&lt;if $markedPositions.includes(4)&gt;&gt;
-                    &lt;button class=&quot;bingo-cell marked&quot; data-index=&quot;4&quot;&gt;51&lt;/button&gt;
-                &lt;&lt;else&gt;&gt;
-                    &lt;button class=&quot;bingo-cell&quot; data-index=&quot;4&quot;&gt;51&lt;/button&gt;
-                &lt;&lt;/if&gt;&gt;
-
-                &lt;&lt;if $markedPositions.includes(5)&gt;&gt;
-                    &lt;button class=&quot;bingo-cell marked&quot; data-index=&quot;5&quot;&gt;36&lt;/button&gt;
-                &lt;&lt;else&gt;&gt;
-                    &lt;button class=&quot;bingo-cell&quot; data-index=&quot;5&quot;&gt;36&lt;/button&gt;
-                &lt;&lt;/if&gt;&gt;
-                &lt;&lt;if $markedPositions.includes(6)&gt;&gt;
-                    &lt;button class=&quot;bingo-cell marked&quot; data-index=&quot;6&quot;&gt;54&lt;/button&gt;
-                &lt;&lt;else&gt;&gt;
-                    &lt;button class=&quot;bingo-cell&quot; data-index=&quot;6&quot;&gt;54&lt;/button&gt;
-                &lt;&lt;/if&gt;&gt;
-                &lt;&lt;if $markedPositions.includes(7)&gt;&gt;
-                    &lt;button class=&quot;bingo-cell marked&quot; data-index=&quot;7&quot;&gt;72&lt;/button&gt;
-                &lt;&lt;else&gt;&gt;
-                    &lt;button class=&quot;bingo-cell&quot; data-index=&quot;7&quot;&gt;72&lt;/button&gt;
-                &lt;&lt;/if&gt;&gt;
-                &lt;&lt;if $markedPositions.includes(8)&gt;&gt;
-                    &lt;button class=&quot;bingo-cell marked&quot; data-index=&quot;8&quot;&gt;39&lt;/button&gt;
-                &lt;&lt;else&gt;&gt;
-                    &lt;button class=&quot;bingo-cell&quot; data-index=&quot;8&quot;&gt;39&lt;/button&gt;
-                &lt;&lt;/if&gt;&gt;
-                &lt;&lt;if $markedPositions.includes(9)&gt;&gt;
-                    &lt;button class=&quot;bingo-cell marked&quot; data-index=&quot;9&quot;&gt;48&lt;/button&gt;
-                &lt;&lt;else&gt;&gt;
-                    &lt;button class=&quot;bingo-cell&quot; data-index=&quot;9&quot;&gt;48&lt;/button&gt;
-                &lt;&lt;/if&gt;&gt;
-
-                &lt;&lt;if $markedPositions.includes(10)&gt;&gt;
-                    &lt;button class=&quot;bingo-cell marked&quot; data-index=&quot;10&quot;&gt;18&lt;/button&gt;
-                &lt;&lt;else&gt;&gt;
-                    &lt;button class=&quot;bingo-cell&quot; data-index=&quot;10&quot;&gt;18&lt;/button&gt;
-                &lt;&lt;/if&gt;&gt;
-                &lt;&lt;if $markedPositions.includes(11)&gt;&gt;
-                    &lt;button class=&quot;bingo-cell marked&quot; data-index=&quot;11&quot;&gt;22&lt;/button&gt;
-                &lt;&lt;else&gt;&gt;
-                    &lt;button class=&quot;bingo-cell&quot; data-index=&quot;11&quot;&gt;22&lt;/button&gt;
-                &lt;&lt;/if&gt;&gt;
-                &lt;button class=&quot;bingo-cell free marked&quot; data-index=&quot;12&quot; disabled&gt;FREE&lt;/button&gt;
-                &lt;&lt;if $markedPositions.includes(13)&gt;&gt;
-                    &lt;button class=&quot;bingo-cell marked&quot; data-index=&quot;13&quot;&gt;93&lt;/button&gt;
-                &lt;&lt;else&gt;&gt;
-                    &lt;button class=&quot;bingo-cell&quot; data-index=&quot;13&quot;&gt;93&lt;/button&gt;
-                &lt;&lt;/if&gt;&gt;
-                &lt;&lt;if $markedPositions.includes(14)&gt;&gt;
-                    &lt;button class=&quot;bingo-cell marked&quot; data-index=&quot;14&quot;&gt;14&lt;/button&gt;
-                &lt;&lt;else&gt;&gt;
-                    &lt;button class=&quot;bingo-cell&quot; data-index=&quot;14&quot;&gt;14&lt;/button&gt;
-                &lt;&lt;/if&gt;&gt;
-
-                &lt;&lt;if $markedPositions.includes(15)&gt;&gt;
-                    &lt;button class=&quot;bingo-cell marked&quot; data-index=&quot;15&quot;&gt;44&lt;/button&gt;
-                &lt;&lt;else&gt;&gt;
-                    &lt;button class=&quot;bingo-cell&quot; data-index=&quot;15&quot;&gt;44&lt;/button&gt;
-                &lt;&lt;/if&gt;&gt;
-                &lt;&lt;if $markedPositions.includes(16)&gt;&gt;
-                    &lt;button class=&quot;bingo-cell marked&quot; data-index=&quot;16&quot;&gt;68&lt;/button&gt;
-                &lt;&lt;else&gt;&gt;
-                    &lt;button class=&quot;bingo-cell&quot; data-index=&quot;16&quot;&gt;68&lt;/button&gt;
-                &lt;&lt;/if&gt;&gt;
-                &lt;&lt;if $markedPositions.includes(17)&gt;&gt;
-                    &lt;button class=&quot;bingo-cell marked&quot; data-index=&quot;17&quot;&gt;9&lt;/button&gt;
-                &lt;&lt;else&gt;&gt;
-                    &lt;button class=&quot;bingo-cell&quot; data-index=&quot;17&quot;&gt;9&lt;/button&gt;
-                &lt;&lt;/if&gt;&gt;
-                &lt;&lt;if $markedPositions.includes(18)&gt;&gt;
-                    &lt;button class=&quot;bingo-cell marked&quot; data-index=&quot;18&quot;&gt;64&lt;/button&gt;
-                &lt;&lt;else&gt;&gt;
-                    &lt;button class=&quot;bingo-cell&quot; data-index=&quot;18&quot;&gt;64&lt;/button&gt;
-                &lt;&lt;/if&gt;&gt;
-                &lt;&lt;if $markedPositions.includes(19)&gt;&gt;
-                    &lt;button class=&quot;bingo-cell marked&quot; data-index=&quot;19&quot;&gt;86&lt;/button&gt;
-                &lt;&lt;else&gt;&gt;
-                    &lt;button class=&quot;bingo-cell&quot; data-index=&quot;19&quot;&gt;86&lt;/button&gt;
-                &lt;&lt;/if&gt;&gt;
-
-                &lt;&lt;if $markedPositions.includes(20)&gt;&gt;
-                    &lt;button class=&quot;bingo-cell marked&quot; data-index=&quot;20&quot;&gt;52&lt;/button&gt;
-                &lt;&lt;else&gt;&gt;
-                    &lt;button class=&quot;bingo-cell&quot; data-index=&quot;20&quot;&gt;52&lt;/button&gt;
-                &lt;&lt;/if&gt;&gt;
-                &lt;&lt;if $markedPositions.includes(21)&gt;&gt;
-                    &lt;button class=&quot;bingo-cell marked&quot; data-index=&quot;21&quot;&gt;37&lt;/button&gt;
-                &lt;&lt;else&gt;&gt;
-                    &lt;button class=&quot;bingo-cell&quot; data-index=&quot;21&quot;&gt;37&lt;/button&gt;
-                &lt;&lt;/if&gt;&gt;
-                &lt;&lt;if $markedPositions.includes(22)&gt;&gt;
-                    &lt;button class=&quot;bingo-cell marked&quot; data-index=&quot;22&quot;&gt;50&lt;/button&gt;
-                &lt;&lt;else&gt;&gt;
-                    &lt;button class=&quot;bingo-cell&quot; data-index=&quot;22&quot;&gt;50&lt;/button&gt;
-                &lt;&lt;/if&gt;&gt;
-                &lt;&lt;if $markedPositions.includes(23)&gt;&gt;
-                    &lt;button class=&quot;bingo-cell marked&quot; data-index=&quot;23&quot;&gt;58&lt;/button&gt;
-                &lt;&lt;else&gt;&gt;
-                    &lt;button class=&quot;bingo-cell&quot; data-index=&quot;23&quot;&gt;58&lt;/button&gt;
-                &lt;&lt;/if&gt;&gt;
-                &lt;&lt;if $markedPositions.includes(24)&gt;&gt;
-                    &lt;button class=&quot;bingo-cell marked&quot; data-index=&quot;24&quot;&gt;91&lt;/button&gt;
-                &lt;&lt;else&gt;&gt;
-                    &lt;button class=&quot;bingo-cell&quot; data-index=&quot;24&quot;&gt;91&lt;/button&gt;
-                &lt;&lt;/if&gt;&gt;
-            &lt;/div&gt;
-            &lt;button class=&quot;bingo-reset non-bingo-btn&quot;
-                onclick=&quot;BingoGame.resetBoard()&quot;&gt;
-                Reset Board
-            &lt;/button&gt;
-            &lt;button data-passage=&quot;Home&quot; class=&quot;non-bingo-btn&quot;&gt;Exit to Home&lt;/button&gt;
+            &lt;&lt;/for&gt;&gt;
         &lt;/div&gt;
+        &lt;button class=&quot;bingo-reset non-bingo-btn&quot;
+            onclick=&quot;BingoGame.resetBoard()&quot;&gt;
+            Reset Board
+        &lt;/button&gt;
+        &lt;button data-passage=&quot;Home&quot; class=&quot;exit-btn&quot;&gt;Exit to Home&lt;/button&gt;
     &lt;/div&gt;
+&lt;/div&gt;
 &lt;&lt;/nobr&gt;&gt;</tw-passagedata></tw-storydata>
 	<script id="script-sugarcube" type="text/javascript">
 	/*! SugarCube JS */
