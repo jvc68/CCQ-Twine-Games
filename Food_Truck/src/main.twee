@@ -199,7 +199,7 @@
 </div>
 
 :: CookingMinigame
-<<run FoodTruck.updateCookingMarkerSpeed()>>
+<<run FoodTruck.updateCookingMarkerSpeed()>>\
 <div class="phone">\
     <div class="HUD">\
         <span><strong>Day:</strong> $currentDay</span> |\
