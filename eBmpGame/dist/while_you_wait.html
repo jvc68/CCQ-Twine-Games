@@ -104,7 +104,7 @@ var LZString=function(){var r=String.fromCharCode,o="ABCDEFGHIJKLMNOPQRSTUVWXYZa
 		<div id="init-lacking"><p>Browser lacks capabilities required to play.</p><p>Upgrade or switch to another browser.</p></div>
 		<div id="init-loading"><div>Loading&hellip;</div></div>
 	</div>
-	<!-- UUID://637D0CD9-6182-4ACE-9AF0-B6FB94AB090A// --><tw-storydata name="While You Wait" startnode="2" creator="Tweego" creator-version="2.1.1+81d1d71" ifid="637D0CD9-6182-4ACE-9AF0-B6FB94AB090A" zoom="1" format="SugarCube" format-version="2.37.3" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">* { box-sizing: border-box; }
+	<!-- UUID://637D0CD9-6182-4ACE-9AF0-B6FB94AB090A// --><tw-storydata name="While You Wait" startnode="3" creator="Tweego" creator-version="2.1.1+81d1d71" ifid="637D0CD9-6182-4ACE-9AF0-B6FB94AB090A" zoom="1" format="SugarCube" format-version="2.37.3" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">* { box-sizing: border-box; }
 
 body {
   font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -157,7 +157,6 @@ body {
   padding: 5px;
   box-shadow: 0 8px 30px rgba(0,0,0,0.18),
   0px 0px 10px rgba(255, 255, 255, 1);
-  
   border-radius:12px;
 }
 
@@ -168,6 +167,9 @@ body {
   padding-left: 12px;
   padding: 10px;
   margin: 10px;
+  height: auto;
+  width: 340px;
+  max-width: 100%;
 }
 
 #ui-dialog-titlebar {
@@ -306,9 +308,10 @@ body {
   background-color: transparent;
   border: none;
   width: 100%; 
+  height: 100%; 
   display: grid;
   place-items: center;     /* Centers both horizontally and vertically */
-  height: 100%; 
+
   
 }
 
@@ -338,11 +341,11 @@ body {
 }
 
 .switchImg {
-  width: 58%;
-  height: 58%;
+  height: 60%;
   display: inline;
   position:absolute;
-  left: auto;
+  aspect-ratio: 1/1.5;
+  left: 15%;
   margin-left: auto;
   margin-right: auto;
   
@@ -429,7 +432,7 @@ body {
 
 }</style><script role="script" id="twine-user-script" type="text/twine-javascript">/* twine-user-script #1: "script.js" */
 setup.prevRand = -1
-setup.currentFidget = "bubbleWrap"
+setup.currentFidget = "switch"
 
 setup.isMouseDown = false;
 setup.light = [0, 0, 0, 0]
@@ -563,6 +566,7 @@ setup.populateFidget = function populateFidget() {
 	container.replaceChildren();
 	postContainer.replaceChildren();
 	container.style.backgroundColor = 'snow'
+	container.style.border = '1px solid black'
 	switch (setup.currentFidget) {
 		case "bubbleWrap":
 			blankSpace.style.height = '0px'
@@ -613,6 +617,8 @@ setup.populateFidget = function populateFidget() {
 			blankSpace.style.height = '0%'
 			blankSpace.style.display = 'hidden'
 			container.style.height = '72%'
+			container.style.backgroundColor = "transparent"
+			container.style.border = "none"
 			fidgetLabel.textContent = "Light Switch"
 
 			let newImg = document.createElement('img');
@@ -858,10 +864,14 @@ setup.lightColors = {
 &lt;&lt;=setup.formattedTime = &quot;02:00&quot;&gt;&gt;
 &lt;&lt;run  
   Dialog.setup(&quot;Important Reminder&quot;, &quot;reminderPopup&quot;);
-  Dialog.wiki(`Reminder:\n
-  This game is meant to relax you before you take your blood pressure measurement.\n\n
-  Please make sure to play the game with the hand that you are NOT going to use for taking your measurement.\n
-  Keep your other hand open, relax the arm, and avoid clenching your fist`);
+  Dialog.wiki(`
+  Welcome to While You Wait!\n
+  This game is meant to help you relax before you take your blood pressure measurement. Relaxing is important as it makes sure your reading is accurate.\n
+  Please make sure to play the game with the hand of the arm that you are NOT going to use for taking your measurement.\n
+  With your other arm, keep it relaxed and have the hand open, and take calming breaths throughout the game.\n
+  We suggest you wait 2 minutes before taking your measurement, but feel free to do so at any time.\n
+  Enjoy!
+  `);
   Dialog.open();&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="Home" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;Time Spent: &lt;span id=&quot;timer&quot;&gt;&lt;&lt;=setup.formattedTime&gt;&gt;&lt;/span&gt;
 &lt;span id=&quot;currentFidget&quot;&gt;Switch&lt;/span&gt;
 &lt;div id=&quot;blankSpace&quot;&gt;&lt;/div&gt;

@@ -117,7 +117,7 @@ body {
 
 #story {
   margin: 0 auto;
-  max-width: 340px;
+  max-width: 380px;
   padding: 0;
 }
 
@@ -446,7 +446,7 @@ setup.setMode = function setMode(mode) {
 	setup.exposedExtras = []
 	setup.actualDistance = 0
 	setup.totalWalked = 0
-	for (let [key, value] of Object.entries(window.GameData.extras)) {
+	for (let [key, value] of Object.entries(window.GameData.extrasDEMO)) {
 		value.requiredSteps = value.ogRequiredSteps
 	}
 }
@@ -476,7 +476,7 @@ setup.reset = function reset() {
 	setup.totalWalked = 0
 	setup.exposedExtras = []
 
-	for (let [key, value] of Object.entries(window.GameData.extras)) {
+	for (let [key, value] of Object.entries(window.GameData.extrasDEMO)) {
 		value.requiredSteps = value.ogRequiredSteps
 	}
 }
@@ -610,14 +610,11 @@ setup.beginChase = function beginChase() {
 			/*This sets zombie speed to 192 steps per minute */
 			setup.intervalId = setInterval(setup.decZombieDist, 1000, -3.2);
 			break;
-		case "impossible":
-			setup.zombieAmount = 200
-			setup.intervalId = setInterval(setup.decZombieDist, 500, -1000);
-			break;
 		default:
 			console.error(`${setup.mode} is not a mode`)
 	}
 
+	setup.multiText.textContent = setup.multi
 	setup.zombieCntText.textContent = `There are ${setup.zombieAmount} left...`
 	let container = document.getElementById("extras");
 	container.replaceChildren();
@@ -629,7 +626,7 @@ setup.beginChase = function beginChase() {
 }
 
 setup.createExtra = function createExtra(container) {
-	if (setup.currentFinalExtra >= Object.keys(window.GameData.extras).length) {
+	if (setup.currentFinalExtra >= Object.keys(window.GameData.extrasDEMO).length) {
 		let newDiv = document.createElement('div');
 		newDiv.classList.add("extra");
 
@@ -641,8 +638,8 @@ setup.createExtra = function createExtra(container) {
 		return
 	}
 	let i = setup.currentFinalExtra
-	let allKeys = Object.keys(window.GameData.extras)
-	let currentExtra = window.GameData.extras[allKeys[i]]
+	let allKeys = Object.keys(window.GameData.extrasDEMO)
+	let currentExtra = window.GameData.extrasDEMO[allKeys[i]]
 	setup.exposedExtras.push([allKeys[i], currentExtra])
 
 	let newDiv = document.createElement('div');
@@ -694,7 +691,7 @@ setup.redeem = function redeem(stepsWalked) {
 
 	let spotsToDelete = []
 
-	for (let [key, value] of Object.entries(window.GameData.extras)) {
+	for (let [key, value] of Object.entries(window.GameData.extrasDEMO)) {
 		if (value.requiredSteps >= 0) {
 			value.requiredSteps -= stepsWalked
 		}
@@ -795,6 +792,18 @@ window.GameData = {
 		"Walk 21,000 Steps": { "reward": -20, "type": "killZombies", "requiredSteps": 22000, "ogRequiredSteps": 22000 },
 		"Walk 24,000 Steps": { "reward": -20, "type": "killZombies", "requiredSteps": 24000, "ogRequiredSteps": 24000 },
 		"Walk 26,000 Steps": { "reward": -40, "type": "killZombies", "requiredSteps": 26000, "ogRequiredSteps": 26000 }
+	},
+	"extrasDEMO": {
+		"Walk 50 Steps": { "reward": -10, "type": "killZombies", "requiredSteps": 100, "ogRequiredSteps": 100 },
+		"Walk 100 Steps": { "reward": 1, "type": "multi", "requiredSteps": 800, "ogRequiredSteps": 800 },
+		"Walk 200 Steps": { "reward": -10, "type": "killZombies", "requiredSteps": 3000, "ogRequiredSteps": 3000 },
+		"Walk 300 Steps": { "reward": -10, "type": "killZombies", "requiredSteps": 5000, "ogRequiredSteps": 5000 },
+		"Walk 400 Steps": { "reward": -20, "type": "killZombies", "requiredSteps": 8000, "ogRequiredSteps": 8000 },
+		"Walk 500 Steps": { "reward": 1, "type": "multi", "requiredSteps": 10000, "ogRequiredSteps": 10000 },
+		"Walk 600 Steps": { "reward": -30, "type": "killZombies", "requiredSteps": 12000, "ogRequiredSteps": 12000 },
+		"Walk 700 Steps": { "reward": -30, "type": "killZombies", "requiredSteps": 15000, "ogRequiredSteps": 15000 },
+		"Walk 800 Steps": { "reward": -20, "type": "killZombies", "requiredSteps": 18000, "ogRequiredSteps": 18000 },
+		"Walk 900 Steps": { "reward": -20, "type": "killZombies", "requiredSteps": 22000, "ogRequiredSteps": 22000 },
 	}
 }
 
@@ -814,7 +823,7 @@ At milestone 26,000, the user would have walked 10,783 steps, which is considere
           &lt;&lt;button &quot;Easy&quot; &quot;Chase&quot;&gt;&gt;&lt;&lt;run setup.setMode(&#39;easy&#39;)&gt;&gt;&lt;&lt;/button&gt;&gt;
           &lt;&lt;button &quot;Medium&quot; &quot;Chase&quot;&gt;&gt;&lt;&lt;run setup.setMode(&#39;med&#39;)&gt;&gt;&lt;&lt;/button&gt;&gt;
           &lt;&lt;button &quot;Hard&quot; &quot;Chase&quot;&gt;&gt;&lt;&lt;run setup.setMode(&#39;hard&#39;)&gt;&gt;&lt;&lt;/button&gt;&gt;
-          &lt;&lt;button &quot;Impossible&quot; &quot;Chase&quot;&gt;&gt;&lt;&lt;run setup.setMode(&#39;impossible&#39;)&gt;&gt;&lt;&lt;/button&gt;&gt;
+          /* &lt;&lt;button &quot;Impossible&quot; &quot;Chase&quot;&gt;&gt;&lt;&lt;run setup.setMode(&#39;impossible&#39;)&gt;&gt;&lt;&lt;/button&gt;&gt; */\
         &lt;/div&gt;
       &lt;/div&gt;
       &lt;&lt;done&gt;&gt;&lt;&lt;run setup.zombieDistText = document.getElementById(&quot;zombieDist&quot;); &gt;&gt;&lt;&lt;/done&gt;&gt;
@@ -833,7 +842,7 @@ At milestone 26,000, the user would have walked 10,783 steps, which is considere
   &lt;div class=&quot;progress-container totalBar&quot; id=&quot;bar&quot;&gt;&lt;div class=&quot;progress-fill totalBarFill&quot;&gt; &lt;/div&gt;&lt;/div&gt;\
   &lt;span id=&quot;zombieDist&quot;&gt;&lt;/span&gt;
   &lt;span id=&quot;yourDist&quot;&gt;You&#39;ve Walked &lt;&lt;=setup.totalWalked&gt;&gt; Steps!&lt;/span&gt;
-  &lt;span id=&quot;zombieCnt&quot;&gt;&lt;/span&gt;&lt;div class=&quot;mainTab&quot;&gt; /* &lt;&lt;button &quot;Run!&quot; &gt;&gt; &lt;&lt;run setup.incZombieDist(1)&gt;&gt;&lt;&lt;/button&gt;&gt; */\
+  &lt;span id=&quot;zombieCnt&quot;&gt;&lt;/span&gt;&lt;div class=&quot;mainTab&quot;&gt; /*&lt;&lt;button &quot;Run!&quot; &gt;&gt; &lt;&lt;run setup.incZombieDist(1)&gt;&gt;&lt;&lt;/button&gt;&gt;*/\
   &lt;div class=&quot;extras&quot; id=&quot;extras&quot;&gt;Extras&lt;/div&gt;
   &lt;button data-passage=&quot;Home&quot; class=&quot;return&quot; onclick=&quot;SugarCube.setup.stopChase()&quot;&gt;Return&lt;/button&gt;
   &lt;&lt;done&gt;&gt;&lt;&lt;run setup.startChase() &gt;&gt;&lt;&lt;/done&gt;&gt;

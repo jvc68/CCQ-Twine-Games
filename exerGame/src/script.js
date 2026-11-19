@@ -63,7 +63,7 @@ setup.setMode = function setMode(mode) {
 	setup.exposedExtras = []
 	setup.actualDistance = 0
 	setup.totalWalked = 0
-	for (let [key, value] of Object.entries(window.GameData.extras)) {
+	for (let [key, value] of Object.entries(window.GameData.extrasDEMO)) {
 		value.requiredSteps = value.ogRequiredSteps
 	}
 }
@@ -93,7 +93,7 @@ setup.reset = function reset() {
 	setup.totalWalked = 0
 	setup.exposedExtras = []
 
-	for (let [key, value] of Object.entries(window.GameData.extras)) {
+	for (let [key, value] of Object.entries(window.GameData.extrasDEMO)) {
 		value.requiredSteps = value.ogRequiredSteps
 	}
 }
@@ -227,14 +227,11 @@ setup.beginChase = function beginChase() {
 			/*This sets zombie speed to 192 steps per minute */
 			setup.intervalId = setInterval(setup.decZombieDist, 1000, -3.2);
 			break;
-		case "impossible":
-			setup.zombieAmount = 200
-			setup.intervalId = setInterval(setup.decZombieDist, 500, -1000);
-			break;
 		default:
 			console.error(`${setup.mode} is not a mode`)
 	}
 
+	setup.multiText.textContent = setup.multi
 	setup.zombieCntText.textContent = `There are ${setup.zombieAmount} left...`
 	let container = document.getElementById("extras");
 	container.replaceChildren();
@@ -246,7 +243,7 @@ setup.beginChase = function beginChase() {
 }
 
 setup.createExtra = function createExtra(container) {
-	if (setup.currentFinalExtra >= Object.keys(window.GameData.extras).length) {
+	if (setup.currentFinalExtra >= Object.keys(window.GameData.extrasDEMO).length) {
 		let newDiv = document.createElement('div');
 		newDiv.classList.add("extra");
 
@@ -258,8 +255,8 @@ setup.createExtra = function createExtra(container) {
 		return
 	}
 	let i = setup.currentFinalExtra
-	let allKeys = Object.keys(window.GameData.extras)
-	let currentExtra = window.GameData.extras[allKeys[i]]
+	let allKeys = Object.keys(window.GameData.extrasDEMO)
+	let currentExtra = window.GameData.extrasDEMO[allKeys[i]]
 	setup.exposedExtras.push([allKeys[i], currentExtra])
 
 	let newDiv = document.createElement('div');
@@ -311,7 +308,7 @@ setup.redeem = function redeem(stepsWalked) {
 
 	let spotsToDelete = []
 
-	for (let [key, value] of Object.entries(window.GameData.extras)) {
+	for (let [key, value] of Object.entries(window.GameData.extrasDEMO)) {
 		if (value.requiredSteps >= 0) {
 			value.requiredSteps -= stepsWalked
 		}
