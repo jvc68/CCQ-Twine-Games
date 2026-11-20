@@ -138,6 +138,13 @@ body {
   font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
+.fancyButton {
+  padding: 5px;
+  border-radius: 12px;
+  background-color: cornsilk;
+  color: black;
+}
+
 .library {
   display: grid;
   grid-template-columns: auto auto auto auto ;
@@ -184,7 +191,11 @@ body {
 
 .flButton {
   position: absolute;
-  bottom: 4%;
+  bottom: 8%;
+  padding: 1px;
+  border-radius: 12px;
+  background-color: cornsilk;
+  color: black;
 }
 
 .fidgetInterface {
@@ -231,7 +242,7 @@ body {
   border-radius: 50%;
   width: 136px;
   height: 135px;
-  top: 47%;
+  top: 40%;
   left: 30%;
 }
 
@@ -241,8 +252,8 @@ body {
   border-radius: 50%;
   width: 70px;
   height: 70px;
-  top: 46%;
-  left: 12.5%;
+  top: 39%;
+  left: 15%;
 }
 
 /* Hi-Hat (Top Left) */
@@ -251,7 +262,7 @@ body {
   border-radius: 50%;
   width: 75px;
   height: 75px;
-  top: 35%;
+  top: 29%;
   left: 17%;
 }
 
@@ -261,7 +272,7 @@ body {
   border-radius: 50%;
   width: 60px;
   height: 60px;
-  top: 38%;
+  top: 32%;
   left: 36%;
 }
 
@@ -271,7 +282,7 @@ body {
   border-radius: 50%;
   width: 75px;
   height: 75px;
-  top: 37%;
+  top: 31%;
   left: 50.5%;
 }
 
@@ -281,8 +292,8 @@ body {
   border-radius: 50%;
   width: 100px;
   height: 100px;
-  top: 43%;
-  left: 65%;
+  top: 38%;
+  left: 60%;
 }
 
 /* Crash Cymbal (Top Right) */
@@ -291,7 +302,7 @@ body {
   border-radius: 50%;
   width: 75px;
   height: 75px;
-  top: 32%;
+  top: 29%;
   left: 67%;
 }
 
@@ -432,7 +443,7 @@ body {
 
 }</style><script role="script" id="twine-user-script" type="text/twine-javascript">/* twine-user-script #1: "script.js" */
 setup.prevRand = -1
-setup.currentFidget = "switch"
+setup.currentFidget = "drums"
 
 setup.isMouseDown = false;
 setup.light = [0, 0, 0, 0]
@@ -608,7 +619,7 @@ setup.populateFidget = function populateFidget() {
 
 			let refreshButton = document.createElement('button');
 			refreshButton.addEventListener('click', () => setup.populateFidget(setup.currentFidget));
-			refreshButton.classList.add("refreshButton");
+			refreshButton.classList.add("fancyButton");
 			refreshButton.textContent = "Refresh Bubble Wrap"
 			postContainer.appendChild(refreshButton);
 			break;
@@ -616,7 +627,7 @@ setup.populateFidget = function populateFidget() {
 		case "switch":
 			blankSpace.style.height = '0%'
 			blankSpace.style.display = 'hidden'
-			container.style.height = '72%'
+			container.style.height = '65%'
 			container.style.backgroundColor = "transparent"
 			container.style.border = "none"
 			fidgetLabel.textContent = "Light Switch"
@@ -862,7 +873,7 @@ setup.lightColors = {
 
 }</script><tw-passagedata pid="1" name="StoryInit" tags="" position="100,100" size="100,100">&lt;&lt;run setInterval(setup.updateTimer, 1000)&gt;&gt;
 &lt;&lt;=setup.formattedTime = &quot;02:00&quot;&gt;&gt;
-&lt;&lt;run  
+/* &lt;&lt;run  
   Dialog.setup(&quot;Important Reminder&quot;, &quot;reminderPopup&quot;);
   Dialog.wiki(`
   Welcome to While You Wait!\n
@@ -872,14 +883,14 @@ setup.lightColors = {
   We suggest you wait 2 minutes before taking your measurement, but feel free to do so at any time.\n
   Enjoy!
   `);
-  Dialog.open();&gt;&gt;</tw-passagedata><tw-passagedata pid="2" name="Home" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;Time Spent: &lt;span id=&quot;timer&quot;&gt;&lt;&lt;=setup.formattedTime&gt;&gt;&lt;/span&gt;
+  Dialog.open();&gt;&gt;  */</tw-passagedata><tw-passagedata pid="2" name="Home" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;Time Spent: &lt;span id=&quot;timer&quot;&gt;&lt;&lt;=setup.formattedTime&gt;&gt;&lt;/span&gt;
 &lt;span id=&quot;currentFidget&quot;&gt;Switch&lt;/span&gt;
-&lt;div id=&quot;blankSpace&quot;&gt;&lt;/div&gt;
+&lt;div id=&quot;blankSpace&quot;&gt;&lt;/div&gt;\
 &lt;div class=&quot;fidgetInterface&quot; id=&quot;container&quot;&gt;&lt;/div&gt;\
 &lt;div class=&quot;desc&quot; id=&quot;desc&quot;&gt;&lt;/div&gt;\
 &lt;div class=&quot;options&quot; id=&quot;postContainer&quot;&gt;&lt;/div&gt;
   &lt;&lt;done&gt;&gt;&lt;&lt;run setup.populateFidget()&gt;&gt;&lt;&lt;/done&gt;&gt;
-  &lt;div class=&quot;flButton&quot;&gt; 
+  &lt;div class=&quot;flButton fancyButton&quot;&gt; 
     &lt;&lt;button &quot;Fidget Library&quot; &quot;Fidget Library&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;
   &lt;/div&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="Fidget Library" tags="" position="350,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;Fidget Library

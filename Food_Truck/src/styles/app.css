@@ -1,4 +1,6 @@
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -7,7 +9,9 @@ body {
   padding: 1.5em 0;
 }
 
-#ui-bar { display: none; }
+#ui-bar {
+  display: none;
+}
 
 #story {
   margin: 0 auto;
@@ -17,11 +21,11 @@ body {
 
 /* Phone frame — compact, soft dark viridis teal */
 .phone {
-  background: linear-gradient(180deg, #440154	 0%, #3b528b 50%, #21918c 100%);
+  background: linear-gradient(180deg, #440154 0%, #3b528b 50%, #21918c 100%);
   border-radius: 32px;
   padding: 25px;
   overflow: hidden;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
   color: white;
   position: relative;
   height: 660px;
@@ -35,8 +39,8 @@ body {
   background-color: #0d1b2a;
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)),
-    url("../images/FoodTruckBG.jpeg"),
-    linear-gradient(180deg, #440154	 0%, #3b528b 50%, #21918c 100%);
+    url("../../img/diet/FoodTruckBG.jpeg"),
+    linear-gradient(180deg, #440154 0%, #3b528b 50%, #21918c 100%);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -70,7 +74,7 @@ body {
   margin-bottom: 12px;
 }
 
-.ticket-row > br {
+.ticket-row>br {
   display: none;
 }
 
@@ -276,7 +280,7 @@ body {
   background-color: #bde8f2;
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.12)),
-    url("../images/ParkBG.jpeg"),
+    url("../../img/diet/ParkBG.jpeg"),
     linear-gradient(#bde8f2 0 72%, #e8cfa2 72%);
   background-position: center;
   background-repeat: no-repeat;
@@ -327,7 +331,7 @@ body {
   font-size: 2rem;
 }
 
-.start-screen > p {
+.start-screen>p {
   margin: 12px auto 20px;
   max-width: 280px;
   font-size: 1rem;
@@ -433,6 +437,7 @@ body {
     border-color: #ff8a00;
     box-shadow: 0 0 0 0 rgba(255, 138, 0, 0.6);
   }
+
   to {
     background: #ff8a00;
     border-color: #ffffff;
@@ -616,7 +621,7 @@ body {
   margin: 0 0 6px 0;
   font-size: 0.95rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em; 
+  letter-spacing: 0.05em;
   color: #a8ffdb;
 }
 
@@ -653,7 +658,7 @@ body {
   gap: 8px;
 }
 
-.ingredient-grid > br {
+.ingredient-grid>br {
   display: none;
 }
 
@@ -819,8 +824,13 @@ body {
 }
 
 @keyframes skill-slide {
-  from { left: 0; }
-  to { left: 100%; }
+  from {
+    left: 0;
+  }
+
+  to {
+    left: 100%;
+  }
 }
 
 .skill-legend {
@@ -835,6 +845,7 @@ body {
 .skill-legend span {
   flex: 1;
 }
+
 /* ChooseMenu screen */
 .menu-title {
   margin: 4px 0 2px;
@@ -856,7 +867,7 @@ body {
   gap: 6px;
 }
 
-.menu-grid > br {
+.menu-grid>br {
   display: none;
 }
 
@@ -992,7 +1003,7 @@ body {
   background-color: rgba(0, 0, 0, 0.3);
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)),
-    url("../images/CuttingBoard.jpeg");
+    url("../../img/diet/CuttingBoard.jpeg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -1009,8 +1020,7 @@ body {
   top: 50%;
   left: 50%;
   pointer-events: none;
-  transform: translate(-50%, -50%) translate(var(--icon-x, 0px), var(--icon-y, 0px))
-    scale(var(--icon-scale-x, 1), var(--icon-scale-y, 1));
+  transform: translate(-50%, -50%) translate(var(--icon-x, 0px), var(--icon-y, 0px)) scale(var(--icon-scale-x, 1), var(--icon-scale-y, 1));
   transition: transform 50ms linear;
 }
 
@@ -1019,13 +1029,14 @@ body {
 }
 
 @keyframes prep-knife {
-  0%, 100% {
-    transform: translate(-50%, -50%) translate(var(--icon-x, 0px), var(--icon-y, 0px))
-      rotate(0deg);
+
+  0%,
+  100% {
+    transform: translate(-50%, -50%) translate(var(--icon-x, 0px), var(--icon-y, 0px)) rotate(0deg);
   }
+
   50% {
-    transform: translate(-50%, -50%) translate(var(--icon-x, 0px), var(--icon-y, 0px))
-      rotate(-24deg);
+    transform: translate(-50%, -50%) translate(var(--icon-x, 0px), var(--icon-y, 0px)) rotate(-24deg);
   }
 }
 
@@ -1049,8 +1060,13 @@ body {
 }
 
 @keyframes prep-bump {
-  from { transform: scale(0.94); }
-  to { transform: scale(1); }
+  from {
+    transform: scale(0.94);
+  }
+
+  to {
+    transform: scale(1);
+  }
 }
 
 .prep-action-progress {
@@ -1141,6 +1157,7 @@ button,
 
 /* Sticky :hover on touch screens leaves buttons highlighted; undo it there */
 @media (hover: none) {
+
   .action-button button:hover,
   .passage-nav button:hover,
   .tray-controls button:hover,
@@ -1243,10 +1260,15 @@ button,
     font-size: 0.85rem;
   }
 
-  .ticket-customer { font-size: 0.95rem; }
+  .ticket-customer {
+    font-size: 0.95rem;
+  }
+
   .ticket-dish,
   .ticket-ingredients,
-  .ticket-status { font-size: 0.78rem; }
+  .ticket-status {
+    font-size: 0.78rem;
+  }
 
   .menu-grid {
     grid-auto-rows: 62px;
@@ -1324,6 +1346,7 @@ button,
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .ticket-action button.tutorial-target,
   .tutorial-target,
   .prep-action-bump {

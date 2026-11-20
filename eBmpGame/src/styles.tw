@@ -33,6 +33,13 @@ body {
   font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
+.fancyButton {
+  padding: 5px;
+  border-radius: 12px;
+  background-color: cornsilk;
+  color: black;
+}
+
 .library {
   display: grid;
   grid-template-columns: auto auto auto auto ;
@@ -79,7 +86,11 @@ body {
 
 .flButton {
   position: absolute;
-  bottom: 4%;
+  bottom: 8%;
+  padding: 1px;
+  border-radius: 12px;
+  background-color: cornsilk;
+  color: black;
 }
 
 .fidgetInterface {
@@ -126,7 +137,7 @@ body {
   border-radius: 50%;
   width: 136px;
   height: 135px;
-  top: 47%;
+  top: 40%;
   left: 30%;
 }
 
@@ -136,8 +147,8 @@ body {
   border-radius: 50%;
   width: 70px;
   height: 70px;
-  top: 46%;
-  left: 12.5%;
+  top: 39%;
+  left: 15%;
 }
 
 /* Hi-Hat (Top Left) */
@@ -146,7 +157,7 @@ body {
   border-radius: 50%;
   width: 75px;
   height: 75px;
-  top: 35%;
+  top: 29%;
   left: 17%;
 }
 
@@ -156,7 +167,7 @@ body {
   border-radius: 50%;
   width: 60px;
   height: 60px;
-  top: 38%;
+  top: 32%;
   left: 36%;
 }
 
@@ -166,7 +177,7 @@ body {
   border-radius: 50%;
   width: 75px;
   height: 75px;
-  top: 37%;
+  top: 31%;
   left: 50.5%;
 }
 
@@ -176,8 +187,8 @@ body {
   border-radius: 50%;
   width: 100px;
   height: 100px;
-  top: 43%;
-  left: 65%;
+  top: 38%;
+  left: 60%;
 }
 
 /* Crash Cymbal (Top Right) */
@@ -186,7 +197,7 @@ body {
   border-radius: 50%;
   width: 75px;
   height: 75px;
-  top: 32%;
+  top: 29%;
   left: 67%;
 }
 

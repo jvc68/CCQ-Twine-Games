@@ -2,7 +2,7 @@
 <div class="phone start-screen">\
     <h1>Food Truck</h1>\
     <p>Serve customers, prepare delicious meals, and grow your food truck.</p>\
-    <img class="start-icon" src="../images/FoodTruckICON.jpeg" alt="Food truck icon">\
+    <img class="start-icon" src="../../img/diet/FoodTruckICON.jpeg" alt="Food truck icon">\
     <div class="action-button start-actions">\
         <<button "Start Day" "ChooseMenu">><<run FoodTruck.endTutorial()>><<run FoodTruck.beginMenuSelection()>><</button>>\
         <<button "Play Tutorial" "TakeOrderScreen">><<run FoodTruck.startTutorial()>><</button>>\

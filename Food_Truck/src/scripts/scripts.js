@@ -167,14 +167,14 @@ window.FoodTruck = {
 
     /* Function Description: Returns the ticket the player is currently
        preparing, or null if none is selected */
-    getActiveOrder: function() {
+    getActiveOrder: function () {
         var state = SugarCube.State.variables;
 
         if (state.activeTicketId === null || !Array.isArray(state.tickets)) {
             return null;
         }
 
-        return state.tickets.find(function(ticket) {
+        return state.tickets.find(function (ticket) {
             return ticket.id === state.activeTicketId;
         }) || null;
     },
@@ -182,7 +182,7 @@ window.FoodTruck = {
     /* Function Description: Adds new tickets until the ticket limit is reached
        or no more orders remain for the day (orders already on a ticket count
        toward the day's remaining orders) */
-    fillTickets: function() {
+    fillTickets: function () {
         var state = SugarCube.State.variables;
 
         while (state.tickets.length < maxTickets &&
@@ -199,9 +199,9 @@ window.FoodTruck = {
     /* Function Description: Randomly picks an order for a new ticket, preferring
        customers not yet used today and never one already on a ticket (or in
        the optional exclude list). Returns null if no customer is available. */
-    pickOrder: function(excludeNames) {
+    pickOrder: function (excludeNames) {
         var state = SugarCube.State.variables;
-        var excluded = (excludeNames || []).concat(state.tickets.map(function(ticket) {
+        var excluded = (excludeNames || []).concat(state.tickets.map(function (ticket) {
             return ticket.custName;
         }));
 
@@ -223,7 +223,7 @@ window.FoodTruck = {
             name = state.availableCustomers.splice(index, 1)[0];
         } else {
             // every customer has been used today, so recycle ones not on a ticket
-            var recyclable = customerNames.filter(function(customer) {
+            var recyclable = customerNames.filter(function (customer) {
                 return excluded.indexOf(customer) === -1;
             });
 
@@ -238,7 +238,7 @@ window.FoodTruck = {
 
     /* Function Description: Builds a dish for a customer from three different
        ingredients on today's menu */
-    buildOrder: function(customerName) {
+    buildOrder: function (customerName) {
         var state = SugarCube.State.variables;
         var chosen = shuffled(state.todaysMenu).slice(0, 3);
         var type = dishTypes[Math.floor(Math.random() * dishTypes.length)];
@@ -246,7 +246,7 @@ window.FoodTruck = {
         return {
             custName: customerName,
             dishName: chosen[0].name + " & " + chosen[1].name + " " + type,
-            requiredIngredients: chosen.map(function(ingredient) {
+            requiredIngredients: chosen.map(function (ingredient) {
                 return ingredient.name;
             })
         };
@@ -254,13 +254,13 @@ window.FoodTruck = {
 
     /* Function Description: Clears the menu picks before the player chooses
        the ingredients for a new day */
-    beginMenuSelection: function() {
+    beginMenuSelection: function () {
         SugarCube.State.variables.menuPicks = [];
     },
 
     /* Function Description: Selects or deselects the ingredient at the given
        database index as one of the player's menu picks (limit 3) */
-    toggleMenuPick: function(index) {
+    toggleMenuPick: function (index) {
         var state = SugarCube.State.variables;
         var ingredient = ingredientDatabase[index];
 
@@ -283,7 +283,7 @@ window.FoodTruck = {
 
     /* Function Description: Updates the ChooseMenu screen to show which
        ingredients are picked and enables Start Day once three are chosen */
-    refreshMenuSelection: function() {
+    refreshMenuSelection: function () {
         var state = SugarCube.State.variables;
         var buttons = document.querySelectorAll(".menu-pick-button");
         var count = document.getElementById("menu-count");
@@ -292,7 +292,7 @@ window.FoodTruck = {
         if (!Array.isArray(state.menuPicks)) {
             state.menuPicks = [];
         }
-        buttons.forEach(function(button, index) {
+        buttons.forEach(function (button, index) {
             var ingredient = ingredientDatabase[index];
             var picked = state.menuPicks.indexOf(ingredient.id) !== -1;
 
@@ -310,23 +310,23 @@ window.FoodTruck = {
 
     /* Function Description: Sets todaysMenu to the player's picks plus randomly
        chosen ingredients from the rest of the database */
-    buildTodaysMenu: function() {
+    buildTodaysMenu: function () {
         var state = SugarCube.State.variables;
         var database = ingredientDatabase;
 
         if (state.tutorialMode) {
-            state.todaysMenu = tutorialMenuIds.map(function(id) {
-                return database.find(function(ingredient) {
+            state.todaysMenu = tutorialMenuIds.map(function (id) {
+                return database.find(function (ingredient) {
                     return ingredient.id === id;
                 });
             });
             return;
         }
 
-        var picks = database.filter(function(ingredient) {
+        var picks = database.filter(function (ingredient) {
             return state.menuPicks.indexOf(ingredient.id) !== -1;
         });
-        var others = shuffled(database.filter(function(ingredient) {
+        var others = shuffled(database.filter(function (ingredient) {
             return state.menuPicks.indexOf(ingredient.id) === -1;
         }));
 
@@ -335,7 +335,7 @@ window.FoodTruck = {
     },
 
     /* Function Description: Builds a new ticket with a full timer from an order */
-    makeTicket: function(order) {
+    makeTicket: function (order) {
         var state = SugarCube.State.variables;
         var time = this.orderTimeForDay();
         var ticket = {
@@ -353,7 +353,7 @@ window.FoodTruck = {
 
     /* Function Description: Returns the number of orders for the cuurent day,
        calculated based on current day number */
-    ordersForDay: function() {
+    ordersForDay: function () {
         if (SugarCube.State.variables.debugMode) {
             return 1;
         }
@@ -365,7 +365,7 @@ window.FoodTruck = {
 
     /* Function Description: Returns the time limit for fulfilling an order for
        the current day, calculated based on current day number */
-    orderTimeForDay: function() {
+    orderTimeForDay: function () {
         var day = SugarCube.State.variables.currentDay;
         return Math.max(50, 120 - 5 * (day - 1));
         /* return Math.max(40, Math.round(40 + 80 / day)); */
@@ -373,7 +373,7 @@ window.FoodTruck = {
 
     /* Function Description: Updates the speed of the cooking skill-check marker
        based on the cyrrent day number */
-    updateCookingMarkerSpeed: function() {
+    updateCookingMarkerSpeed: function () {
         var day = SugarCube.State.variables.currentDay;
         var speed = Math.min(3, 1 + (day - 1) * 0.25);
         var duration = 3.2 / speed;
@@ -383,13 +383,13 @@ window.FoodTruck = {
 
     /* Function Description: Toggles debug mode, which limits new days to one
        order */
-    toggleDebugMode: function() {
+    toggleDebugMode: function () {
         var state = SugarCube.State.variables;
         state.debugMode = !state.debugMode;
     },
 
     /* Function Description: Initializes the food truck for a new day */
-    startDay: function() {
+    startDay: function () {
         var state = SugarCube.State.variables;
         this.stopOrderTimer();
         state.numOrders = this.ordersForDay();
@@ -416,13 +416,13 @@ window.FoodTruck = {
         this.startOrderTimer();
     },
 
-    startTutorial: function() {
+    startTutorial: function () {
         var state = SugarCube.State.variables;
         state.tutorialMode = true;
         this.startDay();
     },
 
-    endTutorial: function() {
+    endTutorial: function () {
         var state = SugarCube.State.variables;
         state.tutorialMode = false;
         state.tutorialStep = null;
@@ -434,7 +434,7 @@ window.FoodTruck = {
         state.currentDay = 1;
     },
 
-    advanceTutorialIngredient: function() {
+    advanceTutorialIngredient: function () {
         var state = SugarCube.State.variables;
 
         if (!state.tutorialMode || state.tutorialStep !== "result") {
@@ -448,7 +448,7 @@ window.FoodTruck = {
             : "return-to-order";
     },
 
-    startTutorialIngredients: function() {
+    startTutorialIngredients: function () {
         var state = SugarCube.State.variables;
 
         if (state.tutorialMode && state.tutorialStep === "assembly") {
@@ -456,7 +456,7 @@ window.FoodTruck = {
         }
     },
 
-    restoreTutorialIngredient: function() {
+    restoreTutorialIngredient: function () {
         var state = SugarCube.State.variables;
         var activeOrder = this.getActiveOrder();
         var required = activeOrder && activeOrder.requiredIngredients;
@@ -465,7 +465,7 @@ window.FoodTruck = {
             return;
         }
 
-        var nextIndex = required.findIndex(function(ingredient) {
+        var nextIndex = required.findIndex(function (ingredient) {
             return state.prepTray.indexOf(ingredient) === -1;
         });
 
@@ -478,11 +478,11 @@ window.FoodTruck = {
         state.tutorialStep = "ingredient";
     },
 
-    returnToAssembly: function() {
+    returnToAssembly: function () {
         this.restoreTutorialIngredient();
     },
 
-    finishTutorialPrep: function() {
+    finishTutorialPrep: function () {
         var state = SugarCube.State.variables;
 
         if (!state.tutorialMode) {
@@ -496,16 +496,16 @@ window.FoodTruck = {
         }
     },
 
-    updateTutorialHighlights: function() {
+    updateTutorialHighlights: function () {
         var state = SugarCube.State.variables;
         var buttons = document.querySelectorAll("button.tutorial-target");
         var passage = SugarCube.State.passage;
         var targetText = null;
 
-        buttons.forEach(function(button) {
+        buttons.forEach(function (button) {
             button.classList.remove("tutorial-target");
         });
-        document.querySelectorAll(".ingredient-button").forEach(function(button) {
+        document.querySelectorAll(".ingredient-button").forEach(function (button) {
             button.classList.remove("tutorial-disabled");
             button.disabled = false;
         });
@@ -549,7 +549,7 @@ window.FoodTruck = {
             return;
         }
 
-        Array.prototype.forEach.call(document.querySelectorAll("button"), function(button) {
+        Array.prototype.forEach.call(document.querySelectorAll("button"), function (button) {
             if (button.textContent.indexOf(targetText) !== -1) {
                 button.classList.add("tutorial-target");
             }
@@ -557,7 +557,7 @@ window.FoodTruck = {
 
         if (passage === "AssemblyStation" &&
             state.tutorialStep === "ingredient") {
-            document.querySelectorAll(".ingredient-button").forEach(function(button) {
+            document.querySelectorAll(".ingredient-button").forEach(function (button) {
                 if (button.textContent.indexOf(targetText) === -1) {
                     button.classList.add("tutorial-disabled");
                     button.disabled = true;
@@ -568,17 +568,17 @@ window.FoodTruck = {
 
     /* Function Description: Advances to the next day and resets the menu picks.
        The day itself begins from the ChooseMenu screen via startDay. */
-    startNextDay: function() {
+    startNextDay: function () {
         SugarCube.State.variables.currentDay += 1;
         this.beginMenuSelection();
     },
 
     /* Function Description: Removes the cooking choices made for a ticket that
        was cancelled or expired, so they no longer affect the day's scores */
-    discardTicketChoices: function(ticketId) {
+    discardTicketChoices: function (ticketId) {
         var state = SugarCube.State.variables;
 
-        state.dayPreparationChoices = state.dayPreparationChoices.filter(function(choice) {
+        state.dayPreparationChoices = state.dayPreparationChoices.filter(function (choice) {
             return choice.ticketId !== ticketId;
         });
     },
@@ -586,9 +586,9 @@ window.FoodTruck = {
     /* Function Description: Immediately discards a ticket and replaces it in
        place with a different random ticket (fresh timer). The day's remaining
        order count is unchanged. */
-    cancelTicket: function(ticketId) {
+    cancelTicket: function (ticketId) {
         var state = SugarCube.State.variables;
-        var index = state.tickets.findIndex(function(t) {
+        var index = state.tickets.findIndex(function (t) {
             return t.id === ticketId;
         });
 
@@ -615,9 +615,9 @@ window.FoodTruck = {
 
     /* Function Description: Takes the ticket with the given id as the order
        being prepared. Switching tickets clears the prep tray. */
-    selectOrder: function(ticketId) {
+    selectOrder: function (ticketId) {
         var state = SugarCube.State.variables;
-        var ticket = state.tickets.find(function(t) {
+        var ticket = state.tickets.find(function (t) {
             return t.id === ticketId;
         });
 
@@ -637,7 +637,7 @@ window.FoodTruck = {
 
     /* Function Description: Returns a string representation of the ingredient
        at the specified index, including its image and name */
-    ingredientLabel: function(index) {
+    ingredientLabel: function (index) {
         var ingredients = SugarCube.State.variables.todaysMenu;
         var ingredient = ingredients[index];
 
@@ -651,7 +651,7 @@ window.FoodTruck = {
     /* Function Description: Returns the button label for a preparation method of
        the pending ingredient. The label deliberately doesn't say whether the
        method is healthy; position is the button's slot (0 = A, 1 = B). */
-    methodLabel: function(type, position) {
+    methodLabel: function (type, position) {
         var ingredient = SugarCube.State.variables.pendingIngredient;
 
         if (!ingredient || !ingredient.methods || !ingredient.methods[type]) {
@@ -664,7 +664,7 @@ window.FoodTruck = {
     /* Function Description: Selects an ingredient from the menu by its index,
        adding it to the prep tray if there's space and resetting any pending
        preparation method or cooking result */
-    selectIngredient: function(index) {
+    selectIngredient: function (index) {
         var state = SugarCube.State.variables;
         var ingredient = state.todaysMenu[index];
 
@@ -694,7 +694,7 @@ window.FoodTruck = {
 
     /* Function Description: Selects a preparation method for the pending
      ingredient, resetting any previous cooking result */
-    chooseMethod: function(type) {
+    chooseMethod: function (type) {
         var state = SugarCube.State.variables;
         var ingredient = state.pendingIngredient;
 
@@ -716,7 +716,7 @@ window.FoodTruck = {
 
     /* Function Description: Marks the ingredient's preparation action as done,
        which unlocks the cooking minigame */
-    completePrepAction: function() {
+    completePrepAction: function () {
         var state = SugarCube.State.variables;
 
         state.prepActionDone = true;
@@ -728,7 +728,7 @@ window.FoodTruck = {
 
     /* Function Description: Builds the preparation micro-action for the pending
        ingredient (tap, hold, scrub or swipe) on the PrepareIngredient screen */
-    initPrepAction: function() {
+    initPrepAction: function () {
         var self = this;
         var host = document.getElementById("prep-action");
         var next = document.getElementById("prep-continue");
@@ -737,7 +737,7 @@ window.FoodTruck = {
         if (!host || !next) {
             return;
         }
-        next.addEventListener("click", function() {
+        next.addEventListener("click", function () {
             if (SugarCube.State.variables.prepActionDone) {
                 SugarCube.Engine.play("CookingMinigame");
             }
@@ -765,6 +765,8 @@ window.FoodTruck = {
         label.textContent = action.label;
         pad.type = "button";
         pad.className = "prep-action-pad";
+        var computed = window.getComputedStyle(pad);
+
         icon.className = "prep-action-icon";
         icon.textContent = action.icon;
         pad.appendChild(icon);
@@ -772,7 +774,7 @@ window.FoodTruck = {
         fill.className = "prep-action-fill";
         track.appendChild(fill);
         // long-press (hold) and drag (scrub) must not open the mobile context menu
-        pad.addEventListener("contextmenu", function(event) {
+        pad.addEventListener("contextmenu", function (event) {
             event.preventDefault();
         });
         host.appendChild(label);
@@ -854,7 +856,7 @@ window.FoodTruck = {
             var timer = null;
             var startTime = 0;
 
-            var stopHold = function() {
+            var stopHold = function () {
                 if (timer !== null) {
                     clearInterval(timer);
                     timer = null;
@@ -866,13 +868,13 @@ window.FoodTruck = {
                 }
                 pad.classList.remove("prep-action-held");
             };
-            var startHold = function() {
+            var startHold = function () {
                 if (timer !== null || finished) {
                     return;
                 }
                 pad.classList.add("prep-action-held");
                 startTime = performance.now();
-                timer = setInterval(function() {
+                timer = setInterval(function () {
                     var fraction = (performance.now() - startTime) / action.ms;
 
                     setProgress(fraction);
@@ -890,46 +892,43 @@ window.FoodTruck = {
                 }, 30);
             };
 
-            pad.addEventListener("pointerdown", function(event) {
+            pad.addEventListener("pointerdown", function (event) {
                 capture(event);
                 startHold();
             });
-            ["pointerup", "pointercancel", "lostpointercapture"].forEach(function(name) {
+            ["pointerup", "pointercancel", "lostpointercapture"].forEach(function (name) {
                 pad.addEventListener(name, stopHold);
             });
-            pad.addEventListener("pointerleave", function(event) {
+            pad.addEventListener("pointerleave", function (event) {
                 // a finger slipping a few px off the edge must not cancel a hold
                 if (event.pointerType === "mouse") {
                     stopHold();
                 }
             });
-            pad.addEventListener("keydown", function(event) {
+            pad.addEventListener("keydown", function (event) {
                 if ((event.key === " " || event.key === "Enter") && !event.repeat) {
                     event.preventDefault();
                     startHold();
                 }
             });
             pad.addEventListener("keyup", stopHold);
+
         } else if (action.type === "scrub") {
             var dragging = false;
             var direction = 0;
             var extreme = 0;
             var lastKey = null;
+            var activeInput = null;
+            var activeTouchId = null;
+
             var minTravel = Math.max(14, Math.min(25, padWidth() * 0.08));
 
-            pad.addEventListener("pointerdown", function(event) {
-                dragging = true;
-                direction = 0;
-                extreme = event.clientX;
-                capture(event);
-                moveIcon(event);
-            });
-            pad.addEventListener("pointermove", function(event) {
-                if (!dragging) {
-                    return;
-                }
-                moveIcon(event);
-                var x = event.clientX;
+            // Shared movement and progress logic for mouse and touch
+            function updateScrub(x, y) {
+                moveIcon({
+                    clientX: x,
+                    clientY: y
+                });
 
                 if (direction === 0) {
                     if (Math.abs(x - extreme) >= minTravel) {
@@ -951,15 +950,109 @@ window.FoodTruck = {
                     extreme = x;
                     step();
                 }
+            }
+
+            function endScrub() {
+                dragging = false;
+                activeInput = null;
+                activeTouchId = null;
+                resetIconPosition();
+            }
+
+            // Desktop mouse / pointer handling
+            pad.addEventListener("pointerdown", function (event) {
+                if (event.pointerType === "touch" || finished) {
+                    return;
+                }
+
+                dragging = true;
+                activeInput = "pointer";
+                direction = 0;
+                extreme = event.clientX;
+
+                capture(event);
+                moveIcon(event);
             });
-            ["pointerup", "pointercancel"].forEach(function(name) {
-                pad.addEventListener(name, function() {
-                    dragging = false;
-                    resetIconPosition();
+
+            pad.addEventListener("pointermove", function (event) {
+                if (!dragging || activeInput !== "pointer") {
+                    return;
+                }
+
+                updateScrub(event.clientX, event.clientY);
+            });
+
+            ["pointerup", "pointercancel", "lostpointercapture"].forEach(function (name) {
+                pad.addEventListener(name, function (event) {
+                    if (activeInput !== "pointer") {
+                        return;
+                    }
+
+                    endScrub();
                 });
             });
-            // keyboard fallback: alternate the left and right arrow keys
-            pad.addEventListener("keydown", function(event) {
+
+            // Mobile touch handling (Android and iOS)
+            pad.addEventListener("touchstart", function (event) {
+                if (dragging || finished || event.changedTouches.length === 0) {
+                    return;
+                }
+
+                event.preventDefault();
+
+                var touch = event.changedTouches[0];
+
+                dragging = true;
+                activeInput = "touch";
+                activeTouchId = touch.identifier;
+                direction = 0;
+                extreme = touch.clientX;
+
+                moveIcon(touch);
+            }, { passive: false });
+
+            pad.addEventListener("touchmove", function (event) {
+                if (!dragging || activeInput !== "touch") {
+                    return;
+                }
+
+                var touch = null;
+
+                for (var i = 0; i < event.touches.length; i++) {
+                    if (event.touches[i].identifier === activeTouchId) {
+                        touch = event.touches[i];
+                        break;
+                    }
+                }
+
+                if (!touch) {
+                    return;
+                }
+
+                event.preventDefault();
+
+                updateScrub(touch.clientX, touch.clientY);
+            }, { passive: false });
+
+            function handleTouchEnd(event) {
+                if (!dragging || activeInput !== "touch") {
+                    return;
+                }
+
+                for (var i = 0; i < event.changedTouches.length; i++) {
+                    if (event.changedTouches[i].identifier === activeTouchId) {
+                        event.preventDefault();
+                        endScrub();
+                        return;
+                    }
+                }
+            }
+
+            pad.addEventListener("touchend", handleTouchEnd, { passive: false });
+            pad.addEventListener("touchcancel", handleTouchEnd, { passive: false });
+
+            // Keyboard fallback: alternate left and right arrow keys
+            pad.addEventListener("keydown", function (event) {
                 if ((event.key === "ArrowLeft" || event.key === "ArrowRight") &&
                     event.key !== lastKey) {
                     lastKey = event.key;
@@ -969,29 +1062,29 @@ window.FoodTruck = {
         } else if (action.type === "swipe") {
             var startX = null;
 
-            pad.addEventListener("pointerdown", function(event) {
+            pad.addEventListener("pointerdown", function (event) {
                 startX = event.clientX;
                 capture(event);
                 moveIcon(event);
             });
-            pad.addEventListener("pointermove", function(event) {
+            pad.addEventListener("pointermove", function (event) {
                 if (startX !== null) {
                     moveIcon(event);
                 }
             });
-            pad.addEventListener("pointerup", function(event) {
+            pad.addEventListener("pointerup", function (event) {
                 if (startX !== null && Math.abs(event.clientX - startX) >= Math.min(50, padWidth() * 0.15)) {
                     step();
                 }
                 startX = null;
                 resetIconPosition();
             });
-            pad.addEventListener("pointercancel", function() {
+            pad.addEventListener("pointercancel", function () {
                 startX = null;
                 resetIconPosition();
             });
             // keyboard fallback: Enter or Space counts as a swipe
-            pad.addEventListener("click", function(event) {
+            pad.addEventListener("click", function (event) {
                 if (event.detail === 0) {
                     step();
                 }
@@ -1002,7 +1095,7 @@ window.FoodTruck = {
     /* Function Description: Stops the cooking skill-check, calculates the
        doneness of the ingredient based on the marker's position, and adds the
        result to the day's preparation choices and prep tray */
-    stopCooking: function() {
+    stopCooking: function () {
         var state = SugarCube.State.variables;
         var marker = document.getElementById("skill-marker");
         var track = document.querySelector(".skill-track");
@@ -1047,7 +1140,7 @@ window.FoodTruck = {
 
     /* Function Description: Clears the prep tray and resets the tray display in
        the UI */
-    clearTray: function() {
+    clearTray: function () {
         var state = SugarCube.State.variables;
 
         state.prepTray = [];
@@ -1064,7 +1157,7 @@ window.FoodTruck = {
     /* Function Description: Checks if the prep tray matches the required
        ingredients for the active order, returning true if they match and false
        otherwise */
-    canFulfillOrder: function() {
+    canFulfillOrder: function () {
         var state = SugarCube.State.variables;
         var tray = state.prepTray;
         var activeOrder = this.getActiveOrder();
@@ -1075,11 +1168,11 @@ window.FoodTruck = {
         }
 
         var counts = new Map();
-        tray.forEach(function(ingredient) {
+        tray.forEach(function (ingredient) {
             counts.set(ingredient, (counts.get(ingredient) || 0) + 1);
         });
 
-        return required.every(function(ingredient) {
+        return required.every(function (ingredient) {
             var count = counts.get(ingredient) || 0;
 
             if (count === 0) {
@@ -1093,14 +1186,14 @@ window.FoodTruck = {
 
     /* Function Description: Calculates the healthiness and satisfaction scores
        for the day's preparation choices, returning an object with both scores */
-    calculateDayScores: function() {
+    calculateDayScores: function () {
         var state = SugarCube.State.variables;
         var choices = state.dayPreparationChoices;
         var totalChoices = choices.length;
         var healthyChoices = 0;
         var perfectChoices = 0;
 
-        choices.forEach(function(choice) {
+        choices.forEach(function (choice) {
             if (choice.healthy) {
                 healthyChoices += 1;
             }
@@ -1124,7 +1217,7 @@ window.FoodTruck = {
 
     /* Function Description: Returns a string representation of a star rating
        based on the provided score, with filled and empty stars */
-    starRating: function(score) {
+    starRating: function (score) {
         var filledStars = Math.max(0, Math.min(5, Math.round(score || 0)));
 
         return "★".repeat(filledStars) + "☆".repeat(5 - filledStars);
@@ -1132,7 +1225,7 @@ window.FoodTruck = {
 
     /* Function Description: Returns a string of tips based on the day's
        satisfaction and healthiness scores, providing feedback for improvement */
-    dayTips: function() {
+    dayTips: function () {
         var state = SugarCube.State.variables;
         var tips = [];
 
@@ -1159,7 +1252,7 @@ window.FoodTruck = {
 
     /* Function Description: Stops the order timer, calculates the day's scores,
        and transitions to the DayTally passage */
-    finishDay: function() {
+    finishDay: function () {
         this.stopOrderTimer();
         this.calculateDayScores();
         SugarCube.Engine.play("DayTally");
@@ -1168,7 +1261,7 @@ window.FoodTruck = {
     /* Function Description: Fulfills the current order if the prep tray matches
        the required ingredients, updating scores and moving to the next order
        or finishing the day */
-    fulfillOrder: function() {
+    fulfillOrder: function () {
         var state = SugarCube.State.variables;
 
         if (!this.canFulfillOrder()) {
@@ -1178,7 +1271,7 @@ window.FoodTruck = {
         state.ordersCompleted += 1;
         state.dayScore += 1;
         state.numOrders -= 1;
-        state.tickets = state.tickets.filter(function(ticket) {
+        state.tickets = state.tickets.filter(function (ticket) {
             return ticket.id !== state.activeTicketId;
         });
         state.activeTicketId = null;
@@ -1198,7 +1291,7 @@ window.FoodTruck = {
 
     /* Function Description: Starts the shared timer interval, which ticks every
        ticket down several times a second so the progress bars animate smoothly */
-    startOrderTimer: function() {
+    startOrderTimer: function () {
         var self = this;
 
         this.stopOrderTimer();
@@ -1207,7 +1300,7 @@ window.FoodTruck = {
         }
 
         lastTickTime = Date.now();
-        orderTimerInterval = setInterval(function() {
+        orderTimerInterval = setInterval(function () {
             self.tickOrders();
         }, 100);
     },
@@ -1217,7 +1310,7 @@ window.FoodTruck = {
        order) and a new ticket fills its slot if orders remain. A ticket that
        was never taken is instead swapped for a different random ticket with a
        fresh timer. The day ends once no orders are left. */
-    tickOrders: function() {
+    tickOrders: function () {
         var state = SugarCube.State.variables;
 
         if (!state.tickets.length) {
@@ -1234,11 +1327,11 @@ window.FoodTruck = {
 
         lastTickTime = now;
 
-        state.tickets.forEach(function(ticket) {
+        state.tickets.forEach(function (ticket) {
             ticket.timeLeft = Math.max(0, ticket.timeLeft - elapsed);
         });
 
-        state.tickets.forEach(function(ticket) {
+        state.tickets.forEach(function (ticket) {
             if (ticket.timeLeft > 0) {
                 remaining.push(ticket);
                 return;
@@ -1289,7 +1382,7 @@ window.FoodTruck = {
     },
 
     /* Function Description: Stops the order timer interval if it's running */
-    stopOrderTimer: function() {
+    stopOrderTimer: function () {
         if (orderTimerInterval !== null) {
             clearInterval(orderTimerInterval);
             orderTimerInterval = null;
@@ -1298,7 +1391,7 @@ window.FoodTruck = {
 
     /* Function Description: Returns a string representation of the order timer
        in the format "MM:SS" */
-    orderTimerDisplay: function() {
+    orderTimerDisplay: function () {
         var activeOrder = this.getActiveOrder();
         var seconds = Math.max(0, Math.ceil(activeOrder ? activeOrder.timeLeft : 0));
         var minutes = Math.floor(seconds / 60);
@@ -1310,13 +1403,13 @@ window.FoodTruck = {
 
     /* Function Description: Returns a ticket's progress bar color, fading from
        green (full) through yellow to red (empty) */
-    ticketColor: function(fraction) {
+    ticketColor: function (fraction) {
         return "hsl(" + Math.round(120 * fraction) + ", 80%, 42%)";
     },
 
     /* Function Description: Applies a ticket's remaining time to a progress bar
        fill element. When instant is true the width is set without animating. */
-    applyTimerFill: function(fill, ticket, instant) {
+    applyTimerFill: function (fill, ticket, instant) {
         var fraction = Math.max(0, Math.min(1, ticket.timeLeft / ticket.timeTotal));
 
         if (instant) {
@@ -1332,13 +1425,13 @@ window.FoodTruck = {
 
     /* Function Description: Updates the ticket cards, their progress bars, and
        the active ticket timer on the assembly station in the UI */
-    updateTicketDisplays: function(instant) {
+    updateTicketDisplays: function (instant) {
         var self = this;
         var state = SugarCube.State.variables;
         var cards = document.querySelectorAll(".ticket-card");
 
         if (cards.length === state.tickets.length) {
-            state.tickets.forEach(function(ticket, index) {
+            state.tickets.forEach(function (ticket, index) {
                 var fill = cards[index].querySelector(".ticket-timer-fill");
 
                 cards[index].classList.toggle("ticket-active", ticket.id === state.activeTicketId);
@@ -1361,7 +1454,7 @@ window.FoodTruck = {
     }
 };
 
-window.jQuery(document).on(":passagedisplay", function() {
+window.jQuery(document).on(":passagedisplay", function () {
     var state = SugarCube.State.variables;
 
     // resume ticking if tickets exist but the timer isn't running (e.g. after loading a save)
@@ -1369,8 +1462,8 @@ window.jQuery(document).on(":passagedisplay", function() {
         window.FoodTruck.startOrderTimer();
     }
     window.FoodTruck.updateTicketDisplays(true);
-    document.querySelectorAll(".ingredient-button").forEach(function(button) {
-        button.addEventListener("click", function() {
+    document.querySelectorAll(".ingredient-button").forEach(function (button) {
+        button.addEventListener("click", function () {
             var ingredientButtons = document.querySelectorAll(".ingredient-button");
             var ingredientIndex = Array.prototype.indexOf.call(ingredientButtons, button);
 
@@ -1378,15 +1471,15 @@ window.jQuery(document).on(":passagedisplay", function() {
             SugarCube.Engine.play("PrepareIngredient");
         });
     });
-    document.querySelectorAll(".menu-pick-button").forEach(function(button, index) {
-        button.addEventListener("click", function() {
+    document.querySelectorAll(".menu-pick-button").forEach(function (button, index) {
+        button.addEventListener("click", function () {
             window.FoodTruck.toggleMenuPick(index);
         });
     });
     var menuStart = document.getElementById("menu-start");
 
     if (menuStart) {
-        menuStart.addEventListener("click", function() {
+        menuStart.addEventListener("click", function () {
             if (SugarCube.State.variables.menuPicks.length === 3) {
                 window.FoodTruck.startDay();
                 SugarCube.Engine.play("TakeOrderScreen");

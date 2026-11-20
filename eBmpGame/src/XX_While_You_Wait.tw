@@ -13,7 +13,7 @@ While You Wait
 :: StoryInit {"position": "100,100", "size": "100,100"}
 <<run setInterval(setup.updateTimer, 1000)>>
 <<=setup.formattedTime = "02:00">>
-<<run  
+/* <<run  
   Dialog.setup("Important Reminder", "reminderPopup");
   Dialog.wiki(`
   Welcome to While You Wait!\n
@@ -23,17 +23,17 @@ While You Wait
   We suggest you wait 2 minutes before taking your measurement, but feel free to do so at any time.\n
   Enjoy!
   `);
-  Dialog.open();>> 
+  Dialog.open();>>  */
 
 :: Home
 <div class="phone">Time Spent: <span id="timer"><<=setup.formattedTime>></span>
 <span id="currentFidget">Switch</span>
-<div id="blankSpace"></div>
+<div id="blankSpace"></div>\
 <div class="fidgetInterface" id="container"></div>\
 <div class="desc" id="desc"></div>\
 <div class="options" id="postContainer"></div>
   <<done>><<run setup.populateFidget()>><</done>>
-  <div class="flButton"> 
+  <div class="flButton fancyButton"> 
     <<button "Fidget Library" "Fidget Library">><</button>>
   </div>
 </div>

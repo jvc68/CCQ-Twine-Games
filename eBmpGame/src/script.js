@@ -1,5 +1,5 @@
 setup.prevRand = -1
-setup.currentFidget = "switch"
+setup.currentFidget = "drums"
 
 setup.isMouseDown = false;
 setup.light = [0, 0, 0, 0]
@@ -175,7 +175,7 @@ setup.populateFidget = function populateFidget() {
 
 			let refreshButton = document.createElement('button');
 			refreshButton.addEventListener('click', () => setup.populateFidget(setup.currentFidget));
-			refreshButton.classList.add("refreshButton");
+			refreshButton.classList.add("fancyButton");
 			refreshButton.textContent = "Refresh Bubble Wrap"
 			postContainer.appendChild(refreshButton);
 			break;
@@ -183,7 +183,7 @@ setup.populateFidget = function populateFidget() {
 		case "switch":
 			blankSpace.style.height = '0%'
 			blankSpace.style.display = 'hidden'
-			container.style.height = '72%'
+			container.style.height = '65%'
 			container.style.backgroundColor = "transparent"
 			container.style.border = "none"
 			fidgetLabel.textContent = "Light Switch"

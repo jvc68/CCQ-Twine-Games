@@ -1,0 +1,14 @@
+{
+	"name": "tweehelloworld",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"build": "tweego -o dist/FoodTruck.html src/",
+		"watch": "nodemon --watch src --ext twee,tw,js,css --exec \"npm run build\""
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"type": "commonjs"
+}
