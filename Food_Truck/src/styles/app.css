@@ -19,6 +19,20 @@ body {
   padding: 0;
 }
 
+#story.food-truck-active {
+  overflow: hidden;
+  border-radius: 32px;
+  background-color: #0d1b2a;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)),
+    url("../../img/diet/FoodTruckBG.jpeg"),
+    linear-gradient(180deg, #440154 0%, #3b528b 50%, #21918c 100%);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+}
+
 /* Phone frame — compact, soft dark viridis teal */
 .phone {
   background: linear-gradient(180deg, #440154 0%, #3b528b 50%, #21918c 100%);
@@ -36,14 +50,8 @@ body {
 }
 
 .phone:not(.start-screen) {
-  background-color: #0d1b2a;
-  background-image:
-    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)),
-    url("../../img/diet/FoodTruckBG.jpeg"),
-    linear-gradient(180deg, #440154 0%, #3b528b 50%, #21918c 100%);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  background: transparent;
+  box-shadow: none;
 }
 
 .HUD {

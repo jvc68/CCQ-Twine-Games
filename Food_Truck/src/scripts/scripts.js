@@ -1460,6 +1460,11 @@ window.FoodTruck = {
 window.jQuery(document).on(":passagedisplay", function () {
     var state = SugarCube.State.variables;
 
+    document.getElementById("story").classList.toggle(
+        "food-truck-active",
+        SugarCube.State.passage !== "Start"
+    );
+
     // resume ticking if tickets exist but the timer isn't running (e.g. after loading a save)
     if (state.tickets && state.tickets.length && !orderTimerInterval) {
         window.FoodTruck.startOrderTimer();
