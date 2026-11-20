@@ -33,6 +33,13 @@ setup.activityLibraries.bloodCells = {
                 activityId: "plateletRescue",
                 passage: "BloodCellActivity",
                 completed: false
+            },
+            {
+                title: "🔴 Red Cell Journey",
+                description: "Discover how red blood cells carry oxygen through the bloodstream.",
+                activityId: "redCellJourney",
+                passage: "BloodCellActivity",
+                completed: false
             }
         ]
 
@@ -248,6 +255,59 @@ setup.activityLibraries.bloodCells = {
 
         completionHeading: "Germ Detective Complete!",
         completionMessage: "Ruby has discovered how germs can affect the body.",
+        continueLabel: "Continue to the lesson",
+        nextPassage: "LessonLearned"
+    },
+
+    redCellJourney: {
+        title: "Red Cell Journey",
+        introduction: "Ruby discovers how red blood cells carry oxygen through the bloodstream.",
+        characterName: "Ruby",
+        characterLine: "Let's follow the red blood cells on their journey!",
+        mission: "Help Ruby discover what red blood cells do!",
+        instructions: "Choose TWO correct facts",
+        requiredCorrect: 2,
+
+        choices: [
+            {
+                id: "redCellsCarryOxygen",
+                label: "🔴 Red blood cells carry oxygen around the body",
+                correct: true,
+                feedbackTitle: "Correct!",
+                feedback: "Red blood cells use a protein called haemoglobin to carry oxygen."
+            },
+            {
+                id: "redCellsUseVessels",
+                label: "🩸 Red blood cells travel through blood vessels",
+                correct: true,
+                feedbackTitle: "Great job!",
+                feedback: "Red blood cells travel through blood vessels to deliver oxygen to body tissues."
+            },
+            {
+                id: "redCellsFightGerms",
+                label: "🛡️ Red blood cells are the main cells that fight germs",
+                correct: false,
+                feedbackTitle: "Not quite!",
+                feedback: "White blood cells help defend the body against harmful germs."
+            },
+            {
+                id: "redCellsPumpBlood",
+                label: "❤️ Red blood cells pump blood around the body",
+                correct: false,
+                feedbackTitle: "Try again!",
+                feedback: "The heart pumps blood. Red blood cells travel in the blood and carry oxygen."
+            }
+        ],
+
+        lesson: {
+            introduction: "Ruby has discovered how red blood cells help deliver oxygen around the body.",
+            characterName: "Ruby",
+            characterLine: "My red blood cells are busy carrying oxygen to where it is needed!",
+            remember: "Red blood cells contain haemoglobin, which carries oxygen. They travel through blood vessels as the heart pumps blood around the body."
+        },
+
+        completionHeading: "Red Cell Express Complete!",
+        completionMessage: "Ruby has learned about the important job of red blood cells!",
         continueLabel: "Continue to the lesson",
         nextPassage: "LessonLearned"
     }

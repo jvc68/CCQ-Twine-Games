@@ -12,7 +12,7 @@ Education Game
 
 
 :: Start {"position": "625,275", "size": "100,100"}
-<div class="tutorial-panel"><h3>Welcome to Vascular Village!</h3><p>Meet Ruby, your guide on an amazing adventure inside the human body! 🔬</p><p>Follow Ruby as she explores the body's incredible systems, how they work together, and learns the little things we can do every day to stay healthy.</p><p>From the heart pumping blood to the lungs bringing in oxygen, every discovery brings Ruby one step closer to understanding how our bodies keep us going!</p><p><strong>Are you ready to join Ruby and explore the wonders of Vascular Village?</strong></p><div class="start-buttons"><div class="start-buttons"><<button "Let's Explore!">><<goto "ScenarioMenu">><</button>><<button "🎓 Tutorial">><<goto "TutorialRuby">><</button>></div></div>
+<div class="tutorial-panel"><h3>Welcome to Vascular Village!</h3><p>Meet Ruby, your guide on an amazing adventure inside the human body! 🔬</p><p>Follow Ruby as she explores the body's incredible systems, discovers how they work together, and learns about the importance of keeping blood pressure healthy.</p><p>From the heart pumping blood to the blood vessels carrying it around the body, every discovery helps Ruby understand hypertension and how healthy choices can protect our bodies!</p><p><strong>Are you ready to join Ruby and explore the wonders of Vascular Village?</strong></p><div class="start-buttons"><<button "Let's Explore!">><<goto "ScenarioMenu">><</button>><<button "🎓 Tutorial">><<goto "TutorialRuby">><</button>></div></div>
 
 
 /* MAIN HOME SCREEN  */

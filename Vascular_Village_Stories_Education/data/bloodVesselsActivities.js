@@ -33,6 +33,20 @@ setup.activityLibraries.bloodVessels = {
                 activityId: "clottingChallenge",
                 passage: "BloodVesselsActivity",
                 completed: false
+            },
+            {
+                title: "🩸 Vessel Explorer",
+                description: "Discover how blood vessels carry blood around the body.",
+                activityId: "vesselExplorer",
+                passage: "BloodVesselsActivity",
+                completed: false
+            },
+            {
+                title: "💓 Healthy Heart Choices",
+                description: "Discover how everyday healthy habits help protect the heart and blood vessels.",
+                activityId: "healthyHeartChoices",
+                passage: "BloodVesselsActivity",
+                completed: false
             }
         ]
 
@@ -250,5 +264,112 @@ setup.activityLibraries.bloodVessels = {
         completionMessage: "Ruby has learned how the body forms blood clots to help stop bleeding.",
         continueLabel: "Continue to the lesson",
         nextPassage: "LessonLearned"
+    },
+
+    vesselExplorer: {
+        title: "Vessel Explorer",
+        introduction: "Ruby discovers how blood vessels carry blood around the body.",
+        characterName: "Ruby",
+        characterLine: "Let's explore the pathways that carry my blood!",
+        mission: "Help Ruby understand why healthy blood vessels matter!",
+        instructions: "Choose TWO correct facts",
+        requiredCorrect: 2,
+
+        choices: [
+            {
+                id: "vesselsCarryBlood",
+                label: "🩸 Blood vessels carry blood around the body",
+                correct: true,
+                feedbackTitle: "Correct!",
+                feedback: "Blood vessels form a network that carries blood throughout the body."
+            },
+            {
+                id: "arteriesCarryAway",
+                label: "❤️ Arteries carry blood away from the heart",
+                correct: true,
+                feedbackTitle: "Great work!",
+                feedback: "Arteries carry blood away from the heart, while veins carry blood back."
+            },
+            {
+                id: "vesselsMakeBlood",
+                label: "🩸 Blood vessels make all the blood cells",
+                correct: false,
+                feedbackTitle: "Not quite!",
+                feedback: "Most blood cells are made in the bone marrow, not inside blood vessels."
+            },
+            {
+                id: "veinsCarryAway",
+                label: "💙 Veins always carry blood away from the heart",
+                correct: false,
+                feedbackTitle: "Try again!",
+                feedback: "Veins carry blood towards the heart. Arteries carry blood away from it."
+            }
+        ],
+
+        lesson: {
+            introduction: "Ruby has discovered how blood vessels help blood travel around the body.",
+            characterName: "Ruby",
+            characterLine: "My blood vessels are important pathways that keep my blood moving!",
+            remember: "Blood vessels carry blood throughout the body. Arteries carry blood away from the heart, while veins return blood to the heart. Healthy blood vessels help support good circulation."
+        },
+
+        completionHeading: "Vessel Explorer Complete!",
+        completionMessage: "Ruby has discovered how blood vessels work!",
+        continueLabel: "Continue to the lesson",
+        nextPassage: "LessonLearned"
+    },
+
+    healthyHeartChoices: {
+        title: "Healthy Heart Choices",
+        introduction: "Ruby discovers how everyday healthy habits help protect her heart and blood vessels.",
+        characterName: "Ruby",
+        characterLine: "Let's find healthy ways to look after my body!",
+        mission: "Help Ruby choose habits that support healthy blood pressure!",
+        instructions: "Choose TWO correct facts",
+        requiredCorrect: 2,
+
+        choices: [
+            {
+                id: "healthyEating",
+                label: "🥦 Eating fruits and vegetables supports heart health",
+                correct: true,
+                feedbackTitle: "Excellent choice!",
+                feedback: "Fruits and vegetables provide nutrients that support overall heart and blood vessel health."
+            },
+            {
+                id: "regularCheckups",
+                label: "🩺 Regular blood pressure checks help monitor health",
+                correct: true,
+                feedbackTitle: "Correct!",
+                feedback: "Blood pressure checks help identify high blood pressure, even when there are no symptoms."
+            },
+            {
+                id: "ignorePressure",
+                label: "⚠️ Blood pressure checks are only needed when we feel unwell",
+                correct: false,
+                feedbackTitle: "Not quite!",
+                feedback: "High blood pressure often has no symptoms, so regular checks are important."
+            },
+            {
+                id: "unhealthyHabits",
+                label: "🍟 Eating lots of salty foods every day protects blood vessels",
+                correct: false,
+                feedbackTitle: "Try again!",
+                feedback: "Too much sodium can contribute to high blood pressure and increase strain on blood vessels."
+            }
+        ],
+
+        lesson: {
+            introduction: "Ruby has discovered how everyday choices can support healthy blood pressure.",
+            characterName: "Ruby",
+            characterLine: "Small healthy choices can help protect my heart and blood vessels!",
+            remember: "Eating a balanced diet, choosing foods with less sodium and staying active can support healthy blood pressure. Regular blood pressure checks are important because high blood pressure often has no symptoms."
+        },
+
+        completionHeading: "Healthy Heart Choices Complete!",
+        completionMessage: "Ruby has discovered how to support her heart and blood vessels!",
+        continueLabel: "Continue to the lesson",
+        nextPassage: "LessonLearned"
     }
+    
 };

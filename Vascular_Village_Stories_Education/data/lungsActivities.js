@@ -19,6 +19,20 @@ setup.activityLibraries.lungs = {
                 activityId: "oxygenAdventure",
                 passage: "LungsActivity",
                 completed: false
+            },
+            {
+                title: "🏃 Breathe and Move",
+                description: "Discover how breathing supports the body during activity.",
+                activityId: "breatheAndMove",
+                passage: "LungsActivity",
+                completed: false
+            },
+            {
+                title: "🏃 Movement Mission",
+                description: "Discover how physical activity supports a healthy heart and lungs.",
+                activityId: "movementMission",
+                passage: "LungsActivity",
+                completed: false
             }
         ]
     },
@@ -125,6 +139,112 @@ setup.activityLibraries.lungs = {
 
         completionHeading: "Oxygen Explorer!",
         completionMessage: "Ruby has discovered how oxygen enters the blood.",
+        continueLabel: "Continue to the lesson",
+        nextPassage: "LessonLearned"
+    },
+
+    breatheAndMove: {
+        title: "Breathe and Move",
+        introduction: "Ruby discovers how breathing helps bring oxygen into the body during activity.",
+        characterName: "Ruby",
+        characterLine: "Let's see how my lungs help me stay active!",
+        mission: "Help Ruby discover how the lungs support the body!",
+        instructions: "Choose TWO correct facts",
+        requiredCorrect: 2,
+
+        choices: [
+            {
+                id: "lungsBringOxygen",
+                label: "🌬️ The lungs bring oxygen into the body",
+                correct: true,
+                feedbackTitle: "Correct!",
+                feedback: "When we breathe in, oxygen enters the lungs and moves into the blood."
+            },
+            {
+                id: "exerciseBreathing",
+                label: "🏃 Breathing usually becomes faster during exercise",
+                correct: true,
+                feedbackTitle: "Great job!",
+                feedback: "During exercise, the body needs more oxygen, so breathing usually becomes faster."
+            },
+            {
+                id: "lungsPumpBlood",
+                label: "❤️ The lungs pump blood around the body",
+                correct: false,
+                feedbackTitle: "Not quite!",
+                feedback: "The heart pumps blood, while the lungs help bring oxygen into the blood."
+            },
+            {
+                id: "oxygenMadeInLungs",
+                label: "🫁 The lungs make all the oxygen we need",
+                correct: false,
+                feedbackTitle: "Try again!",
+                feedback: "Oxygen comes from the air we breathe. The lungs help move it into the bloodstream."
+            }
+        ],
+
+        lesson: {
+            introduction: "Ruby has discovered how breathing supports the body during activity.",
+            characterName: "Ruby",
+            characterLine: "My lungs bring oxygen into my body so I can keep moving!",
+            remember: "The lungs bring oxygen into the body and move it into the blood. During exercise, breathing usually becomes faster to help meet the body's increased oxygen needs."
+        },
+
+        completionHeading: "Breathe and Move Complete!",
+        completionMessage: "Ruby has learned how breathing supports the body!",
+        continueLabel: "Continue to the lesson",
+        nextPassage: "LessonLearned"
+    },
+
+    movementMission: {
+        title: "Movement Mission",
+        introduction: "Ruby discovers how moving her body helps keep her heart and lungs healthy.",
+        characterName: "Ruby",
+        characterLine: "Let's get moving and discover how exercise helps my body!",
+        mission: "Help Ruby discover why physical activity matters!",
+        instructions: "Choose TWO correct facts",
+        requiredCorrect: 2,
+
+        choices: [
+            {
+                id: "exerciseStrengthensHeart",
+                label: "🏃 Regular physical activity helps keep the heart healthy",
+                correct: true,
+                feedbackTitle: "Great choice!",
+                feedback: "Regular physical activity helps strengthen the heart and supports cardiovascular health."
+            },
+            {
+                id: "exerciseIncreasesBreathing",
+                label: "🌬️ Breathing usually gets faster during exercise",
+                correct: true,
+                feedbackTitle: "Correct!",
+                feedback: "During activity, muscles need more oxygen, so breathing usually becomes faster."
+            },
+            {
+                id: "exerciseAlwaysRaisesPressure",
+                label: "⚠️ Exercise always causes blood pressure to stay high",
+                correct: false,
+                feedbackTitle: "Not quite!",
+                feedback: "Blood pressure can rise temporarily during exercise, but regular activity supports healthy blood pressure over time."
+            },
+            {
+                id: "restOnlyHealthy",
+                label: "🛋️ Staying still all day is best for the heart",
+                correct: false,
+                feedbackTitle: "Try again!",
+                feedback: "Regular movement is important for heart health. Sitting for long periods can reduce daily activity."
+            }
+        ],
+
+        lesson: {
+            introduction: "Ruby has discovered how physical activity supports a healthy heart and lungs.",
+            characterName: "Ruby",
+            characterLine: "Moving my body helps keep my heart and lungs working well!",
+            remember: "Regular physical activity supports heart and lung health. During exercise, breathing and heart rate usually increase to deliver more oxygen to working muscles. Activity can also help support healthy blood pressure."
+        },
+
+        completionHeading: "Movement Mission Complete!",
+        completionMessage: "Ruby has discovered why staying active matters!",
         continueLabel: "Continue to the lesson",
         nextPassage: "LessonLearned"
     }

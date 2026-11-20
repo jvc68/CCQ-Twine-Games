@@ -4,6 +4,63 @@ setup.scenarios = setup.scenarios || {};
 // Scenario collection
 setup.scenarios.bodyScenarios = {
 
+    // Hypertension related scenario
+    heartUnderPressure: {
+        title: "Heart Under Pressure",
+        description: "Ruby discovers that blood pressure is too high! Let's explore how the heart pumps blood and why healthy blood pressure matters!",
+
+        activities: [
+            "bloodPressureBasics",
+            "brainController",
+            "breatheAndMove"
+        ],
+
+        lesson: {
+            introduction: "Ruby has discovered why healthy blood pressure is important for the heart and body.",
+            characterName: "Ruby",
+            characterLine: "I learned that blood pressure helps move blood around my body, but too much pressure can strain my heart!",
+            remember: "Blood pressure is the force of blood pushing against blood vessel walls. When blood pressure stays too high, the heart has to work harder. Regular blood pressure checks help us keep track of our health."
+        }
+    },
+
+    // hypertension related scenario
+    vesselTrouble: {
+        title: "Vessel Trouble",
+        description: "Ruby discovers that blood vessels are under pressure! Let's explore how healthy blood vessels help blood flow around the body!",
+
+        activities: [
+            "vesselExplorer",
+            "redCellJourney",
+            "pressureDetective"
+        ],
+
+        lesson: {
+            introduction: "Ruby has discovered why healthy blood vessels are important for blood flow and blood pressure.",
+            characterName: "Ruby",
+            characterLine: "I learned that healthy blood vessels help blood flow smoothly around my body!",
+            remember: "Blood vessels carry blood throughout the body. Flexible, healthy arteries help blood flow. Stiff or narrowed arteries can contribute to high blood pressure, which can damage blood vessels over time."
+        }
+    },
+
+    // hypertension related scenario
+    healthyChoicesChallenge: {
+        title: "Ruby's Healthy Choices Challenge",
+        description: "Ruby wants to keep her heart healthy! Let's discover how food, exercise and everyday habits can help manage blood pressure!",
+
+        activities: [
+            "saltDetective",
+            "movementMission",
+            "healthyHeartChoices"
+        ],
+
+        lesson: {
+            introduction: "Ruby has discovered how everyday healthy choices can support healthy blood pressure.",
+            characterName: "Ruby",
+            characterLine: "I learned that small healthy choices can help protect my heart and blood vessels!",
+            remember: "Eating less salt, enjoying healthy foods, staying active, getting enough sleep and managing stress can support healthy blood pressure. Regular blood pressure checks are also important."
+        }
+    },
+    
     // Scenario 1: Sitting around all day
     sittingAllDay: {
         title: "We've Been Sitting Around All Day",
@@ -31,7 +88,7 @@ setup.scenarios.bodyScenarios = {
         description: "Some body cells aren't getting enough oxygen! Let's discover how the lungs, heart and blood work together to deliver oxygen around the body!",
         activities: [
             "oxygenAdventure",
-            "redCellExpress",
+            "redCellJourney",
             "heartPumpMission"
         ],
 

@@ -1124,8 +1124,6 @@
                 if (isCompleted) {
 
                     var completedLabel = document.createElement("p");
-
-                    completedLabel.textContent = "✓ Completed!";
                     completedLabel.className = "completed-label";
 
                     card.appendChild(completedLabel);
