@@ -1024,6 +1024,10 @@ body {
   transition: transform 50ms linear;
 }
 
+.prep-action-dragging .prep-action-icon {
+  transition: none;
+}
+
 .prep-action-knife .prep-action-icon {
   animation: prep-knife 360ms ease-in-out;
 }
@@ -1122,9 +1126,16 @@ html {
 /* Game controls: no double-tap zoom, no grey tap flash, no text selection */
 button,
 .prep-action-pad {
-  touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
+}
+
+button {
+  touch-action: manipulation;
+}
+
+.prep-action-pad {
+  touch-action: none;
 }
 
 .phone {

@@ -956,6 +956,7 @@ window.FoodTruck = {
                 dragging = false;
                 activeInput = null;
                 activeTouchId = null;
+                pad.classList.remove("prep-action-dragging");
                 resetIconPosition();
             }
 
@@ -970,6 +971,7 @@ window.FoodTruck = {
                 direction = 0;
                 extreme = event.clientX;
 
+                pad.classList.add("prep-action-dragging");
                 capture(event);
                 moveIcon(event);
             });
@@ -1008,6 +1010,7 @@ window.FoodTruck = {
                 direction = 0;
                 extreme = touch.clientX;
 
+                pad.classList.add("prep-action-dragging");
                 moveIcon(touch);
             }, { passive: false });
 
