@@ -1,5 +1,5 @@
 setup.prevRand = -1
-setup.currentFidget = "bubbleWrap"
+setup.currentFidget = "switch"
 
 setup.isMouseDown = false;
 setup.light = [0, 0, 0, 0]
@@ -133,6 +133,7 @@ setup.populateFidget = function populateFidget() {
 	container.replaceChildren();
 	postContainer.replaceChildren();
 	container.style.backgroundColor = 'snow'
+	container.style.border = '1px solid black'
 	switch (setup.currentFidget) {
 		case "bubbleWrap":
 			blankSpace.style.height = '0px'
@@ -183,6 +184,8 @@ setup.populateFidget = function populateFidget() {
 			blankSpace.style.height = '0%'
 			blankSpace.style.display = 'hidden'
 			container.style.height = '72%'
+			container.style.backgroundColor = "transparent"
+			container.style.border = "none"
 			fidgetLabel.textContent = "Light Switch"
 
 			let newImg = document.createElement('img');

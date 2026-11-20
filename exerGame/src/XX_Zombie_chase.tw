@@ -21,7 +21,7 @@ Zombie Chase
           <<button "Easy" "Chase">><<run setup.setMode('easy')>><</button>>
           <<button "Medium" "Chase">><<run setup.setMode('med')>><</button>>
           <<button "Hard" "Chase">><<run setup.setMode('hard')>><</button>>
-          <<button "Impossible" "Chase">><<run setup.setMode('impossible')>><</button>>
+          /* <<button "Impossible" "Chase">><<run setup.setMode('impossible')>><</button>> */\
         </div>
       </div>
       <<done>><<run setup.zombieDistText = document.getElementById("zombieDist"); >><</done>>
@@ -43,7 +43,7 @@ Zombie Chase
   <div class="progress-container totalBar" id="bar"><div class="progress-fill totalBarFill"> </div></div>\
   <span id="zombieDist"></span>
   <span id="yourDist">You've Walked <<=setup.totalWalked>> Steps!</span>
-  <span id="zombieCnt"></span><div class="mainTab"> /* <<button "Run!" >> <<run setup.incZombieDist(1)>><</button>> */\
+  <span id="zombieCnt"></span><div class="mainTab"> /*<<button "Run!" >> <<run setup.incZombieDist(1)>><</button>>*/\
   <div class="extras" id="extras">Extras</div>
   <button data-passage="Home" class="return" onclick="SugarCube.setup.stopChase()">Return</button>
   <<done>><<run setup.startChase() >><</done>>

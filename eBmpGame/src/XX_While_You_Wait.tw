@@ -6,7 +6,7 @@ While You Wait
   "ifid": "637D0CD9-6182-4ACE-9AF0-B6FB94AB090A",
   "format": "SugarCube",
   "format-version": "2.37.3",
-  "start": "Home",
+  "start": "Fidget Library",
   "zoom": 1
 }
 
@@ -15,10 +15,14 @@ While You Wait
 <<=setup.formattedTime = "02:00">>
 <<run  
   Dialog.setup("Important Reminder", "reminderPopup");
-  Dialog.wiki(`Reminder:\n
-  This game is meant to relax you before you take your blood pressure measurement.\n\n
-  Please make sure to play the game with the hand that you are NOT going to use for taking your measurement.\n
-  Keep your other hand open, relax the arm, and avoid clenching your fist`);
+  Dialog.wiki(`
+  Welcome to While You Wait!\n
+  This game is meant to help you relax before you take your blood pressure measurement. Relaxing is important as it makes sure your reading is accurate.\n
+  Please make sure to play the game with the hand of the arm that you are NOT going to use for taking your measurement.\n
+  With your other arm, keep it relaxed and have the hand open, and take calming breaths throughout the game.\n
+  We suggest you wait 2 minutes before taking your measurement, but feel free to do so at any time.\n
+  Enjoy!
+  `);
   Dialog.open();>> 
 
 :: Home
