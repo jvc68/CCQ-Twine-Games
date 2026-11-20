@@ -1,10 +1,5 @@
 :: StoryStylesheet [stylesheet]
 
-/* ============================================================
-   CardioCareQuest — Daily Archer visual theme
-   Viridis colour palette
-   ============================================================ */
-
 * {
     box-sizing: border-box;
 }
@@ -162,9 +157,8 @@ body {
     position: relative;
     width: 100%;
     max-width: 340px;
-    height: 320px;
-    margin: 8px auto;
-    margin-bottom: 50px;
+    height: 290px;
+    margin: 8px auto 10px;
 }
 
 /* Five topic circles */
@@ -284,13 +278,13 @@ body {
 
 .activity-tabs a {
     flex: 1;
-    padding: 6px 5px;
-    border-radius: 10px;
+    padding: 3px 5px;
+    border-radius: 7px;
     background: rgba(255, 255, 255, 0.2);
     color: white;
     text-decoration: none;
     font-weight: bold;
-    font-size: 12px;
+    font-size: 10px;
 }
 
 /* Highlight the currently selected tab */
@@ -448,14 +442,23 @@ body {
 
 .tutorial-panel {
     max-width: 650px;
-    margin: 30px auto;
-    padding: 25px;
+    margin: 5px auto;
+    padding: 5px;
     text-align: center;
-    line-height: 1.6;
 }
 
 .tutorial-icon {
     font-size: 3rem
+}
+
+.tutorial-panel ul {
+    margin: 5px auto;
+    padding-left: 20px;
+}
+
+.tutorial-panel li {
+    margin-bottom: 2px;
+    line-height: 1.2;
 }
 
 .tutorial-panel h2 {
@@ -486,6 +489,11 @@ body {
     font-size: 1em;
     font-weight: bold;
     cursor: pointer;
+}
+.scenario-menu .tutorial-button {
+    padding: 7px 14px;
+    font-size: 13px;
+    border-radius: 8px;
 }
 
 .tutorial-navigation button:hover,
@@ -526,14 +534,16 @@ body {
     z-index: 2;
 }
 
-/* Keep centred circles centred when highlighted */
-.body-circle.head.scenario-highlighted,
-.body-circle.center.scenario-highlighted,
-.body-circle.legs.scenario-highlighted {
+/* Keep highlighted circles in their original positions */
+.body-circle.head.scenario-highlighted {
     transform: translateX(-50%) scale(1.08);
 }
 
-/* Keep side circles in their original positions */
+.body-circle.center.scenario-highlighted,
+.body-circle.legs.scenario-highlighted {
+    transform: translateX(-100%) scale(1.08);
+}
+
 .body-circle.left.scenario-highlighted,
 .body-circle.right.scenario-highlighted {
     transform: scale(1.08);
@@ -547,4 +557,44 @@ body {
 
 #scenario-body-map button {
     margin: 2px auto;
+}
+
+.scenario-video {
+    display: block;
+    width: 100%;
+    max-width: 500px;
+    max-height: 35vh;
+    object-fit: contain;
+    margin: 8px auto;
+    border-radius: 12px;
+}
+
+.scenario-menu .activity-card {
+    text-align: center;
+    padding: 5px;
+    background: #ffffff;
+    border-radius: 15px;
+    color: #000000;
+    overflow: hidden;
+}
+
+.scenario-menu .activity-card h3 {
+    margin: 0 0 4px;
+    padding: 0;
+    color: #000000;
+}
+
+.start-buttons button {
+    padding: 8px 12px;
+    font-size: 12px;
+    border-radius: 8px;
+    flex: 1;
+}
+
+.start-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 15px auto;
 }

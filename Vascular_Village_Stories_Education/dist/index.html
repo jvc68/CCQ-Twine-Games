@@ -100,12 +100,7 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
 		<div id="init-lacking">Your browser lacks required capabilities. Please upgrade it or switch to another to continue.</div>
 		<div id="init-loading"><div>Loading&hellip;</div></div>
 	</div>
-	<!-- UUID://BAE48670-5730-4DC7-B1BA-608EFEDA5280// --><tw-storydata name="Education Game" startnode="1" creator="Tweego" creator-version="2.1.1+81d1d71" ifid="BAE48670-5730-4DC7-B1BA-608EFEDA5280" zoom="1" format="SugarCube" format-version="2.30.0" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">/* ============================================================
-   CardioCareQuest — Daily Archer visual theme
-   Viridis colour palette
-   ============================================================ */
-
-* {
+	<!-- UUID://BAE48670-5730-4DC7-B1BA-608EFEDA5280// --><tw-storydata name="Education Game" startnode="1" creator="Tweego" creator-version="2.1.1+81d1d71" ifid="BAE48670-5730-4DC7-B1BA-608EFEDA5280" zoom="1" format="SugarCube" format-version="2.30.0" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">* {
     box-sizing: border-box;
 }
 
@@ -262,9 +257,8 @@ body {
     position: relative;
     width: 100%;
     max-width: 340px;
-    height: 320px;
-    margin: 8px auto;
-    margin-bottom: 50px;
+    height: 290px;
+    margin: 8px auto 10px;
 }
 
 /* Five topic circles */
@@ -384,13 +378,13 @@ body {
 
 .activity-tabs a {
     flex: 1;
-    padding: 6px 5px;
-    border-radius: 10px;
+    padding: 3px 5px;
+    border-radius: 7px;
     background: rgba(255, 255, 255, 0.2);
     color: white;
     text-decoration: none;
     font-weight: bold;
-    font-size: 12px;
+    font-size: 10px;
 }
 
 /* Highlight the currently selected tab */
@@ -548,14 +542,23 @@ body {
 
 .tutorial-panel {
     max-width: 650px;
-    margin: 30px auto;
-    padding: 25px;
+    margin: 5px auto;
+    padding: 5px;
     text-align: center;
-    line-height: 1.6;
 }
 
 .tutorial-icon {
     font-size: 3rem
+}
+
+.tutorial-panel ul {
+    margin: 5px auto;
+    padding-left: 20px;
+}
+
+.tutorial-panel li {
+    margin-bottom: 2px;
+    line-height: 1.2;
 }
 
 .tutorial-panel h2 {
@@ -586,6 +589,11 @@ body {
     font-size: 1em;
     font-weight: bold;
     cursor: pointer;
+}
+.scenario-menu .tutorial-button {
+    padding: 7px 14px;
+    font-size: 13px;
+    border-radius: 8px;
 }
 
 .tutorial-navigation button:hover,
@@ -626,14 +634,16 @@ body {
     z-index: 2;
 }
 
-/* Keep centred circles centred when highlighted */
-.body-circle.head.scenario-highlighted,
-.body-circle.center.scenario-highlighted,
-.body-circle.legs.scenario-highlighted {
+/* Keep highlighted circles in their original positions */
+.body-circle.head.scenario-highlighted {
     transform: translateX(-50%) scale(1.08);
 }
 
-/* Keep side circles in their original positions */
+.body-circle.center.scenario-highlighted,
+.body-circle.legs.scenario-highlighted {
+    transform: translateX(-100%) scale(1.08);
+}
+
 .body-circle.left.scenario-highlighted,
 .body-circle.right.scenario-highlighted {
     transform: scale(1.08);
@@ -647,6 +657,46 @@ body {
 
 #scenario-body-map button {
     margin: 2px auto;
+}
+
+.scenario-video {
+    display: block;
+    width: 100%;
+    max-width: 500px;
+    max-height: 35vh;
+    object-fit: contain;
+    margin: 8px auto;
+    border-radius: 12px;
+}
+
+.scenario-menu .activity-card {
+    text-align: center;
+    padding: 5px;
+    background: #ffffff;
+    border-radius: 15px;
+    color: #000000;
+    overflow: hidden;
+}
+
+.scenario-menu .activity-card h3 {
+    margin: 0 0 4px;
+    padding: 0;
+    color: #000000;
+}
+
+.start-buttons button {
+    padding: 8px 12px;
+    font-size: 12px;
+    border-radius: 8px;
+    flex: 1;
+}
+
+.start-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 15px auto;
 }</style><script role="script" id="twine-user-script" type="text/twine-javascript">/* twine-user-script #1: "scripts.js" */
 
 /*
@@ -854,10 +904,10 @@ body {
             activityId
         );
 
-        // find HTML container for activitys interface to be inserted
+        // Find HTML container for activity interface
         var container = document.getElementById(containerId);
 
-        // check if activity and container exist
+        // Check if activity and container exist
         if (!activity || !container) {
             console.error(
                 "Could not render activity:",
@@ -866,75 +916,65 @@ body {
             return;
         }
 
-        // create activitys progress key for retreieving players progress
+        // Create activity progress key
         var activityKey = category + "." + activityId;
 
         // Remember which activity's lesson should be displayed
         State.variables.currentLessonActivity = activityKey;
 
-        // retrieve players progress
+        // Retrieve player's progress
         var progress = setup.getActivityProgress(activityKey);
 
-        // clear activity container
+        // Clear activity container
         container.replaceChildren();
 
-        // display intro with p HTML
+        // Display introduction
         var intro = document.createElement("h4");
         intro.textContent = activity.introduction;
         container.appendChild(intro);
 
-        // display Rubys dialogue with p HTML
-        var character = document.createElement("p");
-        var characterName = document.createElement("strong");
-
-        characterName.textContent = activity.characterName || "";
-        character.appendChild(characterName);
-
-        if (activity.characterLine) {
-            character.appendChild(
-                document.createTextNode(" " + activity.characterLine)
-            );
-        }
-
-        container.appendChild(character);
-
-        // display mission with h3 HTML
+        // Display mission
         var mission = document.createElement("h4");
         mission.textContent = activity.mission;
         container.appendChild(mission);
 
-        // display instructions with p HTML
+        // Display instructions
         var instructions = document.createElement("p");
         instructions.textContent = activity.instructions;
         container.appendChild(instructions);
 
-        // create answer-buttons container
+        // Create answer-buttons container
         var buttons = document.createElement("div");
         buttons.className = "answer-buttons";
-        // created using CSS .answer-buttons button {}
 
-        // create progress container to display progress display
+        // Create progress container
         var progressContainer = document.createElement("div");
         progressContainer.id = "activity-progress";
 
-        // create a button for every choice by going through dictioonary
-        /*
-        choices: [
-        {
-            id: "stretch",
-            label: "Stand up and stretch",
-            correct: true
+        // Create a copy of the choices so the original dictionary stays unchanged
+        var shuffledChoices = activity.choices.slice();
+
+        // Randomly shuffle the choices using the Fisher-Yates shuffle
+        for (var i = shuffledChoices.length - 1; i > 0; i--) {
+
+            var j = Math.floor(Math.random() * (i + 1));
+
+            var temp = shuffledChoices[i];
+            shuffledChoices[i] = shuffledChoices[j];
+            shuffledChoices[j] = temp;
         }
-        */
-        activity.choices.forEach(function (choice)
-        {
-            // create button HTML
+
+        // Create a button for every randomly ordered choice
+        shuffledChoices.forEach(function (choice) {
+
+            // Create HTML button
             var button = document.createElement("button");
             button.type = "button";
-            // set visible answer from dictionary
+
+            // Set visible answer from dictionary
             button.textContent = choice.label;
 
-            // attatch click handler, call checkAnswer to verify answer clicked
+            // Check the answer when clicked
             button.addEventListener("click", function () {
                 setup.checkAnswer(
                     activity,
@@ -944,22 +984,23 @@ body {
                 );
             });
 
-            // add button to container
+            // Add button to the answer-buttons container
             buttons.appendChild(button);
         });
 
-        // add interface elements to the page
+        // Add interface elements to the page
         container.appendChild(buttons);
         container.appendChild(document.createElement("hr"));
         container.appendChild(progressContainer);
 
-        // display current progress
+        // Display current progress
         setup.renderProgress(
             activity,
             progress,
             progressContainer
         );
-                // Create a button to return to the scenario body map
+
+        // Create a button to return to the scenario body map
         if (State.variables.selectedScenarioId) {
 
             var back = document.createElement("p");
@@ -1377,197 +1418,556 @@ body {
     };
 
     // Generates the menu for scenario selection
+    // setup.renderScenarioMenu = function (containerId) {
+
+    //     // Retrieve the scenario dictionary
+    //     var scenarios = setup.scenarios &&
+    //         setup.scenarios.bodyScenarios;
+
+    //     // Find the HTML container where the menu will appear
+    //     var container = document.getElementById(containerId);
+
+    //     if (!scenarios || !container) {
+    //         console.error("Could not render scenario menu.");
+    //         return;
+    //     }
+
+    //     // Access SugarCube variables
+    //     var variables = State.variables;
+
+    //     // Set the default selected tab
+    //     if (variables.scenarioTab === undefined) {
+    //         variables.scenarioTab = "new";
+    //     }
+
+    //     var tab = variables.scenarioTab;
+
+    //     // Separate scenarios into New and Completed lists
+    //     var newScenarios = [];
+    //     var completedScenarios = [];
+
+    //     Object.keys(scenarios).forEach(function (scenarioId) {
+
+    //         var scenario = scenarios[scenarioId];
+
+    //         // Check whether all activities in this scenario are completed
+    //         var isCompleted =
+    //             setup.checkScenarioCompletion(scenarioId) ||
+    //             variables.replayingScenarioId === scenarioId;
+
+    //         if (isCompleted) {
+    //             completedScenarios.push({
+    //                 id: scenarioId,
+    //                 data: scenario
+    //             });
+    //         }
+    //         else {
+    //             newScenarios.push({
+    //                 id: scenarioId,
+    //                 data: scenario
+    //             });
+    //         }
+    //     });
+
+    //     // Choose the list for the selected tab
+    //     var visibleScenarios =
+    //         tab === "completed" ? completedScenarios : newScenarios;
+        
+    //     // Calculate the number of pages (three scenarios per page)
+    //     var scenariosPerPage = 3;
+    //     var pageCount = Math.max(
+    //         1,
+    //         Math.ceil(visibleScenarios.length / scenariosPerPage)
+    //     );
+
+    //     // Set the default page
+    //     if (variables.scenarioPage === undefined) {
+    //         variables.scenarioPage = 1;
+    //     }
+
+    //     var page = variables.scenarioPage;
+
+    //     // Keep the selected page within the available range
+    //     if (page < 1) {
+    //         page = 1;
+    //     }
+
+    //     if (page > pageCount) {
+    //         page = pageCount;
+    //     }
+
+    //     variables.scenarioPage = page;
+
+    //     // Select the scenarios to display on this page
+    //     var start = (page - 1) * scenariosPerPage;
+
+    //     var scenariosToDisplay = visibleScenarios.slice(
+    //         start,
+    //         start + scenariosPerPage
+    //     );
+
+    //     // Clear the existing menu
+    //     container.replaceChildren();
+
+    //     // Set menu CSS classes
+    //     var wrapper = container;
+    //     wrapper.className = "activity-page scenario-menu";
+
+    //     // Create New and Completed tabs
+    //     var tabs = document.createElement("div");
+    //     tabs.className = "activity-tabs";
+
+    //     ["completed", "new"].forEach(function (tabName) {
+
+    //         var link = document.createElement("a");
+    //         link.href = "#";
+
+    //         link.textContent =
+    //             tabName === "completed" ? "Completed" : "New";
+
+    //         // Highlight the currently selected tab
+    //         if (tabName === tab) {
+    //             link.classList.add("active");
+    //         }
+
+    //         link.addEventListener("click", function (event) {
+    //             event.preventDefault();
+
+    //             variables.scenarioTab = tabName;
+    //             variables.scenarioPage = 1;
+
+    //             // Return to the scenario menu to refresh the cards
+    //             Engine.play("ScenarioMenu");
+    //         });
+
+    //         tabs.appendChild(link);
+    //     });
+
+    //     wrapper.appendChild(tabs);
+
+    //     // Create the scenario card list
+    //     var list = document.createElement("div");
+    //     list.className = "activity-list";
+
+    //     // Create a card for each scenario in the selected tab
+    //     scenariosToDisplay.forEach(function (item) {
+
+    //         var scenarioId = item.id;
+    //         var scenario = item.data;
+
+    //         // Create the scenario card
+    //         var card = document.createElement("div");
+    //         card.className = "activity-card";
+
+    //         var isCompleted =
+    //             setup.checkScenarioCompletion(scenarioId) ||
+    //             variables.replayingScenarioId === scenarioId;
+
+    //         // Style completed scenario cards
+    //         if (isCompleted) {
+    //             card.classList.add("completed");
+    //         }
+
+    //         // Add the scenario title
+    //         var title = document.createElement("h3");
+    //         title.textContent = scenario.title;
+    //         card.appendChild(title);
+
+    //         // Add the scenario description
+    //         var description = document.createElement("p");
+    //         description.textContent = scenario.description;
+    //         card.appendChild(description);
+
+    //         // Display completion status
+    //         if (isCompleted) {
+    //             var completedLabel = document.createElement("span");
+    //             completedLabel.className = "completed-label";
+    //             completedLabel.textContent = "✓ Completed  ";
+    //             card.appendChild(completedLabel);
+    //         }
+
+    //         // Create the Choose or Replay Scenario link
+    //         var choose = document.createElement("a");
+    //         choose.href = "#";
+
+    //         choose.textContent = isCompleted
+    //             ? "↻ Replay Scenario"
+    //             : "Choose Scenario →";
+
+    //         choose.addEventListener("click", function (event) {
+    //             event.preventDefault();
+
+    //             // Remember which scenario the player selected
+    //             variables.selectedScenarioId = scenarioId;
+
+    //             // Check whether this scenario is already being replayed
+    //             var replayAlreadyInProgress =
+    //                 variables.replayingScenarioId === scenarioId;
+
+    //             // Only reset progress when STARTING a new replay
+    //             if (isCompleted && !replayAlreadyInProgress) {
+
+    //                 // Remember that this scenario is being replayed
+    //                 variables.replayingScenarioId = scenarioId;
+
+    //                 // Reset all activities belonging to this scenario
+    //                 scenario.activities.forEach(function (activityId) {
+
+    //                     var result = setup.getScenarioActivity(activityId);
+
+    //                     if (!result) {
+    //                         return;
+    //                     }
+
+    //                     var activityKey =
+    //                         result.category + "." + activityId;
+
+    //                     if (variables.activityProgress &&
+    //                         variables.activityProgress[activityKey]) {
+
+    //                         variables.activityProgress[activityKey].completed = false;
+    //                         variables.activityProgress[activityKey].correctChoices = [];
+    //                     }
+    //                 });
+    //             }
+
+    //             // Go to the scenario body map passage
+    //             Engine.play("ScenarioBodyMap");
+    //         });
+
+    //         card.appendChild(choose);
+
+    //         // Add the card to the scenario list
+    //         list.appendChild(card);
+    //     });
+
+    //     wrapper.appendChild(list);
+
+    //     // Create pagination controls
+    //     var pagination = document.createElement("div");
+    //     pagination.className = "activity-pagination";
+
+    //     // Generate page buttons
+    //     for (var pageNumber = 1; pageNumber <= pageCount; pageNumber++) {
+    //         (function (number) {
+
+    //             var link = document.createElement("a");
+    //             link.href = "#";
+    //             link.textContent = String(number);
+
+    //             // Highlight the current page
+    //             if (number === page) {
+    //                 link.classList.add("active");
+    //             }
+
+    //             link.addEventListener("click", function (event) {
+    //                 event.preventDefault();
+
+    //                 variables.scenarioPage = number;
+    //                 Engine.play("ScenarioMenu");
+    //             });
+
+    //             pagination.appendChild(link);
+
+    //         })(pageNumber);
+    //     }
+
+    //     wrapper.appendChild(pagination);
+    // };    
     setup.renderScenarioMenu = function (containerId) {
 
-        // Retrieve the scenario dictionary
-        var scenarios = setup.scenarios &&
-            setup.scenarios.bodyScenarios;
-
-        // Find the HTML container where the menu will appear
         var container = document.getElementById(containerId);
 
-        if (!scenarios || !container) {
-            console.error("Could not render scenario menu.");
+        if (!container) {
+            console.error("Could not find scenario menu container");
             return;
         }
 
-        // Access SugarCube variables
-        var variables = State.variables;
-
-        // Set the default selected tab
-        if (variables.scenarioTab === undefined) {
-            variables.scenarioTab = "new";
-        }
-
-        var tab = variables.scenarioTab;
-
-        // Separate scenarios into New and Completed lists
-        var newScenarios = [];
-        var completedScenarios = [];
-
-        Object.keys(scenarios).forEach(function (scenarioId) {
-
-            var scenario = scenarios[scenarioId];
-
-            // Check whether all activities in this scenario are completed
-            var isCompleted =
-                setup.checkScenarioCompletion(scenarioId) ||
-                variables.replayingScenarioId === scenarioId;
-
-            if (isCompleted) {
-                completedScenarios.push({
-                    id: scenarioId,
-                    data: scenario
-                });
-            }
-            else {
-                newScenarios.push({
-                    id: scenarioId,
-                    data: scenario
-                });
-            }
-        });
-
-        // Choose the list for the selected tab
-        var visibleScenarios =
-            tab === "completed" ? completedScenarios : newScenarios;
-
-        // Clear the existing menu
         container.replaceChildren();
 
-        // Set menu CSS classes
-        var wrapper = container;
-        wrapper.className = "activity-page scenario-menu";
+        var variables = State.variables;
 
-        // Create New and Completed tabs
+        // Get available scenarios
+        var scenarios = setup.scenarios.bodyScenarios;
+
+        // Number of scenarios displayed per page
+        var scenariosPerPage = 3;
+
+        // Current tab and page
+        var currentTab = "new";
+        var currentPage = 0;
+
+        // Create main wrapper
+        var wrapper = document.createElement("div");
+        wrapper.className = "scenario-menu";
+
+        // Create tabs
         var tabs = document.createElement("div");
         tabs.className = "activity-tabs";
 
-        ["completed", "new"].forEach(function (tabName) {
+        var completedTab = document.createElement("a");
+        completedTab.textContent = "Completed";
 
-            var link = document.createElement("a");
-            link.href = "#";
+        var newTab = document.createElement("a");
+        newTab.textContent = "New";
 
-            link.textContent =
-                tabName === "completed" ? "Completed" : "New";
+        tabs.appendChild(completedTab);
+        tabs.appendChild(newTab);
 
-            // Highlight the currently selected tab
-            if (tabName === tab) {
-                link.classList.add("active");
-            }
-
-            link.addEventListener("click", function (event) {
-                event.preventDefault();
-
-                variables.scenarioTab = tabName;
-
-                // Return to the scenario menu to refresh the cards
-                Engine.play("ScenarioMenu");
-            });
-
-            tabs.appendChild(link);
-        });
-
-        wrapper.appendChild(tabs);
-
-        // Create the scenario card list
+        // Create scenario list
         var list = document.createElement("div");
         list.className = "activity-list";
 
-        // Create a card for each scenario in the selected tab
-        visibleScenarios.forEach(function (item) {
+        // Create pagination container
+        var pagination = document.createElement("div");
+        pagination.className = "activity-pagination";
 
-            var scenarioId = item.id;
-            var scenario = item.data;
+        wrapper.appendChild(tabs);
+        wrapper.appendChild(list);
+        wrapper.appendChild(pagination);
 
-            // Create the scenario card
-            var card = document.createElement("div");
-            card.className = "activity-card";
+        container.appendChild(wrapper);
 
-            var isCompleted =
-                setup.checkScenarioCompletion(scenarioId) ||
-                variables.replayingScenarioId === scenarioId;
+        // Render the scenario cards
+        function renderScenarios() {
 
-            // Style completed scenario cards
-            if (isCompleted) {
-                card.classList.add("completed");
-            }
+            list.replaceChildren();
+            pagination.replaceChildren();
 
-            // Add the scenario title
-            var title = document.createElement("h3");
-            title.textContent = scenario.title;
-            card.appendChild(title);
+            // Update active tab styling
+            completedTab.classList.toggle(
+                "active",
+                currentTab === "completed"
+            );
 
-            // Add the scenario description
-            var description = document.createElement("p");
-            description.textContent = scenario.description;
-            card.appendChild(description);
+            newTab.classList.toggle(
+                "active",
+                currentTab === "new"
+            );
 
-            // Display completion status
-            if (isCompleted) {
-                var completedLabel = document.createElement("span");
-                completedLabel.className = "completed-label";
-                completedLabel.textContent = "✓ Completed  ";
-                card.appendChild(completedLabel);
-            }
+            // Separate new and completed scenarios
+            var scenarioIds = Object.keys(scenarios).filter(function (scenarioId) {
 
-            // Create the Choose or Replay Scenario link
-            var choose = document.createElement("a");
-            choose.href = "#";
+                var isCompleted = setup.checkScenarioCompletion(scenarioId);
 
-            choose.textContent = isCompleted
-                ? "↻ Replay Scenario"
-                : "Choose Scenario →";
+                return currentTab === "completed"
+                    ? isCompleted
+                    : !isCompleted;
 
-            choose.addEventListener("click", function (event) {
-                event.preventDefault();
-
-                // Remember which scenario the player selected
-                variables.selectedScenarioId = scenarioId;
-
-                // Check whether this scenario is already being replayed
-                var replayAlreadyInProgress =
-                    variables.replayingScenarioId === scenarioId;
-
-                // Only reset progress when STARTING a new replay
-                if (isCompleted && !replayAlreadyInProgress) {
-
-                    // Remember that this scenario is being replayed
-                    variables.replayingScenarioId = scenarioId;
-
-                    // Reset all activities belonging to this scenario
-                    scenario.activities.forEach(function (activityId) {
-
-                        var result = setup.getScenarioActivity(activityId);
-
-                        if (!result) {
-                            return;
-                        }
-
-                        var activityKey =
-                            result.category + "." + activityId;
-
-                        if (variables.activityProgress &&
-                            variables.activityProgress[activityKey]) {
-
-                            variables.activityProgress[activityKey].completed = false;
-                            variables.activityProgress[activityKey].correctChoices = [];
-                        }
-                    });
-                }
-
-                // Go to the scenario body map passage
-                Engine.play("ScenarioBodyMap");
             });
 
-            card.appendChild(choose);
+            // Calculate pagination
+            var totalPages = Math.ceil(
+                scenarioIds.length / scenariosPerPage
+            );
 
-            // Add the card to the scenario list
-            list.appendChild(card);
+            if (currentPage >= totalPages) {
+                currentPage = Math.max(0, totalPages - 1);
+            }
+
+            var start = currentPage * scenariosPerPage;
+
+            var end = start + scenariosPerPage;
+
+            var pageScenarios = scenarioIds.slice(start, end);
+
+            // Display message if no scenarios exist in this tab
+            if (pageScenarios.length === 0) {
+
+                var emptyMessage = document.createElement("p");
+
+                emptyMessage.textContent =
+                    currentTab === "completed"
+                        ? "You haven't completed any scenarios yet!"
+                        : "You've completed all available scenarios!";
+
+                list.appendChild(emptyMessage);
+
+            }
+
+            // Create a card for each scenario
+            pageScenarios.forEach(function (scenarioId) {
+
+                var scenario = scenarios[scenarioId];
+
+                var isCompleted = setup.checkScenarioCompletion(scenarioId);
+
+                // Create scenario card
+                var card = document.createElement("div");
+                card.className = "activity-card";
+
+                // Scenario title
+                var title = document.createElement("h3");
+                title.textContent = scenario.title;
+                card.appendChild(title);
+
+                // Scenario description
+                var description = document.createElement("p");
+                description.textContent = scenario.description;
+                card.appendChild(description);
+
+                // Scenario video
+                if (scenario.video) {
+
+                    var video = document.createElement("video");
+
+                    video.src = scenario.video;
+                    video.controls = true;
+                    video.playsInline = true;
+                    video.preload = "metadata";
+                    video.className = "scenario-video";
+
+                    card.appendChild(video);
+                }
+
+                // Completed label
+                if (isCompleted) {
+
+                    var completedLabel = document.createElement("p");
+
+                    completedLabel.textContent = "✓ Completed!";
+                    completedLabel.className = "completed-label";
+
+                    card.appendChild(completedLabel);
+                }
+
+                // Choose or replay button
+                var chooseButton = document.createElement("button");
+
+                chooseButton.type = "button";
+
+                chooseButton.className = "tutorial-button";
+
+                chooseButton.textContent = isCompleted
+                    ? "Replay Scenario"
+                    : "Choose Scenario";
+
+                chooseButton.addEventListener("click", function () {
+
+                    // Check whether this scenario is already being replayed
+                    var replayAlreadyInProgress =
+                        variables.replayingScenarioId === scenarioId;
+
+                    // Reset activities when starting a replay
+                    if (isCompleted && !replayAlreadyInProgress) {
+
+                        variables.replayingScenarioId = scenarioId;
+
+                        scenario.activities.forEach(function (activityId) {
+
+                            var result = setup.getScenarioActivity(activityId);
+
+                            if (!result) {
+                                return;
+                            }
+
+                            var activityKey =
+                                result.category + "." + activityId;
+
+                            if (
+                                variables.activityProgress &&
+                                variables.activityProgress[activityKey]
+                            ) {
+
+                                variables.activityProgress[activityKey].completed = false;
+
+                                variables.activityProgress[activityKey].correctChoices = [];
+                            }
+
+                        });
+
+                    }
+
+                    // Remember selected scenario
+                    variables.selectedScenarioId = scenarioId;
+
+                    // Open scenario body map
+                    Engine.play("ScenarioBodyMap");
+
+                });
+
+                card.appendChild(chooseButton);
+
+                list.appendChild(card);
+
+            });
+
+            // Create pagination controls
+            if (totalPages > 1) {
+
+                var previousButton = document.createElement("button");
+
+                previousButton.type = "button";
+                previousButton.textContent = "← Previous";
+                previousButton.className = "tutorial-button";
+
+                previousButton.disabled = currentPage === 0;
+
+                previousButton.addEventListener("click", function () {
+
+                    if (currentPage > 0) {
+                        currentPage--;
+                        renderScenarios();
+                    }
+
+                });
+
+                pagination.appendChild(previousButton);
+
+                var pageLabel = document.createElement("span");
+
+                pageLabel.textContent =
+                    " Page " + (currentPage + 1) + " of " + totalPages + " ";
+
+                pagination.appendChild(pageLabel);
+
+                var nextButton = document.createElement("button");
+
+                nextButton.type = "button";
+                nextButton.textContent = "Next →";
+                nextButton.className = "tutorial-button";
+
+                nextButton.disabled = currentPage >= totalPages - 1;
+
+                nextButton.addEventListener("click", function () {
+
+                    if (currentPage < totalPages - 1) {
+                        currentPage++;
+                        renderScenarios();
+                    }
+
+                });
+
+                pagination.appendChild(nextButton);
+
+            }
+
+        }
+
+        // Switch to completed scenarios
+        completedTab.addEventListener("click", function () {
+
+            currentTab = "completed";
+            currentPage = 0;
+
+            renderScenarios();
+
         });
 
-        wrapper.appendChild(list);
-    };       
+        // Switch to new scenarios
+        newTab.addEventListener("click", function () {
+
+            currentTab = "new";
+            currentPage = 0;
+
+            renderScenarios();
+
+        });
+
+        // Initial display
+        renderScenarios();
+
+    };   
 
     
     // Generates the body map for the selected scenario
@@ -1887,7 +2287,7 @@ body {
 
         // Display the scenario heading
         var heading = document.createElement("h1");
-        heading.textContent = "Scenario Lesson Learned!";
+        heading.textContent = "Lesson Learned!";
         container.appendChild(heading);
 
         // Display the introduction
@@ -1953,61 +2353,35 @@ setup.activityLibraries.bloodCells = {
                 completed: false
             },
             {
-                title: "⚪ White Cell Defenders",
-                description: "Discover how white blood cells help fight germs.",
-                activityId: "whiteCellDefenders",
+                title: "🔴 Red Cell Express",
+                description: "Discover how red blood cells and haemoglobin transport oxygen.",
+                activityId: "redCellExpress",
                 passage: "BloodCellActivity",
                 completed: false
             },
             {
-                title: "🩹 Platelet Power",
-                description: "Explore how platelets help stop bleeding.",
-                activityId: "plateletPower",
+                title: "🕵️ Germ Detective",
+                description: "Investigate germs and discover how they can affect the body.",
+                activityId: "germDetective",
                 passage: "BloodCellActivity",
                 completed: false
             },
             {
-                title: "🩸 Cell Teamwork",
-                description: "See how different blood cells work together.",
-                activityId: "cellTeamwork",
+                title: "🩹 Platelet Rescue",
+                description: "Learn how platelets help stop bleeding.",
+                activityId: "plateletRescue",
                 passage: "BloodCellActivity",
-                completed: false
-            },
-            {
-                title: "🫁 Oxygen Delivery",
-                description: "Discover how oxygen travels to the body's cells.",
-                activityId: "oxygenDelivery",
-                passage: "BloodCellActivity",
-                completed: false
-            },
-            {
-                title: "🛡️ Germ Fighters",
-                description: "Learn how the body defends itself against germs.",
-                activityId: "germFighters",
-                passage: "BloodCellActivity",
-                completed: false
-            },
-            {
-                title: "✨ Tiny Heroes",
-                description: "More blood cell discoveries are on their way.",
-                locked: true,
-                completed: true
-            },
-            {
-                title: "🛡️ White Cell Warriors",
-                description: "Learn how white blood cells help protect the body against germs.",
-                activityId: "whiteCellWarriors",
-                passage: "BloodCellsActivity",
                 completed: false
             }
         ]
+
     },
 
     redCellRescue: {
         title: "Red Cell Rescue",
         introduction: "Help Ruby learn how red blood cells deliver oxygen throughout the body.",
         characterName: "Ruby",
-        characterLine: "Let's discover how our blood cells help us!",
+        characterLine: "Let's learn how our blood cells help us!",
         mission: "Help Ruby understand the important jobs of blood cells!",
         instructions: "Choose TWO correct facts about blood cells.",
         requiredCorrect: 2,
@@ -2056,319 +2430,163 @@ setup.activityLibraries.bloodCells = {
         nextPassage: "LessonLearned"
     },
 
-    whiteCellDefenders: {
-        title: "White Cell Defenders",
-        introduction: "Ruby has discovered some tiny defenders that help protect the body.",
+
+    redCellExpress: {
+        title: "Red Cell Express",
+        introduction: "Ruby has met some red blood cells that are ready to deliver oxygen around the body.",
         characterName: "Ruby",
-        characterLine: "Let's find out how white blood cells help protect us!",
-        mission: "Help Ruby identify the jobs of white blood cells!",
-        instructions: "Choose TWO correct facts about white blood cells.",
+        characterLine: "These red blood cells look like tiny delivery vehicles! What are they carrying?",
+        mission: "Help Ruby discover how red blood cells transport oxygen!",
+        instructions: "Choose TWO correct facts",
         requiredCorrect: 2,
 
         choices: [
             {
-                id: "fightInfections",
-                label: "🛡️ White blood cells help defend against infections",
+                id: "redCellsCarryOxygen",
+                label: "🔴 Red blood cells carry oxygen around the body",
+                correct: true,
+                feedbackTitle: "Fantastic!",
+                feedback: "Red blood cells carry oxygen from the lungs to tissues throughout the body."
+            },
+            {
+                id: "haemoglobinOxygen",
+                label: "🩸 Haemoglobin helps red blood cells carry oxygen",
                 correct: true,
                 feedbackTitle: "Correct!",
-                feedback: "White blood cells are important parts of the body's immune defenses."
+                feedback: "Haemoglobin is a protein inside red blood cells that binds to oxygen."
             },
             {
-                id: "recognizeThreats",
-                label: "🔎 Some white blood cells recognize and respond to harmful germs",
-                correct: true,
-                feedbackTitle: "Great choice!",
-                feedback: "Different types of white blood cells help the body recognize and respond to threats."
-            },
-            {
-                id: "carryOxygen",
-                label: "🔴 White blood cells carry most of the body's oxygen",
-                correct: false,
-                feedbackTitle: "Try again!",
-                feedback: "Red blood cells carry most of the oxygen in the blood."
-            },
-            {
-                id: "stopAllBleeding",
-                label: "🩹 White blood cells form the main plug that stops bleeding",
+                id: "redCellsFightGerms",
+                label: "🦠 Red blood cells are the main cells that fight infections",
                 correct: false,
                 feedbackTitle: "Not quite!",
-                feedback: "Platelets help form plugs at damaged blood vessels to help stop bleeding."
+                feedback: "White blood cells help defend the body against germs and infections."
+            },
+            {
+                id: "redCellsStopBleeding",
+                label: "🩹 Red blood cells form plugs to stop bleeding",
+                correct: false,
+                feedbackTitle: "Try again!",
+                feedback: "Platelets help form plugs at damaged blood vessels to limit bleeding."
             }
         ],
 
         lesson: {
-            introduction: "Ruby has met some of the body's tiny defenders.",
+            introduction: "Ruby has discovered how red blood cells help deliver oxygen around the body.",
             characterName: "Ruby",
-            characterLine: "Fantastic! White blood cells help your immune system recognize and fight infections.",
-            remember: "White blood cells are part of the immune system. Different types help recognize, attack, or coordinate defenses against harmful germs."
+            characterLine: "Now I understand! Red blood cells carry oxygen, and haemoglobin helps them do their important job!",
+            remember: "Red blood cells contain haemoglobin, a protein that binds oxygen. They transport oxygen from the lungs to tissues throughout the body."
         },
 
-        completionHeading: "White Cell Defenders Complete!",
-        completionMessage: "Ruby has learned how white blood cells help protect the body.",
+        completionHeading: "Red Cell Express Complete!",
+        completionMessage: "Ruby has learned how red blood cells deliver oxygen.",
         continueLabel: "Continue to the lesson",
         nextPassage: "LessonLearned"
     },
 
-    plateletPower: {
-        title: "Platelet Power",
-        introduction: "Ruby has found a tiny helper that helps the body respond when a blood vessel is damaged.",
+
+    plateletRescue: {
+        title: "Platelet Rescue",
+        introduction: "Ruby has found some tiny platelets rushing towards a damaged blood vessel.",
         characterName: "Ruby",
-        characterLine: "Let's discover how platelets help stop bleeding!",
-        mission: "Help Ruby understand how platelets support blood clotting!",
+        characterLine: "These little helpers are in a hurry! I wonder what they're going to do!",
+        mission: "Help Ruby discover how platelets help stop bleeding!",
         instructions: "Choose TWO correct facts about platelets.",
         requiredCorrect: 2,
 
         choices: [
             {
-                id: "formPlugs",
-                label: "🩹 Platelets help form plugs at damaged blood vessels",
+                id: "plateletsGather",
+                label: "🩹 Platelets gather at damaged blood vessels",
                 correct: true,
-                feedbackTitle: "Correct!",
-                feedback: "Platelets gather at damaged areas and help form a plug."
+                feedbackTitle: "Great work!",
+                feedback: "Platelets gather at the site of a damaged blood vessel to help begin forming a plug."
             },
             {
-                id: "helpClotting",
+                id: "plateletsClot",
                 label: "🩸 Platelets help the blood clot",
                 correct: true,
-                feedbackTitle: "Great choice!",
-                feedback: "Platelets help start the process that forms a blood clot and limits bleeding."
+                feedbackTitle: "Correct!",
+                feedback: "Platelets help start the clotting process, which helps limit blood loss."
             },
             {
-                id: "carryOxygen",
+                id: "plateletsCarryOxygen",
                 label: "🔴 Platelets carry most of the oxygen in the blood",
                 correct: false,
-                feedbackTitle: "Try again!",
-                feedback: "Red blood cells carry most of the oxygen in the blood."
-            },
-            {
-                id: "fightAllGerms",
-                label: "⚪ Platelets are the main cells that fight all infections",
-                correct: false,
-                feedbackTitle: "Not quite!",
-                feedback: "White blood cells are key parts of the body's immune defenses."
-            }
-        ],
-
-        lesson: {
-            introduction: "Ruby has discovered how platelets help protect the body when blood vessels are damaged.",
-            characterName: "Ruby",
-            characterLine: "Well done! Platelets help the body form clots that limit bleeding.",
-            remember: "Platelets are small blood components that gather at damaged blood vessels and help blood clot. This process helps limit blood loss."
-        },
-
-        completionHeading: "Platelet Power Complete!",
-        completionMessage: "Ruby understands how platelets help stop bleeding.",
-        continueLabel: "Continue to the lesson",
-        nextPassage: "LessonLearned"
-    },
-
-    cellTeamwork: {
-        title: "Cell Teamwork",
-        introduction: "Ruby is ready to discover how different blood components work together.",
-        characterName: "Ruby",
-        characterLine: "Every team member has a job. Let's match each blood component to its role!",
-        mission: "Help Ruby understand how blood cells work together!",
-        instructions: "Choose TWO correct facts about blood components.",
-        requiredCorrect: 2,
-
-        choices: [
-            {
-                id: "redCells",
-                label: "🔴 Red blood cells carry oxygen",
-                correct: true,
-                feedbackTitle: "Correct!",
-                feedback: "Red blood cells carry oxygen from the lungs to tissues throughout the body."
-            },
-            {
-                id: "whiteCells",
-                label: "⚪ White blood cells help defend against infections",
-                correct: true,
-                feedbackTitle: "Great choice!",
-                feedback: "White blood cells help the immune system respond to harmful germs."
-            },
-            {
-                id: "plateletsOxygen",
-                label: "🩸 Platelets carry most of the oxygen around the body",
-                correct: false,
-                feedbackTitle: "Try again!",
-                feedback: "Red blood cells carry most of the oxygen in the blood."
-            },
-            {
-                id: "redCellsClot",
-                label: "🩹 Red blood cells are the main component responsible for blood clotting",
-                correct: false,
-                feedbackTitle: "Not quite!",
-                feedback: "Platelets and clotting proteins help the blood clot."
-            }
-        ],
-
-        lesson: {
-            introduction: "Ruby has discovered how different blood components have different jobs.",
-            characterName: "Ruby",
-            characterLine: "Amazing teamwork! Each blood component contributes to keeping the body working properly.",
-            remember: "Red blood cells carry oxygen, white blood cells help defend against infections, and platelets help blood clot. Together, they support important body functions."
-        },
-
-        completionHeading: "Cell Teamwork Complete!",
-        completionMessage: "Ruby has learned how blood components work together.",
-        continueLabel: "Continue to the lesson",
-        nextPassage: "LessonLearned"
-    },
-
-    oxygenDelivery: {
-        title: "Oxygen Delivery",
-        introduction: "Ruby is following oxygen on its journey from the lungs to the body's tissues.",
-        characterName: "Ruby",
-        characterLine: "Let's discover how oxygen reaches the cells that need it!",
-        mission: "Help Ruby follow the path of oxygen!",
-        instructions: "Choose TWO correct facts about oxygen delivery.",
-        requiredCorrect: 2,
-
-        choices: [
-            {
-                id: "lungsOxygen",
-                label: "🫁 Oxygen enters the blood through the lungs",
-                correct: true,
-                feedbackTitle: "Correct!",
-                feedback: "Oxygen moves from the air in the lungs into the blood."
-            },
-            {
-                id: "redCellsDeliver",
-                label: "🔴 Red blood cells help carry oxygen to body tissues",
-                correct: true,
-                feedbackTitle: "Great choice!",
-                feedback: "Hemoglobin in red blood cells binds oxygen and helps transport it around the body."
-            },
-            {
-                id: "stomachOxygen",
-                label: "🍎 Most oxygen enters the blood from the stomach",
-                correct: false,
-                feedbackTitle: "Try again!",
-                feedback: "Oxygen enters the blood through gas exchange in the lungs."
-            },
-            {
-                id: "plateletsDeliver",
-                label: "🩸 Platelets carry most oxygen to the body's tissues",
-                correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "Red blood cells carry most of the oxygen in the blood."
+            },
+            {
+                id: "plateletsFightGerms",
+                label: "🦠 Platelets are the main cells that fight infections",
+                correct: false,
+                feedbackTitle: "Try again!",
+                feedback: "White blood cells play important roles in defending the body against infections."
             }
         ],
 
         lesson: {
-            introduction: "Ruby has followed oxygen from the lungs to the body's tissues.",
+            introduction: "Ruby has discovered how platelets help the body respond to damaged blood vessels.",
             characterName: "Ruby",
-            characterLine: "You did it! The lungs, heart, blood vessels, and red blood cells work together to deliver oxygen.",
-            remember: "Oxygen passes from the lungs into the blood. The heart pumps blood through the circulatory system, and red blood cells help deliver oxygen to tissues."
+            characterLine: "Amazing! Platelets rush to the damaged area and help stop the bleeding!",
+            remember: "Platelets are small blood components that gather at damaged blood vessels. They help form a plug and start the process of blood clotting, which limits blood loss."
         },
 
-        completionHeading: "Oxygen Delivery Complete!",
-        completionMessage: "Ruby has discovered how oxygen travels through the body.",
+        completionHeading: "Platelet Rescue Complete!",
+        completionMessage: "Ruby has learned how platelets help stop bleeding.",
         continueLabel: "Continue to the lesson",
         nextPassage: "LessonLearned"
     },
 
-    germFighters: {
-        title: "Germ Fighters",
-        introduction: "Ruby is learning how the body responds to germs that can cause infections.",
+    germDetective: {
+        title: "Germ Detective",
+        introduction: "Ruby has spotted some unfamiliar germs! She needs to discover which ones could make the body unwell.",
         characterName: "Ruby",
-        characterLine: "Let's discover how the immune system helps protect us!",
-        mission: "Help Ruby identify ways the body defends itself!",
-        instructions: "Choose TWO correct facts about immune defenses.",
+        characterLine: "Something strange is happening in Vascular Village! Let's investigate these germs!",
+        mission: "Help Ruby understand what germs are and how they can affect the body!",
+        instructions: "Choose TWO correct facts",
         requiredCorrect: 2,
 
         choices: [
             {
-                id: "whiteCells",
-                label: "⚪ White blood cells help fight infections",
+                id: "germsCauseInfections",
+                label: "🦠 Some germs can enter the body and cause infections",
+                correct: true,
+                feedbackTitle: "Good detective work!",
+                feedback: "Some microorganisms, including certain bacteria and viruses, can cause infections."
+            },
+            {
+                id: "immuneSystemDefends",
+                label: "🛡️ The immune system helps protect the body against harmful germs",
                 correct: true,
                 feedbackTitle: "Correct!",
-                feedback: "White blood cells help the immune system respond to harmful germs."
+                feedback: "The immune system uses different cells and processes to recognise and respond to harmful germs."
             },
             {
-                id: "immuneResponse",
-                label: "🛡️ The immune system uses different defenses to protect the body",
-                correct: true,
-                feedbackTitle: "Great choice!",
-                feedback: "The immune system uses many kinds of cells and processes to help protect the body."
-            },
-            {
-                id: "redCellsFight",
-                label: "🔴 Red blood cells are the main cells that destroy germs",
-                correct: false,
-                feedbackTitle: "Try again!",
-                feedback: "Red blood cells mainly carry oxygen. White blood cells help defend against infections."
-            },
-            {
-                id: "plateletsImmune",
-                label: "🩹 Platelets are the only part of the immune system",
+                id: "allGermsHarmful",
+                label: "⚠️ All germs are harmful to the body",
                 correct: false,
                 feedbackTitle: "Not quite!",
-                feedback: "The immune system includes many cells, tissues, and processes."
+                feedback: "Not all microorganisms are harmful. Many live naturally in and on our bodies and can be helpful."
+            },
+            {
+                id: "redCellsDestroyGerms",
+                label: "🔴 Red blood cells are the main defenders against germs",
+                correct: false,
+                feedbackTitle: "Try again!",
+                feedback: "White blood cells play important roles in defending the body against infections."
             }
         ],
 
         lesson: {
-            introduction: "Ruby has discovered how the body's defenses help protect against infections.",
+            introduction: "Ruby has completed her investigation and discovered more about germs and the immune system.",
             characterName: "Ruby",
-            characterLine: "Great job! The immune system has many defenders working together to help keep us healthy.",
-            remember: "The immune system uses different cells and processes to recognize and respond to harmful germs. White blood cells play important roles in these defenses."
+            characterLine: "Mystery solved! Some germs can cause infections, but my immune system has amazing ways to help protect me!",
+            remember: "Germs are microorganisms such as bacteria and viruses. Some can cause infections, while others are harmless or helpful. The immune system helps protect the body against harmful germs."
         },
 
-        completionHeading: "Germ Fighters Complete!",
-        completionMessage: "Ruby has learned how the body helps defend itself against germs.",
-        continueLabel: "Continue to the lesson",
-        nextPassage: "LessonLearned"
-    },
-    whiteCellWarriors: {
-        title: "White Cell Warriors",
-        introduction: "Ruby has encountered some germs! Help her understand how white blood cells protect her body.",
-        characterName: "Ruby",
-        characterLine: "I didn't know my blood had tiny defenders!",
-        mission: "Help Ruby understand how her body fights germs!",
-        instructions: "Choose TWO correct answers.",
-        requiredCorrect: 2,
-
-        choices: [
-            {
-                id: "fightGerms",
-                label: "🛡️ White blood cells help fight infections",
-                correct: true,
-                feedbackTitle: "Great choice!",
-                feedback: "White blood cells are part of the immune system and help defend the body against germs."
-            },
-            {
-                id: "immuneSystem",
-                label: "🦠 White blood cells help protect the body from harmful germs",
-                correct: true,
-                feedbackTitle: "Correct!",
-                feedback: "White blood cells recognise and help fight harmful microorganisms that can cause illness."
-            },
-            {
-                id: "carryOxygen",
-                label: "🫁 White blood cells carry oxygen around the body",
-                correct: false,
-                feedbackTitle: "Try again!",
-                feedback: "Red blood cells carry oxygen around the body. White blood cells help defend against infection."
-            },
-            {
-                id: "pumpBlood",
-                label: "❤️ White blood cells pump blood around the body",
-                correct: false,
-                feedbackTitle: "Not quite!",
-                feedback: "The heart pumps blood around the body. White blood cells help protect us from germs."
-            }
-        ],
-
-        lesson: {
-            introduction: "Ruby discovers that white blood cells are important defenders of her body.",
-            characterName: "Ruby",
-            characterLine: "I learned that white blood cells help my body fight germs and infections!",
-            remember: "White blood cells are part of the immune system. They help recognise and fight harmful germs, protecting the body from infections."
-        },
-
-        completionHeading: "White Cell Warriors!",
-        completionMessage: "Ruby has discovered how white blood cells help protect her body.",
+        completionHeading: "Germ Detective Complete!",
+        completionMessage: "Ruby has discovered how germs can affect the body.",
         continueLabel: "Continue to the lesson",
         nextPassage: "LessonLearned"
     }
@@ -2390,48 +2608,28 @@ setup.activityLibraries.bloodVessels = {
                 completed: false
             },
             {
-                title: "🏃 Keep the Blood Moving",
-                description: "Discover how movement supports circulation.",
-                activityId: "keepBloodMoving",
+                title: "🛡️ Immune Team Rescue",
+                description: "Discover how blood vessels help white blood cells travel around the body.",
+                activityId: "immuneTeamRescue",
                 passage: "BloodVesselsActivity",
                 completed: false
             },
             {
-                title: "💓 Heartbeat Heroes",
-                description: "Discover how your heart keeps blood moving.",
-                activityId: "heartbeatHeroes",
+                title: "🚨 Vessel Emergency",
+                description: "Learn how blood vessels respond when they become damaged.",
+                activityId: "vesselEmergency",
                 passage: "BloodVesselsActivity",
                 completed: false
             },
             {
-                title: "🩸 Vessel Voyage",
-                description: "Explore how blood travels around the body.",
-                activityId: "vesselVoyage",
-                passage: "BloodVesselsActivity",
-                completed: false
-            },
-            {
-                title: "💧 Hydration Station",
-                description: "Learn why drinking enough water matters.",
-                activityId: "hydrationStation",
-                passage: "BloodVesselsActivity",
-                completed: false
-            },
-            {
-                title: "🥗 Fuel Your Flow",
-                description: "Explore healthy food choices for your circulation.",
-                activityId: "fuelYourFlow",
-                passage: "BloodVesselsActivity",
-                completed: false
-            },
-            {
-                title: "🩸 Blood Flow Mission",
-                description: "Discover how blood vessels transport blood around the body.",
-                activityId: "bloodFlowMission",
+                title: "🩹 Clotting Challenge",
+                description: "Discover how platelets and clotting proteins help stop bleeding.",
+                activityId: "clottingChallenge",
                 passage: "BloodVesselsActivity",
                 completed: false
             }
         ]
+
     },
 
     longPause: {
@@ -2487,319 +2685,163 @@ setup.activityLibraries.bloodVessels = {
         nextPassage: "LessonLearned"
     },
 
-    keepBloodMoving: {
-        title: "Keep the Blood Moving",
-        introduction: "Ruby wants to discover how moving our bodies helps keep us healthy.",
+    immuneTeamRescue: {
+        title: "Immune Team Rescue",
+        introduction: "Ruby learns how immune cells travel through the blood to protect the body.",
         characterName: "Ruby",
-        characterLine: "Let's find activities that get our bodies moving!",
-        mission: "Help Ruby identify healthy ways to stay active!",
-        instructions: "Choose TWO healthy movement activities.",
+        characterLine: "The defenders are travelling through the blood vessels! Let's follow them!",
+        mission: "Help Ruby discover how blood vessels carry immune cells around the body!",
+        instructions: "Choose TWO correct facts",
         requiredCorrect: 2,
 
         choices: [
             {
-                id: "walking",
-                label: "🚶 Go for a walk",
+                id: "vesselsTransportBlood",
+                label: "🩸 Blood vessels carry blood around the body",
                 correct: true,
-                feedbackTitle: "Great choice!",
-                feedback: "Walking is a physical activity that helps support cardiovascular health."
+                feedbackTitle: "Great discovery!",
+                feedback: "Blood vessels form a network of tubes that transport blood throughout the body."
             },
             {
-                id: "dancing",
-                label: "💃 Dance to your favorite music",
+                id: "vesselsTransportDefenders",
+                label: "🛡️ Blood vessels help transport white blood cells around the body",
                 correct: true,
                 feedbackTitle: "Correct!",
-                feedback: "Dancing is a fun way to be physically active."
+                feedback: "White blood cells travel through the bloodstream and can move into tissues where they help respond to infection."
             },
             {
-                id: "sitAllDay",
-                label: "🪑 Sit all day without movement breaks",
-                correct: false,
-                feedbackTitle: "Try again!",
-                feedback: "Try breaking up long periods of sitting with movement."
-            },
-            {
-                id: "avoidMovement",
-                label: "📺 Avoid physical activity whenever possible",
+                id: "vesselsMakeWhiteCells",
+                label: "⚪ Blood vessels make all the body's white blood cells",
                 correct: false,
                 feedbackTitle: "Not quite!",
-                feedback: "Regular physical activity supports overall health."
+                feedback: "White blood cells are produced in blood-forming tissues, especially the bone marrow. Blood vessels transport them around the body."
+            },
+            {
+                id: "vesselsCarryAir",
+                label: "🫁 Blood vessels carry air directly from the lungs to the body",
+                correct: false,
+                feedbackTitle: "Try again!",
+                feedback: "Blood vessels carry blood, not air. Oxygen enters the blood in the lungs and is transported around the body."
             }
         ],
 
         lesson: {
-            introduction: "Ruby discovers that movement is an important part of a healthy routine.",
+            introduction: "Ruby has discovered how blood vessels help transport immune cells around the body.",
             characterName: "Ruby",
-            characterLine: "Fantastic! Moving our bodies in different ways can help us care for our hearts and circulation.",
-            remember: "Walking, dancing, and other physical activities can support cardiovascular health. Choose activities that are appropriate for your abilities and take breaks from sitting."
+            characterLine: "Now I see! Blood vessels help my tiny defenders travel to places where they are needed!",
+            remember: "Blood vessels form a network that carries blood throughout the body. White blood cells travel in the bloodstream and can move into body tissues to help defend against infections."
         },
 
-        completionHeading: "Movement Mission Complete!",
-        completionMessage: "Ruby has discovered ways to keep moving throughout the day.",
+        completionHeading: "Immune Team Rescue Complete!",
+        completionMessage: "Ruby has learned how blood vessels help transport immune cells.",
         continueLabel: "Continue to the lesson",
         nextPassage: "LessonLearned"
     },
 
-    heartbeatHeroes: {
-        title: "Heartbeat Heroes",
-        introduction: "Ruby is ready to learn how the heart helps blood travel around the body.",
+
+    vesselEmergency: {
+        title: "Vessel Emergency",
+        introduction: "Ruby has spotted a damaged blood vessel! Blood is escaping from the injured area, and the body needs to respond.",
         characterName: "Ruby",
-        characterLine: "Your heart is working hard! Let's discover how it helps you.",
-        mission: "Help Ruby understand the heart's role in circulation!",
-        instructions: "Choose TWO correct facts about the heart.",
+        characterLine: "Oh no! There's a leak in the blood vessel! What happens when a blood vessel gets damaged?",
+        mission: "Help Ruby understand what happens when a blood vessel is injured!",
+        instructions: "Choose TWO correct facts about damaged blood vessels.",
         requiredCorrect: 2,
 
         choices: [
             {
-                id: "pumpsBlood",
-                label: "❤️ The heart pumps blood around the body",
+                id: "vesselDamageBleeding",
+                label: "🩸 Damage to a blood vessel can cause bleeding",
                 correct: true,
                 feedbackTitle: "Correct!",
-                feedback: "The heart contracts to pump blood through the circulatory system."
+                feedback: "When a blood vessel is damaged, blood can escape from the injured area."
             },
             {
-                id: "deliversOxygen",
-                label: "🩸 Blood carries oxygen to body tissues",
+                id: "vesselNarrows",
+                label: "🩹 The injured blood vessel can narrow to help reduce blood loss",
                 correct: true,
                 feedbackTitle: "Great choice!",
-                feedback: "Blood transports oxygen from the lungs to tissues throughout the body."
+                feedback: "The damaged blood vessel can constrict, meaning it becomes narrower. This helps reduce blood flow to the injured area."
             },
             {
-                id: "heartMakesOxygen",
-                label: "🫁 The heart makes all the oxygen the body needs",
-                correct: false,
-                feedbackTitle: "Try again!",
-                feedback: "The lungs bring oxygen into the body. The heart pumps blood that carries it."
-            },
-            {
-                id: "heartStopsBlood",
-                label: "🛑 The heart stops blood from moving",
+                id: "vesselsMakeClotsAlone",
+                label: "❤️ The heart makes a blood clot whenever a vessel is damaged",
                 correct: false,
                 feedbackTitle: "Not quite!",
-                feedback: "The heart's pumping action keeps blood moving through the circulatory system."
+                feedback: "Platelets and clotting proteins help form a clot at the damaged area."
+            },
+            {
+                id: "vesselDamageMakesOxygen",
+                label: "🫁 A damaged blood vessel produces extra oxygen",
+                correct: false,
+                feedbackTitle: "Try again!",
+                feedback: "Blood vessels transport blood around the body. They do not produce oxygen."
             }
         ],
 
         lesson: {
-            introduction: "Ruby has discovered how the heart helps power circulation.",
+            introduction: "Ruby has discovered how the body responds when a blood vessel is damaged.",
             characterName: "Ruby",
-            characterLine: "You got it! Your heart and blood vessels work together to move blood throughout your body.",
-            remember: "The heart pumps blood through blood vessels. Blood carries oxygen and nutrients to tissues and helps transport waste products away."
+            characterLine: "I learned that a damaged blood vessel can narrow to reduce blood loss while the body begins repairing the injury!",
+            remember: "When a blood vessel is damaged, it can constrict to reduce blood flow to the injured area. Platelets gather at the injury and clotting proteins help form a clot to limit bleeding."
         },
 
-        completionHeading: "Heartbeat Heroes Complete!",
-        completionMessage: "Ruby understands how the heart helps keep blood moving.",
+        completionHeading: "Vessel Emergency Solved!",
+        completionMessage: "Ruby has learned how the body responds to blood vessel damage.",
         continueLabel: "Continue to the lesson",
         nextPassage: "LessonLearned"
     },
 
-    vesselVoyage: {
-        title: "Vessel Voyage",
-        introduction: "Ruby is exploring the pathways that carry blood around the body.",
+
+    clottingChallenge: {
+        title: "Clotting Challenge",
+        introduction: "Ruby has found platelets and clotting proteins working together to repair a damaged blood vessel.",
         characterName: "Ruby",
-        characterLine: "Let's explore the amazing network of blood vessels!",
-        mission: "Help Ruby learn how different blood vessels work!",
-        instructions: "Choose TWO correct facts about blood vessels.",
+        characterLine: "The platelets are gathering together! Let's discover how a blood clot forms!",
+        mission: "Help Ruby understand how platelets and clotting proteins work together to stop bleeding!",
+        instructions: "Choose TWO correct facts about blood clotting.",
         requiredCorrect: 2,
 
         choices: [
             {
-                id: "arteries",
-                label: "🔴 Arteries carry blood away from the heart",
+                id: "plateletsFormPlug",
+                label: "🩹 Platelets gather together to help form a plug",
+                correct: true,
+                feedbackTitle: "Fantastic!",
+                feedback: "Platelets stick to the damaged area and gather together to form an initial plug."
+            },
+            {
+                id: "fibrinStrengthensClot",
+                label: "🕸️ Fibrin forms a mesh that strengthens the blood clot",
                 correct: true,
                 feedbackTitle: "Correct!",
-                feedback: "Arteries carry blood away from the heart."
+                feedback: "Fibrin forms a mesh of tiny fibres that helps strengthen and stabilise the clot."
             },
             {
-                id: "veins",
-                label: "🔵 Veins carry blood toward the heart",
-                correct: true,
-                feedbackTitle: "Great choice!",
-                feedback: "Veins return blood toward the heart."
-            },
-            {
-                id: "vesselsDigest",
-                label: "🍎 Blood vessels digest the food we eat",
-                correct: false,
-                feedbackTitle: "Try again!",
-                feedback: "Blood vessels transport blood. Digestion takes place in the digestive system."
-            },
-            {
-                id: "allVesselsSame",
-                label: "🔀 Every type of blood vessel has exactly the same job",
+                id: "redCellsStartClot",
+                label: "🔴 Red blood cells are the main components that start clotting",
                 correct: false,
                 feedbackTitle: "Not quite!",
-                feedback: "Arteries, veins, and capillaries have different structures and roles."
+                feedback: "Platelets and clotting proteins are the main components involved in forming a blood clot."
+            },
+            {
+                id: "clottingAddsOxygen",
+                label: "🫁 Blood clotting adds extra oxygen to the blood",
+                correct: false,
+                feedbackTitle: "Try again!",
+                feedback: "Blood clotting helps stop bleeding. Oxygen enters the blood through the lungs."
             }
         ],
 
         lesson: {
-            introduction: "Ruby has traveled through the body's network of blood vessels.",
+            introduction: "Ruby has discovered how platelets and clotting proteins work together to form a blood clot.",
             characterName: "Ruby",
-            characterLine: "Amazing exploring! Arteries, veins, and capillaries all help the circulatory system do its job.",
-            remember: "Arteries carry blood away from the heart, veins return blood toward the heart, and tiny capillaries allow gases, nutrients, and other substances to be exchanged with tissues."
+            characterLine: "We did it! Platelets form a plug, and fibrin helps strengthen it into a clot!",
+            remember: "When a blood vessel is damaged, platelets gather at the injury and help form a plug. Clotting proteins produce fibrin, which forms a mesh that strengthens the plug into a stable clot and helps limit blood loss."
         },
 
-        completionHeading: "Vessel Voyage Complete!",
-        completionMessage: "Ruby has discovered how blood vessels transport blood.",
-        continueLabel: "Continue to the lesson",
-        nextPassage: "LessonLearned"
-    },
-
-    hydrationStation: {
-        title: "Hydration Station",
-        introduction: "Ruby is learning why staying hydrated is part of caring for the body.",
-        characterName: "Ruby",
-        characterLine: "Let's discover some healthy hydration habits!",
-        mission: "Help Ruby choose good hydration habits!",
-        instructions: "Choose TWO healthy hydration choices.",
-        requiredCorrect: 2,
-
-        choices: [
-            {
-                id: "drinkWater",
-                label: "💧 Drink water regularly throughout the day",
-                correct: true,
-                feedbackTitle: "Great choice!",
-                feedback: "Water helps the body maintain its normal functions."
-            },
-            {
-                id: "bringBottle",
-                label: "🚰 Bring a water bottle when appropriate",
-                correct: true,
-                feedbackTitle: "Correct!",
-                feedback: "Having water available can make it easier to stay hydrated."
-            },
-            {
-                id: "neverDrink",
-                label: "🥤 Avoid drinking fluids all day",
-                correct: false,
-                feedbackTitle: "Try again!",
-                feedback: "The body needs water to function properly."
-            },
-            {
-                id: "onlySugaryDrinks",
-                label: "🥤 Choose sugary drinks as your only source of fluids",
-                correct: false,
-                feedbackTitle: "Not quite!",
-                feedback: "Water is a good everyday drink choice for many people."
-            }
-        ],
-
-        lesson: {
-            introduction: "Ruby discovers that hydration is one part of taking care of the body.",
-            characterName: "Ruby",
-            characterLine: "Well done! Drinking enough water helps your body carry out its everyday jobs.",
-            remember: "Water supports many normal body functions. Fluid needs vary with factors such as activity, climate, and health."
-        },
-
-        completionHeading: "Hydration Station Complete!",
-        completionMessage: "Ruby has learned about healthy hydration habits.",
-        continueLabel: "Continue to the lesson",
-        nextPassage: "LessonLearned"
-    },
-
-    fuelYourFlow: {
-        title: "Fuel Your Flow",
-        introduction: "Ruby is ready to discover how healthy food choices support the body.",
-        characterName: "Ruby",
-        characterLine: "Let's choose foods that help support a healthy heart and blood vessels!",
-        mission: "Help Ruby choose healthy foods!",
-        instructions: "Choose TWO healthy options.",
-        requiredCorrect: 2,
-
-        choices: [
-            {
-                id: "vegetables",
-                label: "🥦 Eat a variety of vegetables",
-                correct: true,
-                feedbackTitle: "Correct!",
-                feedback: "Vegetables provide nutrients that support overall health."
-            },
-            {
-                id: "wholeGrains",
-                label: "🌾 Choose whole-grain foods",
-                correct: true,
-                feedbackTitle: "Great choice!",
-                feedback: "Whole grains can be part of a balanced eating pattern."
-            },
-            {
-                id: "saltySnacks",
-                label: "🧂 Eat lots of salty snacks",
-                correct: false,
-                feedbackTitle: "Try again!",
-                feedback: "Eating too much sodium can make blood pressure harder to manage."
-            },
-            {
-                id: "skipMeals",
-                label: "🍽️ Skip meals instead of eating a balanced diet",
-                correct: false,
-                feedbackTitle: "Try again!",
-                feedback: "Regular, balanced meals can help you get a variety of nutrients."
-            }
-        ],
-
-        lesson: {
-            introduction: "Ruby discovers that everyday food choices can support a healthy body.",
-            characterName: "Ruby",
-            characterLine: "Great work! Making balanced food choices is one way to care for your body.",
-            remember: "A balanced eating pattern that includes vegetables, whole grains, and other nutritious foods can support overall health. Choosing foods lower in sodium can help manage blood pressure."
-        },
-
-        completionHeading: "Fuel Your Flow completed!",
-        completionMessage: "Ruby has discovered some healthy food choices.",
-        continueLabel: "Continue to the lesson",
-        nextPassage: "LessonLearned"
-    },
-    bloodFlowMission: {
-        title: "Blood Flow Mission",
-        introduction: "Ruby wants to discover how blood travels around her body and delivers important supplies!",
-        characterName: "Ruby",
-        characterLine: "How does blood reach every part of my body?",
-        mission: "Help Ruby understand how blood vessels work!",
-        instructions: "Choose TWO correct answers.",
-        requiredCorrect: 2,
-
-        choices: [
-            {
-                id: "arteries",
-                label: "🩸 Arteries carry blood away from the heart",
-                correct: true,
-                feedbackTitle: "Great choice!",
-                feedback: "Arteries carry blood away from the heart to different parts of the body."
-            },
-            {
-                id: "veins",
-                label: "❤️ Veins carry blood back towards the heart",
-                correct: true,
-                feedbackTitle: "Correct!",
-                feedback: "Veins return blood towards the heart so it can continue circulating around the body."
-            },
-            {
-                id: "vesselsDigest",
-                label: "🍎 Blood vessels digest the food we eat",
-                correct: false,
-                feedbackTitle: "Try again!",
-                feedback: "Blood vessels transport blood. Digestion happens in the digestive system."
-            },
-            {
-                id: "vesselsThink",
-                label: "🧠 Blood vessels control our thoughts",
-                correct: false,
-                feedbackTitle: "Not quite!",
-                feedback: "The brain controls thoughts. Blood vessels help transport blood around the body."
-            }
-        ],
-
-        lesson: {
-            introduction: "Ruby discovers how blood vessels create pathways for blood to travel around her body.",
-            characterName: "Ruby",
-            characterLine: "I learned that arteries and veins have different jobs, but both help keep my blood moving!",
-            remember: "Blood vessels form a network throughout the body. Arteries carry blood away from the heart, veins return blood towards the heart, and tiny capillaries allow substances to be exchanged with body tissues."
-        },
-
-        completionHeading: "Blood Flow Mission Complete!",
-        completionMessage: "Ruby has learned how arteries and veins help blood travel around her body.",
+        completionHeading: "Clotting Challenge Complete!",
+        completionMessage: "Ruby has learned how the body forms blood clots to help stop bleeding.",
         continueLabel: "Continue to the lesson",
         nextPassage: "LessonLearned"
     }
@@ -2820,45 +2862,11 @@ setup.activityLibraries.brain = {
                 passage: "BrainActivity",
                 completed: false
             },
+
             {
-                title: "⚡ Message Mission",
-                description: "Explore how the brain and nerves send signals.",
-                activityId: "messageMission",
-                passage: "BrainActivity",
-                completed: false
-            },
-            {
-                title: "🧩 Memory Masters",
-                description: "Learn how the brain helps us remember and learn.",
-                activityId: "memoryMasters",
-                passage: "BrainActivity",
-                completed: false
-            },
-            {
-                title: "😴 Brain Recharge",
-                description: "Discover why sleep helps the brain work well.",
-                activityId: "brainRecharge",
-                passage: "BrainActivity",
-                completed: false
-            },
-            {
-                title: "💡 Thinking Power",
-                description: "Explore how the brain helps us think and solve problems.",
-                activityId: "thinkingPower",
-                passage: "BrainActivity",
-                completed: false
-            },
-            {
-                title: "🛡️ Brain Protector",
-                description: "Learn why protecting your head is important.",
-                activityId: "brainProtector",
-                passage: "BrainActivity",
-                completed: false
-            },
-            {
-                title: "🛡️ Brain Defenders",
-                description: "Discover how the brain helps the body respond to information.",
-                activityId: "brainDefenders",
+                title: "🧠 Brain Defender Mission",
+                description: "Discover how the brain helps the body respond when we become unwell.",
+                activityId: "brainDefenderMission",
                 passage: "BrainActivity",
                 completed: false
             }
@@ -2892,14 +2900,14 @@ setup.activityLibraries.brain = {
             },
             {
                 id: "pumpsBlood",
-                label: "❤️ The brain pumps blood around the body",
+                label: "❤️ The brain pumps blood for the body",
                 correct: false,
                 feedbackTitle: "Try again!",
                 feedback: "The heart pumps blood around the body. The brain helps control many body functions."
             },
             {
                 id: "digestsFood",
-                label: "🍎 The brain directly digests the food we eat",
+                label: "🍎 The brain digests the food we eat",
                 correct: false,
                 feedbackTitle: "Not quite!",
                 feedback: "The digestive system breaks down food. The brain helps regulate and coordinate many body processes."
@@ -2920,334 +2928,60 @@ setup.activityLibraries.brain = {
         nextPassage: "LessonLearned"
     },
 
-    // ACTIVITY 2: MESSAGE MISSION
-    messageMission: {
-        title: "Message Mission",
-        introduction: "Join Ruby on a mission to discover how messages travel between the brain and the body.",
+
+    brainDefenderMission: {
+        title: "Brain Defender Mission",
+        introduction: "Ruby needs help learning how the brain responds to germs and illness.",
         characterName: "Ruby",
-        characterLine: "How does my brain tell my body what to do?",
-        mission: "Help Ruby discover how the brain and nerves communicate!",
-        instructions: "Choose TWO correct facts about messages in the nervous system.",
+        characterLine: "My brain helps me recognise when something is wrong. Let's discover how!",
+        mission: "Help Ruby understand how the brain responds when the body is unwell!",
+        instructions: "Choose TWO correct facts about the brain and its role in protecting the body.",
         requiredCorrect: 2,
 
         choices: [
             {
-                id: "nerveSignals",
-                label: "⚡ Nerves carry signals between the brain and body",
-                correct: true,
-                feedbackTitle: "Signal received!",
-                feedback: "Nerves carry information between the brain, spinal cord, and other parts of the body."
-            },
-            {
-                id: "fastResponses",
-                label: "🚀 Nerve signals help the body respond to information",
-                correct: true,
-                feedbackTitle: "Well done!",
-                feedback: "The nervous system helps the body respond to changes inside and around us."
-            },
-            {
-                id: "bloodMessages",
-                label: "🩸 The brain sends every message only through blood",
-                correct: false,
-                feedbackTitle: "Keep exploring!",
-                feedback: "The nervous system uses nerve signals to communicate information. Blood has other important jobs."
-            },
-            {
-                id: "noCommunication",
-                label: "🔇 The brain works without communicating with the body",
-                correct: false,
-                feedbackTitle: "Try another answer!",
-                feedback: "The brain communicates with the body through the nervous system."
-            }
-        ],
-
-        completionHeading: "Mission Accomplished!",
-        completionMessage: "Ruby has discovered how the nervous system carries messages!",
-        continueLabel: "Continue to the lesson",
-
-        lesson: {
-            introduction: "The brain, spinal cord, and nerves work together as the nervous system. They carry information that helps the body sense, think, move, and respond.",
-            characterName: "Ruby",
-            characterLine: "The brain and nerves work together like a communication team!",
-            remember: "Nerves carry signals that help the brain and body communicate."
-        },
-
-        nextPassage: "LessonLearned"
-    },
-
-    // ACTIVITY 3: MEMORY MASTERS
-    memoryMasters: {
-        title: "Memory Masters",
-        introduction: "Ruby wants to understand how the brain helps us learn new things and remember experiences.",
-        characterName: "Ruby",
-        characterLine: "How does my brain help me remember what I learn?",
-        mission: "Help Ruby identify how the brain supports learning and memory!",
-        instructions: "Choose TWO correct facts about memory.",
-        requiredCorrect: 2,
-
-        choices: [
-            {
-                id: "formsMemories",
-                label: "💭 The brain helps us form and recall memories",
-                correct: true,
-                feedbackTitle: "Memory master!",
-                feedback: "The brain helps us store information and bring it back to mind later."
-            },
-            {
-                id: "practiceLearning",
-                label: "📚 Practice and learning can help strengthen memories",
-                correct: true,
-                feedbackTitle: "Excellent!",
-                feedback: "Reviewing and practising information can help us learn and remember it."
-            },
-            {
-                id: "memoryInMuscles",
-                label: "💪 All memories are stored only in our muscles",
-                correct: false,
-                feedbackTitle: "Not quite!",
-                feedback: "Memory depends on activity and connections among brain cells, not just the muscles."
-            },
-            {
-                id: "instantLearning",
-                label: "✨ We remember everything perfectly without learning or practice",
-                correct: false,
-                feedbackTitle: "Keep thinking!",
-                feedback: "Memory can change over time. Learning, attention, and practice can help us remember information."
-            }
-        ],
-
-        completionHeading: "Memory Masters!",
-        completionMessage: "Ruby has learned how the brain helps us learn and remember!",
-        continueLabel: "Continue to the lesson",
-
-        lesson: {
-            introduction: "The brain helps us learn new information, build skills, and recall experiences. Attention, practice, and sleep can all support learning and memory.",
-            characterName: "Ruby",
-            characterLine: "Practising what I learn can help me remember it!",
-            remember: "The brain helps us learn and remember. Practice and enough sleep can support memory."
-        },
-
-        nextPassage: "LessonLearned"
-    },
-
-    // ACTIVITY 4: BRAIN RECHARGE
-    brainRecharge: {
-        title: "Brain Recharge",
-        introduction: "Ruby is discovering why sleep is important for the brain and body.",
-        characterName: "Ruby",
-        characterLine: "Why do I feel better after a good night's sleep?",
-        mission: "Help Ruby discover how sleep supports brain health!",
-        instructions: "Choose TWO correct facts about sleep.",
-        requiredCorrect: 2,
-
-        choices: [
-            {
-                id: "supportsLearning",
-                label: "📖 Sleep helps support learning and memory",
-                correct: true,
-                feedbackTitle: "Rest well!",
-                feedback: "Sleep helps the brain process information and supports learning and memory."
-            },
-            {
-                id: "restoresBody",
-                label: "😴 Sleep helps the brain and body rest and recover",
-                correct: true,
-                feedbackTitle: "Correct!",
-                feedback: "Getting enough sleep supports attention, mood, and overall health."
-            },
-            {
-                id: "noSleepNeeded",
-                label: "⏰ The brain never needs sleep to work well",
-                correct: false,
-                feedbackTitle: "Try again!",
-                feedback: "Sleep is important for healthy brain function and wellbeing."
-            },
-            {
-                id: "sleepStopsBrain",
-                label: "🔌 The brain completely switches off during sleep",
-                correct: false,
-                feedbackTitle: "Not quite!",
-                feedback: "The brain remains active during sleep and carries out important processes."
-            }
-        ],
-
-        completionHeading: "Recharge Complete!",
-        completionMessage: "Ruby has discovered why sleep helps the brain work well!",
-        continueLabel: "Continue to the lesson",
-
-        lesson: {
-            introduction: "Sleep supports healthy brain function. It helps with attention, learning, memory, mood, and the body's recovery.",
-            characterName: "Ruby",
-            characterLine: "A good night's sleep helps me feel ready to learn and explore!",
-            remember: "Getting enough sleep is an important way to care for your brain and body."
-        },
-
-        nextPassage: "LessonLearned"
-    },
-
-    // ACTIVITY 5: THINKING POWER
-    thinkingPower: {
-        title: "Thinking Power",
-        introduction: "Ruby is ready to explore how the brain helps us reason, make decisions, and solve problems.",
-        characterName: "Ruby",
-        characterLine: "My brain helps me think through challenges!",
-        mission: "Help Ruby discover how the brain supports thinking and problem-solving!",
-        instructions: "Choose TWO correct facts about thinking.",
-        requiredCorrect: 2,
-
-        choices: [
-            {
-                id: "solvesProblems",
-                label: "🧩 The brain helps us solve problems and make decisions",
-                correct: true,
-                feedbackTitle: "Brilliant thinking!",
-                feedback: "The brain helps us consider information and choose how to respond."
-            },
-            {
-                id: "usesInformation",
-                label: "👀 The brain processes information from our senses",
+                id: "recognisesSymptoms",
+                label: "🧠 The brain helps us recognise symptoms and changes in how we feel",
                 correct: true,
                 feedbackTitle: "Great discovery!",
-                feedback: "The brain interprets information from senses such as sight, hearing, touch, taste, and smell."
+                feedback: "The brain processes information from the body, helping us notice when we feel unwell."
             },
             {
-                id: "thinkingHeartOnly",
-                label: "❤️ The heart is the body's main organ for solving puzzles",
-                correct: false,
-                feedbackTitle: "Think it through!",
-                feedback: "The heart pumps blood. The brain plays a major role in thinking and solving problems."
-            },
-            {
-                id: "noLearning",
-                label: "🔒 Thinking never changes as we learn new things",
-                correct: false,
-                feedbackTitle: "Try again!",
-                feedback: "Learning and experience can change how we understand information and solve problems."
-            }
-        ],
-
-        completionHeading: "Powerful Thinking!",
-        completionMessage: "Ruby has explored how the brain helps us think and solve problems!",
-        continueLabel: "Continue to the lesson",
-
-        lesson: {
-            introduction: "The brain helps us interpret sensory information, pay attention, reason, plan, make decisions, and solve problems.",
-            characterName: "Ruby",
-            characterLine: "Every new thing I learn gives me more to think about!",
-            remember: "The brain processes information and helps us learn, reason, plan, and make decisions."
-        },
-
-        nextPassage: "LessonLearned"
-    },
-
-    // ACTIVITY 6: BRAIN PROTECTOR
-    brainProtector: {
-        title: "Brain Protector",
-        introduction: "Ruby wants to learn how to protect the brain from injury.",
-        characterName: "Ruby",
-        characterLine: "What can I do to help keep my brain safe?",
-        mission: "Help Ruby identify healthy ways to protect the brain!",
-        instructions: "Choose TWO correct ways to protect your brain.",
-        requiredCorrect: 2,
-
-        choices: [
-            {
-                id: "wearHelmet",
-                label: "⛑️ Wear a properly fitted helmet for activities that require one",
-                correct: true,
-                feedbackTitle: "Safety star!",
-                feedback: "A properly fitted helmet can help reduce the risk of certain head injuries."
-            },
-            {
-                id: "seatbelt",
-                label: "🚗 Wear a seat belt when travelling in a vehicle",
-                correct: true,
-                feedbackTitle: "Smart choice!",
-                feedback: "Seat belts help protect people from serious injury during a crash."
-            },
-            {
-                id: "ignoreInjury",
-                label: "🤕 Ignore a head injury even when you feel unwell",
-                correct: false,
-                feedbackTitle: "Stay safe!",
-                feedback: "A head injury should be taken seriously. Tell a trusted adult and seek medical help when needed."
-            },
-            {
-                id: "unsafePlay",
-                label: "⚠️ Take unnecessary risks during sports and play",
-                correct: false,
-                feedbackTitle: "Think safety!",
-                feedback: "Following safety rules and using suitable protective equipment can help reduce the risk of injury."
-            }
-        ],
-
-        completionHeading: "Brain Protector!",
-        completionMessage: "Ruby has learned some important ways to help protect the brain!",
-        continueLabel: "Continue to the lesson",
-
-        lesson: {
-            introduction: "The brain is protected by the skull, but head injuries can still happen. Helmets, seat belts, and safe choices can help reduce the risk of injury.",
-            characterName: "Ruby",
-            characterLine: "Making safe choices is one way I can help protect my brain!",
-            remember: "Use appropriate protective equipment, follow safety rules, and tell a trusted adult if you have a head injury."
-        },
-
-        nextPassage: "LessonLearned"
-    },
-
-    brainDefenders: {
-        title: "Brain Defenders",
-        introduction: "Ruby wants to understand how her brain helps her notice danger and respond when germs make her feel unwell!",
-        characterName: "Ruby",
-        characterLine: "My brain helps me understand what's happening inside my body!",
-        mission: "Help Ruby discover how the brain helps control the body!",
-        instructions: "Choose TWO correct answers.",
-        requiredCorrect: 2,
-
-        choices: [
-            {
-                id: "brainSignals",
-                label: "🧠 The brain sends messages through the nervous system",
-                correct: true,
-                feedbackTitle: "Great choice!",
-                feedback: "The brain communicates with the body through the nervous system using signals."
-            },
-            {
-                id: "brainResponds",
-                label: "⚡ The brain helps the body respond to changes around us",
+                id: "coordinatesResponse",
+                label: "🧠 The brain helps coordinate the body's responses",
                 correct: true,
                 feedbackTitle: "Correct!",
-                feedback: "The brain processes information and helps coordinate how the body responds."
+                feedback: "The brain helps coordinate responses such as resting, moving and reacting when we feel unwell."
             },
             {
-                id: "brainPumps",
-                label: "❤️ The brain pumps blood around the body",
+                id: "killsGerms",
+                label: "🦠 The brain directly kills harmful germs",
                 correct: false,
                 feedbackTitle: "Try again!",
-                feedback: "The heart pumps blood around the body. The brain controls and coordinates many body activities."
+                feedback: "The immune system helps fight harmful germs. The brain helps coordinate many body functions."
             },
             {
-                id: "brainDigests",
-                label: "🍎 The brain digests the food we eat",
+                id: "makesWhiteCells",
+                label: "⚪ The brain produces all the white blood cells",
                 correct: false,
                 feedbackTitle: "Not quite!",
-                feedback: "The digestive system breaks down food. The brain helps control and coordinate body functions."
+                feedback: "White blood cells are produced mainly in the bone marrow. They help defend the body against infection."
             }
         ],
 
-        completionHeading: "Brain Defenders!",
-        completionMessage: "Ruby has discovered how her brain helps her body respond to information.",
-        continueLabel: "Continue to the lesson",
-
         lesson: {
-            introduction: "Ruby discovers how her brain helps her understand information and coordinate her body's responses.",
+            introduction: "Ruby has discovered how the brain helps the body respond when we become unwell.",
             characterName: "Ruby",
-            characterLine: "I learned that my brain sends messages and helps my body respond to what's happening!",
-            remember: "The brain is the control centre of the nervous system. It receives information, processes it and sends signals that help coordinate movement, senses and other body functions."
+            characterLine: "I learned that my brain helps me notice changes in my body and coordinate my responses!",
+            remember: "The brain processes information from the body and helps coordinate responses. The immune system, including white blood cells, is responsible for defending the body against harmful germs."
         },
 
+        completionHeading: "Brain Defender Mission Complete!",
+        completionMessage: "Ruby has discovered how the brain helps the body respond when it is unwell.",
+        continueLabel: "Continue to the lesson",
         nextPassage: "LessonLearned"
     }
+
 };
 /* twine-user-script #5: "heartActivities.js" */
 setup.activityLibraries = setup.activityLibraries || {};
@@ -3260,43 +2994,15 @@ setup.activityLibraries.heart = {
         activities: [
             {
                 title: "❤️ Heartbeat Heroes",
-                description: "Discover how the heart pumps blood around the body.",
+                description: "Discover how the heart pumps blood and learn how physical activity supports heart health.",
                 activityId: "heartbeatHeroes",
                 passage: "HeartActivity",
                 completed: false
             },
             {
-                title: "🏃 Move for Your Heart",
-                description: "Learn how physical activity helps the heart.",
-                activityId: "moveForYourHeart",
-                passage: "HeartActivity",
-                completed: false
-            },
-            {
-                title: "💓 Pulse Detectives",
-                description: "Explore how your heartbeat changes with activity.",
-                activityId: "pulseDetectives",
-                passage: "HeartActivity",
-                completed: false
-            },
-            {
-                title: "🥗 Heart-Healthy Habits",
-                description: "Discover everyday ways to care for your heart.",
-                activityId: "heartHealthyHabits",
-                passage: "HeartActivity",
-                completed: false
-            },
-            {
-                title: "🩸 Blood Flow Journey",
-                description: "Discover how the heart moves blood through the body.",
-                activityId: "bloodFlowJourney",
-                passage: "HeartActivity",
-                completed: false
-            },
-            {
-                title: "💗 Heart Care Basics",
-                description: "Learn simple ways to support heart health.",
-                activityId: "heartCareBasics",
+                title: "❤️ Heart Pump Mission",
+                description: "Learn how the heart pumps blood and delivers oxygen around the body.",
+                activityId: "heartPumpMission",
                 passage: "HeartActivity",
                 completed: false
             }
@@ -3356,270 +3062,59 @@ setup.activityLibraries.heart = {
         nextPassage: "LessonLearned"
     },
 
-    moveForYourHeart: {
-        title: "Move for Your Heart",
-        introduction: "Ruby wants to discover how moving her body can support her heart.",
+    heartPumpMission: {
+        title: "Heart Pump Mission",
+        introduction: "Ruby has reached the heart, where blood is being pumped around the body.",
         characterName: "Ruby",
-        characterLine: "Let's get moving and learn how exercise helps our heart!",
-        mission: "Help Ruby identify healthy ways to support her heart through movement!",
-        instructions: "Choose TWO correct facts about exercise and the heart.",
+        characterLine: "The heart is working so hard! Let's discover how it helps deliver oxygen!",
+        mission: "Help Ruby understand how the heart pumps blood around the body!",
+        instructions: "Choose TWO correct facts about the heart.",
         requiredCorrect: 2,
 
         choices: [
             {
-                id: "regularActivity",
-                label: "🏃 Regular physical activity supports heart health",
+                id: "heartPumpsBlood",
+                label: "❤️ The heart pumps blood around the body",
                 correct: true,
-                feedbackTitle: "Great choice!",
-                feedback: "Regular physical activity can improve cardiovascular fitness and support overall health."
+                feedbackTitle: "Fantastic!",
+                feedback: "The heart is a muscular organ that pumps blood through the blood vessels."
             },
             {
-                id: "heartWorksHarder",
-                label: "💓 The heart usually beats faster during exercise",
+                id: "heartSendsOxygen",
+                label: "🩸 The heart helps send oxygen-rich blood to the body",
                 correct: true,
                 feedbackTitle: "Correct!",
-                feedback: "Working muscles need more oxygen during exercise, so the heart usually pumps faster."
+                feedback: "The left side of the heart pumps oxygen-rich blood through the arteries to the body's tissues."
             },
             {
-                id: "neverMove",
-                label: "🛋️ Sitting all day is the best way to strengthen the heart",
-                correct: false,
-                feedbackTitle: "Try again!",
-                feedback: "Breaking up long periods of sitting and being regularly active can support heart health."
-            },
-            {
-                id: "exerciseStopsHeart",
-                label: "🌙 The heart stops working when we exercise",
+                id: "heartMakesOxygen",
+                label: "🫁 The heart makes oxygen for the body",
                 correct: false,
                 feedbackTitle: "Not quite!",
-                feedback: "The heart continues pumping during exercise and usually beats faster to supply working muscles."
+                feedback: "Oxygen enters the blood through the lungs. The heart pumps blood to deliver it around the body."
+            },
+            {
+                id: "heartFightsGerms",
+                label: "🦠 The heart is the main organ that fights infections",
+                correct: false,
+                feedbackTitle: "Try again!",
+                feedback: "The immune system, including white blood cells, helps defend the body against infections."
             }
         ],
 
         lesson: {
-            introduction: "Ruby learns how physical activity affects the heart.",
+            introduction: "Ruby has discovered how the heart helps circulate blood around the body.",
             characterName: "Ruby",
-            characterLine: "Fantastic! Moving regularly helps support a healthy heart, and your heart works harder when your body needs more oxygen.",
-            remember: "During exercise, muscles need more oxygen, so the heart usually beats faster and pumps more blood. Regular physical activity supports cardiovascular fitness."
+            characterLine: "I understand now! My heart pumps blood so oxygen can travel to all the cells that need it!",
+            remember: "The heart is a muscular organ that pumps blood through the circulatory system. It sends oxygen-rich blood from the lungs to the body's tissues and helps return oxygen-poor blood to the lungs."
         },
 
-        completionHeading: "Move for Your Heart Complete!",
-        completionMessage: "Ruby has discovered how physical activity supports heart health.",
-        continueLabel: "Continue to the lesson",
-        nextPassage: "LessonLearned"
-    },
-
-    pulseDetectives: {
-        title: "Pulse Detectives",
-        introduction: "Ruby has noticed that her heartbeat changes after running and resting.",
-        characterName: "Ruby",
-        characterLine: "Can you help me investigate my pulse?",
-        mission: "Help Ruby understand what the pulse tells us about the heart!",
-        instructions: "Choose TWO correct facts about pulse and heartbeat.",
-        requiredCorrect: 2,
-
-        choices: [
-            {
-                id: "pulseHeartbeat",
-                label: "💓 Your pulse reflects your heartbeat",
-                correct: true,
-                feedbackTitle: "Correct!",
-                feedback: "Each heartbeat sends a wave of blood through arteries that can be felt as a pulse."
-            },
-            {
-                id: "exercisePulse",
-                label: "🏃 Your pulse usually increases during exercise",
-                correct: true,
-                feedbackTitle: "Great choice!",
-                feedback: "The heart usually beats faster during activity to help deliver more oxygen to working muscles."
-            },
-            {
-                id: "noPulseChange",
-                label: "🛌 Your pulse can never change",
-                correct: false,
-                feedbackTitle: "Try again!",
-                feedback: "Pulse can change with activity, emotions, illness, and other factors."
-            },
-            {
-                id: "pulseLungs",
-                label: "🫁 Your pulse measures how quickly your lungs digest food",
-                correct: false,
-                feedbackTitle: "Not quite!",
-                feedback: "Pulse gives information about your heartbeat, not digestion."
-            }
-        ],
-
-        lesson: {
-            introduction: "Ruby discovers how the pulse helps us notice the heartbeat.",
-            characterName: "Ruby",
-            characterLine: "You solved the mystery! Your pulse reflects your heartbeat and often changes with activity.",
-            remember: "The pulse is the pressure wave produced as the heart pumps blood through the arteries. Pulse rate usually rises during exercise and slows again during recovery."
-        },
-
-        completionHeading: "Pulse Detectives Complete!",
-        completionMessage: "Ruby has learned how the pulse relates to the heartbeat.",
-        continueLabel: "Continue to the lesson",
-        nextPassage: "LessonLearned"
-    },
-
-    heartHealthyHabits: {
-        title: "Heart-Healthy Habits",
-        introduction: "Ruby wants to discover everyday habits that can help care for her heart.",
-        characterName: "Ruby",
-        characterLine: "Small healthy choices can make a difference. Let's explore them!",
-        mission: "Help Ruby identify habits that support heart health!",
-        instructions: "Choose TWO heart-healthy habits.",
-        requiredCorrect: 2,
-
-        choices: [
-            {
-                id: "balancedFood",
-                label: "🥗 Eat a balanced variety of nutritious foods",
-                correct: true,
-                feedbackTitle: "Great choice!",
-                feedback: "A balanced eating pattern can support cardiovascular health."
-            },
-            {
-                id: "activeLifestyle",
-                label: "🚶 Make regular physical activity part of your routine",
-                correct: true,
-                feedbackTitle: "Correct!",
-                feedback: "Regular movement supports heart health and overall well-being."
-            },
-            {
-                id: "avoidAllActivity",
-                label: "🛋️ Avoid all physical activity to keep your heart healthy",
-                correct: false,
-                feedbackTitle: "Try again!",
-                feedback: "Regular, appropriate physical activity supports cardiovascular health."
-            },
-            {
-                id: "onlySugaryDrinks",
-                label: "🥤 Choose sugary drinks all the time instead of water",
-                correct: false,
-                feedbackTitle: "Not quite!",
-                feedback: "Water is a good everyday drink choice, and limiting sugary drinks can support a healthy eating pattern."
-            }
-        ],
-
-        lesson: {
-            introduction: "Ruby discovers that everyday choices can help support her heart.",
-            characterName: "Ruby",
-            characterLine: "Well done! Eating a balanced variety of foods and staying active are helpful habits for heart health.",
-            remember: "Heart health is supported by a combination of habits, including regular physical activity, a balanced eating pattern, avoiding tobacco, and getting enough sleep."
-        },
-
-        completionHeading: "Heart-Healthy Habits Complete!",
-        completionMessage: "Ruby has discovered everyday ways to support her heart.",
-        continueLabel: "Continue to the lesson",
-        nextPassage: "LessonLearned"
-    },
-
-    bloodFlowJourney: {
-        title: "Blood Flow Journey",
-        introduction: "Ruby is ready to follow the blood as the heart pumps it around the body.",
-        characterName: "Ruby",
-        characterLine: "Let's follow the blood on its journey!",
-        mission: "Help Ruby understand how the heart and blood vessels work together!",
-        instructions: "Choose TWO correct facts about blood flow.",
-        requiredCorrect: 2,
-
-        choices: [
-            {
-                id: "heartPumps",
-                label: "❤️ The heart pumps blood through blood vessels",
-                correct: true,
-                feedbackTitle: "Correct!",
-                feedback: "The heart creates the pressure that moves blood through the circulatory system."
-            },
-            {
-                id: "bodyDelivery",
-                label: "🩸 Blood helps deliver oxygen to body tissues",
-                correct: true,
-                feedbackTitle: "Great choice!",
-                feedback: "Blood transports oxygen and nutrients to tissues throughout the body."
-            },
-            {
-                id: "bloodOnlyLungs",
-                label: "🫁 Blood only travels between the heart and lungs",
-                correct: false,
-                feedbackTitle: "Try again!",
-                feedback: "Blood travels through the heart and lungs and also circulates to the rest of the body."
-            },
-            {
-                id: "veinsPump",
-                label: "🛣️ Blood vessels do not carry blood anywhere",
-                correct: false,
-                feedbackTitle: "Not quite!",
-                feedback: "Blood vessels form a network of pathways that carry blood throughout the body."
-            }
-        ],
-
-        lesson: {
-            introduction: "Ruby follows the journey of blood through the circulatory system.",
-            characterName: "Ruby",
-            characterLine: "Amazing! The heart pumps blood, and blood vessels carry it to the lungs and the rest of the body.",
-            remember: "The heart, blood, and blood vessels work together as the circulatory system. Blood travels to the lungs for gas exchange and to body tissues to deliver oxygen and nutrients."
-        },
-
-        completionHeading: "Blood Flow Journey Complete!",
-        completionMessage: "Ruby has discovered how the heart moves blood through the body.",
-        continueLabel: "Continue to the lesson",
-        nextPassage: "LessonLearned"
-    },
-
-    heartCareBasics: {
-        title: "Heart Care Basics",
-        introduction: "Ruby wants to put her heart-health knowledge into practice.",
-        characterName: "Ruby",
-        characterLine: "Let's review some simple ways to care for our hearts!",
-        mission: "Help Ruby recognize habits that support long-term heart health!",
-        instructions: "Choose TWO helpful heart-care habits.",
-        requiredCorrect: 2,
-
-        choices: [
-            {
-                id: "regularCheckups",
-                label: "🩺 Get appropriate health checkups",
-                correct: true,
-                feedbackTitle: "Good choice!",
-                feedback: "Health checkups can help identify concerns and provide guidance suited to a person's needs."
-            },
-            {
-                id: "healthyRoutine",
-                label: "🌱 Build healthy routines with activity and balanced meals",
-                correct: true,
-                feedbackTitle: "Correct!",
-                feedback: "Regular activity and balanced eating habits can support cardiovascular health."
-            },
-            {
-                id: "ignoreSymptoms",
-                label: "🤒 Always ignore unusual or concerning symptoms",
-                correct: false,
-                feedbackTitle: "Try again!",
-                feedback: "New, persistent, or concerning symptoms should not be ignored. Seek appropriate medical advice."
-            },
-            {
-                id: "tobaccoHealthy",
-                label: "🚬 Tobacco smoke makes the heart healthier",
-                correct: false,
-                feedbackTitle: "Not quite!",
-                feedback: "Tobacco smoke harms cardiovascular health. Avoiding smoking and secondhand smoke is beneficial."
-            }
-        ],
-
-        lesson: {
-            introduction: "Ruby reviews practical ways to care for her heart.",
-            characterName: "Ruby",
-            characterLine: "Great job! Healthy routines and appropriate health checkups can help us look after our hearts.",
-            remember: "Heart care includes regular physical activity, balanced eating habits, avoiding tobacco, and seeking appropriate health advice and checkups."
-        },
-
-        completionHeading: "Heart Care Basics Complete!",
-        completionMessage: "Ruby has learned several ways to support heart health.",
+        completionHeading: "Heart Pump Mission Complete!",
+        completionMessage: "Ruby has learned how the heart helps deliver oxygen around the body.",
         continueLabel: "Continue to the lesson",
         nextPassage: "LessonLearned"
     }
+
 };
 /* twine-user-script #6: "lungsActivities.js" */
 setup.activityLibraries = setup.activityLibraries || {};
@@ -3631,44 +3126,16 @@ setup.activityLibraries.lungs = {
 
         activities: [
             {
-                title: "🌬️ Breath by Breath",
-                description: "Help Ruby learn how breathing brings air into her lungs.",
+                title: "🌬️ Breathe Easy",
+                description: "Help Ruby make healthy choices to protect her lungs.",
                 activityId: "longPause",
                 passage: "LungsActivity",
                 completed: false
             },
             {
-                title: "🏃 Breathe and Move",
-                description: "Discover how breathing changes when you exercise.",
-                activityId: "breatheAndMove",
-                passage: "LungsActivity",
-                completed: false
-            },
-            {
-                title: "💨 Air Adventure",
-                description: "Explore the journey air takes through your respiratory system.",
-                activityId: "airAdventure",
-                passage: "LungsActivity",
-                completed: false
-            },
-            {
-                title: "🌿 Lung Protectors",
-                description: "Learn about everyday habits that help keep lungs healthy.",
-                activityId: "lungProtectors",
-                passage: "LungsActivity",
-                completed: false
-            },
-            {
-                title: "💧 Fresh Air Finder",
-                description: "Discover why clean air matters for your lungs.",
-                activityId: "freshAirFinder",
-                passage: "LungsActivity",
-                completed: false
-            },
-            {
-                title: "🫁 Breathing Basics",
-                description: "Learn how your lungs help your body get oxygen.",
-                activityId: "breathingBasics",
+                title: "🫁 Oxygen Adventure",
+                description: "Discover how oxygen enters the lungs and moves into the bloodstream.",
+                activityId: "oxygenAdventure",
                 passage: "LungsActivity",
                 completed: false
             }
@@ -3728,270 +3195,59 @@ setup.activityLibraries.lungs = {
         nextPassage: "LessonLearned"
     },
 
-    breatheAndMove: {
-        title: "Breathe and Move",
-        introduction: "Ruby notices that she breathes faster when she runs and plays.",
+    oxygenAdventure: {
+        title: "Oxygen Adventure",
+        introduction: "Ruby is exploring the lungs to discover how oxygen enters the blood.",
         characterName: "Ruby",
-        characterLine: "Why do we breathe harder when we exercise?",
-        mission: "Help Ruby understand how breathing responds to physical activity!",
-        instructions: "Choose TWO correct facts about breathing and exercise.",
+        characterLine: "I can see oxygen entering my lungs! But how does it get into my blood?",
+        mission: "Help Ruby discover how the lungs bring oxygen into the bloodstream!",
+        instructions: "Choose TWO correct facts about the lungs and oxygen.",
         requiredCorrect: 2,
 
         choices: [
             {
-                id: "moreOxygen",
-                label: "🌬️ Breathing faster helps bring more oxygen into the body",
+                id: "oxygenEntersLungs",
+                label: "🫁 Oxygen enters the body when we breathe in",
+                correct: true,
+                feedbackTitle: "Great discovery!",
+                feedback: "When we breathe in, air containing oxygen travels into the lungs."
+            },
+            {
+                id: "oxygenIntoBlood",
+                label: "🩸 Oxygen moves from the tiny air sacs into the blood",
                 correct: true,
                 feedbackTitle: "Correct!",
-                feedback: "During exercise, the body needs more oxygen, so breathing usually becomes faster."
+                feedback: "Tiny air sacs called alveoli allow oxygen to move from the lungs into nearby blood vessels."
             },
             {
-                id: "removeCarbonDioxide",
-                label: "💨 Breathing helps remove carbon dioxide from the body",
-                correct: true,
-                feedbackTitle: "Great choice!",
-                feedback: "The lungs remove carbon dioxide, a waste gas produced by the body's cells."
-            },
-            {
-                id: "stopBreathing",
-                label: "⛔ The body does not need oxygen during exercise",
-                correct: false,
-                feedbackTitle: "Try again!",
-                feedback: "Working muscles need oxygen to help release energy."
-            },
-            {
-                id: "lungsStop",
-                label: "🛑 The lungs stop working when we run",
+                id: "lungsPumpBlood",
+                label: "❤️ The lungs pump blood around the body",
                 correct: false,
                 feedbackTitle: "Not quite!",
-                feedback: "Your lungs continue working during exercise, usually with faster and deeper breathing."
+                feedback: "The heart pumps blood around the body. The lungs help oxygen enter the blood."
+            },
+            {
+                id: "oxygenFromStomach",
+                label: "🍎 Oxygen enters the bloodstream through the stomach",
+                correct: false,
+                feedbackTitle: "Try again!",
+                feedback: "Oxygen enters the bloodstream through gas exchange in the lungs, not through the stomach."
             }
         ],
 
         lesson: {
-            introduction: "Ruby discovers why breathing changes when the body is active.",
+            introduction: "Ruby has discovered how oxygen enters the bloodstream through the lungs.",
             characterName: "Ruby",
-            characterLine: "You did it! During exercise, breathing helps supply oxygen and remove carbon dioxide.",
-            remember: "During physical activity, muscles use more oxygen and produce more carbon dioxide. Breathing usually becomes faster and deeper to help meet these needs."
+            characterLine: "I did it! Oxygen travels into my lungs and moves into my blood through tiny air sacs!",
+            remember: "When we breathe in, oxygen enters the lungs. In tiny air sacs called alveoli, oxygen moves into nearby blood vessels and enters the bloodstream. The blood can then carry oxygen around the body."
         },
 
-        completionHeading: "Breathe and Move Complete!",
-        completionMessage: "Ruby has learned how breathing supports exercise.",
-        continueLabel: "Continue to the lesson",
-        nextPassage: "LessonLearned"
-    },
-
-    airAdventure: {
-        title: "Air Adventure",
-        introduction: "Ruby is following a breath of air on its journey into the lungs.",
-        characterName: "Ruby",
-        characterLine: "Let's follow the path that air takes when we breathe in!",
-        mission: "Help Ruby discover how air travels through the respiratory system!",
-        instructions: "Choose TWO correct facts about the path of air.",
-        requiredCorrect: 2,
-
-        choices: [
-            {
-                id: "noseAndMouth",
-                label: "👃 Air can enter the body through the nose or mouth",
-                correct: true,
-                feedbackTitle: "Correct!",
-                feedback: "The nose and mouth provide routes for air to enter the respiratory system."
-            },
-            {
-                id: "airways",
-                label: "🫁 Air travels through airways toward the lungs",
-                correct: true,
-                feedbackTitle: "Great choice!",
-                feedback: "Air passes through the throat and windpipe before moving into the branching airways in the lungs."
-            },
-            {
-                id: "foodTube",
-                label: "🍽️ Air normally travels to the lungs through the food pipe",
-                correct: false,
-                feedbackTitle: "Try again!",
-                feedback: "The food pipe carries food to the stomach. Air travels through the respiratory airways."
-            },
-            {
-                id: "skin",
-                label: "🧴 Air enters the lungs directly through the skin",
-                correct: false,
-                feedbackTitle: "Not quite!",
-                feedback: "Air enters through the nose or mouth and travels through the respiratory system."
-            }
-        ],
-
-        lesson: {
-            introduction: "Ruby follows the route air takes when entering the respiratory system.",
-            characterName: "Ruby",
-            characterLine: "Amazing! Air travels through the airways to reach the lungs, where gas exchange takes place.",
-            remember: "Air can enter through the nose or mouth, travel through the throat and trachea, and pass through branching airways to reach the lungs. Oxygen then moves into the blood at the gas-exchange surfaces."
-        },
-
-        completionHeading: "Air Adventure Complete!",
-        completionMessage: "Ruby has discovered the route air takes into the lungs.",
-        continueLabel: "Continue to the lesson",
-        nextPassage: "LessonLearned"
-    },
-
-    lungProtectors: {
-        title: "Lung Protectors",
-        introduction: "Ruby wants to learn which everyday habits help keep her lungs healthy.",
-        characterName: "Ruby",
-        characterLine: "Let's discover how we can protect our lungs!",
-        mission: "Help Ruby identify healthy habits for her respiratory system!",
-        instructions: "Choose TWO healthy habits.",
-        requiredCorrect: 2,
-
-        choices: [
-            {
-                id: "avoidSmoking",
-                label: "🚭 Avoid smoking and secondhand smoke",
-                correct: true,
-                feedbackTitle: "Great choice!",
-                feedback: "Avoiding tobacco smoke helps reduce exposure to substances that damage the lungs."
-            },
-            {
-                id: "cleanAir",
-                label: "🌿 Reduce exposure to polluted air when possible",
-                correct: true,
-                feedbackTitle: "Correct!",
-                feedback: "Cleaner air can help reduce exposure to particles and gases that irritate the respiratory system."
-            },
-            {
-                id: "startSmoking",
-                label: "🚬 Start smoking to strengthen the lungs",
-                correct: false,
-                feedbackTitle: "Try again!",
-                feedback: "Smoking harms the lungs. It does not make them stronger."
-            },
-            {
-                id: "ignoreIrritants",
-                label: "⚠️ Ignore strong fumes and irritating smoke",
-                correct: false,
-                feedbackTitle: "Not quite!",
-                feedback: "Some fumes and smoke can irritate or harm the respiratory system. Avoid exposure when possible."
-            }
-        ],
-
-        lesson: {
-            introduction: "Ruby learns that everyday choices can help protect respiratory health.",
-            characterName: "Ruby",
-            characterLine: "Wonderful! Avoiding smoke and reducing exposure to polluted air are helpful ways to protect our lungs.",
-            remember: "Avoiding smoking and secondhand smoke, limiting exposure to harmful fumes, and reducing exposure to polluted air when possible can help protect lung health."
-        },
-
-        completionHeading: "Lung Protectors Complete!",
-        completionMessage: "Ruby has discovered ways to help protect her lungs.",
-        continueLabel: "Continue to the lesson",
-        nextPassage: "LessonLearned"
-    },
-
-    freshAirFinder: {
-        title: "Fresh Air Finder",
-        introduction: "Ruby wants to understand why the quality of the air we breathe matters.",
-        characterName: "Ruby",
-        characterLine: "Is all the air around us equally healthy to breathe?",
-        mission: "Help Ruby understand why cleaner air matters!",
-        instructions: "Choose TWO correct facts about air quality.",
-        requiredCorrect: 2,
-
-        choices: [
-            {
-                id: "lessPollution",
-                label: "💧 Cleaner air can reduce exposure to harmful pollutants",
-                correct: true,
-                feedbackTitle: "Correct!",
-                feedback: "Reducing exposure to harmful air pollutants can help protect the lungs."
-            },
-            {
-                id: "avoidSmoke",
-                label: "🌬️ Avoiding smoke can help protect the respiratory system",
-                correct: true,
-                feedbackTitle: "Great choice!",
-                feedback: "Smoke can contain particles and chemicals that irritate and damage the lungs."
-            },
-            {
-                id: "pollutionHealthy",
-                label: "🌫️ Air pollution always makes breathing healthier",
-                correct: false,
-                feedbackTitle: "Try again!",
-                feedback: "Air pollution can irritate the airways and harm respiratory health."
-            },
-            {
-                id: "smokeHarmless",
-                label: "🧪 Smoke is harmless to the lungs",
-                correct: false,
-                feedbackTitle: "Not quite!",
-                feedback: "Smoke can contain harmful substances that affect the lungs and airways."
-            }
-        ],
-
-        lesson: {
-            introduction: "Ruby discovers why the quality of the air we breathe matters.",
-            characterName: "Ruby",
-            characterLine: "Great discovery! Cleaner air and less exposure to smoke can help us protect our lungs.",
-            remember: "Air pollution and smoke can contain particles and gases that harm respiratory health. Reducing exposure when possible can help protect the lungs."
-        },
-
-        completionHeading: "Fresh Air Finder Complete!",
-        completionMessage: "Ruby has learned why clean air matters for her lungs.",
-        continueLabel: "Continue to the lesson",
-        nextPassage: "LessonLearned"
-    },
-
-    breathingBasics: {
-        title: "Breathing Basics",
-        introduction: "Ruby is ready to discover how the lungs help the body get the oxygen it needs.",
-        characterName: "Ruby",
-        characterLine: "Let's find out what happens when we breathe!",
-        mission: "Help Ruby understand the basics of breathing!",
-        instructions: "Choose TWO correct facts about the lungs.",
-        requiredCorrect: 2,
-
-        choices: [
-            {
-                id: "oxygenEnters",
-                label: "🫁 Oxygen moves from the lungs into the blood",
-                correct: true,
-                feedbackTitle: "Correct!",
-                feedback: "Oxygen passes from the air in the lungs into nearby blood vessels."
-            },
-            {
-                id: "carbonDioxideLeaves",
-                label: "💨 Carbon dioxide moves from the blood into the lungs to be breathed out",
-                correct: true,
-                feedbackTitle: "Great choice!",
-                feedback: "The lungs help remove carbon dioxide from the body when we exhale."
-            },
-            {
-                id: "lungsDigest",
-                label: "🍽️ The lungs digest food",
-                correct: false,
-                feedbackTitle: "Try again!",
-                feedback: "The digestive system processes food. The lungs help the body exchange oxygen and carbon dioxide."
-            },
-            {
-                id: "oxygenMade",
-                label: "✨ The lungs create oxygen",
-                correct: false,
-                feedbackTitle: "Not quite!",
-                feedback: "The lungs take oxygen from the air and transfer it into the blood; they do not create it."
-            }
-        ],
-
-        lesson: {
-            introduction: "Ruby discovers the main job of the lungs in gas exchange.",
-            characterName: "Ruby",
-            characterLine: "Fantastic! The lungs help oxygen enter the blood and carbon dioxide leave the body.",
-            remember: "The lungs exchange gases with the blood. Oxygen moves from inhaled air into the blood, while carbon dioxide moves from the blood into the lungs to be exhaled."
-        },
-
-        completionHeading: "Breathing Basics Complete!",
-        completionMessage: "Ruby has learned how the lungs help the body exchange gases.",
+        completionHeading: "Oxygen Explorer!",
+        completionMessage: "Ruby has discovered how oxygen enters the blood.",
         continueLabel: "Continue to the lesson",
         nextPassage: "LessonLearned"
     }
+
 };
 /* twine-user-script #7: "scenarios.js" */
 // Stores all available scenarios
@@ -4021,47 +3277,63 @@ setup.scenarios.bodyScenarios = {
         }
     },
 
-    // Scenario 2: Eating chips all day
-    eatingChipsAllDay: {
-        title: "We've Been Eating Chips All Day",
-        description: "Our body has spent most of the day eating chips. Let's discover how eating healthy foods can help us stay healthy!",
-
+    // scenario 2: The Great Oxygen Rescue
+    greatOxygenRescue: {
+        title: "The Great Oxygen Rescue",
+        description: "Some body cells aren't getting enough oxygen! Let's discover how the lungs, heart and blood work together to deliver oxygen around the body!",
         activities: [
-            "heartbeatHeroes",
-            "breatheAndMove",
-            "messageMission"
+            "oxygenAdventure",
+            "redCellExpress",
+            "heartPumpMission"
         ],
 
         lesson: {
-            introduction: "",
+            introduction: "Ruby has completed the Great Oxygen Rescue! Let's discover how the body works together to deliver oxygen to every cell.",
             characterName: "Ruby",
-            characterLine: "",
-            remember: ""
+            characterLine: "We did it! I discovered that my lungs, heart, blood vessels and red blood cells all work together to deliver oxygen around my body!",
+            remember: "Oxygen enters the blood through the lungs. Red blood cells carry oxygen, while the heart pumps blood through blood vessels to deliver it to the body's cells. Every part plays an important role in keeping us alive and healthy."
         }
     },
-    // Scenario 3: The Germs Are Coming
-    germsAreComing: {
-        title: "The Germs Are Coming!",
-        description: "Ruby has been around lots of germs and wants to learn how her body protects itself. Let's discover how different body systems help keep us healthy!",
 
-        // Activities connected to this scenario
+
+    // scenario 3: The Mystery of the Missing Defenders
+    missingDefenders: {
+        title: "The Mystery of the Missing Defenders",
+        description: "Oh no! Harmful germs have entered the body! Let's discover how our immune system helps protect us and fight infections!",
         activities: [
-            "whiteCellWarriors",
-            "bloodFlowMission",
-            "brainDefenders"
+            "germDetective",
+            "brainDefenderMission",
+            "immuneTeamRescue"
         ],
 
-        // Lesson displayed after all three activities are completed
         lesson: {
-            introduction: "Ruby has completed all three activities! Let's see how her body works to protect her and keep her healthy.",
+            introduction: "Ruby has solved the Mystery of the Missing Defenders! Let's discover how the immune system helps protect the body from harmful germs.",
             characterName: "Ruby",
-            characterLine: "I learned that my body has amazing ways to protect me and keep everything working together!",
-            remember: "White blood cells help protect the body against germs and infections. Blood vessels transport blood around the body, while the brain controls and coordinates important body functions. These systems all help keep us healthy."
+            characterLine: "Mystery solved! I discovered that white blood cells are amazing defenders that help my body recognise and fight harmful germs!",
+            remember: "The immune system protects the body against harmful germs. White blood cells play important roles in recognising, attacking and responding to infections. Different immune cells work together to help keep the body healthy."
         }
     },
 
-};</script><tw-passagedata pid="1" name="Start" tags="" position="625,275" size="100,100">&lt;h1&gt;Welcome to Vascular Village!&lt;/h1&gt;&lt;p&gt;Meet Ruby, your guide on an amazing adventure inside the human body! 🔬&lt;/p&gt;&lt;p&gt;Follow Ruby as she explores the body&#39;s incredible systems, discovers how they work together, and learns the little things we can do every day to stay healthy.&lt;/p&gt;&lt;p&gt;From the heart pumping blood to the lungs bringing in oxygen, every discovery brings Ruby one step closer to understanding how our bodies keep us going!&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Are you ready to join Ruby and explore the wonders of Vascular Village?&lt;/strong&gt;&lt;/p&gt;
-&lt;p class=&quot;back-link &quot;&gt; &lt;&lt;button &quot;Let&#39;s Explore! →&quot;&gt;&gt;&lt;&lt;goto &quot;ScenarioMenu&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/p&gt;
+
+    // scenario 4: The Great Blood Vessel Repair Mission
+    vesselRepairMission: {
+        title: "The Great Blood Vessel Repair Mission",
+        description: "Oh no! A blood vessel has been damaged! Let's discover how platelets and clotting help stop bleeding and protect the body!",
+        activities: [
+            "vesselEmergency",
+            "plateletRescue",
+            "clottingChallenge"
+        ],
+
+        lesson: {
+            introduction: "Ruby has completed the Great Blood Vessel Repair Mission! Let's discover how the body works to stop bleeding and repair damaged blood vessels.",
+            characterName: "Ruby",
+            characterLine: "We saved the day! I learned that platelets rush to damaged blood vessels and help form a clot to stop the bleeding!",
+            remember: "When a blood vessel is damaged, platelets gather at the injury and help form a plug. Clotting proteins strengthen this plug by forming a clot. This process helps limit blood loss and allows the damaged area to heal."
+        }
+    }
+
+};</script><tw-passagedata pid="1" name="Start" tags="" position="625,275" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h3&gt;Welcome to Vascular Village!&lt;/h3&gt;&lt;p&gt;Meet Ruby, your guide on an amazing adventure inside the human body! 🔬&lt;/p&gt;&lt;p&gt;Follow Ruby as she explores the body&#39;s incredible systems, how they work together, and learns the little things we can do every day to stay healthy.&lt;/p&gt;&lt;p&gt;From the heart pumping blood to the lungs bringing in oxygen, every discovery brings Ruby one step closer to understanding how our bodies keep us going!&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Are you ready to join Ruby and explore the wonders of Vascular Village?&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;start-buttons&quot;&gt;&lt;div class=&quot;start-buttons&quot;&gt;&lt;&lt;button &quot;Let&#39;s Explore!&quot;&gt;&gt;&lt;&lt;goto &quot;ScenarioMenu&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;&lt;button &quot;🎓 Tutorial&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialRuby&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;&lt;/div&gt;
 
 
 /* MAIN HOME SCREEN  */
@@ -4110,7 +3382,8 @@ $(document).one(&quot;:passagedisplay&quot;, function () {
 &lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="6" name="BloodCellActivity" tags="" position="725,100" size="100,100">&lt;div id=&quot;activity-content&quot;&gt;&lt;/div&gt;
 &lt;&lt;script&gt;&gt;
 $(document).one(&quot;:passagedisplay&quot;, function () {
-    setup.renderActivity(&quot;bloodCells&quot;, &quot;redCellRescue&quot;, &quot;activity-content&quot;);
+    var activityId = State.variables.selectedActivityId || &quot;redCellRescue&quot;;
+    setup.renderActivity(&quot;bloodCells&quot;, activityId, &quot;activity-content&quot;);
 });
 &lt;&lt;/script&gt;&gt;
 
@@ -4174,17 +3447,15 @@ $(document).one(&quot;:passagedisplay&quot;, function () {
 });
 &lt;&lt;/script&gt;&gt;
 
-/* TUTORIAL */</tw-passagedata><tw-passagedata pid="15" name="TutorialRuby" tags="" position="600,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;Meet Ruby, Your Little Guide!&lt;/h2&gt;&lt;p&gt;Hi there! I&#39;m Ruby! 👋&lt;/p&gt;&lt;p&gt;I&#39;m a red blood cell, and I&#39;m part of your body&#39;s amazing circulatory system.&lt;/p&gt;&lt;p&gt;My job is to travel around your body, carrying oxygen to the places that need it. I travel through blood vessels, pass by the heart, and visit different parts of the body every day!&lt;/p&gt;&lt;p&gt;During your adventure, I&#39;ll travel alongside you as we explore different body systems and discover how they work together to keep us healthy.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Are you ready to explore the body with me?&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Let&#39;s Go! →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialScenario&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="16" name="TutorialScenario" tags="" position="725,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;Step 1: Choose a Scenario&lt;/h2&gt;&lt;p&gt;Before we begin, let&#39;s talk about scenarios!&lt;/p&gt;&lt;p&gt;A scenario is a real situation that helps us understand how the human body works and how our everyday choices can affect our health.&lt;/p&gt;&lt;p&gt;For example, we might explore what happens inside the body when someone exercises, rests, or makes healthy lifestyle choices.&lt;/p&gt;&lt;p&gt;Each scenario contains several activities. By completing these activities, you&#39;ll discover how different parts of the body work together in that situation.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Your mission is to explore the scenario and help me discover what is happening inside the body!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialBodyMap&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="17" name="TutorialBodyMap" tags="" position="850,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;Step 2: Explore Body Map&lt;/h2&gt;&lt;p&gt;Once you choose a scenario, you&#39;ll see a map of the human body.&lt;/p&gt;&lt;p&gt;Look for the highlighted circles! Each circle represents a body system involved in your chosen scenario and becomes dimmed when you complete an activity.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;🧠 Brain&lt;/li&gt;&lt;li&gt;🩸 Blood Cells&lt;/li&gt;&lt;li&gt;❤️ Heart&lt;/li&gt;&lt;li&gt;🩸 Blood Vessels&lt;/li&gt;&lt;li&gt;🫁 Lungs&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;&lt;strong&gt;Explore each highlighted area to uncover everything happening inside the body!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialActivity&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="18" name="TutorialActivity" tags="" position="975,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;Step 3: Complete an Activity&lt;/h2&gt;&lt;p&gt;When you select a body system, you&#39;ll open an activity that helps you learn more about what&#39;s happening inside the body.&lt;/p&gt;&lt;p&gt;Read the instructions carefully and choose the correct healthy actions or answers.&lt;/p&gt;&lt;p&gt;After making a choice, Ruby will give you feedback to explain why your answer is correct and what it means for the body.&lt;/p&gt;&lt;p&gt;Keep choosing the correct answers until you&#39;ve completed all the required choices for that activity.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Remember, every correct choice brings you one step closer to completing your mission!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialLessons&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="19" name="TutorialLessons" tags="" position="1100,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;Step 4: Discover What You&#39;ve Learned!&lt;/h2&gt;&lt;p&gt;Every completed activity unlocks a special lesson that explains the important information you&#39;ve discovered.&lt;/p&gt;&lt;p&gt;When every activity is completed, you unlock the scenario lesson, which brings everything together for a completed scenario.&lt;/p&gt;&lt;p&gt;Remember, you can return to unfinished scenarios and continue where you left off.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Every activity is a new discovery, and every completed scenario brings you closer to understanding the amazing human body!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;🏠 Start Exploring!&quot;&gt;&gt;&lt;&lt;goto &quot;ScenarioMenu&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+/* TUTORIAL */</tw-passagedata><tw-passagedata pid="15" name="TutorialRuby" tags="" position="600,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;Meet Ruby, Your Little Guide!&lt;/h2&gt;&lt;p&gt;I&#39;m a red blood cell, and I&#39;m part of your body&#39;s amazing circulatory system.&lt;/p&gt;&lt;p&gt;My job is to travel around your body, carrying oxygen to the places that need it. I travel through blood vessels, pass by the heart, and visit different parts of the body every day!&lt;/p&gt;&lt;p&gt;Together, we&#39;ll explore different body systems and discover how they work together to keep us healthy.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Are you ready to explore the body with me?&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Let&#39;s Go! →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialScenario&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="16" name="TutorialScenario" tags="" position="725,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;Step 1: Choose a Scenario&lt;/h2&gt;&lt;p&gt;A scenario is a real situation that helps us understand how the human body works and how our everyday choices can affect our health.&lt;/p&gt;&lt;p&gt;Each scenario contains several activities. By completing these activities, you&#39;ll discover how different parts of the body work together in each scenario.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Your mission is to explore the scenario and help me discover what is happening inside the body!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialBodyMap&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="17" name="TutorialBodyMap" tags="" position="850,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;Step 2: Explore Body Map&lt;/h2&gt;&lt;p&gt;Once you choose a scenario, you&#39;ll see a map of the human body.&lt;/p&gt;&lt;p&gt;Each circle represents a body system in your scenario and dims when its activity is complete.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;🧠 Brain&lt;/li&gt;&lt;li&gt;🩸 Blood Cells&lt;/li&gt;&lt;li&gt;❤️ Heart&lt;/li&gt;&lt;li&gt;🩸 Blood Vessels&lt;/li&gt;&lt;li&gt;🫁 Lungs&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;&lt;strong&gt;Explore each highlighted area to uncover everything happening inside the body!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialActivity&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="18" name="TutorialActivity" tags="" position="975,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;Step 3: Complete an Activity&lt;/h2&gt;&lt;p&gt;Select a body system to open an activity and discover what happens inside your body. Read the instructions carefully and choose the healthy actions or correct answers.&lt;/p&gt;&lt;p&gt;After each choice, Ruby will give you feedback explaining why your answer is correct and how it helps the body. Keep choosing the correct answers until you complete all the required choices for the activity!&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Remember, every correct choice brings you one step closer to completing your mission!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialLessons&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="19" name="TutorialLessons" tags="" position="1100,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;Step 4: Discover What You&#39;ve Learned!&lt;/h2&gt;&lt;p&gt;Every completed activity unlocks a special lesson that explains the important information you&#39;ve discovered.&lt;/p&gt;&lt;p&gt;When every activity is completed, you unlock the scenario lesson, which brings everything together for a completed scenario.&lt;/p&gt;&lt;p&gt;Remember, you can return to unfinished scenarios anytime you&#39;d like&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Every activity is a new discovery, and every completed scenario brings you closer to understanding the amazing human body!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;🏠 Start Exploring!&quot;&gt;&gt;&lt;&lt;goto &quot;ScenarioMenu&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
 &lt;/div&gt;
 
 
-/* NEW SCENARIO MENU */</tw-passagedata><tw-passagedata pid="20" name="ScenarioMenu" tags="" position="1225,225" size="100,100">&lt;div class=&quot;home-screen&quot;&gt;&lt;h1&gt;Choose Your Scenario&lt;/h1&gt;&lt;p&gt;Select a situation to begin your adventure!&lt;/p&gt;&lt;div id=&quot;scenario-menu&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;&lt;script&gt;&gt;$(document).one(&quot;:passagedisplay&quot;, function () {setup.renderScenarioMenu(&quot;scenario-menu&quot;);});&lt;&lt;/script&gt;&gt;&lt;div class=&quot;tutorial-home-button&quot;&gt;&lt;&lt;button &quot;🎓 Take the Tutorial&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialRuby&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;</tw-passagedata><tw-passagedata pid="21" name="ScenarioBodyMap" tags="" position="100,350" size="100,100">&lt;div class=&quot;home-screen&quot;&gt;
-    &lt;div id=&quot;scenario-body-map&quot;&gt;&lt;/div&gt;&lt;p class=&quot;home-hint&quot;&gt;The highlighted body systems are involved in your selected scenario!&lt;/p&gt;
-&lt;/div&gt;
+/* NEW SCENARIO MENU */</tw-passagedata><tw-passagedata pid="20" name="ScenarioMenu" tags="" position="1225,225" size="100,100">&lt;div class=&quot;home-screen&quot;&gt;&lt;h1&gt;Choose Your Scenario&lt;/h1&gt;&lt;p&gt;Select a scenario to begin your adventure!&lt;/p&gt;&lt;div id=&quot;scenario-menu&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;&lt;script&gt;&gt;$(document).one(&quot;:passagedisplay&quot;, function () {setup.renderScenarioMenu(&quot;scenario-menu&quot;);});&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="21" name="ScenarioBodyMap" tags="" position="100,350" size="100,100">&lt;div class=&quot;home-screen&quot;&gt;&lt;div id=&quot;scenario-body-map&quot;&gt;&lt;/div&gt;&lt;p class=&quot;home-hint&quot;&gt;The highlighted body systems are involved in your selected scenario!&lt;/p&gt;&lt;/div&gt;
 
 &lt;&lt;script&gt;&gt;
 $(document).one(&quot;:passagedisplay&quot;, function () {

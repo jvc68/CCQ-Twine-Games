@@ -204,10 +204,10 @@
             activityId
         );
 
-        // find HTML container for activitys interface to be inserted
+        // Find HTML container for activity interface
         var container = document.getElementById(containerId);
 
-        // check if activity and container exist
+        // Check if activity and container exist
         if (!activity || !container) {
             console.error(
                 "Could not render activity:",
@@ -216,75 +216,65 @@
             return;
         }
 
-        // create activitys progress key for retreieving players progress
+        // Create activity progress key
         var activityKey = category + "." + activityId;
 
         // Remember which activity's lesson should be displayed
         State.variables.currentLessonActivity = activityKey;
 
-        // retrieve players progress
+        // Retrieve player's progress
         var progress = setup.getActivityProgress(activityKey);
 
-        // clear activity container
+        // Clear activity container
         container.replaceChildren();
 
-        // display intro with p HTML
+        // Display introduction
         var intro = document.createElement("h4");
         intro.textContent = activity.introduction;
         container.appendChild(intro);
 
-        // display Rubys dialogue with p HTML
-        var character = document.createElement("p");
-        var characterName = document.createElement("strong");
-
-        characterName.textContent = activity.characterName || "";
-        character.appendChild(characterName);
-
-        if (activity.characterLine) {
-            character.appendChild(
-                document.createTextNode(" " + activity.characterLine)
-            );
-        }
-
-        container.appendChild(character);
-
-        // display mission with h3 HTML
+        // Display mission
         var mission = document.createElement("h4");
         mission.textContent = activity.mission;
         container.appendChild(mission);
 
-        // display instructions with p HTML
+        // Display instructions
         var instructions = document.createElement("p");
         instructions.textContent = activity.instructions;
         container.appendChild(instructions);
 
-        // create answer-buttons container
+        // Create answer-buttons container
         var buttons = document.createElement("div");
         buttons.className = "answer-buttons";
-        // created using CSS .answer-buttons button {}
 
-        // create progress container to display progress display
+        // Create progress container
         var progressContainer = document.createElement("div");
         progressContainer.id = "activity-progress";
 
-        // create a button for every choice by going through dictioonary
-        /*
-        choices: [
-        {
-            id: "stretch",
-            label: "Stand up and stretch",
-            correct: true
+        // Create a copy of the choices so the original dictionary stays unchanged
+        var shuffledChoices = activity.choices.slice();
+
+        // Randomly shuffle the choices using the Fisher-Yates shuffle
+        for (var i = shuffledChoices.length - 1; i > 0; i--) {
+
+            var j = Math.floor(Math.random() * (i + 1));
+
+            var temp = shuffledChoices[i];
+            shuffledChoices[i] = shuffledChoices[j];
+            shuffledChoices[j] = temp;
         }
-        */
-        activity.choices.forEach(function (choice)
-        {
-            // create button HTML
+
+        // Create a button for every randomly ordered choice
+        shuffledChoices.forEach(function (choice) {
+
+            // Create HTML button
             var button = document.createElement("button");
             button.type = "button";
-            // set visible answer from dictionary
+
+            // Set visible answer from dictionary
             button.textContent = choice.label;
 
-            // attatch click handler, call checkAnswer to verify answer clicked
+            // Check the answer when clicked
             button.addEventListener("click", function () {
                 setup.checkAnswer(
                     activity,
@@ -294,22 +284,23 @@
                 );
             });
 
-            // add button to container
+            // Add button to the answer-buttons container
             buttons.appendChild(button);
         });
 
-        // add interface elements to the page
+        // Add interface elements to the page
         container.appendChild(buttons);
         container.appendChild(document.createElement("hr"));
         container.appendChild(progressContainer);
 
-        // display current progress
+        // Display current progress
         setup.renderProgress(
             activity,
             progress,
             progressContainer
         );
-                // Create a button to return to the scenario body map
+
+        // Create a button to return to the scenario body map
         if (State.variables.selectedScenarioId) {
 
             var back = document.createElement("p");
@@ -727,197 +718,556 @@
     };
 
     // Generates the menu for scenario selection
+    // setup.renderScenarioMenu = function (containerId) {
+
+    //     // Retrieve the scenario dictionary
+    //     var scenarios = setup.scenarios &&
+    //         setup.scenarios.bodyScenarios;
+
+    //     // Find the HTML container where the menu will appear
+    //     var container = document.getElementById(containerId);
+
+    //     if (!scenarios || !container) {
+    //         console.error("Could not render scenario menu.");
+    //         return;
+    //     }
+
+    //     // Access SugarCube variables
+    //     var variables = State.variables;
+
+    //     // Set the default selected tab
+    //     if (variables.scenarioTab === undefined) {
+    //         variables.scenarioTab = "new";
+    //     }
+
+    //     var tab = variables.scenarioTab;
+
+    //     // Separate scenarios into New and Completed lists
+    //     var newScenarios = [];
+    //     var completedScenarios = [];
+
+    //     Object.keys(scenarios).forEach(function (scenarioId) {
+
+    //         var scenario = scenarios[scenarioId];
+
+    //         // Check whether all activities in this scenario are completed
+    //         var isCompleted =
+    //             setup.checkScenarioCompletion(scenarioId) ||
+    //             variables.replayingScenarioId === scenarioId;
+
+    //         if (isCompleted) {
+    //             completedScenarios.push({
+    //                 id: scenarioId,
+    //                 data: scenario
+    //             });
+    //         }
+    //         else {
+    //             newScenarios.push({
+    //                 id: scenarioId,
+    //                 data: scenario
+    //             });
+    //         }
+    //     });
+
+    //     // Choose the list for the selected tab
+    //     var visibleScenarios =
+    //         tab === "completed" ? completedScenarios : newScenarios;
+        
+    //     // Calculate the number of pages (three scenarios per page)
+    //     var scenariosPerPage = 3;
+    //     var pageCount = Math.max(
+    //         1,
+    //         Math.ceil(visibleScenarios.length / scenariosPerPage)
+    //     );
+
+    //     // Set the default page
+    //     if (variables.scenarioPage === undefined) {
+    //         variables.scenarioPage = 1;
+    //     }
+
+    //     var page = variables.scenarioPage;
+
+    //     // Keep the selected page within the available range
+    //     if (page < 1) {
+    //         page = 1;
+    //     }
+
+    //     if (page > pageCount) {
+    //         page = pageCount;
+    //     }
+
+    //     variables.scenarioPage = page;
+
+    //     // Select the scenarios to display on this page
+    //     var start = (page - 1) * scenariosPerPage;
+
+    //     var scenariosToDisplay = visibleScenarios.slice(
+    //         start,
+    //         start + scenariosPerPage
+    //     );
+
+    //     // Clear the existing menu
+    //     container.replaceChildren();
+
+    //     // Set menu CSS classes
+    //     var wrapper = container;
+    //     wrapper.className = "activity-page scenario-menu";
+
+    //     // Create New and Completed tabs
+    //     var tabs = document.createElement("div");
+    //     tabs.className = "activity-tabs";
+
+    //     ["completed", "new"].forEach(function (tabName) {
+
+    //         var link = document.createElement("a");
+    //         link.href = "#";
+
+    //         link.textContent =
+    //             tabName === "completed" ? "Completed" : "New";
+
+    //         // Highlight the currently selected tab
+    //         if (tabName === tab) {
+    //             link.classList.add("active");
+    //         }
+
+    //         link.addEventListener("click", function (event) {
+    //             event.preventDefault();
+
+    //             variables.scenarioTab = tabName;
+    //             variables.scenarioPage = 1;
+
+    //             // Return to the scenario menu to refresh the cards
+    //             Engine.play("ScenarioMenu");
+    //         });
+
+    //         tabs.appendChild(link);
+    //     });
+
+    //     wrapper.appendChild(tabs);
+
+    //     // Create the scenario card list
+    //     var list = document.createElement("div");
+    //     list.className = "activity-list";
+
+    //     // Create a card for each scenario in the selected tab
+    //     scenariosToDisplay.forEach(function (item) {
+
+    //         var scenarioId = item.id;
+    //         var scenario = item.data;
+
+    //         // Create the scenario card
+    //         var card = document.createElement("div");
+    //         card.className = "activity-card";
+
+    //         var isCompleted =
+    //             setup.checkScenarioCompletion(scenarioId) ||
+    //             variables.replayingScenarioId === scenarioId;
+
+    //         // Style completed scenario cards
+    //         if (isCompleted) {
+    //             card.classList.add("completed");
+    //         }
+
+    //         // Add the scenario title
+    //         var title = document.createElement("h3");
+    //         title.textContent = scenario.title;
+    //         card.appendChild(title);
+
+    //         // Add the scenario description
+    //         var description = document.createElement("p");
+    //         description.textContent = scenario.description;
+    //         card.appendChild(description);
+
+    //         // Display completion status
+    //         if (isCompleted) {
+    //             var completedLabel = document.createElement("span");
+    //             completedLabel.className = "completed-label";
+    //             completedLabel.textContent = "✓ Completed  ";
+    //             card.appendChild(completedLabel);
+    //         }
+
+    //         // Create the Choose or Replay Scenario link
+    //         var choose = document.createElement("a");
+    //         choose.href = "#";
+
+    //         choose.textContent = isCompleted
+    //             ? "↻ Replay Scenario"
+    //             : "Choose Scenario →";
+
+    //         choose.addEventListener("click", function (event) {
+    //             event.preventDefault();
+
+    //             // Remember which scenario the player selected
+    //             variables.selectedScenarioId = scenarioId;
+
+    //             // Check whether this scenario is already being replayed
+    //             var replayAlreadyInProgress =
+    //                 variables.replayingScenarioId === scenarioId;
+
+    //             // Only reset progress when STARTING a new replay
+    //             if (isCompleted && !replayAlreadyInProgress) {
+
+    //                 // Remember that this scenario is being replayed
+    //                 variables.replayingScenarioId = scenarioId;
+
+    //                 // Reset all activities belonging to this scenario
+    //                 scenario.activities.forEach(function (activityId) {
+
+    //                     var result = setup.getScenarioActivity(activityId);
+
+    //                     if (!result) {
+    //                         return;
+    //                     }
+
+    //                     var activityKey =
+    //                         result.category + "." + activityId;
+
+    //                     if (variables.activityProgress &&
+    //                         variables.activityProgress[activityKey]) {
+
+    //                         variables.activityProgress[activityKey].completed = false;
+    //                         variables.activityProgress[activityKey].correctChoices = [];
+    //                     }
+    //                 });
+    //             }
+
+    //             // Go to the scenario body map passage
+    //             Engine.play("ScenarioBodyMap");
+    //         });
+
+    //         card.appendChild(choose);
+
+    //         // Add the card to the scenario list
+    //         list.appendChild(card);
+    //     });
+
+    //     wrapper.appendChild(list);
+
+    //     // Create pagination controls
+    //     var pagination = document.createElement("div");
+    //     pagination.className = "activity-pagination";
+
+    //     // Generate page buttons
+    //     for (var pageNumber = 1; pageNumber <= pageCount; pageNumber++) {
+    //         (function (number) {
+
+    //             var link = document.createElement("a");
+    //             link.href = "#";
+    //             link.textContent = String(number);
+
+    //             // Highlight the current page
+    //             if (number === page) {
+    //                 link.classList.add("active");
+    //             }
+
+    //             link.addEventListener("click", function (event) {
+    //                 event.preventDefault();
+
+    //                 variables.scenarioPage = number;
+    //                 Engine.play("ScenarioMenu");
+    //             });
+
+    //             pagination.appendChild(link);
+
+    //         })(pageNumber);
+    //     }
+
+    //     wrapper.appendChild(pagination);
+    // };    
     setup.renderScenarioMenu = function (containerId) {
 
-        // Retrieve the scenario dictionary
-        var scenarios = setup.scenarios &&
-            setup.scenarios.bodyScenarios;
-
-        // Find the HTML container where the menu will appear
         var container = document.getElementById(containerId);
 
-        if (!scenarios || !container) {
-            console.error("Could not render scenario menu.");
+        if (!container) {
+            console.error("Could not find scenario menu container");
             return;
         }
 
-        // Access SugarCube variables
-        var variables = State.variables;
-
-        // Set the default selected tab
-        if (variables.scenarioTab === undefined) {
-            variables.scenarioTab = "new";
-        }
-
-        var tab = variables.scenarioTab;
-
-        // Separate scenarios into New and Completed lists
-        var newScenarios = [];
-        var completedScenarios = [];
-
-        Object.keys(scenarios).forEach(function (scenarioId) {
-
-            var scenario = scenarios[scenarioId];
-
-            // Check whether all activities in this scenario are completed
-            var isCompleted =
-                setup.checkScenarioCompletion(scenarioId) ||
-                variables.replayingScenarioId === scenarioId;
-
-            if (isCompleted) {
-                completedScenarios.push({
-                    id: scenarioId,
-                    data: scenario
-                });
-            }
-            else {
-                newScenarios.push({
-                    id: scenarioId,
-                    data: scenario
-                });
-            }
-        });
-
-        // Choose the list for the selected tab
-        var visibleScenarios =
-            tab === "completed" ? completedScenarios : newScenarios;
-
-        // Clear the existing menu
         container.replaceChildren();
 
-        // Set menu CSS classes
-        var wrapper = container;
-        wrapper.className = "activity-page scenario-menu";
+        var variables = State.variables;
 
-        // Create New and Completed tabs
+        // Get available scenarios
+        var scenarios = setup.scenarios.bodyScenarios;
+
+        // Number of scenarios displayed per page
+        var scenariosPerPage = 3;
+
+        // Current tab and page
+        var currentTab = "new";
+        var currentPage = 0;
+
+        // Create main wrapper
+        var wrapper = document.createElement("div");
+        wrapper.className = "scenario-menu";
+
+        // Create tabs
         var tabs = document.createElement("div");
         tabs.className = "activity-tabs";
 
-        ["completed", "new"].forEach(function (tabName) {
+        var completedTab = document.createElement("a");
+        completedTab.textContent = "Completed";
 
-            var link = document.createElement("a");
-            link.href = "#";
+        var newTab = document.createElement("a");
+        newTab.textContent = "New";
 
-            link.textContent =
-                tabName === "completed" ? "Completed" : "New";
+        tabs.appendChild(completedTab);
+        tabs.appendChild(newTab);
 
-            // Highlight the currently selected tab
-            if (tabName === tab) {
-                link.classList.add("active");
-            }
-
-            link.addEventListener("click", function (event) {
-                event.preventDefault();
-
-                variables.scenarioTab = tabName;
-
-                // Return to the scenario menu to refresh the cards
-                Engine.play("ScenarioMenu");
-            });
-
-            tabs.appendChild(link);
-        });
-
-        wrapper.appendChild(tabs);
-
-        // Create the scenario card list
+        // Create scenario list
         var list = document.createElement("div");
         list.className = "activity-list";
 
-        // Create a card for each scenario in the selected tab
-        visibleScenarios.forEach(function (item) {
+        // Create pagination container
+        var pagination = document.createElement("div");
+        pagination.className = "activity-pagination";
 
-            var scenarioId = item.id;
-            var scenario = item.data;
+        wrapper.appendChild(tabs);
+        wrapper.appendChild(list);
+        wrapper.appendChild(pagination);
 
-            // Create the scenario card
-            var card = document.createElement("div");
-            card.className = "activity-card";
+        container.appendChild(wrapper);
 
-            var isCompleted =
-                setup.checkScenarioCompletion(scenarioId) ||
-                variables.replayingScenarioId === scenarioId;
+        // Render the scenario cards
+        function renderScenarios() {
 
-            // Style completed scenario cards
-            if (isCompleted) {
-                card.classList.add("completed");
-            }
+            list.replaceChildren();
+            pagination.replaceChildren();
 
-            // Add the scenario title
-            var title = document.createElement("h3");
-            title.textContent = scenario.title;
-            card.appendChild(title);
+            // Update active tab styling
+            completedTab.classList.toggle(
+                "active",
+                currentTab === "completed"
+            );
 
-            // Add the scenario description
-            var description = document.createElement("p");
-            description.textContent = scenario.description;
-            card.appendChild(description);
+            newTab.classList.toggle(
+                "active",
+                currentTab === "new"
+            );
 
-            // Display completion status
-            if (isCompleted) {
-                var completedLabel = document.createElement("span");
-                completedLabel.className = "completed-label";
-                completedLabel.textContent = "✓ Completed  ";
-                card.appendChild(completedLabel);
-            }
+            // Separate new and completed scenarios
+            var scenarioIds = Object.keys(scenarios).filter(function (scenarioId) {
 
-            // Create the Choose or Replay Scenario link
-            var choose = document.createElement("a");
-            choose.href = "#";
+                var isCompleted = setup.checkScenarioCompletion(scenarioId);
 
-            choose.textContent = isCompleted
-                ? "↻ Replay Scenario"
-                : "Choose Scenario →";
+                return currentTab === "completed"
+                    ? isCompleted
+                    : !isCompleted;
 
-            choose.addEventListener("click", function (event) {
-                event.preventDefault();
-
-                // Remember which scenario the player selected
-                variables.selectedScenarioId = scenarioId;
-
-                // Check whether this scenario is already being replayed
-                var replayAlreadyInProgress =
-                    variables.replayingScenarioId === scenarioId;
-
-                // Only reset progress when STARTING a new replay
-                if (isCompleted && !replayAlreadyInProgress) {
-
-                    // Remember that this scenario is being replayed
-                    variables.replayingScenarioId = scenarioId;
-
-                    // Reset all activities belonging to this scenario
-                    scenario.activities.forEach(function (activityId) {
-
-                        var result = setup.getScenarioActivity(activityId);
-
-                        if (!result) {
-                            return;
-                        }
-
-                        var activityKey =
-                            result.category + "." + activityId;
-
-                        if (variables.activityProgress &&
-                            variables.activityProgress[activityKey]) {
-
-                            variables.activityProgress[activityKey].completed = false;
-                            variables.activityProgress[activityKey].correctChoices = [];
-                        }
-                    });
-                }
-
-                // Go to the scenario body map passage
-                Engine.play("ScenarioBodyMap");
             });
 
-            card.appendChild(choose);
+            // Calculate pagination
+            var totalPages = Math.ceil(
+                scenarioIds.length / scenariosPerPage
+            );
 
-            // Add the card to the scenario list
-            list.appendChild(card);
+            if (currentPage >= totalPages) {
+                currentPage = Math.max(0, totalPages - 1);
+            }
+
+            var start = currentPage * scenariosPerPage;
+
+            var end = start + scenariosPerPage;
+
+            var pageScenarios = scenarioIds.slice(start, end);
+
+            // Display message if no scenarios exist in this tab
+            if (pageScenarios.length === 0) {
+
+                var emptyMessage = document.createElement("p");
+
+                emptyMessage.textContent =
+                    currentTab === "completed"
+                        ? "You haven't completed any scenarios yet!"
+                        : "You've completed all available scenarios!";
+
+                list.appendChild(emptyMessage);
+
+            }
+
+            // Create a card for each scenario
+            pageScenarios.forEach(function (scenarioId) {
+
+                var scenario = scenarios[scenarioId];
+
+                var isCompleted = setup.checkScenarioCompletion(scenarioId);
+
+                // Create scenario card
+                var card = document.createElement("div");
+                card.className = "activity-card";
+
+                // Scenario title
+                var title = document.createElement("h3");
+                title.textContent = scenario.title;
+                card.appendChild(title);
+
+                // Scenario description
+                var description = document.createElement("p");
+                description.textContent = scenario.description;
+                card.appendChild(description);
+
+                // Scenario video
+                if (scenario.video) {
+
+                    var video = document.createElement("video");
+
+                    video.src = scenario.video;
+                    video.controls = true;
+                    video.playsInline = true;
+                    video.preload = "metadata";
+                    video.className = "scenario-video";
+
+                    card.appendChild(video);
+                }
+
+                // Completed label
+                if (isCompleted) {
+
+                    var completedLabel = document.createElement("p");
+
+                    completedLabel.textContent = "✓ Completed!";
+                    completedLabel.className = "completed-label";
+
+                    card.appendChild(completedLabel);
+                }
+
+                // Choose or replay button
+                var chooseButton = document.createElement("button");
+
+                chooseButton.type = "button";
+
+                chooseButton.className = "tutorial-button";
+
+                chooseButton.textContent = isCompleted
+                    ? "Replay Scenario"
+                    : "Choose Scenario";
+
+                chooseButton.addEventListener("click", function () {
+
+                    // Check whether this scenario is already being replayed
+                    var replayAlreadyInProgress =
+                        variables.replayingScenarioId === scenarioId;
+
+                    // Reset activities when starting a replay
+                    if (isCompleted && !replayAlreadyInProgress) {
+
+                        variables.replayingScenarioId = scenarioId;
+
+                        scenario.activities.forEach(function (activityId) {
+
+                            var result = setup.getScenarioActivity(activityId);
+
+                            if (!result) {
+                                return;
+                            }
+
+                            var activityKey =
+                                result.category + "." + activityId;
+
+                            if (
+                                variables.activityProgress &&
+                                variables.activityProgress[activityKey]
+                            ) {
+
+                                variables.activityProgress[activityKey].completed = false;
+
+                                variables.activityProgress[activityKey].correctChoices = [];
+                            }
+
+                        });
+
+                    }
+
+                    // Remember selected scenario
+                    variables.selectedScenarioId = scenarioId;
+
+                    // Open scenario body map
+                    Engine.play("ScenarioBodyMap");
+
+                });
+
+                card.appendChild(chooseButton);
+
+                list.appendChild(card);
+
+            });
+
+            // Create pagination controls
+            if (totalPages > 1) {
+
+                var previousButton = document.createElement("button");
+
+                previousButton.type = "button";
+                previousButton.textContent = "← Previous";
+                previousButton.className = "tutorial-button";
+
+                previousButton.disabled = currentPage === 0;
+
+                previousButton.addEventListener("click", function () {
+
+                    if (currentPage > 0) {
+                        currentPage--;
+                        renderScenarios();
+                    }
+
+                });
+
+                pagination.appendChild(previousButton);
+
+                var pageLabel = document.createElement("span");
+
+                pageLabel.textContent =
+                    " Page " + (currentPage + 1) + " of " + totalPages + " ";
+
+                pagination.appendChild(pageLabel);
+
+                var nextButton = document.createElement("button");
+
+                nextButton.type = "button";
+                nextButton.textContent = "Next →";
+                nextButton.className = "tutorial-button";
+
+                nextButton.disabled = currentPage >= totalPages - 1;
+
+                nextButton.addEventListener("click", function () {
+
+                    if (currentPage < totalPages - 1) {
+                        currentPage++;
+                        renderScenarios();
+                    }
+
+                });
+
+                pagination.appendChild(nextButton);
+
+            }
+
+        }
+
+        // Switch to completed scenarios
+        completedTab.addEventListener("click", function () {
+
+            currentTab = "completed";
+            currentPage = 0;
+
+            renderScenarios();
+
         });
 
-        wrapper.appendChild(list);
-    };       
+        // Switch to new scenarios
+        newTab.addEventListener("click", function () {
+
+            currentTab = "new";
+            currentPage = 0;
+
+            renderScenarios();
+
+        });
+
+        // Initial display
+        renderScenarios();
+
+    };   
 
     
     // Generates the body map for the selected scenario
@@ -1237,7 +1587,7 @@
 
         // Display the scenario heading
         var heading = document.createElement("h1");
-        heading.textContent = "Scenario Lesson Learned!";
+        heading.textContent = "Lesson Learned!";
         container.appendChild(heading);
 
         // Display the introduction
