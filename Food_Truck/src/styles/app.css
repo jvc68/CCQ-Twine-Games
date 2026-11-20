@@ -25,7 +25,7 @@ body {
   background-color: #0d1b2a;
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)),
-    url("../../img/diet/FoodTruckBG.jpeg"),
+    /* url("../../img/diet/FoodTruckBG.jpeg"), */
     linear-gradient(180deg, #440154 0%, #3b528b 50%, #21918c 100%);
   background-position: center;
   background-repeat: no-repeat;
@@ -288,7 +288,7 @@ body {
   background-color: #bde8f2;
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.12)),
-    url("../../img/diet/ParkBG.jpeg"),
+    /* url("../../img/diet/ParkBG.jpeg"), */
     linear-gradient(#bde8f2 0 72%, #e8cfa2 72%);
   background-position: center;
   background-repeat: no-repeat;
@@ -1010,8 +1010,8 @@ body {
   border-radius: 14px;
   background-color: rgba(0, 0, 0, 0.3);
   background-image:
-    linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)),
-    url("../../img/diet/CuttingBoard.jpeg");
+    linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25));
+  /* url("../../img/diet/CuttingBoard.jpeg"); */
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
