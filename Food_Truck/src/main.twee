@@ -1,3 +1,8 @@
+:: PhoneBackground [widget]
+<<widget "phoneBackground">>\
+<img class="phone-background" src="../../img/diet/FoodTruckBG.webp" width="760" height="421" alt="" decoding="async">\
+<</widget>>
+
 :: Start
 <div class="phone start-screen">\
     <h1>Food Truck</h1>\
@@ -12,6 +17,7 @@
 
 :: ChooseMenu
 <div class="phone">\
+    <<phoneBackground>>\
     <div class="HUD">\
         <span><strong>Day:</strong> $currentDay</span>\
     </div>\
@@ -37,6 +43,7 @@
 
 :: TakeOrderScreen
 <div class="phone">\
+    <<phoneBackground>>\
     <div class="HUD">\
         <span><strong>Day:</strong> $currentDay</span> |\
         <span><strong>Orders Left:</strong> $numOrders</span> |\
@@ -96,6 +103,7 @@
 
 :: DayTally
 <div class="phone day-tally-screen">\
+    <<phoneBackground>>\
     <section class="day-tally-box">\
         <h2>Customer Satisfaction</h2>\
         <p class="tally-stars" aria-label="Customer satisfaction: $satisfactionScore out of 5 stars"><<print FoodTruck.starRating($satisfactionScore)>></p>\
@@ -114,6 +122,7 @@
 
 :: AssemblyStation
 <div class="phone">\
+    <<phoneBackground>>\
     <div class="HUD">\
         <span><strong>Day:</strong> $currentDay</span> |\
         <span><strong>Orders Left:</strong> $numOrders</span> |\
@@ -160,6 +169,7 @@
 
 :: PrepareIngredient
 <div class="phone">\
+    <<phoneBackground>>\
     <div class="HUD">\
         <span><strong>Day:</strong> $currentDay</span> |\
         <span><strong>Orders Left:</strong> $numOrders</span> |\
@@ -209,6 +219,7 @@
 :: CookingMinigame
 <<run FoodTruck.updateCookingMarkerSpeed()>>\
 <div class="phone">\
+    <<phoneBackground>>\
     <div class="HUD">\
         <span><strong>Day:</strong> $currentDay</span> |\
         <span><strong>Orders Left:</strong> $numOrders</span> |\
@@ -252,6 +263,7 @@
 
 :: CookingResult
 <div class="phone">\
+    <<phoneBackground>>\
     <div class="HUD">\
         <span><strong>Day:</strong> $currentDay</span> |\
         <span><strong>Orders Left:</strong> $numOrders</span> |\

@@ -1448,23 +1448,6 @@ window.FoodTruck = {
 
 window.jQuery(document).on(":passagedisplay", function () {
     var state = SugarCube.State.variables;
-    var story = document.getElementById("story");
-    var truckBackground = document.getElementById("food-truck-background");
-    var isGamePassage = SugarCube.State.passage !== "Start";
-
-    story.classList.toggle("food-truck-active", isGamePassage);
-    if (!truckBackground) {
-        truckBackground = document.createElement("img");
-        truckBackground.id = "food-truck-background";
-        truckBackground.className = "food-truck-background";
-        truckBackground.src = "../../img/diet/FoodTruckBG.webp";
-        truckBackground.width = 760;
-        truckBackground.height = 421;
-        truckBackground.alt = "";
-        truckBackground.decoding = "async";
-        story.insertBefore(truckBackground, story.firstChild);
-    }
-    truckBackground.hidden = !isGamePassage;
 
     // resume ticking if tickets exist but the timer isn't running (e.g. after loading a save)
     if (state.tickets && state.tickets.length && !orderTimerInterval) {
