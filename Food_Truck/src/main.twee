@@ -2,7 +2,7 @@
 <div class="phone start-screen">\
     <h1>Food Truck</h1>\
     <p>Serve customers, prepare delicious meals, and grow your food truck.</p>\
-    <!-- <img class="start-icon" src="../../img/diet/FoodTruckICON.jpeg" alt="Food truck icon"> -->\
+    <img class="start-icon" src="../../img/diet/FoodTruckICON.webp" width="208" height="208" alt="Food truck icon" decoding="async">\
     <div class="action-button start-actions">\
         <<button "Start Day" "ChooseMenu">><<run FoodTruck.endTutorial()>><<run FoodTruck.beginMenuSelection()>><</button>>\
         <<button "Play Tutorial" "TakeOrderScreen">><<run FoodTruck.startTutorial()>><</button>>\
@@ -45,6 +45,7 @@
     <hr>\
     <section class="customer-panel">\
         <div class="customer-window">\
+            <img class="customer-background" src="../../img/diet/ParkBG.webp" width="660" height="369" alt="" decoding="async">\
             <div class="customer-face" role="img" aria-label="Placeholder customer face">🙂</div>\
         </div>\
     </section>\
@@ -185,7 +186,14 @@
                 <strong><<if $pendingMethod.type === "healthy">>Healthy choice!<<else>>Unhealthy choice<</if>></strong>\
                 <p>$pendingMethod.reason</p>\
             </div>\
-            <div id="prep-action" class="prep-action"></div>\
+            <div id="prep-action" class="prep-action">\
+                <p class="prep-action-label"></p>\
+                <button type="button" class="prep-action-pad">\
+                    <img class="prep-action-background" src="../../img/diet/CuttingBoard.webp" width="660" height="434" alt="" decoding="async">\
+                    <span class="prep-action-icon"></span>\
+                </button>\
+                <div class="prep-action-progress"><div class="prep-action-fill"></div></div>\
+            </div>\
             <div class="action-button">\
                 <button type="button" id="prep-continue" disabled>Continue to Cooking</button>\
             </div>\

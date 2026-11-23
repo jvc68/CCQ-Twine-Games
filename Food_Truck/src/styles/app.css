@@ -14,23 +14,43 @@ body {
 }
 
 #story {
+  position: relative;
   margin: 0 auto;
   max-width: 380px;
   padding: 0;
 }
 
 #story.food-truck-active {
+  background-color: #440154;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+}
+
+.food-truck-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 660px;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+  user-select: none;
+}
+
+#story.food-truck-active {
   overflow: hidden;
   border-radius: 32px;
-  background-color: #0d1b2a;
-  background-image:
-    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)),
-    /* url("../../img/diet/FoodTruckBG.jpeg"), */
-    linear-gradient(180deg, #440154 0%, #3b528b 50%, #21918c 100%);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+}
+
+#story.food-truck-active::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6));
+  pointer-events: none;
 }
 
 /* Phone frame — compact, soft dark viridis teal */
@@ -42,6 +62,7 @@ body {
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
   color: white;
   position: relative;
+  z-index: 2;
   height: 660px;
   min-height: 660px;
   width: 100%;
@@ -278,6 +299,8 @@ body {
 }
 
 .customer-window {
+  position: relative;
+  overflow: hidden;
   width: 100%;
   height: 160px;
   display: flex;
@@ -285,18 +308,24 @@ body {
   justify-content: center;
   border: 8px solid #795548;
   border-radius: 18px;
-  background-color: #bde8f2;
-  background-image:
-    linear-gradient(rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.12)),
-    /* url("../../img/diet/ParkBG.jpeg"), */
-    linear-gradient(#bde8f2 0 72%, #e8cfa2 72%);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  background: linear-gradient(#bde8f2 0 72%, #e8cfa2 72%);
   box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.6), 0 4px 12px rgba(0, 0, 0, 0.18);
 }
 
+.customer-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+}
+
 .customer-face {
+  position: relative;
+  z-index: 1;
   width: 90px;
   height: 90px;
   display: flex;
@@ -1009,18 +1038,23 @@ body {
   border: 3px dashed rgba(255, 255, 255, 0.9);
   border-radius: 14px;
   background-color: rgba(0, 0, 0, 0.3);
-  background-image:
-    linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25));
-  /* url("../../img/diet/CuttingBoard.jpeg"); */
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
   font-size: 2.6rem;
   line-height: 1;
   cursor: pointer;
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
+}
+
+.prep-action-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
 }
 
 .prep-action-icon {

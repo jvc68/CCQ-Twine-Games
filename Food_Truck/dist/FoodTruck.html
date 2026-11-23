@@ -120,23 +120,43 @@ body {
 }
 
 #story {
+  position: relative;
   margin: 0 auto;
   max-width: 380px;
   padding: 0;
 }
 
 #story.food-truck-active {
+  background-color: #440154;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+}
+
+.food-truck-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 660px;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+  user-select: none;
+}
+
+#story.food-truck-active {
   overflow: hidden;
   border-radius: 32px;
-  background-color: #0d1b2a;
-  background-image:
-    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)),
-    /* url("../../img/diet/FoodTruckBG.jpeg"), */
-    linear-gradient(180deg, #440154 0%, #3b528b 50%, #21918c 100%);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+}
+
+#story.food-truck-active::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6));
+  pointer-events: none;
 }
 
 /* Phone frame — compact, soft dark viridis teal */
@@ -148,6 +168,7 @@ body {
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
   color: white;
   position: relative;
+  z-index: 2;
   height: 660px;
   min-height: 660px;
   width: 100%;
@@ -384,6 +405,8 @@ body {
 }
 
 .customer-window {
+  position: relative;
+  overflow: hidden;
   width: 100%;
   height: 160px;
   display: flex;
@@ -391,18 +414,24 @@ body {
   justify-content: center;
   border: 8px solid #795548;
   border-radius: 18px;
-  background-color: #bde8f2;
-  background-image:
-    linear-gradient(rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.12)),
-    /* url("../../img/diet/ParkBG.jpeg"), */
-    linear-gradient(#bde8f2 0 72%, #e8cfa2 72%);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  background: linear-gradient(#bde8f2 0 72%, #e8cfa2 72%);
   box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.6), 0 4px 12px rgba(0, 0, 0, 0.18);
 }
 
+.customer-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+}
+
 .customer-face {
+  position: relative;
+  z-index: 1;
   width: 90px;
   height: 90px;
   display: flex;
@@ -1115,18 +1144,23 @@ body {
   border: 3px dashed rgba(255, 255, 255, 0.9);
   border-radius: 14px;
   background-color: rgba(0, 0, 0, 0.3);
-  background-image:
-    linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25));
-  /* url("../../img/diet/CuttingBoard.jpeg"); */
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
   font-size: 2.6rem;
   line-height: 1;
   cursor: pointer;
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
+}
+
+.prep-action-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
 }
 
 .prep-action-icon {
@@ -2243,32 +2277,21 @@ window.FoodTruck = {
             return;
         }
 
-        var label = document.createElement("p");
-        var pad = document.createElement("button");
-        var icon = document.createElement("span");
-        var track = document.createElement("div");
-        var fill = document.createElement("div");
+        var label = host.querySelector(".prep-action-label");
+        var pad = host.querySelector(".prep-action-pad");
+        var icon = host.querySelector(".prep-action-icon");
+        var fill = host.querySelector(".prep-action-fill");
         var finished = false;
 
-        label.className = "prep-action-label";
+        if (!label || !pad || !icon || !fill) {
+            throw new Error("The preparation action controls are unavailable.");
+        }
         label.textContent = action.label;
-        pad.type = "button";
-        pad.className = "prep-action-pad";
-        var computed = window.getComputedStyle(pad);
-
-        icon.className = "prep-action-icon";
         icon.textContent = action.icon;
-        pad.appendChild(icon);
-        track.className = "prep-action-progress";
-        fill.className = "prep-action-fill";
-        track.appendChild(fill);
         // long-press (hold) and drag (scrub) must not open the mobile context menu
         pad.addEventListener("contextmenu", function (event) {
             event.preventDefault();
         });
-        host.appendChild(label);
-        host.appendChild(pad);
-        host.appendChild(track);
 
         function setProgress(fraction) {
             fill.style.width = Math.min(100, fraction * 100) + "%";
@@ -2948,11 +2971,23 @@ window.FoodTruck = {
 
 window.jQuery(document).on(":passagedisplay", function () {
     var state = SugarCube.State.variables;
+    var story = document.getElementById("story");
+    var truckBackground = document.getElementById("food-truck-background");
+    var isGamePassage = SugarCube.State.passage !== "Start";
 
-    document.getElementById("story").classList.toggle(
-        "food-truck-active",
-        SugarCube.State.passage !== "Start"
-    );
+    story.classList.toggle("food-truck-active", isGamePassage);
+    if (!truckBackground) {
+        truckBackground = document.createElement("img");
+        truckBackground.id = "food-truck-background";
+        truckBackground.className = "food-truck-background";
+        truckBackground.src = "../../img/diet/FoodTruckBG.webp";
+        truckBackground.width = 760;
+        truckBackground.height = 421;
+        truckBackground.alt = "";
+        truckBackground.decoding = "async";
+        story.insertBefore(truckBackground, story.firstChild);
+    }
+    truckBackground.hidden = !isGamePassage;
 
     // resume ticking if tickets exist but the timer isn't running (e.g. after loading a save)
     if (state.tickets && state.tickets.length && !orderTimerInterval) {
@@ -3030,7 +3065,7 @@ window.jQuery(document).on(":passagedisplay", function () {
 &lt;&lt;set $nextTicketId = 1&gt;&gt;</tw-passagedata><tw-passagedata pid="3" name="Start" tags="" position="350,100" size="100,100">&lt;div class=&quot;phone start-screen&quot;&gt;\
     &lt;h1&gt;Food Truck&lt;/h1&gt;\
     &lt;p&gt;Serve customers, prepare delicious meals, and grow your food truck.&lt;/p&gt;\
-    &lt;!-- &lt;img class=&quot;start-icon&quot; src=&quot;../../img/diet/FoodTruckICON.jpeg&quot; alt=&quot;Food truck icon&quot;&gt; --&gt;\
+    &lt;img class=&quot;start-icon&quot; src=&quot;../../img/diet/FoodTruckICON.webp&quot; width=&quot;208&quot; height=&quot;208&quot; alt=&quot;Food truck icon&quot; decoding=&quot;async&quot;&gt;\
     &lt;div class=&quot;action-button start-actions&quot;&gt;\
         &lt;&lt;button &quot;Start Day&quot; &quot;ChooseMenu&quot;&gt;&gt;&lt;&lt;run FoodTruck.endTutorial()&gt;&gt;&lt;&lt;run FoodTruck.beginMenuSelection()&gt;&gt;&lt;&lt;/button&gt;&gt;\
         &lt;&lt;button &quot;Play Tutorial&quot; &quot;TakeOrderScreen&quot;&gt;&gt;&lt;&lt;run FoodTruck.startTutorial()&gt;&gt;&lt;&lt;/button&gt;&gt;\
@@ -3067,6 +3102,7 @@ window.jQuery(document).on(":passagedisplay", function () {
     &lt;hr&gt;\
     &lt;section class=&quot;customer-panel&quot;&gt;\
         &lt;div class=&quot;customer-window&quot;&gt;\
+            &lt;img class=&quot;customer-background&quot; src=&quot;../../img/diet/ParkBG.webp&quot; width=&quot;660&quot; height=&quot;369&quot; alt=&quot;&quot; decoding=&quot;async&quot;&gt;\
             &lt;div class=&quot;customer-face&quot; role=&quot;img&quot; aria-label=&quot;Placeholder customer face&quot;&gt;🙂&lt;/div&gt;\
         &lt;/div&gt;\
     &lt;/section&gt;\
@@ -3198,7 +3234,14 @@ window.jQuery(document).on(":passagedisplay", function () {
                 &lt;strong&gt;&lt;&lt;if $pendingMethod.type === &quot;healthy&quot;&gt;&gt;Healthy choice!&lt;&lt;else&gt;&gt;Unhealthy choice&lt;&lt;/if&gt;&gt;&lt;/strong&gt;\
                 &lt;p&gt;$pendingMethod.reason&lt;/p&gt;\
             &lt;/div&gt;\
-            &lt;div id=&quot;prep-action&quot; class=&quot;prep-action&quot;&gt;&lt;/div&gt;\
+            &lt;div id=&quot;prep-action&quot; class=&quot;prep-action&quot;&gt;\
+                &lt;p class=&quot;prep-action-label&quot;&gt;&lt;/p&gt;\
+                &lt;button type=&quot;button&quot; class=&quot;prep-action-pad&quot;&gt;\
+                    &lt;img class=&quot;prep-action-background&quot; src=&quot;../../img/diet/CuttingBoard.webp&quot; width=&quot;660&quot; height=&quot;434&quot; alt=&quot;&quot; decoding=&quot;async&quot;&gt;\
+                    &lt;span class=&quot;prep-action-icon&quot;&gt;&lt;/span&gt;\
+                &lt;/button&gt;\
+                &lt;div class=&quot;prep-action-progress&quot;&gt;&lt;div class=&quot;prep-action-fill&quot;&gt;&lt;/div&gt;&lt;/div&gt;\
+            &lt;/div&gt;\
             &lt;div class=&quot;action-button&quot;&gt;\
                 &lt;button type=&quot;button&quot; id=&quot;prep-continue&quot; disabled&gt;Continue to Cooking&lt;/button&gt;\
             &lt;/div&gt;\

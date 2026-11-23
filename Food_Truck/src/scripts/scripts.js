@@ -754,32 +754,21 @@ window.FoodTruck = {
             return;
         }
 
-        var label = document.createElement("p");
-        var pad = document.createElement("button");
-        var icon = document.createElement("span");
-        var track = document.createElement("div");
-        var fill = document.createElement("div");
+        var label = host.querySelector(".prep-action-label");
+        var pad = host.querySelector(".prep-action-pad");
+        var icon = host.querySelector(".prep-action-icon");
+        var fill = host.querySelector(".prep-action-fill");
         var finished = false;
 
-        label.className = "prep-action-label";
+        if (!label || !pad || !icon || !fill) {
+            throw new Error("The preparation action controls are unavailable.");
+        }
         label.textContent = action.label;
-        pad.type = "button";
-        pad.className = "prep-action-pad";
-        var computed = window.getComputedStyle(pad);
-
-        icon.className = "prep-action-icon";
         icon.textContent = action.icon;
-        pad.appendChild(icon);
-        track.className = "prep-action-progress";
-        fill.className = "prep-action-fill";
-        track.appendChild(fill);
         // long-press (hold) and drag (scrub) must not open the mobile context menu
         pad.addEventListener("contextmenu", function (event) {
             event.preventDefault();
         });
-        host.appendChild(label);
-        host.appendChild(pad);
-        host.appendChild(track);
 
         function setProgress(fraction) {
             fill.style.width = Math.min(100, fraction * 100) + "%";
@@ -1459,11 +1448,23 @@ window.FoodTruck = {
 
 window.jQuery(document).on(":passagedisplay", function () {
     var state = SugarCube.State.variables;
+    var story = document.getElementById("story");
+    var truckBackground = document.getElementById("food-truck-background");
+    var isGamePassage = SugarCube.State.passage !== "Start";
 
-    document.getElementById("story").classList.toggle(
-        "food-truck-active",
-        SugarCube.State.passage !== "Start"
-    );
+    story.classList.toggle("food-truck-active", isGamePassage);
+    if (!truckBackground) {
+        truckBackground = document.createElement("img");
+        truckBackground.id = "food-truck-background";
+        truckBackground.className = "food-truck-background";
+        truckBackground.src = "../../img/diet/FoodTruckBG.webp";
+        truckBackground.width = 760;
+        truckBackground.height = 421;
+        truckBackground.alt = "";
+        truckBackground.decoding = "async";
+        story.insertBefore(truckBackground, story.firstChild);
+    }
+    truckBackground.hidden = !isGamePassage;
 
     // resume ticking if tickets exist but the timer isn't running (e.g. after loading a save)
     if (state.tickets && state.tickets.length && !orderTimerInterval) {
