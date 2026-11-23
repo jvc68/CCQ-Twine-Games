@@ -5,11 +5,10 @@
 }
 
 body {
-    font-family: 'Atkinson Hyperlegible', system-ui, -apple-system,
-                 "Segoe UI", sans-serif;
-    background-color: #d1e8e8;
-    margin: 0;
-    padding: 1.5em 0;
+    font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, "Segoe UI", sans-serif;
+  background-color: #d1e8e8;
+  margin: 0;
+  padding: 1.5em 0;
 }
 
 /* Hide SugarCube's sidebar */
@@ -17,20 +16,24 @@ body {
     display: none;
 }
 
-/* Phone frame — compact, soft dark viridis teal */
 #story {
-  background: linear-gradient(180deg, #440154 0%, #3b528b 50%, #21918c 100%);
+  margin: 0 auto;
+  max-width: 380px;
+  padding: 0;
+}
+
+/* Phone frame — compact, soft dark viridis teal */
+.phone{
+  background: linear-gradient(180deg, #440154	 0%, #3b528b 50%, #21918c 100%);
   border-radius: 32px;
   padding: 25px;
   overflow: hidden;
   box-shadow: 0 8px 30px rgba(0,0,0,0.18);
   color: white;
-  position: relative;
   min-height: 660px;
   max-height: 100px;
   width: 100%;
-  max-width: 340px;
-  margin: 0 auto;
+  max-width: 100%;
   font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 

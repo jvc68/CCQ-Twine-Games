@@ -35,7 +35,16 @@ body {
 
 .fancyButton {
   padding: 5px;
-  border-radius: 12px;
+  border-radius: 8px;
+  background-color: cornsilk;
+  color: black;
+}
+
+.flButton {
+  position: absolute;
+  bottom: 8%;
+  padding: 12px;
+  border-radius: 8px;
   background-color: cornsilk;
   color: black;
 }
@@ -43,13 +52,16 @@ body {
 .library {
   display: grid;
   grid-template-columns: auto auto auto auto ;
-  gap: 18px;
-  max-width: 300px;
-  margin: 5% -2%;
+  gap: 6.5%;
+  max-width: 100%;
+  margin: 5%;
+  position: absolute;
+  left: 0%;
+
 }
 
 .library button{ 
-  border-radius:12px;
+  border-radius: 12%;
   background: snow;
   border: 2px solid darkgrey;
 }
@@ -84,14 +96,6 @@ body {
   object-fit: contain;
 }
 
-.flButton {
-  position: absolute;
-  bottom: 8%;
-  padding: 1px;
-  border-radius: 12px;
-  background-color: cornsilk;
-  color: black;
-}
 
 .fidgetInterface {
   background: snow;
@@ -217,7 +221,16 @@ body {
   height: 100%; 
   display: grid;
   place-items: center;     /* Centers both horizontally and vertically */
+  
+}
 
+.switchImg {
+  height: 60%;
+  display: inline;
+  position:absolute;
+  aspect-ratio: 1/1.5;
+  margin-left: auto;
+  margin-right: auto;
   
 }
 
@@ -246,16 +259,6 @@ body {
   border: none;
 }
 
-.switchImg {
-  height: 60%;
-  display: inline;
-  position:absolute;
-  aspect-ratio: 1/1.5;
-  left: 15%;
-  margin-left: auto;
-  margin-right: auto;
-  
-}
 
 /*Control Panel */
 

@@ -33,9 +33,7 @@ While You Wait
 <div class="desc" id="desc"></div>\
 <div class="options" id="postContainer"></div>
   <<done>><<run setup.populateFidget()>><</done>>
-  <div class="flButton fancyButton"> 
-    <<button "Fidget Library" "Fidget Library">><</button>>
-  </div>
+  <button data-passage="Fidget Library" class="flButton">Return</button>
 </div>
 
 :: Fidget Library

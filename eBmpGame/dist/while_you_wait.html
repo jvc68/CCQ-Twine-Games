@@ -140,7 +140,16 @@ body {
 
 .fancyButton {
   padding: 5px;
-  border-radius: 12px;
+  border-radius: 8px;
+  background-color: cornsilk;
+  color: black;
+}
+
+.flButton {
+  position: absolute;
+  bottom: 8%;
+  padding: 12px;
+  border-radius: 8px;
   background-color: cornsilk;
   color: black;
 }
@@ -148,13 +157,16 @@ body {
 .library {
   display: grid;
   grid-template-columns: auto auto auto auto ;
-  gap: 18px;
-  max-width: 300px;
-  margin: 5% -2%;
+  gap: 6.5%;
+  max-width: 100%;
+  margin: 5%;
+  position: absolute;
+  left: 0%;
+
 }
 
 .library button{ 
-  border-radius:12px;
+  border-radius: 12%;
   background: snow;
   border: 2px solid darkgrey;
 }
@@ -189,14 +201,6 @@ body {
   object-fit: contain;
 }
 
-.flButton {
-  position: absolute;
-  bottom: 8%;
-  padding: 1px;
-  border-radius: 12px;
-  background-color: cornsilk;
-  color: black;
-}
 
 .fidgetInterface {
   background: snow;
@@ -322,7 +326,16 @@ body {
   height: 100%; 
   display: grid;
   place-items: center;     /* Centers both horizontally and vertically */
+  
+}
 
+.switchImg {
+  height: 60%;
+  display: inline;
+  position:absolute;
+  aspect-ratio: 1/1.5;
+  margin-left: auto;
+  margin-right: auto;
   
 }
 
@@ -351,16 +364,6 @@ body {
   border: none;
 }
 
-.switchImg {
-  height: 60%;
-  display: inline;
-  position:absolute;
-  aspect-ratio: 1/1.5;
-  left: 15%;
-  margin-left: auto;
-  margin-right: auto;
-  
-}
 
 /*Control Panel */
 
@@ -890,9 +893,7 @@ setup.lightColors = {
 &lt;div class=&quot;desc&quot; id=&quot;desc&quot;&gt;&lt;/div&gt;\
 &lt;div class=&quot;options&quot; id=&quot;postContainer&quot;&gt;&lt;/div&gt;
   &lt;&lt;done&gt;&gt;&lt;&lt;run setup.populateFidget()&gt;&gt;&lt;&lt;/done&gt;&gt;
-  &lt;div class=&quot;flButton fancyButton&quot;&gt; 
-    &lt;&lt;button &quot;Fidget Library&quot; &quot;Fidget Library&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;
-  &lt;/div&gt;
+  &lt;button data-passage=&quot;Fidget Library&quot; class=&quot;flButton&quot;&gt;Return&lt;/button&gt;
 &lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="Fidget Library" tags="" position="350,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;Fidget Library
 Time Spent: &lt;span id=&quot;timer&quot;&gt;&lt;&lt;=setup.formattedTime&gt;&gt;&lt;/span&gt;
   &lt;div class=&quot;library&quot;&gt;

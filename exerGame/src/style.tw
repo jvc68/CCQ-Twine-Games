@@ -124,8 +124,8 @@ button {
 .return {
   position: absolute;
   left: 10%;
-  bottom: 3%;
-  padding: 1px;
+  padding: 5px;
+  margin: 5px;
   border-radius: 12px;
   min-width: 80%;
   background-color: cornsilk;

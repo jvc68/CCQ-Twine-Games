@@ -105,11 +105,10 @@ var saveAs=saveAs||navigator.msSaveBlob&&navigator.msSaveBlob.bind(navigator)||f
 }
 
 body {
-    font-family: 'Atkinson Hyperlegible', system-ui, -apple-system,
-                 "Segoe UI", sans-serif;
-    background-color: #d1e8e8;
-    margin: 0;
-    padding: 1.5em 0;
+    font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, "Segoe UI", sans-serif;
+  background-color: #d1e8e8;
+  margin: 0;
+  padding: 1.5em 0;
 }
 
 /* Hide SugarCube's sidebar */
@@ -117,20 +116,24 @@ body {
     display: none;
 }
 
-/* Phone frame — compact, soft dark viridis teal */
 #story {
-  background: linear-gradient(180deg, #440154 0%, #3b528b 50%, #21918c 100%);
+  margin: 0 auto;
+  max-width: 380px;
+  padding: 0;
+}
+
+/* Phone frame — compact, soft dark viridis teal */
+.phone{
+  background: linear-gradient(180deg, #440154	 0%, #3b528b 50%, #21918c 100%);
   border-radius: 32px;
   padding: 25px;
   overflow: hidden;
   box-shadow: 0 8px 30px rgba(0,0,0,0.18);
   color: white;
-  position: relative;
   min-height: 660px;
   max-height: 100px;
   width: 100%;
-  max-width: 340px;
-  margin: 0 auto;
+  max-width: 100%;
   font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
@@ -3929,136 +3932,171 @@ setup.scenarios.bodyScenarios = {
         }
     }
 
-};</script><tw-passagedata pid="1" name="Start" tags="" position="625,275" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h3&gt;Welcome to Vascular Village!&lt;/h3&gt;&lt;p&gt;Meet Ruby, your guide on an amazing adventure inside the human body! 🔬&lt;/p&gt;&lt;p&gt;Follow Ruby as she explores the body&#39;s incredible systems, discovers how they work together, and learns about the importance of keeping blood pressure healthy.&lt;/p&gt;&lt;p&gt;From the heart pumping blood to the blood vessels carrying it around the body, every discovery helps Ruby understand hypertension and how healthy choices can protect our bodies!&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Are you ready to join Ruby and explore the wonders of Vascular Village?&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;start-buttons&quot;&gt;&lt;&lt;button &quot;Let&#39;s Explore!&quot;&gt;&gt;&lt;&lt;goto &quot;ScenarioMenu&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;&lt;button &quot;🎓 Tutorial&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialRuby&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;&lt;/div&gt;
+};</script><tw-passagedata pid="1" name="Start" tags="" position="100,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h3&gt;Welcome to Vascular Village!&lt;/h3&gt;&lt;p&gt;Meet Ruby, your guide on an amazing adventure inside the human body! 🔬&lt;/p&gt;&lt;p&gt;Follow Ruby as she explores the body&#39;s incredible systems, discovers how they work together, and learns about the importance of keeping blood pressure healthy.&lt;/p&gt;&lt;p&gt;From the heart pumping blood to the blood vessels carrying it around the body, every discovery helps Ruby understand hypertension and how healthy choices can protect our bodies!&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Are you ready to join Ruby and explore the wonders of Vascular Village?&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;start-buttons&quot;&gt;&lt;&lt;button &quot;Let&#39;s Explore!&quot;&gt;&gt;&lt;&lt;goto &quot;ScenarioMenu&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;&lt;button &quot;🎓 Tutorial&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialRuby&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
 
 
 /* MAIN HOME SCREEN  */
-/* can find body in adobe stock for main screen */</tw-passagedata><tw-passagedata pid="2" name="HomeScreen" tags="" position="225,100" size="100,100">&lt;div class=&quot;home-screen&quot;&gt;
-    &lt;h1&gt;Vascular Village&lt;/h1&gt;&lt;p&gt;Choose a part of your health journey!&lt;/p&gt;&lt;div class=&quot;body-map&quot;&gt;
-        &lt;div class=&quot;body-circle head&quot;&gt;
-            [[🧠Brain-&gt;Brain]]
-        &lt;/div&gt;
-        &lt;div class=&quot;body-circle left&quot;&gt;
-            [[🩸Blood Cells-&gt;Blood Cells]]
-        &lt;/div&gt;
-        &lt;div class=&quot;body-circle center&quot;&gt;
-            [[❤️Heartbeat-&gt;Heart]]
-        &lt;/div&gt;
-        &lt;div class=&quot;body-circle right&quot;&gt;
-            [[🩸Blood Vessels-&gt;Blood Vessels]]
-        &lt;/div&gt;
-        &lt;div class=&quot;body-circle legs&quot;&gt;
-            [[🫁Lungs-&gt;Lungs]]
-        &lt;/div&gt;
+/* can find body in adobe stock for main screen */</tw-passagedata><tw-passagedata pid="2" name="HomeScreen" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+    &lt;div class=&quot;home-screen&quot;&gt;
+        &lt;h1&gt;Vascular Village&lt;/h1&gt;&lt;p&gt;Choose a part of your health journey!&lt;/p&gt;&lt;div class=&quot;body-map&quot;&gt;
+            &lt;div class=&quot;body-circle head&quot;&gt;
+                [[🧠Brain-&gt;Brain]]
+            &lt;/div&gt;
+            &lt;div class=&quot;body-circle left&quot;&gt;
+                [[🩸Blood Cells-&gt;Blood Cells]]
+            &lt;/div&gt;
+            &lt;div class=&quot;body-circle center&quot;&gt;
+                [[❤️Heartbeat-&gt;Heart]]
+            &lt;/div&gt;
+            &lt;div class=&quot;body-circle right&quot;&gt;
+                [[🩸Blood Vessels-&gt;Blood Vessels]]
+            &lt;/div&gt;
+            &lt;div class=&quot;body-circle legs&quot;&gt;
+                [[🫁Lungs-&gt;Lungs]]
+            &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;p class=&quot;back-link &quot;&gt; &lt;&lt;button &quot;Let&#39;s Explore! →&quot;&gt;&gt;&lt;&lt;goto &quot;ScenarioMenu&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/p&gt;
+        &lt;p class=&quot;home-hint&quot;&gt;Tap a circle to begin exploring! Or take the tutorial to learn how activities work before you begin!&lt;/p&gt;&lt;div class=&quot;tutorial-home-button&quot;&gt;&lt;&lt;button &quot;🎓 Take the Tutorial&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialStart&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+/* FOR BLOOD VESSELS */</tw-passagedata><tw-passagedata pid="3" name="Blood Vessels" tags="" position="350,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+    &lt;div id=&quot;activity-menu&quot;&gt;&lt;/div&gt;
+    &lt;&lt;script&gt;&gt;
+    $(document).one(&quot;:passagedisplay&quot;, function () {
+        setup.renderActivityMenu(&quot;bloodVessels&quot;, &quot;activity-menu&quot;);
+    });
+    &lt;&lt;/script&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="4" name="BloodVesselsActivity" tags="" position="475,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+    &lt;div id=&quot;activity-content&quot;&gt;&lt;/div&gt;
+    &lt;&lt;script&gt;&gt;
+    $(document).one(&quot;:passagedisplay&quot;, function () {
+        var activityId = State.variables.selectedActivityId || &quot;longPause&quot;;
+        setup.renderActivity( &quot;bloodVessels&quot;, activityId, &quot;activity-content&quot;);
+    });
+    &lt;&lt;/script&gt;&gt;
 &lt;/div&gt;
 
-&lt;p class=&quot;back-link &quot;&gt; &lt;&lt;button &quot;Let&#39;s Explore! →&quot;&gt;&gt;&lt;&lt;goto &quot;ScenarioMenu&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/p&gt;
-    &lt;p class=&quot;home-hint&quot;&gt;Tap a circle to begin exploring! Or take the tutorial to learn how activities work before you begin!&lt;/p&gt;&lt;div class=&quot;tutorial-home-button&quot;&gt;&lt;&lt;button &quot;🎓 Take the Tutorial&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialStart&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+/* FOR BLOOD CELLS */</tw-passagedata><tw-passagedata pid="5" name="Blood Cells" tags="" position="600,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+    &lt;div id=&quot;activity-menu&quot;&gt;&lt;/div&gt;
+    &lt;&lt;script&gt;&gt;
+    $(document).one(&quot;:passagedisplay&quot;, function () {
+        setup.renderActivityMenu(&quot;bloodCells&quot;, &quot;activity-menu&quot;);
+    });
+    &lt;&lt;/script&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="6" name="BloodCellActivity" tags="" position="725,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+    &lt;div id=&quot;activity-content&quot;&gt;&lt;/div&gt;
+    &lt;&lt;script&gt;&gt;
+    $(document).one(&quot;:passagedisplay&quot;, function () {
+        var activityId = State.variables.selectedActivityId || &quot;redCellRescue&quot;;
+        setup.renderActivity(&quot;bloodCells&quot;, activityId, &quot;activity-content&quot;);
+    });
+    &lt;&lt;/script&gt;&gt;
 &lt;/div&gt;
 
+/* FOR LUNGS */</tw-passagedata><tw-passagedata pid="7" name="Lungs" tags="" position="850,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+    &lt;div id=&quot;activity-menu&quot;&gt;&lt;/div&gt;
+    &lt;&lt;script&gt;&gt;
+    $(document).one(&quot;:passagedisplay&quot;, function () {
+        setup.renderActivityMenu(&quot;lungs&quot;, &quot;activity-menu&quot;);
+    });
+    &lt;&lt;/script&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="8" name="LungsActivity" tags="" position="975,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+    &lt;div id=&quot;activity-content&quot;&gt;&lt;/div&gt;
+    &lt;&lt;script&gt;&gt;
+    $(document).one(&quot;:passagedisplay&quot;, function () {
+        var activityId = State.variables.selectedActivityId || &quot;oxygenAdventure&quot;;
+        setup.renderActivity( &quot;lungs&quot;, activityId,  &quot;activity-content&quot;);
+    });
+    &lt;&lt;/script&gt;&gt;
+&lt;/div&gt;
 
-/* FOR BLOOD VESSELS */</tw-passagedata><tw-passagedata pid="3" name="Blood Vessels" tags="" position="350,100" size="100,100">&lt;div id=&quot;activity-menu&quot;&gt;&lt;/div&gt;
-&lt;&lt;script&gt;&gt;
-$(document).one(&quot;:passagedisplay&quot;, function () {
-    setup.renderActivityMenu(&quot;bloodVessels&quot;, &quot;activity-menu&quot;);
-});
-&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="4" name="BloodVesselsActivity" tags="" position="475,100" size="100,100">&lt;div id=&quot;activity-content&quot;&gt;&lt;/div&gt;
-&lt;&lt;script&gt;&gt;
-$(document).one(&quot;:passagedisplay&quot;, function () {
-    var activityId = State.variables.selectedActivityId || &quot;longPause&quot;;
-    setup.renderActivity( &quot;bloodVessels&quot;, activityId, &quot;activity-content&quot;);
-});
-&lt;&lt;/script&gt;&gt;
+/* FOR HEART */</tw-passagedata><tw-passagedata pid="9" name="Heart" tags="" position="1100,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+    &lt;div id=&quot;activity-menu&quot;&gt;&lt;/div&gt;
+    &lt;&lt;script&gt;&gt;
+    $(document).one(&quot;:passagedisplay&quot;, function () {
+        setup.renderActivityMenu(&quot;heart&quot;, &quot;activity-menu&quot;);
+    });
+    &lt;&lt;/script&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="10" name="HeartActivity" tags="" position="1225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+    &lt;div id=&quot;activity-content&quot;&gt;&lt;/div&gt;
+    &lt;&lt;script&gt;&gt;
+    $(document).one(&quot;:passagedisplay&quot;, function () {
+        var activityId = State.variables.selectedActivityId || &quot;heartbeatHeroes&quot;;
+        setup.renderActivity(&quot;heart&quot;, activityId, &quot;activity-content&quot;);
+    });
+    &lt;&lt;/script&gt;&gt;
+&lt;/div&gt;
 
-/* FOR BLOOD CELLS */</tw-passagedata><tw-passagedata pid="5" name="Blood Cells" tags="" position="600,100" size="100,100">&lt;div id=&quot;activity-menu&quot;&gt;&lt;/div&gt;
-&lt;&lt;script&gt;&gt;
-$(document).one(&quot;:passagedisplay&quot;, function () {
-    setup.renderActivityMenu(&quot;bloodCells&quot;, &quot;activity-menu&quot;);
-});
-&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="6" name="BloodCellActivity" tags="" position="725,100" size="100,100">&lt;div id=&quot;activity-content&quot;&gt;&lt;/div&gt;
-&lt;&lt;script&gt;&gt;
-$(document).one(&quot;:passagedisplay&quot;, function () {
-    var activityId = State.variables.selectedActivityId || &quot;redCellRescue&quot;;
-    setup.renderActivity(&quot;bloodCells&quot;, activityId, &quot;activity-content&quot;);
-});
-&lt;&lt;/script&gt;&gt;
-
-/* FOR LUNGS */</tw-passagedata><tw-passagedata pid="7" name="Lungs" tags="" position="850,100" size="100,100">&lt;div id=&quot;activity-menu&quot;&gt;&lt;/div&gt;
-&lt;&lt;script&gt;&gt;
-$(document).one(&quot;:passagedisplay&quot;, function () {
-    setup.renderActivityMenu(&quot;lungs&quot;, &quot;activity-menu&quot;);
-});
-&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="8" name="LungsActivity" tags="" position="975,100" size="100,100">&lt;div id=&quot;activity-content&quot;&gt;&lt;/div&gt;
-&lt;&lt;script&gt;&gt;
-$(document).one(&quot;:passagedisplay&quot;, function () {
-    var activityId = State.variables.selectedActivityId || &quot;oxygenAdventure&quot;;
-    setup.renderActivity( &quot;lungs&quot;, activityId,  &quot;activity-content&quot;);
-});
-&lt;&lt;/script&gt;&gt;
-
-/* FOR HEART */</tw-passagedata><tw-passagedata pid="9" name="Heart" tags="" position="1100,100" size="100,100">&lt;div id=&quot;activity-menu&quot;&gt;&lt;/div&gt;
-&lt;&lt;script&gt;&gt;
-$(document).one(&quot;:passagedisplay&quot;, function () {
-    setup.renderActivityMenu(&quot;heart&quot;, &quot;activity-menu&quot;);
-});
-&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="10" name="HeartActivity" tags="" position="1225,100" size="100,100">&lt;div id=&quot;activity-content&quot;&gt;&lt;/div&gt;
-&lt;&lt;script&gt;&gt;
-$(document).one(&quot;:passagedisplay&quot;, function () {
-    var activityId = State.variables.selectedActivityId || &quot;heartbeatHeroes&quot;;
-    setup.renderActivity(&quot;heart&quot;, activityId, &quot;activity-content&quot;);
-});
-&lt;&lt;/script&gt;&gt;
-
-/* FOR BRAIN */</tw-passagedata><tw-passagedata pid="11" name="Brain" tags="" position="100,225" size="100,100">&lt;div id=&quot;activity-menu&quot;&gt;&lt;/div&gt;
-&lt;&lt;script&gt;&gt;
-$(document).one(&quot;:passagedisplay&quot;, function () {
-    setup.renderActivityMenu(&quot;brain&quot;, &quot;activity-menu&quot;);
-});
-&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="12" name="BrainActivity" tags="" position="225,225" size="100,100">&lt;div id=&quot;activity-content&quot;&gt;&lt;/div&gt;
-&lt;&lt;script&gt;&gt;
-$(document).one(&quot;:passagedisplay&quot;, function () {
-    var activityId = State.variables.selectedActivityId || &quot;brainControlCenter&quot;;
-    setup.renderActivity(&quot;brain&quot;, activityId, &quot;activity-content&quot;);
-});
-&lt;&lt;/script&gt;&gt;
+/* FOR BRAIN */</tw-passagedata><tw-passagedata pid="11" name="Brain" tags="" position="100,225" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+    &lt;div id=&quot;activity-menu&quot;&gt;&lt;/div&gt;
+    &lt;&lt;script&gt;&gt;
+    $(document).one(&quot;:passagedisplay&quot;, function () {
+        setup.renderActivityMenu(&quot;brain&quot;, &quot;activity-menu&quot;);
+    });
+    &lt;&lt;/script&gt;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="12" name="BrainActivity" tags="" position="225,225" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+    &lt;div id=&quot;activity-content&quot;&gt;&lt;/div&gt;
+    &lt;&lt;script&gt;&gt;
+    $(document).one(&quot;:passagedisplay&quot;, function () {
+        var activityId = State.variables.selectedActivityId || &quot;brainControlCenter&quot;;
+        setup.renderActivity(&quot;brain&quot;, activityId, &quot;activity-content&quot;);
+    });
+    &lt;&lt;/script&gt;&gt;
+&lt;/div&gt;
 
 
 /* LESSON LEARNED */
 
-/* individual lesson learned */</tw-passagedata><tw-passagedata pid="13" name="LessonLearned" tags="" position="350,225" size="100,100">&lt;div id=&quot;lesson-content&quot;&gt;&lt;/div&gt;
-&lt;&lt;run setTimeout(function () {
-    setup.renderLessonLearned(&quot;lesson-content&quot;);
-}, 0)&gt;&gt;
-&lt;&lt;script&gt;&gt;
-$(document).one(&quot;:passagedisplay&quot;, function () {
-    setup.renderActivityMenu(&quot;lungs&quot;, &quot;activity-menu&quot;);
-});
-&lt;&lt;/script&gt;&gt;
+/* individual lesson learned */</tw-passagedata><tw-passagedata pid="13" name="LessonLearned" tags="" position="350,225" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+    &lt;div id=&quot;lesson-content&quot;&gt;&lt;/div&gt;
+    &lt;&lt;run setTimeout(function () {
+        setup.renderLessonLearned(&quot;lesson-content&quot;);
+    }, 0)&gt;&gt;
+    &lt;&lt;script&gt;&gt;
+    $(document).one(&quot;:passagedisplay&quot;, function () {
+        setup.renderActivityMenu(&quot;lungs&quot;, &quot;activity-menu&quot;);
+    });
+    &lt;&lt;/script&gt;&gt;
+&lt;/div&gt;
 
-/* scenario lesson learned  */</tw-passagedata><tw-passagedata pid="14" name="ScenarioLesson" tags="" position="475,225" size="100,100">&lt;div id=&quot;lesson-content&quot;&gt;&lt;/div&gt;
+/* scenario lesson learned  */</tw-passagedata><tw-passagedata pid="14" name="ScenarioLesson" tags="" position="475,225" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+    &lt;div id=&quot;lesson-content&quot;&gt;&lt;/div&gt;
 
-&lt;&lt;script&gt;&gt;
-$(document).one(&quot;:passagedisplay&quot;, function () {
-    setup.renderScenarioLesson(&quot;lesson-content&quot;);
-});
-&lt;&lt;/script&gt;&gt;
+    &lt;&lt;script&gt;&gt;
+    $(document).one(&quot;:passagedisplay&quot;, function () {
+        setup.renderScenarioLesson(&quot;lesson-content&quot;);
+    });
+    &lt;&lt;/script&gt;&gt;
+&lt;/div&gt;
 
-/* TUTORIAL */</tw-passagedata><tw-passagedata pid="15" name="TutorialRuby" tags="" position="600,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;Meet Ruby, Your Little Guide!&lt;/h2&gt;&lt;p&gt;I&#39;m a red blood cell, and I&#39;m part of your body&#39;s amazing circulatory system.&lt;/p&gt;&lt;p&gt;My job is to travel around your body, carrying oxygen to the places that need it. I travel through blood vessels, pass by the heart, and visit different parts of the body every day!&lt;/p&gt;&lt;p&gt;Together, we&#39;ll explore different body systems and discover how they work together to keep us healthy.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Are you ready to explore the body with me?&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Let&#39;s Go! →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialScenario&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="16" name="TutorialScenario" tags="" position="725,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;Step 1: Choose a Scenario&lt;/h2&gt;&lt;p&gt;A scenario is a real situation that helps us understand how the human body works and how our everyday choices can affect our health.&lt;/p&gt;&lt;p&gt;Each scenario contains several activities. By completing these activities, you&#39;ll discover how different parts of the body work together in each scenario.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Your mission is to explore the scenario and help me discover what is happening inside the body!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialBodyMap&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="17" name="TutorialBodyMap" tags="" position="850,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;Step 2: Explore Body Map&lt;/h2&gt;&lt;p&gt;Once you choose a scenario, you&#39;ll see a map of the human body.&lt;/p&gt;&lt;p&gt;Each circle represents a body system in your scenario and dims when its activity is complete.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;🧠 Brain&lt;/li&gt;&lt;li&gt;🩸 Blood Cells&lt;/li&gt;&lt;li&gt;❤️ Heart&lt;/li&gt;&lt;li&gt;🩸 Blood Vessels&lt;/li&gt;&lt;li&gt;🫁 Lungs&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;&lt;strong&gt;Explore each highlighted area to uncover everything happening inside the body!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialActivity&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="18" name="TutorialActivity" tags="" position="975,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;Step 3: Complete an Activity&lt;/h2&gt;&lt;p&gt;Select a body system to open an activity and discover what happens inside your body. Read the instructions carefully and choose the healthy actions or correct answers.&lt;/p&gt;&lt;p&gt;After each choice, Ruby will give you feedback explaining why your answer is correct and how it helps the body. Keep choosing the correct answers until you complete all the required choices for the activity!&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Remember, every correct choice brings you one step closer to completing your mission!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialLessons&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="19" name="TutorialLessons" tags="" position="1100,225" size="100,100">&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;Step 4: Discover What You&#39;ve Learned!&lt;/h2&gt;&lt;p&gt;Every completed activity unlocks a special lesson that explains the important information you&#39;ve discovered.&lt;/p&gt;&lt;p&gt;When every activity is completed, you unlock the scenario lesson, which brings everything together for a completed scenario.&lt;/p&gt;&lt;p&gt;Remember, you can return to unfinished scenarios anytime you&#39;d like&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Every activity is a new discovery, and every completed scenario brings you closer to understanding the amazing human body!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;🏠 Start Exploring!&quot;&gt;&gt;&lt;&lt;goto &quot;ScenarioMenu&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+/* TUTORIAL */</tw-passagedata><tw-passagedata pid="15" name="TutorialRuby" tags="" position="600,225" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;Meet Ruby, Your Little Guide!&lt;/h2&gt;&lt;p&gt;I&#39;m a red blood cell, and I&#39;m part of your body&#39;s amazing circulatory system.&lt;/p&gt;&lt;p&gt;My job is to travel around your body, carrying oxygen to the places that need it. I travel through blood vessels, pass by the heart, and visit different parts of the body every day!&lt;/p&gt;&lt;p&gt;Together, we&#39;ll explore different body systems and discover how they work together to keep us healthy.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Are you ready to explore the body with me?&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Let&#39;s Go! →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialScenario&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="16" name="TutorialScenario" tags="" position="725,225" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;Step 1: Choose a Scenario&lt;/h2&gt;&lt;p&gt;A scenario is a real situation that helps us understand how the human body works and how our everyday choices can affect our health.&lt;/p&gt;&lt;p&gt;Each scenario contains several activities. By completing these activities, you&#39;ll discover how different parts of the body work together in each scenario.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Your mission is to explore the scenario and help me discover what is happening inside the body!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialBodyMap&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="17" name="TutorialBodyMap" tags="" position="850,225" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;Step 2: Explore Body Map&lt;/h2&gt;&lt;p&gt;Once you choose a scenario, you&#39;ll see a map of the human body.&lt;/p&gt;&lt;p&gt;Each circle represents a body system in your scenario and dims when its activity is complete.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;🧠 Brain&lt;/li&gt;&lt;li&gt;🩸 Blood Cells&lt;/li&gt;&lt;li&gt;❤️ Heart&lt;/li&gt;&lt;li&gt;🩸 Blood Vessels&lt;/li&gt;&lt;li&gt;🫁 Lungs&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;&lt;strong&gt;Explore each highlighted area to uncover everything happening inside the body!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialActivity&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="18" name="TutorialActivity" tags="" position="975,225" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;Step 3: Complete an Activity&lt;/h2&gt;&lt;p&gt;Select a body system to open an activity and discover what happens inside your body. Read the instructions carefully and choose the healthy actions or correct answers.&lt;/p&gt;&lt;p&gt;After each choice, Ruby will give you feedback explaining why your answer is correct and how it helps the body. Keep choosing the correct answers until you complete all the required choices for the activity!&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Remember, every correct choice brings you one step closer to completing your mission!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;Continue →&quot;&gt;&gt;&lt;&lt;goto &quot;TutorialLessons&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="19" name="TutorialLessons" tags="" position="1100,225" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+&lt;div class=&quot;tutorial-panel&quot;&gt;&lt;h2&gt;Step 4: Discover What You&#39;ve Learned!&lt;/h2&gt;&lt;p&gt;Every completed activity unlocks a special lesson that explains the important information you&#39;ve discovered.&lt;/p&gt;&lt;p&gt;When every activity is completed, you unlock the scenario lesson, which brings everything together for a completed scenario.&lt;/p&gt;&lt;p&gt;Remember, you can return to unfinished scenarios anytime you&#39;d like&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Every activity is a new discovery, and every completed scenario brings you closer to understanding the amazing human body!&lt;/strong&gt;&lt;/p&gt;&lt;div class=&quot;tutorial-navigation&quot;&gt;&lt;&lt;button &quot;🏠 Start Exploring!&quot;&gt;&gt;&lt;&lt;goto &quot;ScenarioMenu&quot;&gt;&gt;&lt;&lt;/button&gt;&gt;&lt;/div&gt;
+&lt;/div&gt;
 &lt;/div&gt;
 
 
-/* NEW SCENARIO MENU */</tw-passagedata><tw-passagedata pid="20" name="ScenarioMenu" tags="" position="1225,225" size="100,100">&lt;div class=&quot;home-screen&quot;&gt;&lt;h1&gt;Choose Your Scenario&lt;/h1&gt;&lt;p&gt;Select a scenario to begin your adventure!&lt;/p&gt;&lt;div id=&quot;scenario-menu&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;&lt;script&gt;&gt;$(document).one(&quot;:passagedisplay&quot;, function () {setup.renderScenarioMenu(&quot;scenario-menu&quot;);});&lt;&lt;/script&gt;&gt;</tw-passagedata><tw-passagedata pid="21" name="ScenarioBodyMap" tags="" position="100,350" size="100,100">&lt;div class=&quot;home-screen&quot;&gt;&lt;div id=&quot;scenario-body-map&quot;&gt;&lt;/div&gt;&lt;p class=&quot;home-hint&quot;&gt;The highlighted body systems are involved in your selected scenario!&lt;/p&gt;&lt;/div&gt;
+/* NEW SCENARIO MENU */</tw-passagedata><tw-passagedata pid="20" name="ScenarioMenu" tags="" position="1225,225" size="100,100">&lt;div class=&quot;phone&quot;&gt;&lt;div class=&quot;home-screen&quot;&gt;&lt;h1&gt;Choose Your Scenario&lt;/h1&gt;&lt;p&gt;Select a scenario to begin your adventure!&lt;/p&gt;&lt;div id=&quot;scenario-menu&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;&lt;script&gt;&gt;$(document).one(&quot;:passagedisplay&quot;, function () {setup.renderScenarioMenu(&quot;scenario-menu&quot;);});&lt;&lt;/script&gt;&gt;&lt;/div&gt;</tw-passagedata><tw-passagedata pid="21" name="ScenarioBodyMap" tags="" position="100,350" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+&lt;div class=&quot;home-screen&quot;&gt;&lt;div id=&quot;scenario-body-map&quot;&gt;&lt;/div&gt;&lt;p class=&quot;home-hint&quot;&gt;The highlighted body systems are involved in your selected scenario!&lt;/p&gt;&lt;/div&gt;
 
 &lt;&lt;script&gt;&gt;
 $(document).one(&quot;:passagedisplay&quot;, function () {
     setup.renderScenarioBodyMap(&quot;scenario-body-map&quot;);
 });
 &lt;&lt;/script&gt;&gt;
-
+&lt;/div&gt;
 /*
 to run on webpage
 in terminal: npm run watch

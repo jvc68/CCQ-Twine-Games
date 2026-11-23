@@ -44,7 +44,7 @@ Zombie Chase
   <span id="zombieDist"></span>
   <span id="yourDist">You've Walked <<=setup.totalWalked>> Steps!</span>
   <span id="zombieCnt"></span><div class="mainTab"> /*<<button "Run!" >> <<run setup.incZombieDist(1)>><</button>>*/\
-  <div class="extras" id="extras">Extras</div>
+  <div class="extras" id="extras">Extras</div>\
   <button data-passage="Home" class="return" onclick="SugarCube.setup.stopChase()">Return</button>
   <<done>><<run setup.startChase() >><</done>>
   <<done>><<run setup.updateTotalDistance() >><</done>>
