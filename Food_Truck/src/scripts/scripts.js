@@ -162,6 +162,128 @@ var lastTickTime = 0;
 var maxPrepTrayIngredients = 3;
 var maxTickets = 3;
 
+// audio paths are relative to FoodTruck.html
+var audioFilePaths = {
+    navigation: "",
+    gameMusic: "audio/FoodTruckBG.mp3",
+    cookingMusic: "",
+    stopCooking: "",
+    ingredientAdded: "",
+    takeOrder: "",
+    tallyBad: "audio/BadDayJingle.mp3",
+    tallyMedium: "audio/GoodDayJingle.mp3",
+    tallyGood: "audio/GreatDayJingle.mp3",
+    fulfillOrder: "",
+    prepTap: "",
+    prepSlide: "",
+    prepShake: ""
+};
+var audioPlayers = {};
+var gameMusicVolume = 1;
+var cookingGameMusicVolume = 0.2;
+
+window.FoodTruckAudio = {
+    playEffect: function (name) {
+        var path = audioFilePaths[name];
+
+        if (!path) {
+            return;
+        }
+
+        var player = this.getPlayer(name, path);
+        player.loop = false;
+        player.pause();
+        player.currentTime = 0;
+        this.reportPlaybackFailure(name, player.play());
+    },
+
+    startLoop: function (name, volume) {
+        var path = audioFilePaths[name];
+
+        if (!path) {
+            return;
+        }
+
+        var player = this.getPlayer(name, path);
+        player.loop = true;
+        player.volume = volume;
+        if (player.paused || player.ended) {
+            player.currentTime = 0;
+            this.reportPlaybackFailure(name, player.play());
+        }
+    },
+
+    stopLoop: function (name) {
+        var player = audioPlayers[name];
+
+        if (player) {
+            player.pause();
+            player.currentTime = 0;
+        }
+    },
+
+    setLoopVolume: function (name, volume) {
+        if (audioPlayers[name]) {
+            audioPlayers[name].volume = volume;
+        }
+    },
+
+    getPlayer: function (name, path) {
+        if (!audioPlayers[name]) {
+            var player = new Audio(path);
+
+            player.preload = "auto";
+            player.addEventListener("error", function () {
+                console.error("Could not load audio file for " + name + ": " + path);
+            });
+            audioPlayers[name] = player;
+        }
+
+        return audioPlayers[name];
+    },
+
+    reportPlaybackFailure: function (name, playResult) {
+        if (playResult && typeof playResult.catch === "function") {
+            playResult.catch(function (error) {
+                console.error("Could not play audio for " + name + ".", error);
+            });
+        }
+    },
+
+    syncPassage: function () {
+        var state = SugarCube.State.variables;
+        var passage = SugarCube.State.passage;
+
+        if (passage === "DayTally") {
+            this.stopLoop("cookingMusic");
+            this.stopLoop("gameMusic");
+            var averageScore = (state.satisfactionScore + state.healthinessScore) / 2;
+            var tallySound = averageScore <= 2
+                ? "tallyBad"
+                : averageScore >= 4 ? "tallyGood" : "tallyMedium";
+
+            this.playEffect(tallySound);
+            return;
+        }
+
+        if (passage === "Start" || passage === "ChooseMenu") {
+            return;
+        }
+
+        if (state.numOrders > 0) {
+            this.startLoop("gameMusic", gameMusicVolume);
+        }
+
+        if (passage === "CookingMinigame" || passage === "CookingResult") {
+            this.setLoopVolume("gameMusic", cookingGameMusicVolume);
+            this.startLoop("cookingMusic", 1);
+        } else {
+            this.stopLoop("cookingMusic");
+            this.setLoopVolume("gameMusic", gameMusicVolume);
+        }
+    }
+};
+
 window.FoodTruck = {
     ingredientDatabase: ingredientDatabase,
 
@@ -272,11 +394,16 @@ window.FoodTruck = {
         }
 
         var pickIndex = state.menuPicks.indexOf(ingredient.id);
+        var added = false;
 
         if (pickIndex !== -1) {
             state.menuPicks.splice(pickIndex, 1);
         } else if (state.menuPicks.length < menuPickCount) {
             state.menuPicks.push(ingredient.id);
+            added = true;
+        }
+        if (added) {
+            FoodTruckAudio.playEffect("ingredientAdded");
         }
         this.refreshMenuSelection();
     },
@@ -427,6 +554,8 @@ window.FoodTruck = {
         state.tutorialMode = false;
         state.tutorialStep = null;
         state.tutorialIngredientIndex = 0;
+        FoodTruckAudio.stopLoop("gameMusic");
+        FoodTruckAudio.stopLoop("cookingMusic");
         this.stopOrderTimer();
         state.tickets = [];
         state.activeTicketId = null;
@@ -625,6 +754,7 @@ window.FoodTruck = {
             return;
         }
 
+        FoodTruckAudio.playEffect("takeOrder");
         state.activeTicketId = ticketId;
         state.prepTray = [];
         state.pendingIngredient = null;
@@ -827,6 +957,14 @@ window.FoodTruck = {
         function step() {
             if (finished) {
                 return;
+            }
+            var actionSound = action.type === "tap"
+                ? "prepTap"
+                : action.type === "swipe" ? "prepSlide"
+                    : action.type === "scrub" ? "prepShake" : null;
+
+            if (actionSound) {
+                FoodTruckAudio.playEffect(actionSound);
             }
             steps += 1;
             bump();
@@ -1105,6 +1243,10 @@ window.FoodTruck = {
             throw new Error("The cooking skill-check track or marker is unavailable.");
         }
 
+        FoodTruckAudio.playEffect("stopCooking");
+        FoodTruckAudio.playEffect("ingredientAdded");
+        FoodTruckAudio.stopLoop("cookingMusic");
+
         var trackBounds = track.getBoundingClientRect();
         var markerBounds = marker.getBoundingClientRect();
         var markerCenter = markerBounds.left + markerBounds.width / 2;
@@ -1260,6 +1402,7 @@ window.FoodTruck = {
             throw new Error("The prep tray does not match the active order.");
         }
 
+        FoodTruckAudio.playEffect("fulfillOrder");
         state.ordersCompleted += 1;
         state.dayScore += 1;
         state.numOrders -= 1;
@@ -1446,6 +1589,42 @@ window.FoodTruck = {
     }
 };
 
+document.addEventListener("click", function (event) {
+    var target = event.target;
+    var button = target && target.closest ? target.closest("button") : null;
+
+    if (!button || button.disabled) {
+        return;
+    }
+    if (button.classList.contains("menu-pick-button") ||
+        button.classList.contains("ingredient-button") ||
+        button.classList.contains("prep-action-pad")) {
+        return;
+    }
+
+    if (button.id === "menu-start") {
+        if (SugarCube.State.variables.menuPicks.length === 3) {
+            FoodTruckAudio.playEffect("navigation");
+        }
+        return;
+    }
+    if (button.id === "prep-continue") {
+        if (SugarCube.State.variables.prepActionDone) {
+            FoodTruckAudio.playEffect("navigation");
+        }
+        return;
+    }
+
+    var label = button.textContent.trim();
+
+    if (label === "Take Order" || label === "Fulfill Order" || label === "Stop Cooking") {
+        return;
+    }
+    if (button.hasAttribute("data-passage") || button.classList.contains("macro-button")) {
+        FoodTruckAudio.playEffect("navigation");
+    }
+}, true);
+
 window.jQuery(document).on(":passagedisplay", function () {
     var state = SugarCube.State.variables;
 
@@ -1483,4 +1662,5 @@ window.jQuery(document).on(":passagedisplay", function () {
     }
     window.FoodTruck.initPrepAction();
     window.FoodTruck.updateTutorialHighlights();
+    window.FoodTruckAudio.syncPassage();
 });
