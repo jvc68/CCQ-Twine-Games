@@ -121,7 +121,7 @@
 </div>
 
 :: AssemblyStation
-<div class="phone">\
+<div class="phone assembly-screen">\
     <<phoneBackground>>\
     <div class="HUD">\
         <span><strong>Day:</strong> $currentDay</span> |\
@@ -168,7 +168,7 @@
 </div>
 
 :: PrepareIngredient
-<div class="phone">\
+<div class="phone preparation-screen">\
     <<phoneBackground>>\
     <div class="HUD">\
         <span><strong>Day:</strong> $currentDay</span> |\
