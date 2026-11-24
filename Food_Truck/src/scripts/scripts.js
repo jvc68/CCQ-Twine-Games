@@ -164,19 +164,21 @@ var maxTickets = 3;
 
 // audio paths are relative to FoodTruck.html
 var audioFilePaths = {
-    navigation: "",
+    navigation: "audio/Navigation.mp3",
     gameMusic: "audio/FoodTruckBG.mp3",
-    cookingMusic: "",
-    stopCooking: "",
-    ingredientAdded: "",
+    cookingMusic: "audio/CookingMusic.mp3",
+    stopCooking: "audio/StopCooking.mp3",
+    cookingComplete: "audio/CookingComplete.mp3",
+    ingredientAdded: "audio/IngredientSelect.mp3",
     takeOrder: "",
     tallyBad: "audio/BadDayJingle.mp3",
     tallyMedium: "audio/GoodDayJingle.mp3",
     tallyGood: "audio/GreatDayJingle.mp3",
-    fulfillOrder: "",
-    prepTap: "",
-    prepSlide: "",
-    prepShake: ""
+    fulfillOrder: "audio/Fulfill.mp3",
+    prepTap: "audio/KnifeChop.mp3",
+    prepSlide: "audio/Slice.mp3",
+    prepShake: "audio/Shake.mp3",
+    prepSquish: "audio/Squish.mp3"
 };
 var audioPlayers = {};
 var gameMusicVolume = 1;
@@ -195,6 +197,35 @@ window.FoodTruckAudio = {
         player.pause();
         player.currentTime = 0;
         this.reportPlaybackFailure(name, player.play());
+    },
+
+    playEffectThen: function (name, nextName) {
+        var path = audioFilePaths[name];
+
+        if (!path) {
+            this.playEffect(nextName);
+            return;
+        }
+
+        var player = this.getPlayer(name, path);
+        var self = this;
+
+        player.loop = false;
+        player.pause();
+        player.currentTime = 0;
+        player.onended = function () {
+            player.onended = null;
+            self.playEffect(nextName);
+        };
+
+        var playResult = player.play();
+
+        if (playResult && typeof playResult.catch === "function") {
+            playResult.catch(function (error) {
+                player.onended = null;
+                console.error("Could not play audio for " + name + ".", error);
+            });
+        }
     },
 
     startLoop: function (name, volume) {
@@ -274,7 +305,7 @@ window.FoodTruckAudio = {
             this.startLoop("gameMusic", gameMusicVolume);
         }
 
-        if (passage === "CookingMinigame" || passage === "CookingResult") {
+        if (passage === "CookingMinigame") {
             this.setLoopVolume("gameMusic", cookingGameMusicVolume);
             this.startLoop("cookingMusic", 1);
         } else {
@@ -988,6 +1019,7 @@ window.FoodTruck = {
                     clearInterval(timer);
                     timer = null;
                 }
+                FoodTruckAudio.stopLoop("prepSquish");
                 if (!finished) {
                     setProgress(0);
                     icon.style.removeProperty("--icon-scale-x");
@@ -999,6 +1031,7 @@ window.FoodTruck = {
                 if (timer !== null || finished) {
                     return;
                 }
+                FoodTruckAudio.startLoop("prepSquish", 1);
                 pad.classList.add("prep-action-held");
                 startTime = performance.now();
                 timer = setInterval(function () {
@@ -1010,6 +1043,7 @@ window.FoodTruck = {
                         icon.style.setProperty("--icon-scale-y", 0.6);
                         clearInterval(timer);
                         timer = null;
+                        FoodTruckAudio.stopLoop("prepSquish");
                         pad.classList.remove("prep-action-held");
                         finish();
                     } else {
@@ -1243,7 +1277,7 @@ window.FoodTruck = {
             throw new Error("The cooking skill-check track or marker is unavailable.");
         }
 
-        FoodTruckAudio.playEffect("stopCooking");
+        FoodTruckAudio.playEffectThen("stopCooking", "cookingComplete");
         FoodTruckAudio.playEffect("ingredientAdded");
         FoodTruckAudio.stopLoop("cookingMusic");
 
