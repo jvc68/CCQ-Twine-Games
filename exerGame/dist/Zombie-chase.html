@@ -165,16 +165,6 @@ img {
   border-radius: 12px;
 }
 
-button {
-  position: relative;
-  left: 14%;
-  padding: 1px;
-  border-radius: 12px;
-  min-width: 80%;
-  background-color: cornsilk;
-  color: black;
-}
-
 .video {
   height: 200px;
   width: 500px;
@@ -184,6 +174,101 @@ button {
   border-radius: 12px;
   background-color: lavender;
 }
+
+.muteButton {
+  position: absolute;
+  right: 3%; 
+  width: 12%;
+  aspect-ratio:1 / 1;
+  border-radius: 100%;
+  background-color: darkgrey;
+  margin: 2px;
+
+}
+
+.settings {
+  background-color: white !important;
+  font-size:2.4ch;
+
+}
+
+/*AUDIO SETTINGS SECTION */
+.audio-control {
+    margin-bottom: 20px;
+}
+
+.audio-control:last-child {
+    margin-bottom: 0;
+}
+
+.audio-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.audio-icon {
+    font-size: 20px;
+}
+
+/* Slider styling */
+.audio-control input[type="range"] {
+    width: 100%;
+    height: 14px;
+    appearance: none;
+    -webkit-appearance: none;
+    background: #555;
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
+}
+
+.audio-control input[type="range"]::-webkit-slider-runnable-track {
+    height: 10px;
+    background: #232425;
+    border: none;
+    border-radius: 10px;
+}
+
+/* Firefox - actual slider track */
+.audio-control input[type="range"]::-moz-range-track {
+    height: 10px;
+    background: #555;
+    border: none;
+    border-radius: 10px;
+}
+
+/* Slider thumb */
+.audio-control input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+}
+
+.audio-control input[type="range"]::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border: none;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+}
+
+/* Hover effect */
+.audio-control input[type="range"]::-webkit-slider-thumb:hover {
+    background: #cccccc;
+}
+
+.audio-control input[type="range"]::-moz-range-thumb:hover {
+    background: #cccccc;
+}
+
 
 .endImg {
   max-width: 100%;
@@ -228,6 +313,18 @@ button {
 .return {
   position: absolute;
   left: 10%;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 12px;
+  min-width: 80%;
+  background-color: cornsilk;
+  color: black;
+}
+
+.goAgainButton {
+  position: absolute;
+  left: 10%;
+  bottom: 10%;
   padding: 5px;
   margin: 5px;
   border-radius: 12px;
@@ -446,7 +543,7 @@ setup.setMode = function setMode(mode) {
 	setup.exposedExtras = []
 	setup.actualDistance = 0
 	setup.totalWalked = 0
-	for (let [key, value] of Object.entries(window.GameData.extrasDEMO)) {
+	for (let [key, value] of Object.entries(window.GameData.extras)) {
 		value.requiredSteps = value.ogRequiredSteps
 	}
 }
@@ -476,7 +573,7 @@ setup.reset = function reset() {
 	setup.totalWalked = 0
 	setup.exposedExtras = []
 
-	for (let [key, value] of Object.entries(window.GameData.extrasDEMO)) {
+	for (let [key, value] of Object.entries(window.GameData.extras)) {
 		value.requiredSteps = value.ogRequiredSteps
 	}
 }
@@ -517,6 +614,7 @@ setup.incZombieDist = function incZombieDist(amount) {
 // Stops the zombie timer and Flutter step tracking.
 setup.stopChase = function stopChase() {
 	clearInterval(setup.intervalId);
+	SimpleAudio.select("music").stop();
 
 	setup.sendFlutterMessage("STOP_STEP_TRACKING");
 }
@@ -563,6 +661,57 @@ setup.checkWinLoss = function checkWinLoss() {
 	}
 }
 
+setup.audio = true
+
+setup.muteAudio = function muteAudio() {
+	let muteButton = document.getElementById("muteButton");
+	if (!setup.audio) {
+		muteButton.textContent = "🔊"
+		setup.audio = true
+		SimpleAudio.select("music").volume(0.05).loop(true).play();
+	} else {
+		muteButton.textContent = "🔇"
+		setup.audio = false
+		SimpleAudio.select("music").volume(0.0).loop(true).play();
+	}
+}
+
+setup.startZombieAmbience = async function startZombieAmbience() {
+	const delay = ms => new Promise(res => setTimeout(res, ms));
+	SimpleAudio.select("music").volume(0.05).loop(true).play();
+	let randomTime1 = 10
+	let randomTime2 = 25
+	let randomTime3 = 40
+
+	let randomAudio = Math.floor(Math.random() * 10) + 1;
+
+	while (State.passage == "Chase") {
+		if (randomTime1 <= 0) {
+			let newAudio = SimpleAudio.tracks.get(`zombieSnarl${randomAudio}`);
+			if (setup.audio) { newAudio.clone().volume(0.2).play(); }
+			randomAudio = Math.floor(Math.random() * 10) + 1;
+			randomTime1 = Math.floor(Math.random() * (30 - 10 + 1)) + 10;
+		}
+		if (randomTime2 <= 0) {
+			let newAudio = SimpleAudio.tracks.get(`zombieSnarl${randomAudio}`);
+			if (setup.audio) { newAudio.clone().volume(0.2).play(); }
+			randomAudio = Math.floor(Math.random() * 10) + 1;
+			randomTime2 = Math.floor(Math.random() * (60 - 30 + 1)) + 30;
+		}
+		if (randomTime3 <= 0) {
+			let newAudio = SimpleAudio.tracks.get(`zombieSnarl${randomAudio}`);
+			if (setup.audio) { newAudio.clone().volume(0.2).play(); }
+			randomAudio = Math.floor(Math.random() * 10) + 1;
+			randomTime3 = Math.floor(Math.random() * (70 - 40 + 1)) + 40;
+		}
+		await delay(1000);
+		randomTime1 -= 1
+		randomTime2 -= 1
+		randomTime3 -= 1
+	}
+
+}
+
 // Requests the saved distance before starting the game.
 setup.startChase = function startChase() {
 	console.log("Zombie Chase: Requesting saved distance from Flutter.");
@@ -576,6 +725,7 @@ setup.startChase = function startChase() {
 }
 
 setup.beginChase = function beginChase() {
+	setup.startZombieAmbience()
 	setup.zombieDistText = document.getElementById("zombieDist")
 	setup.zombieCntText = document.getElementById("zombieCnt")
 	setup.multiText = document.getElementById("multi")
@@ -626,7 +776,7 @@ setup.beginChase = function beginChase() {
 }
 
 setup.createExtra = function createExtra(container) {
-	if (setup.currentFinalExtra >= Object.keys(window.GameData.extrasDEMO).length) {
+	if (setup.currentFinalExtra >= Object.keys(window.GameData.extras).length) {
 		let newDiv = document.createElement('div');
 		newDiv.classList.add("extra");
 
@@ -638,8 +788,8 @@ setup.createExtra = function createExtra(container) {
 		return
 	}
 	let i = setup.currentFinalExtra
-	let allKeys = Object.keys(window.GameData.extrasDEMO)
-	let currentExtra = window.GameData.extrasDEMO[allKeys[i]]
+	let allKeys = Object.keys(window.GameData.extras)
+	let currentExtra = window.GameData.extras[allKeys[i]]
 	setup.exposedExtras.push([allKeys[i], currentExtra])
 
 	let newDiv = document.createElement('div');
@@ -691,7 +841,7 @@ setup.redeem = function redeem(stepsWalked) {
 
 	let spotsToDelete = []
 
-	for (let [key, value] of Object.entries(window.GameData.extrasDEMO)) {
+	for (let [key, value] of Object.entries(window.GameData.extras)) {
 		if (value.requiredSteps >= 0) {
 			value.requiredSteps -= stepsWalked
 		}
@@ -778,6 +928,28 @@ Useful later:
 	newButton.addEventListener('click', () => setup.respond(name, newButton));
 */
 /* twine-user-script #2: "variables.js" */
+SimpleAudio.tracks.add("zombieSnarl1", "audio/zombieSnarl1.wav");
+SimpleAudio.tracks.add("zombieSnarl2", "audio/zombieSnarl2.wav");
+SimpleAudio.tracks.add("zombieSnarl3", "audio/zombieSnarl3.wav");
+SimpleAudio.tracks.add("zombieSnarl4", "audio/zombieSnarl4.wav");
+SimpleAudio.tracks.add("zombieSnarl5", "audio/zombieSnarl5.wav");
+SimpleAudio.tracks.add("zombieSnarl6", "audio/zombieSnarl6.wav");
+SimpleAudio.tracks.add("zombieSnarl7", "audio/zombieSnarl7.wav");
+SimpleAudio.tracks.add("zombieSnarl8", "audio/zombieSnarl8.wav");
+SimpleAudio.tracks.add("zombieSnarl9", "audio/zombieSnarl9.wav");
+SimpleAudio.tracks.add("zombieSnarl0", "audio/zombieSnarl10.wav");
+SimpleAudio.tracks.add("music", "audio/runningMusic.mp3");
+
+
+/*
+Win at 100 zombies:
+At milestone 15,000, the user would have walked 7,116 steps, which is the minimum for a healthy daily step count 
+Win at 140 zombies:
+At milestone 21,000, the user would have walked 9,116 steps, which is just under whats considered "active"
+Win at 200 zombies:
+At milestone 26,000, the user would have walked 10,783 steps, which is considered active 
+*/
+
 window.GameData = {
 	"extras": {
 		"Walk 100 Steps": { "reward": -1, "type": "killZombies", "requiredSteps": 100, "ogRequiredSteps": 100 },
@@ -792,29 +964,8 @@ window.GameData = {
 		"Walk 21,000 Steps": { "reward": -20, "type": "killZombies", "requiredSteps": 22000, "ogRequiredSteps": 22000 },
 		"Walk 24,000 Steps": { "reward": -20, "type": "killZombies", "requiredSteps": 24000, "ogRequiredSteps": 24000 },
 		"Walk 26,000 Steps": { "reward": -40, "type": "killZombies", "requiredSteps": 26000, "ogRequiredSteps": 26000 }
-	},
-	"extrasDEMO": {
-		"Walk 50 Steps": { "reward": -10, "type": "killZombies", "requiredSteps": 100, "ogRequiredSteps": 100 },
-		"Walk 100 Steps": { "reward": 1, "type": "multi", "requiredSteps": 800, "ogRequiredSteps": 800 },
-		"Walk 200 Steps": { "reward": -10, "type": "killZombies", "requiredSteps": 3000, "ogRequiredSteps": 3000 },
-		"Walk 300 Steps": { "reward": -10, "type": "killZombies", "requiredSteps": 5000, "ogRequiredSteps": 5000 },
-		"Walk 400 Steps": { "reward": -20, "type": "killZombies", "requiredSteps": 8000, "ogRequiredSteps": 8000 },
-		"Walk 500 Steps": { "reward": 1, "type": "multi", "requiredSteps": 10000, "ogRequiredSteps": 10000 },
-		"Walk 600 Steps": { "reward": -30, "type": "killZombies", "requiredSteps": 12000, "ogRequiredSteps": 12000 },
-		"Walk 700 Steps": { "reward": -30, "type": "killZombies", "requiredSteps": 15000, "ogRequiredSteps": 15000 },
-		"Walk 800 Steps": { "reward": -20, "type": "killZombies", "requiredSteps": 18000, "ogRequiredSteps": 18000 },
-		"Walk 900 Steps": { "reward": -20, "type": "killZombies", "requiredSteps": 22000, "ogRequiredSteps": 22000 },
 	}
-}
-
-/*
-Win at 100 zombies:
-At milestone 15,000, the user would have walked 7,116 steps, which is the minimum for a healthy daily step count 
-Win at 140 zombies:
-At milestone 21,000, the user would have walked 9,116 steps, which is just under whats considered "active"
-Win at 200 zombies:
-At milestone 26,000, the user would have walked 10,783 steps, which is considered active 
-*/</script><tw-passagedata pid="1" name="StoryInit" tags="" position="100,100" size="100,100"></tw-passagedata><tw-passagedata pid="2" name="Home" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;Zombies are Stopped.
+}</script><tw-passagedata pid="1" name="StoryInit" tags="" position="100,100" size="100,100"></tw-passagedata><tw-passagedata pid="2" name="Home" tags="" position="225,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;Zombies are Stopped.&lt;button id=&quot;muteButton&quot; class=&quot;muteButton settings&quot; data-passage=&quot;Audio Control&quot;&gt;⚙️&lt;/button&gt;
 &lt;img src=&quot;../../img/exercise/stillFrame.png&quot;&gt;
   &lt;div class=&quot;mainTab&quot;&gt; &lt;div class=&quot;progress-container&quot; id=&quot;bar&quot;&gt;&lt;div class=&quot;progress-fill totalBarFill&quot;&gt; &lt;/div&gt;&lt;/div&gt;\
     &lt;span id=&quot;zombieDist&quot;&gt;&lt;/span&gt;
@@ -829,10 +980,8 @@ At milestone 26,000, the user would have walked 10,783 steps, which is considere
       &lt;&lt;done&gt;&gt;&lt;&lt;run setup.zombieDistText = document.getElementById(&quot;zombieDist&quot;); &gt;&gt;&lt;&lt;/done&gt;&gt;
       &lt;&lt;done&gt;&gt;&lt;&lt;run setup.sendFlutterMessage(&quot;GET_ZOMBIE_DISTANCE&quot;); &gt;&gt;&lt;&lt;/done&gt;&gt;
       
-
-
   &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="Chase" tags="" position="350,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;Step Power: &lt;span id=&quot;multi&quot;&gt;&lt;/span&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="3" name="Chase" tags="" position="350,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;Step Power: &lt;span id=&quot;multi&quot;&gt;&lt;/span&gt; &lt;button id=&quot;muteButton&quot; class=&quot;muteButton&quot; onclick=&quot;SugarCube.setup.muteAudio()&quot;&gt;🔊&lt;/button&gt;
   &lt;video autoplay loop muted playsinline class=&quot;video&quot;&gt;\
   /*IMPORTANT: This currently has not been tested on an Iphone, safari does not support webm.\
   To fix, use an iMac to produce an HEVC (with alpha) file and add to the sources here.*/\
@@ -849,21 +998,47 @@ At milestone 26,000, the user would have walked 10,783 steps, which is considere
   &lt;&lt;done&gt;&gt;&lt;&lt;run setup.updateTotalDistance() &gt;&gt;&lt;&lt;/done&gt;&gt;
   &lt;&lt;done&gt;&gt;&lt;&lt;run setup.DEVplayInComputer() &gt;&gt;&lt;&lt;/done&gt;&gt;
 
-  
   &lt;/div&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="4" name="You Win" tags="" position="475,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;Congratulations!
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="4" name="Audio Control" tags="" position="475,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;\
+&lt;h2&gt;🔊 Audio Settings&lt;/h2&gt;\
+    &lt;div class=&quot;audio-control&quot;&gt;\
+        &lt;div class=&quot;audio-label&quot;&gt;\
+            &lt;span class=&quot;audio-icon&quot;&gt;🎵&lt;/span&gt;&lt;label for=&quot;music-volume&quot;&gt;Music&lt;/label&gt;
+        &lt;/div&gt;
+        &lt;input
+            type=&quot;range&quot;
+            id=&quot;music-volume&quot;
+            min=&quot;0&quot;
+            max=&quot;100&quot;
+            value=&quot;75&quot;
+        /&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;audio-control&quot;&gt;\
+        &lt;div class=&quot;audio-label&quot;&gt;\
+            &lt;span class=&quot;audio-icon&quot;&gt;💥&lt;/span&gt;&lt;label for=&quot;sfx-volume&quot;&gt;Sound Effects&lt;/label&gt;
+        &lt;/div&gt;
+        &lt;input
+            type=&quot;range&quot;
+            id=&quot;sfx-volume&quot;
+            min=&quot;0&quot;
+            max=&quot;100&quot;
+            value=&quot;75&quot;
+        /&gt;
+    &lt;/div&gt;
+&lt;button data-passage=&quot;Home&quot; class=&quot;goAgainButton&quot;&gt;Home&lt;/button&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="5" name="You Win" tags="" position="600,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;Congratulations!
 &lt;img src=&quot;../../img/exercise/winZombie.webp&quot; class=&quot;endImg&quot;&gt;
 Feel free to play again at a different difficulty, and keep on going!
 You travelled: &lt;&lt;=setup.actualDistance&gt;&gt; steps
 &lt;div id=&quot;blankSpace&quot;&gt;&lt;/div&gt;
 
-&lt;&lt;button &quot;Go Again!&quot; &quot;Home&quot;&gt;&gt;&lt;&lt;run setup.reset()&gt;&gt;&lt;&lt;/button&gt;&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="5" name="You Lose" tags="" position="600,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;The Zombies caught you...
+&lt;button data-passage=&quot;Home&quot; class=&quot;goAgainButton&quot; onclick=&quot;SugarCube.setup.reset()&quot;&gt;Go Again!&lt;/button&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="6" name="You Lose" tags="" position="725,100" size="100,100">&lt;div class=&quot;phone&quot;&gt;The Zombies caught you...
 &lt;img src=&quot;../../img/exercise/DefeatZombie.webp&quot; class=&quot;endImg&quot;&gt;
 But don&#39;t worry! You can always try again.
 You travelled: &lt;&lt;=setup.actualDistance&gt;&gt; steps
-&lt;div id=&quot;blankSpace&quot;&gt;&lt;/div&gt;
-&lt;&lt;button &quot;Go Again!&quot; &quot;Home&quot;&gt;&gt;&lt;&lt;run setup.reset()&gt;&gt;&lt;&lt;/button&gt;&gt;
+
+&lt;button data-passage=&quot;Home&quot; class=&quot;goAgainButton&quot; onclick=&quot;SugarCube.setup.reset()&quot;&gt;Go Again!&lt;/button&gt;
 &lt;/div&gt;</tw-passagedata></tw-storydata>
 	<script id="script-sugarcube" type="text/javascript">
 	/*! SugarCube JS */

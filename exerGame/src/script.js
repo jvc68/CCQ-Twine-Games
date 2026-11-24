@@ -63,7 +63,7 @@ setup.setMode = function setMode(mode) {
 	setup.exposedExtras = []
 	setup.actualDistance = 0
 	setup.totalWalked = 0
-	for (let [key, value] of Object.entries(window.GameData.extrasDEMO)) {
+	for (let [key, value] of Object.entries(window.GameData.extras)) {
 		value.requiredSteps = value.ogRequiredSteps
 	}
 }
@@ -93,7 +93,7 @@ setup.reset = function reset() {
 	setup.totalWalked = 0
 	setup.exposedExtras = []
 
-	for (let [key, value] of Object.entries(window.GameData.extrasDEMO)) {
+	for (let [key, value] of Object.entries(window.GameData.extras)) {
 		value.requiredSteps = value.ogRequiredSteps
 	}
 }
@@ -134,6 +134,7 @@ setup.incZombieDist = function incZombieDist(amount) {
 // Stops the zombie timer and Flutter step tracking.
 setup.stopChase = function stopChase() {
 	clearInterval(setup.intervalId);
+	SimpleAudio.select("music").stop();
 
 	setup.sendFlutterMessage("STOP_STEP_TRACKING");
 }
@@ -180,6 +181,57 @@ setup.checkWinLoss = function checkWinLoss() {
 	}
 }
 
+setup.audio = true
+
+setup.muteAudio = function muteAudio() {
+	let muteButton = document.getElementById("muteButton");
+	if (!setup.audio) {
+		muteButton.textContent = "🔊"
+		setup.audio = true
+		SimpleAudio.select("music").volume(0.05).loop(true).play();
+	} else {
+		muteButton.textContent = "🔇"
+		setup.audio = false
+		SimpleAudio.select("music").volume(0.0).loop(true).play();
+	}
+}
+
+setup.startZombieAmbience = async function startZombieAmbience() {
+	const delay = ms => new Promise(res => setTimeout(res, ms));
+	SimpleAudio.select("music").volume(0.05).loop(true).play();
+	let randomTime1 = 10
+	let randomTime2 = 25
+	let randomTime3 = 40
+
+	let randomAudio = Math.floor(Math.random() * 10) + 1;
+
+	while (State.passage == "Chase") {
+		if (randomTime1 <= 0) {
+			let newAudio = SimpleAudio.tracks.get(`zombieSnarl${randomAudio}`);
+			if (setup.audio) { newAudio.clone().volume(0.2).play(); }
+			randomAudio = Math.floor(Math.random() * 10) + 1;
+			randomTime1 = Math.floor(Math.random() * (30 - 10 + 1)) + 10;
+		}
+		if (randomTime2 <= 0) {
+			let newAudio = SimpleAudio.tracks.get(`zombieSnarl${randomAudio}`);
+			if (setup.audio) { newAudio.clone().volume(0.2).play(); }
+			randomAudio = Math.floor(Math.random() * 10) + 1;
+			randomTime2 = Math.floor(Math.random() * (60 - 30 + 1)) + 30;
+		}
+		if (randomTime3 <= 0) {
+			let newAudio = SimpleAudio.tracks.get(`zombieSnarl${randomAudio}`);
+			if (setup.audio) { newAudio.clone().volume(0.2).play(); }
+			randomAudio = Math.floor(Math.random() * 10) + 1;
+			randomTime3 = Math.floor(Math.random() * (70 - 40 + 1)) + 40;
+		}
+		await delay(1000);
+		randomTime1 -= 1
+		randomTime2 -= 1
+		randomTime3 -= 1
+	}
+
+}
+
 // Requests the saved distance before starting the game.
 setup.startChase = function startChase() {
 	console.log("Zombie Chase: Requesting saved distance from Flutter.");
@@ -193,6 +245,7 @@ setup.startChase = function startChase() {
 }
 
 setup.beginChase = function beginChase() {
+	setup.startZombieAmbience()
 	setup.zombieDistText = document.getElementById("zombieDist")
 	setup.zombieCntText = document.getElementById("zombieCnt")
 	setup.multiText = document.getElementById("multi")
@@ -243,7 +296,7 @@ setup.beginChase = function beginChase() {
 }
 
 setup.createExtra = function createExtra(container) {
-	if (setup.currentFinalExtra >= Object.keys(window.GameData.extrasDEMO).length) {
+	if (setup.currentFinalExtra >= Object.keys(window.GameData.extras).length) {
 		let newDiv = document.createElement('div');
 		newDiv.classList.add("extra");
 
@@ -255,8 +308,8 @@ setup.createExtra = function createExtra(container) {
 		return
 	}
 	let i = setup.currentFinalExtra
-	let allKeys = Object.keys(window.GameData.extrasDEMO)
-	let currentExtra = window.GameData.extrasDEMO[allKeys[i]]
+	let allKeys = Object.keys(window.GameData.extras)
+	let currentExtra = window.GameData.extras[allKeys[i]]
 	setup.exposedExtras.push([allKeys[i], currentExtra])
 
 	let newDiv = document.createElement('div');
@@ -308,7 +361,7 @@ setup.redeem = function redeem(stepsWalked) {
 
 	let spotsToDelete = []
 
-	for (let [key, value] of Object.entries(window.GameData.extrasDEMO)) {
+	for (let [key, value] of Object.entries(window.GameData.extras)) {
 		if (value.requiredSteps >= 0) {
 			value.requiredSteps -= stepsWalked
 		}

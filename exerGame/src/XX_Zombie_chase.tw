@@ -12,7 +12,7 @@ Zombie Chase
 
 :: StoryInit {"position": "100,100", "size": "100,100"}
 :: Home
-<div class="phone">Zombies are Stopped.
+<div class="phone">Zombies are Stopped.<button id="muteButton" class="muteButton settings" data-passage="Audio Control">⚙️</button>
 <img src="../../img/exercise/stillFrame.png">
   <div class="mainTab"> <div class="progress-container" id="bar"><div class="progress-fill totalBarFill"> </div></div>\
     <span id="zombieDist"></span>
@@ -27,13 +27,11 @@ Zombie Chase
       <<done>><<run setup.zombieDistText = document.getElementById("zombieDist"); >><</done>>
       <<done>><<run setup.sendFlutterMessage("GET_ZOMBIE_DISTANCE"); >><</done>>
       
-
-
   </div>
 </div>
 
 :: Chase
-<div class="phone">Step Power: <span id="multi"></span>
+<div class="phone">Step Power: <span id="multi"></span> <button id="muteButton" class="muteButton" onclick="SugarCube.setup.muteAudio()">🔊</button>
   <video autoplay loop muted playsinline class="video">\
   /*IMPORTANT: This currently has not been tested on an Iphone, safari does not support webm.\
   To fix, use an iMac to produce an HEVC (with alpha) file and add to the sources here.*/\
@@ -50,8 +48,37 @@ Zombie Chase
   <<done>><<run setup.updateTotalDistance() >><</done>>
   <<done>><<run setup.DEVplayInComputer() >><</done>>
 
-  
   </div>
+</div>
+
+:: Audio Control
+<div class="phone">\
+<h2>🔊 Audio Settings</h2>\
+    <div class="audio-control">\
+        <div class="audio-label">\
+            <span class="audio-icon">🎵</span><label for="music-volume">Music</label>
+        </div>
+        <input
+            type="range"
+            id="music-volume"
+            min="0"
+            max="100"
+            value="75"
+        />
+    </div>
+    <div class="audio-control">\
+        <div class="audio-label">\
+            <span class="audio-icon">💥</span><label for="sfx-volume">Sound Effects</label>
+        </div>
+        <input
+            type="range"
+            id="sfx-volume"
+            min="0"
+            max="100"
+            value="75"
+        />
+    </div>
+<button data-passage="Home" class="goAgainButton">Home</button>
 </div>
 
 :: You Win
@@ -61,13 +88,13 @@ Feel free to play again at a different difficulty, and keep on going!
 You travelled: <<=setup.actualDistance>> steps
 <div id="blankSpace"></div>
 
-<<button "Go Again!" "Home">><<run setup.reset()>><</button>>
+<button data-passage="Home" class="goAgainButton" onclick="SugarCube.setup.reset()">Go Again!</button>
 </div>
 :: You Lose
 <div class="phone">The Zombies caught you...
 <img src="../../img/exercise/DefeatZombie.webp" class="endImg">
 But don't worry! You can always try again.
 You travelled: <<=setup.actualDistance>> steps
-<div id="blankSpace"></div>
-<<button "Go Again!" "Home">><<run setup.reset()>><</button>>
+
+<button data-passage="Home" class="goAgainButton" onclick="SugarCube.setup.reset()">Go Again!</button>
 </div>

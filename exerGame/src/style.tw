@@ -61,16 +61,6 @@ img {
   border-radius: 12px;
 }
 
-button {
-  position: relative;
-  left: 14%;
-  padding: 1px;
-  border-radius: 12px;
-  min-width: 80%;
-  background-color: cornsilk;
-  color: black;
-}
-
 .video {
   height: 200px;
   width: 500px;
@@ -80,6 +70,101 @@ button {
   border-radius: 12px;
   background-color: lavender;
 }
+
+.muteButton {
+  position: absolute;
+  right: 3%; 
+  width: 12%;
+  aspect-ratio:1 / 1;
+  border-radius: 100%;
+  background-color: darkgrey;
+  margin: 2px;
+
+}
+
+.settings {
+  background-color: white !important;
+  font-size:2.4ch;
+
+}
+
+/*AUDIO SETTINGS SECTION */
+.audio-control {
+    margin-bottom: 20px;
+}
+
+.audio-control:last-child {
+    margin-bottom: 0;
+}
+
+.audio-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.audio-icon {
+    font-size: 20px;
+}
+
+/* Slider styling */
+.audio-control input[type="range"] {
+    width: 100%;
+    height: 14px;
+    appearance: none;
+    -webkit-appearance: none;
+    background: #555;
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
+}
+
+.audio-control input[type="range"]::-webkit-slider-runnable-track {
+    height: 10px;
+    background: #232425;
+    border: none;
+    border-radius: 10px;
+}
+
+/* Firefox - actual slider track */
+.audio-control input[type="range"]::-moz-range-track {
+    height: 10px;
+    background: #555;
+    border: none;
+    border-radius: 10px;
+}
+
+/* Slider thumb */
+.audio-control input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+}
+
+.audio-control input[type="range"]::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border: none;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+}
+
+/* Hover effect */
+.audio-control input[type="range"]::-webkit-slider-thumb:hover {
+    background: #cccccc;
+}
+
+.audio-control input[type="range"]::-moz-range-thumb:hover {
+    background: #cccccc;
+}
+
 
 .endImg {
   max-width: 100%;
@@ -124,6 +209,18 @@ button {
 .return {
   position: absolute;
   left: 10%;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 12px;
+  min-width: 80%;
+  background-color: cornsilk;
+  color: black;
+}
+
+.goAgainButton {
+  position: absolute;
+  left: 10%;
+  bottom: 10%;
   padding: 5px;
   margin: 5px;
   border-radius: 12px;
